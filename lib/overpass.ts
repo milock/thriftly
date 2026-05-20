@@ -9,7 +9,7 @@ interface OverpassElement {
   lat?: number;
   lon?: number;
   center?: { lat: number; lon: number };
-  tags?: Record<string, string>;
+  tags?: Record<string, string | undefined>;
 }
 interface OverpassResponse { elements: OverpassElement[] }
 
