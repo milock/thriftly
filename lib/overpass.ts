@@ -76,6 +76,7 @@ export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): 
   // zero elements when it's under load, so we treat "no stores" the same as an
   // error and try the next endpoint rather than reporting an empty result. Each
   // attempt is time-boxed so a slow/throttled mirror bails quickly to the next.
+  let anyResponded = false;
   for (const endpoint of endpoints()) {
     try {
       const res = await fetch(endpoint, {
@@ -90,11 +91,16 @@ export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): 
       });
       if (!res.ok) continue;
       const data = (await res.json()) as OverpassResponse;
+      anyResponded = true;
       const stores = parseOverpass(data);
       if (stores.length > 0) return stores;
     } catch {
-      // try the next endpoint
+      // timeout/network: try the next endpoint
     }
   }
+  // Distinguish "every mirror was unreachable" (transient — caller should surface
+  // a retry, not a misleading empty state) from "a mirror answered with nothing"
+  // (genuinely no Goodwills in range).
+  if (!anyResponded) throw new Error("Overpass unavailable: all mirrors failed");
   return [];
 }
