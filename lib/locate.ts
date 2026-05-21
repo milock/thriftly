@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { ScoredStore, TractDemographics, LatLng } from "@/lib/types";
 import { fetchGoodwillStores } from "@/lib/overpass";
 import { fetchCountyDemographics } from "@/lib/census";
@@ -8,18 +10,46 @@ import { computeGoodsScore } from "@/lib/scoring";
 import { haversineMiles } from "@/lib/distance";
 import { CATCHMENT_RADIUS_MILES } from "@/lib/reference-ranges";
 
+// The bundled, pre-scored national Goodwill dataset (built by the weekly job from
+// one Overpass query). Read once and memoized. This is the primary data source:
+// no Overpass/Census/geocoding at request time, so search and city pages are
+// instant and can't be rate-limited.
+let nationalCache: ScoredStore[] | null = null;
+function nationalDataset(): ScoredStore[] {
+  if (nationalCache) return nationalCache;
+  try {
+    const raw = readFileSync(join(process.cwd(), "data", "goodwill-us.json"), "utf8");
+    nationalCache = (JSON.parse(raw).stores ?? []) as ScoredStore[];
+  } catch {
+    nationalCache = [];
+  }
+  return nationalCache;
+}
+
 /**
- * Core orchestration: find Goodwill stores around a point, blend each store's
- * surrounding census catchment, score it, and return the list sorted best-first.
+ * Find scored Goodwill stores around a point, sorted best-first. Filters the
+ * bundled national dataset first (instant, network-free, throttle-proof); for
+ * any area the dataset doesn't cover yet, falls back to a live lookup.
  *
- * Shared by the `/api/stores` route (client search) and the server-rendered
- * city landing pages, so scoring stays identical everywhere. Pure I/O + scoring,
- * no framework coupling. Upstream fetches carry their own Next data-cache TTLs.
+ * Shared by the `/api/stores` route (client search) and the city landing pages.
  */
 export async function locateStores(
   center: LatLng,
   radiusMiles: number,
 ): Promise<ScoredStore[]> {
+  const hits = nationalDataset()
+    .map((s) => ({ ...s, distanceMiles: haversineMiles(center, s.location) }))
+    .filter((s) => s.distanceMiles <= radiusMiles)
+    .sort((a, b) => b.score.total - a.score.total);
+  if (hits.length > 0) return hits;
+  return liveLocate(center, radiusMiles);
+}
+
+/**
+ * Live lookup (Overpass + Census) for areas the bundled dataset doesn't cover.
+ * Rare once the dataset is complete; kept resilient (multi-mirror, time-boxed).
+ */
+async function liveLocate(center: LatLng, radiusMiles: number): Promise<ScoredStore[]> {
   const stores = await fetchGoodwillStores(center, radiusMiles);
   if (stores.length === 0) return [];
 
