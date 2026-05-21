@@ -48,24 +48,41 @@ export default function AppPage() {
   const [center, setCenter] = useState<LatLng>(SAN_DIEGO);
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [located, setLocated] = useState(false);
   const [areaLabel, setAreaLabel] = useState<string | null>(null);
   const { stores, loading, error, search } = useStores();
   const isDesktop = useIsDesktop();
 
-  // On first load, center on the visitor's actual location (falls back to the default).
+  // On first load: honor a deep link (?lat&lon[&radius][&label]) coming from a
+  // city landing page; otherwise center on the visitor's actual location
+  // (which itself falls back to the default).
   useEffect(() => {
-    if (located || typeof navigator === "undefined" || !navigator.geolocation) return;
+    const p = new URLSearchParams(window.location.search);
+    const qlat = parseFloat(p.get("lat") ?? "");
+    const qlon = parseFloat(p.get("lon") ?? "");
+    if (
+      Number.isFinite(qlat) && Number.isFinite(qlon) &&
+      qlat >= -90 && qlat <= 90 && qlon >= -180 && qlon <= 180
+    ) {
+      const qradius = parseFloat(p.get("radius") ?? "");
+      const label = p.get("label");
+      if (Number.isFinite(qradius)) {
+        setFilters((f) => ({ ...f, radiusMiles: Math.min(100, Math.max(0.5, qradius)) }));
+      }
+      if (label) setAreaLabel(label);
+      setCenter({ lat: qlat, lon: qlon });
+      return;
+    }
+    if (typeof navigator === "undefined" || !navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setLocated(true);
         setSelectedId(null);
         setCenter({ lat: pos.coords.latitude, lon: pos.coords.longitude });
       },
-      () => setLocated(true),
+      () => {},
       { enableHighAccuracy: true, timeout: 8000 },
     );
-  }, [located]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     search(center, filters.radiusMiles);

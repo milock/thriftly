@@ -2,27 +2,49 @@ import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { ThemeProvider } from "@/components/theme-provider";
+import { JsonLd } from "@/components/json-ld";
 import "./globals.css";
 
-const TITLE = "Thriftly — find the best Goodwill near you";
+const SITE_URL = "https://thriftly.xyz";
+const TITLE = "Thriftly: find the best Goodwill near you";
 const DESCRIPTION =
-  "Rank nearby Goodwill stores by neighborhood affluence to find where the best donations land.";
+  "Find the best Goodwill near you. Thriftly ranks nearby thrift stores from 0 to 100 by neighborhood affluence, so you know where the best donations land.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://thriftly.xyz"),
-  title: TITLE,
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: "%s | Thriftly" },
   description: DESCRIPTION,
   applicationName: "Thriftly",
+  authors: [{ name: "Thriftly" }],
+  creator: "Thriftly",
+  category: "lifestyle",
+  keywords: [
+    "goodwill near me",
+    "best goodwill",
+    "thrift stores near me",
+    "goodwill locator",
+    "thrift store finder",
+    "best thrift stores",
+    "goodwill store map",
+    "thrifting",
+  ],
+  alternates: { canonical: "/" },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
   openGraph: {
     type: "website",
-    url: "https://thriftly.xyz",
+    url: SITE_URL,
     siteName: "Thriftly",
     title: TITLE,
     description: DESCRIPTION,
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Thriftly",
+    title: TITLE,
     description: "Find the Goodwill with the best stuff, ranked by neighborhood affluence.",
   },
 };
@@ -33,6 +55,37 @@ export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#fafafa" },
     { media: "(prefers-color-scheme: dark)", color: "#18181b" },
+  ],
+};
+
+const siteJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: "Thriftly",
+      description: DESCRIPTION,
+      publisher: { "@id": `${SITE_URL}/#org` },
+    },
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#org`,
+      name: "Thriftly",
+      url: SITE_URL,
+      logo: `${SITE_URL}/icon.svg`,
+    },
+    {
+      "@type": "WebApplication",
+      name: "Thriftly",
+      url: SITE_URL,
+      applicationCategory: "LifestyleApplication",
+      operatingSystem: "Web",
+      browserRequirements: "Requires JavaScript",
+      description: DESCRIPTION,
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    },
   ],
 };
 
@@ -47,6 +100,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-background text-foreground min-h-full antialiased">
+        <JsonLd data={siteJsonLd} />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

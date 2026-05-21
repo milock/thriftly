@@ -9,7 +9,8 @@ export interface Store {
   location: LatLng;
   address?: string;
   street?: string; // "7631 Girard Avenue"
-  locality?: string; // "La Jolla"
+  neighborhood?: string; // "North Park" (reverse-geocoded; finer than city)
+  locality?: string; // city, "San Diego"
   region?: string; // "CA"
   openingHours?: string;
   website?: string;

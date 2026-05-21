@@ -126,7 +126,27 @@ memoized in module scope.
 
 **Pure, unit-tested core** (no I/O): `scoring`, `catchment`, `distance`, `hours`, `filters`,
 `score-color`. **Data clients** (`overpass`, `census`, `geocode`, `gazetteer`) are tested with mocked
-`fetch`. The client is a single `useStores` hook + presentational components.
+`fetch`. The client is a single `useStores` hook + presentational components. The full scoring
+orchestration lives in `lib/locate.ts`, shared by `/api/stores` and the server-rendered city pages.
+
+## SEO & local pages
+
+Thriftly is built to rank for "best goodwill in <city>" searches, not only to work once you arrive.
+
+- **City landing pages** - `/goodwill/[slug]` (e.g. `/goodwill/san-diego-ca`) server-render the ranked
+  Goodwills for a metro, with a localized title/description, an `ItemList` + `BreadcrumbList` + `FAQPage`
+  in JSON-LD, and a CTA that deep-links into `/search` at that location. They are ISR (`revalidate`
+  daily, `dynamicParams`), so `next build` makes no upstream calls and the first crawl warms the cache.
+  Curated metros live in `lib/metros.ts`.
+- **City hub** - `/goodwill` lists every metro; the landing page adds a "Browse by city" strip. Both
+  feed crawl discovery and internal-link equity.
+- **Metadata** - title template, keywords, canonical URLs, robots, and Open Graph / Twitter on every
+  route (`app/layout.tsx`, per-page `metadata`, `app/search/layout.tsx`).
+- **Generated assets** - `app/robots.ts`, `app/sitemap.ts` (core routes + every metro), `app/manifest.ts`,
+  and dynamic Open Graph images via `next/og` (`app/opengraph-image.tsx` + per-city
+  `app/goodwill/[slug]/opengraph-image.tsx`).
+- **Structured data** - site-wide `WebSite` / `Organization` / `WebApplication`, emitted through a
+  hardened `<JsonLd>` helper (`components/json-ld.tsx`) that escapes `<` to prevent script breakout.
 
 ## Tech stack
 
@@ -206,6 +226,10 @@ All free / open, mostly keyless:
   `data/tract-centroids/{stateFips}.json` via `scripts/build-centroids.mjs`; loaded + memoized at runtime.
 - **Geocoding - U.S. Census Geocoder** (address → lat/lon and point → state FIPS), **Nominatim**
   fallback + reverse geocoding for the area label.
+- **Address & neighborhood enrichment - Photon reverse** (`photon.komoot.io/reverse`). OSM often has a
+  store's location but no address tags, and its `addr:city` is the municipality, not the neighborhood.
+  Each store's coordinate is reverse-geocoded (small concurrent batches, cached a week) to fill in the
+  street address and the neighborhood ("North Park"), which becomes the card title. See `lib/locate.ts`.
 - **Autocomplete - Photon** (`photon.komoot.io`), purpose-built for typeahead, US-filtered.
 - **Map tiles - CARTO** (Positron light/dark) over OpenStreetMap data.
 - **Store hours** are parsed from OSM `opening_hours` by `lib/hours.ts` (a pragmatic parser for the
@@ -216,18 +240,24 @@ All free / open, mostly keyless:
 ```
 app/
   page.tsx                 landing page (/)
-  search/page.tsx          the locator tool (/search)
+  search/{page,layout}.tsx the locator tool (/search) + its metadata
+  goodwill/page.tsx        city hub (/goodwill)
+  goodwill/[slug]/page.tsx city landing pages + opengraph-image (local SEO, ISR)
   api/{stores,geocode,reverse,suggest}/route.ts
+  robots.ts · sitemap.ts · manifest.ts · opengraph-image.tsx · twitter-image.tsx
   layout.tsx · globals.css · icon.svg
 lib/
   scoring · catchment · distance · hours · score-color · filters · format   (pure, tested)
   reference-ranges                                                          (weights + ranges)
   overpass · census · geocode · gazetteer                                   (data clients)
+  locate                                                                    (shared orchestration)
+  metros                                                                    (curated cities for SEO)
   use-stores · types · utils
 components/
   store-card · store-list · score-ring · score-breakdown · store-hours
-  filter-panel · location-search · methodology · wordmark
+  filter-panel · location-search · methodology · wordmark · json-ld
   theme-provider · theme-toggle · github-link · coffee-link
+  city/{ranked-stores,chrome}.tsx   (server-rendered city-page UI)
   map/store-map.tsx        (Leaflet, dynamic ssr:false)
   ui/*                     (shadcn / Base UI primitives)
 data/tract-centroids/      bundled Census Gazetteer centroids (per state, committed)

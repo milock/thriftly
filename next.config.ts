@@ -33,9 +33,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  // Bundle the tract-centroid data into the /api/stores serverless function.
+  // Bundle the tract-centroid data into the functions that score stores at
+  // runtime: the client API route and the server-rendered city landing pages.
   outputFileTracingIncludes: {
     "/api/stores": ["./data/tract-centroids/**/*"],
+    "/goodwill/[slug]": ["./data/tract-centroids/**/*"],
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

@@ -69,6 +69,66 @@ export async function reverseGeocode(lat: number, lon: number): Promise<string |
   }
 }
 
+// Photon returns the full state name ("California"); cards want the postal code.
+const US_STATE_ABBR: Record<string, string> = {
+  alabama: "AL", alaska: "AK", arizona: "AZ", arkansas: "AR", california: "CA",
+  colorado: "CO", connecticut: "CT", delaware: "DE", "district of columbia": "DC",
+  florida: "FL", georgia: "GA", hawaii: "HI", idaho: "ID", illinois: "IL",
+  indiana: "IN", iowa: "IA", kansas: "KS", kentucky: "KY", louisiana: "LA",
+  maine: "ME", maryland: "MD", massachusetts: "MA", michigan: "MI", minnesota: "MN",
+  mississippi: "MS", missouri: "MO", montana: "MT", nebraska: "NE", nevada: "NV",
+  "new hampshire": "NH", "new jersey": "NJ", "new mexico": "NM", "new york": "NY",
+  "north carolina": "NC", "north dakota": "ND", ohio: "OH", oklahoma: "OK",
+  oregon: "OR", pennsylvania: "PA", "rhode island": "RI", "south carolina": "SC",
+  "south dakota": "SD", tennessee: "TN", texas: "TX", utah: "UT", vermont: "VT",
+  virginia: "VA", washington: "WA", "west virginia": "WV", wisconsin: "WI", wyoming: "WY",
+};
+
+function toStateAbbr(state: unknown): string | undefined {
+  if (typeof state !== "string") return undefined;
+  if (/^[A-Z]{2}$/.test(state)) return state;
+  return US_STATE_ABBR[state.trim().toLowerCase()];
+}
+
+export interface ReverseAddress {
+  street?: string; // "1145 Artesia Blvd"
+  neighborhood?: string; // "North Park"
+  locality?: string; // city, "San Diego"
+  region?: string; // "CA"
+}
+
+const PHOTON_REVERSE = "https://photon.komoot.io/reverse";
+
+/**
+ * Best-effort structured street address for a coordinate (Photon reverse).
+ * Used to backfill store addresses that OpenStreetMap never tagged. Cached a
+ * week since a store's address doesn't move. Returns null on miss/error so the
+ * caller keeps whatever it already had.
+ */
+export async function reverseAddress(lat: number, lon: number): Promise<ReverseAddress | null> {
+  const url = `${PHOTON_REVERSE}?lat=${lat}&lon=${lon}&lang=en`;
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
+      next: { revalidate: 604800 },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const p = data?.features?.[0]?.properties ?? {};
+    if (p.countrycode && p.countrycode !== "US") return null;
+    const street = [p.housenumber, p.street].filter(Boolean).join(" ") || undefined;
+    // Photon exposes the neighborhood as `district` (e.g. "North Park"); fall
+    // back to other granularities. Keep the city separate as `locality`.
+    const neighborhood = p.district || p.suburb || p.neighbourhood || p.locality || undefined;
+    const locality = p.city || p.town || p.village || undefined;
+    const region = toStateAbbr(p.state);
+    if (!street && !neighborhood && !locality) return null;
+    return { street, neighborhood, locality, region };
+  } catch {
+    return null;
+  }
+}
+
 export interface PlaceSuggestion {
   id: string;
   label: string;

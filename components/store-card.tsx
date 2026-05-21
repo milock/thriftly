@@ -37,8 +37,11 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
   const best = rank === 1;
   const expanded = selected;
 
-  const title = store.locality || store.street || "Goodwill";
-  const sub = store.locality ? store.street || store.address : store.address;
+  // Lead with the neighborhood ("North Park") when we have it; fall back to the
+  // city, then the street. The sub-line carries the full street address.
+  const title = store.neighborhood || store.locality || store.street || "Goodwill";
+  const sub =
+    [store.street, store.locality, store.region].filter(Boolean).join(", ") || store.address;
 
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {

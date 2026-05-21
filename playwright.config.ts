@@ -24,9 +24,13 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run dev",
+    // Test the production build, not the dev server: prebuilt routes serve
+    // instantly with no per-request Turbopack compile, which is what made the
+    // first /search hit time out under parallel workers. Reuses a server
+    // already on :3000 locally (e.g. `npm run dev`) for fast iteration.
+    command: "npm run build && npm run start",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: 180_000,
   },
 });
