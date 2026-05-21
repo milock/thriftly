@@ -30,48 +30,74 @@ import { computeGoodsScore } from "../lib/scoring";
 import { CATCHMENT_RADIUS_MILES } from "../lib/reference-ranges";
 import { STATES } from "../lib/cities";
 
-const OVERPASS = process.env.OVERPASS_URL ?? "https://overpass-api.de/api/interpreter";
+// Overpass mirrors, tried in turn on retry so one throttling/flaky endpoint
+// doesn't leave a state empty. The primary can be overridden via OVERPASS_URL.
+const MIRRORS = [
+  process.env.OVERPASS_URL ?? "https://overpass-api.de/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter",
+  "https://overpass.openstreetmap.fr/api/interpreter",
+];
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const host = (url: string) => new URL(url).host;
 
-// One small query PER STATE (sequential, gently paced), not one giant US query.
-// A whole-US query takes long enough to trip undici's headers timeout and stress
-// Overpass; per-state queries each return fast and stay well within limits.
-async function fetchAllUSGoodwill(): Promise<Store[]> {
-  const seen = new Map<string, Store>();
-  for (const st of STATES) {
-    // Match the live query's breadth (lib/overpass.ts) so the dataset captures
-    // every store the live path would — otherwise stores tagged e.g.
-    // brand="Goodwill Industries" or without a shop tag (Fargo, Sioux Falls)
-    // slip through and fall to the slow live fallback at request time.
-    const query = `[out:json][timeout:180];
-area["ISO3166-2"="US-${st.code}"][admin_level=4]->.s;
+// Fetch one state's Goodwill stores. Every US state has multiple Goodwill
+// locations, so a 0-result response almost always means a transient Overpass
+// hiccup (throttle, partial response) rather than a real absence — so we retry,
+// cycling mirrors and backing off, before accepting an empty result. This is
+// what keeps states like ND/SD/MT from silently dropping out of the dataset.
+async function fetchState(code: string): Promise<Store[]> {
+  // Match the live query's breadth (lib/overpass.ts): prefix match on brand or
+  // name catches "Goodwill", "Goodwill Store/Outlet", "Goodwill Industries", etc.
+  const query = `[out:json][timeout:180];
+area["ISO3166-2"="US-${code}"][admin_level=4]->.s;
 (
   nwr["brand"~"^Goodwill"](area.s);
   nwr["name"~"^Goodwill"](area.s);
 );
 out center tags;`;
+  const body = `data=${encodeURIComponent(query)}`;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const endpoint = MIRRORS[attempt % MIRRORS.length];
     try {
-      const res = await fetch(OVERPASS, {
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "User-Agent": "Thriftly/1.0 (+https://thriftly.xyz; michael@clarityrcm.com)",
         },
-        body: `data=${encodeURIComponent(query)}`,
+        body,
         signal: AbortSignal.timeout(120_000),
       });
       if (!res.ok) {
-        console.error(`${st.code}: HTTP ${res.status}`);
+        console.error(`  ${code} attempt ${attempt + 1} (${host(endpoint)}): HTTP ${res.status}`);
       } else {
         const stores = parseOverpass(await res.json());
-        for (const s of stores) if (!seen.has(s.id)) seen.set(s.id, s);
-        console.log(`${st.code}: ${stores.length} stores (running total ${seen.size})`);
+        if (stores.length > 0) return stores;
+        console.error(`  ${code} attempt ${attempt + 1} (${host(endpoint)}): 0 stores, retrying`);
       }
     } catch (e) {
-      console.error(`${st.code}: ${(e as Error).message}`);
+      console.error(`  ${code} attempt ${attempt + 1} (${host(endpoint)}): ${(e as Error).message}`);
     }
-    await sleep(6000); // gentle pause between states
+    await sleep(10_000); // back off before retrying (gentle on the mirrors)
   }
+  console.error(`  ${code}: still 0 after all retries`);
+  return [];
+}
+
+// One small query PER STATE (sequential, gently paced), not one giant US query.
+// A whole-US query trips undici's headers timeout and stresses Overpass; per-state
+// queries each return fast and, spaced out, stay well within usage limits.
+async function fetchAllUSGoodwill(): Promise<Store[]> {
+  const seen = new Map<string, Store>();
+  const empties: string[] = [];
+  for (const st of STATES) {
+    const stores = await fetchState(st.code);
+    if (stores.length === 0) empties.push(st.code);
+    for (const s of stores) if (!seen.has(s.id)) seen.set(s.id, s);
+    console.log(`${st.code}: ${stores.length} stores (running total ${seen.size})`);
+    await sleep(10_000); // gentle pause between states
+  }
+  if (empties.length) console.warn(`states still empty after retries: ${empties.join(", ")}`);
   return [...seen.values()];
 }
 
