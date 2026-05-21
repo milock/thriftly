@@ -1,7 +1,7 @@
 import type { LatLng, Store } from "@/lib/types";
 
-const ENDPOINT = "https://overpass-api.de/api/interpreter";
-const FALLBACK = "https://overpass.kumi.systems/api/interpreter";
+const ENDPOINT = "https://overpass.openstreetmap.fr/api/interpreter";
+const FALLBACK = "https://overpass-api.de/api/interpreter";
 
 interface OverpassElement {
   type: string;
@@ -18,8 +18,10 @@ function buildQuery(center: LatLng, radiusMiles: number): string {
   const { lat, lon } = center;
   return `[out:json][timeout:25];
 (
-  nwr["shop"="charity"]["name"~"Goodwill",i](around:${radiusM},${lat},${lon});
-  nwr["brand"~"Goodwill",i](around:${radiusM},${lat},${lon});
+  nwr["brand"="Goodwill"](around:${radiusM},${lat},${lon});
+  nwr["brand"="Goodwill Industries"](around:${radiusM},${lat},${lon});
+  nwr["name"="Goodwill"](around:${radiusM},${lat},${lon});
+  nwr["name"="Goodwill Industries"](around:${radiusM},${lat},${lon});
 );
 out center tags;`;
 }
@@ -56,7 +58,10 @@ export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): 
   const body = `data=${encodeURIComponent(buildQuery(center, radiusMiles))}`;
   const opts: RequestInit = {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "User-Agent": "goodwill-locator/1.0 (https://github.com/goodwill-locator)",
+    },
     body,
     next: { revalidate: 86400 }, // cache a day
   };
@@ -66,6 +71,7 @@ export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): 
     if (!res.ok) throw new Error(`Overpass ${res.status}`);
   } catch {
     res = await fetch(FALLBACK, opts);
+    if (!res.ok) throw new Error(`Overpass fallback ${res.status}`);
   }
   const data = (await res.json()) as OverpassResponse;
   return parseOverpass(data);
