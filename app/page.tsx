@@ -21,7 +21,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { WEIGHTS } from "@/lib/reference-ranges";
 import { FACTOR_LABELS, FACTOR_BLURB, scoreColor } from "@/lib/score-color";
-import { METROS } from "@/lib/metros";
+import { getCity } from "@/lib/cities";
 import type { FactorKey } from "@/lib/types";
 
 const ORDER: FactorKey[] = [
@@ -43,6 +43,22 @@ const FEATURES = [
   { icon: MapPinned, title: "Live map", body: "See every nearby Goodwill as a color-graded pin, with your search radius drawn in." },
   { icon: Navigation, title: "Directions & hours", body: "One tap to Google Maps directions, store hours, phone, and website." },
   { icon: SlidersHorizontal, title: "Powerful filters", body: "Dial radius from a half-mile to 100, set a minimum score, or show only what's open." },
+];
+
+// A handful of high-recognition cities for the landing strip; the hub covers all states.
+const POPULAR_CITY_SLUGS = [
+  "new-york-ny",
+  "los-angeles-ca",
+  "chicago-il",
+  "houston-tx",
+  "phoenix-az",
+  "san-diego-ca",
+  "dallas-tx",
+  "austin-tx",
+  "seattle-wa",
+  "denver-co",
+  "atlanta-ga",
+  "miami-fl",
 ];
 
 export default function Landing() {
@@ -202,20 +218,24 @@ export default function Landing() {
               spot on the live map.
             </p>
             <div className="mt-7 flex flex-wrap gap-2.5">
-              {METROS.slice(0, 12).map((m) => (
-                <Link
-                  key={m.slug}
-                  href={`/goodwill/${m.slug}`}
-                  className="rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:border-foreground/20 hover:text-foreground"
-                >
-                  {m.city}, {m.state}
-                </Link>
-              ))}
+              {POPULAR_CITY_SLUGS.map((slug) => {
+                const c = getCity(slug);
+                if (!c) return null;
+                return (
+                  <Link
+                    key={slug}
+                    href={`/goodwill/${slug}`}
+                    className="rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:border-foreground/20 hover:text-foreground"
+                  >
+                    {c.city}, {c.state}
+                  </Link>
+                );
+              })}
               <Link
                 href="/goodwill"
                 className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-[13px] font-medium text-background"
               >
-                All cities
+                All 50 states
                 <ArrowRight className="size-3.5" />
               </Link>
             </div>

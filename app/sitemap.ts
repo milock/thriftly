@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { METROS } from "@/lib/metros";
+import { STATES, CITIES } from "@/lib/cities";
 
 // Must match the canonical host (www); apex URLs would redirect and GSC won't index them.
 const SITE_URL = "https://www.thriftly.xyz";
@@ -11,11 +11,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/search`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/goodwill`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
   ];
-  const cities: MetadataRoute.Sitemap = METROS.map((m) => ({
-    url: `${SITE_URL}/goodwill/${m.slug}`,
+  const states: MetadataRoute.Sitemap = STATES.map((s) => ({
+    url: `${SITE_URL}/goodwill/state/${s.slug}`,
     lastModified: now,
     changeFrequency: "weekly",
-    priority: 0.7,
+    priority: 0.6,
   }));
-  return [...core, ...cities];
+  const cities: MetadataRoute.Sitemap = CITIES.map((c) => ({
+    url: `${SITE_URL}/goodwill/${c.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.5,
+  }));
+  return [...core, ...states, ...cities];
 }

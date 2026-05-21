@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getMetro } from "@/lib/metros";
+import { getCity } from "@/lib/cities";
 
 export const alt = "Best Goodwill stores, ranked by Thriftly";
 export const size = { width: 1200, height: 630 };
@@ -7,8 +7,8 @@ export const contentType = "image/png";
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const m = getMetro(slug);
-  const place = m ? `${m.city}, ${m.state}` : "your city";
+  const c = getCity(slug);
+  const place = c ? `${c.city}, ${c.state}` : "your city";
 
   return new ImageResponse(
     (

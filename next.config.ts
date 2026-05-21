@@ -37,7 +37,9 @@ const nextConfig: NextConfig = {
   // runtime: the client API route and the server-rendered city landing pages.
   outputFileTracingIncludes: {
     "/api/stores": ["./data/tract-centroids/**/*"],
-    "/goodwill/[slug]": ["./data/tract-centroids/**/*"],
+    // City pages read precomputed store data, and fall back to live scoring
+    // (which reads the tract centroids) for cities not yet precomputed.
+    "/goodwill/[slug]": ["./data/cities/**/*", "./data/tract-centroids/**/*"],
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

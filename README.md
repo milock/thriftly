@@ -132,19 +132,23 @@ orchestration lives in `lib/locate.ts`, shared by `/api/stores` and the server-r
 ## SEO & local pages
 
 Thriftly is built to rank for "best goodwill in <city>" searches, not only to work once you arrive.
+A national hierarchy of pre-rendered pages covers every state and ~450 cities.
 
-- **City landing pages** - `/goodwill/[slug]` (e.g. `/goodwill/san-diego-ca`) server-render the ranked
-  Goodwills for a metro, with a localized title/description, an `ItemList` + `BreadcrumbList` + `FAQPage`
-  in JSON-LD, and a CTA that deep-links into `/search` at that location. They are ISR (`revalidate`
-  daily, `dynamicParams`), so `next build` makes no upstream calls and the first crawl warms the cache.
-  Curated metros live in `lib/metros.ts`.
-- **City hub** - `/goodwill` lists every metro; the landing page adds a "Browse by city" strip. Both
-  feed crawl discovery and internal-link equity.
-- **Metadata** - title template, keywords, canonical URLs, robots, and Open Graph / Twitter on every
-  route (`app/layout.tsx`, per-page `metadata`, `app/search/layout.tsx`).
-- **Generated assets** - `app/robots.ts`, `app/sitemap.ts` (core routes + every metro), `app/manifest.ts`,
-  and dynamic Open Graph images via `next/og` (`app/opengraph-image.tsx` + per-city
-  `app/goodwill/[slug]/opengraph-image.tsx`).
+- **Hierarchy** - `/goodwill` (all 50 states + DC) -> `/goodwill/state/[state]` (a state's cities) ->
+  `/goodwill/[citySlug]` (ranked Goodwills for the city). The location dataset is `lib/cities.ts`
+  (city names per state; slugs like `san-diego-ca` are preserved from the original metros).
+- **Precomputed + pre-rendered** - `scripts/build-city-data.ts` geocodes every city and fetches its
+  ranked stores into `data/cities/<slug>.json`. City pages read that file (`lib/city-data.ts`) and
+  `generateStaticParams` pre-renders exactly the cities that have data, so `next build` makes **no**
+  upstream API calls. Cities not yet precomputed fall back to a live fetch on first request (ISR).
+  A weekly GitHub Action (`.github/workflows/refresh-city-data.yml`) re-runs the precompute and commits
+  changes, which auto-deploys. Neighborhoods resolve client-side via `/api/enrich` so pages paint fast.
+- **Per page** - localized title/description, an `ItemList` + `BreadcrumbList` + `FAQPage` in JSON-LD,
+  and a CTA that deep-links into `/search` at that location.
+- **Metadata** - title template, keywords, canonical URLs (on the `www` host), robots, and Open Graph /
+  Twitter on every route. `generateMetadata` never fetches data (it would block the loading skeleton).
+- **Generated assets** - `app/robots.ts`, `app/sitemap.ts` (core + every state + every city),
+  `app/manifest.ts`, and dynamic Open Graph images via `next/og`.
 - **Structured data** - site-wide `WebSite` / `Organization` / `WebApplication`, emitted through a
   hardened `<JsonLd>` helper (`components/json-ld.tsx`) that escapes `<` to prevent script breakout.
 

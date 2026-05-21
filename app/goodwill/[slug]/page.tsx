@@ -3,8 +3,10 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
-import { getMetro, METROS, type Metro } from "@/lib/metros";
+import { getCity, citiesInState, STATES, type City } from "@/lib/cities";
+import { readCityData, precomputedSlugs } from "@/lib/city-data";
 import { locateStores } from "@/lib/locate";
+import { geocodeAddress } from "@/lib/geocode";
 import type { ScoredStore } from "@/lib/types";
 import { CityStores } from "@/components/city/city-stores";
 import { CityHeader, CityFooter } from "@/components/city/chrome";
@@ -15,51 +17,66 @@ import { cn } from "@/lib/utils";
 
 const SITE_URL = "https://www.thriftly.xyz";
 
-// Cache each city page for a day (ISR): the first visit renders it (a skeleton
-// shows via loading.tsx), then it's served from cache for everyone until the
-// daily background refresh, not re-fetched per load. We deliberately don't
-// generateStaticParams: pre-rendering would run Overpass + Census + dozens of
-// reverse-geocodes per city during the build, and a transient build-time
-// failure would cache an empty page for a day.
 export const revalidate = 86400;
 export const dynamicParams = true;
 
-// Wrapped in React cache so generateMetadata and the page share a single fetch.
-const getCityStores = cache(async (m: Metro): Promise<ScoredStore[]> => {
+// Pre-render only the cities that already have precomputed data, so the build
+// never calls Overpass/Census. Cities without data yet render on demand (ISR)
+// and get pre-rendered on the next build after the precompute job fills them in.
+export function generateStaticParams() {
+  return precomputedSlugs().map((slug) => ({ slug }));
+}
+
+interface CityResult {
+  stores: ScoredStore[];
+  lat: number | null;
+  lon: number | null;
+}
+
+// Prefer precomputed data (instant); fall back to a live fetch for cities the
+// precompute job hasn't covered yet. React cache dedupes within a render.
+const getCityResult = cache(async (c: City): Promise<CityResult> => {
+  const data = readCityData(c.slug);
+  if (data) return { stores: data.stores, lat: data.lat, lon: data.lon };
   try {
-    // Just the ranked list here (fast); neighborhoods/addresses are filled in
-    // client-side by <CityStores> so the page paints without waiting on the
-    // reverse-geocoder. ISR caches the result for a day.
-    return await locateStores({ lat: m.lat, lon: m.lon }, m.radiusMiles);
+    const coords = await geocodeAddress(`${c.city}, ${c.state}`);
+    if (!coords) return { stores: [], lat: null, lon: null };
+    const stores = await locateStores(coords, c.radiusMiles);
+    return { stores, lat: coords.lat, lon: coords.lon };
   } catch (err) {
-    console.error(`city page locate failed: ${m.slug}`, err);
-    return [];
+    console.error(`city page fallback failed: ${c.slug}`, err);
+    return { stores: [], lat: null, lon: null };
   }
 });
 
-function searchHref(m: Metro): string {
-  const label = encodeURIComponent(`${m.city}, ${m.state}`);
-  return `/search?lat=${m.lat}&lon=${m.lon}&radius=${m.radiusMiles}&label=${label}`;
+function stateSlugFor(code: string): string | undefined {
+  return STATES.find((s) => s.code === code)?.slug;
 }
 
-function buildFaqs(m: Metro, stores: ScoredStore[]) {
+function searchHref(c: City, lat: number | null, lon: number | null): string {
+  const label = encodeURIComponent(`${c.city}, ${c.state}`);
+  if (lat == null || lon == null) return `/search?label=${label}`;
+  return `/search?lat=${lat}&lon=${lon}&radius=${c.radiusMiles}&label=${label}`;
+}
+
+function buildFaqs(c: City, stores: ScoredStore[]) {
   const count = stores.length;
   const top = stores[0];
-  const topPlace = top?.neighborhood ?? top?.locality ?? m.city;
+  const topPlace = top?.neighborhood ?? top?.locality ?? c.city;
   return [
     {
-      q: `Which Goodwill in ${m.city} has the best stuff?`,
+      q: `Which Goodwill in ${c.city} has the best stuff?`,
       a: top
         ? `Right now the ${topPlace} location has the highest Goods Score (${Math.round(top.score.total)} out of 100). The score reflects how affluent the surrounding neighborhoods are, which is a strong proxy for donation quality, and it refreshes as Census and store data update.`
-        : `We don't have scored Goodwill data for ${m.city} yet. Try the live locator to search any spot in the U.S.`,
+        : `We don't have scored Goodwill data for ${c.city} yet. Try the live locator to search any spot in the U.S.`,
     },
     {
-      q: `How does Thriftly rank ${m.city} Goodwill stores?`,
+      q: `How does Thriftly rank ${c.city} Goodwill stores?`,
       a: `Each store gets a 0 to 100 Goods Score built from four U.S. Census measures of the area within about three miles: median home value, household income, share of college graduates, and median rent. Stores with wealthier surrounding neighborhoods score higher.`,
     },
     {
-      q: `How many Goodwill locations are in ${m.city}?`,
-      a: `Thriftly tracks ${count} Goodwill ${count === 1 ? "store" : "stores"} within ${m.radiusMiles} miles of downtown ${m.city}, using OpenStreetMap data. A store won't show up if it isn't tagged in OpenStreetMap, so coverage can be incomplete.`,
+      q: `How many Goodwill locations are in ${c.city}?`,
+      a: `Thriftly tracks ${count} Goodwill ${count === 1 ? "store" : "stores"} within ${c.radiusMiles} miles of ${c.city}, using OpenStreetMap data. A store won't show up if it isn't tagged in OpenStreetMap, so coverage can be incomplete.`,
     },
   ];
 }
@@ -70,36 +87,34 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const m = getMetro(slug);
-  if (!m) return {};
-  // IMPORTANT: do NOT fetch store data here. generateMetadata blocks the whole
-  // response (including the loading.tsx skeleton), so awaiting Overpass/Census
-  // here is what made a click sit for ~10s before any loading state appeared.
-  // Build metadata from the static city record only.
-  const title = `Best Goodwill stores in ${m.city}, ${m.state}`;
-  const description = `Find the best Goodwill thrift stores in ${m.city}, ${m.stateName}, ranked 0 to 100 by neighborhood affluence. See the top-rated locations with scores, directions, and a live map.`;
+  const c = getCity(slug);
+  if (!c) return {};
+  // No data fetch here: generateMetadata blocks the response (and the loading
+  // skeleton), so it must stay fast. Build metadata from the static city record.
+  const title = `Best Goodwill stores in ${c.city}, ${c.state}`;
+  const description = `Find the best Goodwill thrift stores in ${c.city}, ${c.stateName}, ranked 0 to 100 by neighborhood affluence. See the top-rated locations with scores, directions, and a live map.`;
   return {
     title,
     description,
-    alternates: { canonical: `/goodwill/${m.slug}` },
-    openGraph: { title: `${title} | Thriftly`, description, url: `/goodwill/${m.slug}`, type: "website" },
+    alternates: { canonical: `/goodwill/${c.slug}` },
+    openGraph: { title: `${title} | Thriftly`, description, url: `/goodwill/${c.slug}`, type: "website" },
   };
 }
 
 export default async function CityPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const m = getMetro(slug);
-  if (!m) notFound();
+  const c = getCity(slug);
+  if (!c) notFound();
 
-  const stores = await getCityStores(m);
+  const { stores, lat, lon } = await getCityResult(c);
   const count = stores.length;
   const top = stores[0];
-  const faqs = buildFaqs(m, stores);
+  const faqs = buildFaqs(c, stores);
+  const stateSlug = stateSlugFor(c.state);
 
-  const related = [
-    ...METROS.filter((x) => x.state === m.state && x.slug !== m.slug),
-    ...METROS.filter((x) => x.state !== m.state && x.slug !== m.slug),
-  ].slice(0, 6);
+  const related = citiesInState(c.state)
+    .filter((x) => x.slug !== c.slug)
+    .slice(0, 8);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -108,15 +123,18 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-          { "@type": "ListItem", position: 2, name: "Goodwill stores by city", item: `${SITE_URL}/goodwill` },
-          { "@type": "ListItem", position: 3, name: `${m.city}, ${m.state}`, item: `${SITE_URL}/goodwill/${m.slug}` },
+          { "@type": "ListItem", position: 2, name: "Goodwill by state", item: `${SITE_URL}/goodwill` },
+          ...(stateSlug
+            ? [{ "@type": "ListItem", position: 3, name: c.stateName, item: `${SITE_URL}/goodwill/state/${stateSlug}` }]
+            : []),
+          { "@type": "ListItem", position: stateSlug ? 4 : 3, name: `${c.city}, ${c.state}`, item: `${SITE_URL}/goodwill/${c.slug}` },
         ],
       },
       ...(count
         ? [
             {
               "@type": "ItemList",
-              name: `Goodwill stores in ${m.city}, ${m.state} ranked by Goods Score`,
+              name: `Goodwill stores in ${c.city}, ${c.state} ranked by Goods Score`,
               numberOfItems: count,
               itemListOrder: "https://schema.org/ItemListOrderDescending",
               itemListElement: stores.slice(0, 20).map((s, i) => ({
@@ -156,48 +174,52 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
       <CityHeader />
       <main className="flex-1">
         <div className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
-          {/* Breadcrumb */}
           <nav aria-label="Breadcrumb" className="text-[13px] text-muted-foreground">
             <Link href="/" className="hover:text-foreground">
               Home
             </Link>
             <span className="px-1.5">/</span>
             <Link href="/goodwill" className="hover:text-foreground">
-              Goodwill by city
+              States
             </Link>
+            {stateSlug && (
+              <>
+                <span className="px-1.5">/</span>
+                <Link href={`/goodwill/state/${stateSlug}`} className="hover:text-foreground">
+                  {c.stateName}
+                </Link>
+              </>
+            )}
             <span className="px-1.5">/</span>
             <span className="text-foreground">
-              {m.city}, {m.state}
+              {c.city}, {c.state}
             </span>
           </nav>
 
           <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-[2.5rem] sm:leading-[1.1]">
-            Best Goodwill stores in {m.city}, {m.state}
+            Best Goodwill stores in {c.city}, {c.state}
           </h1>
 
           {count > 0 ? (
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               There {count === 1 ? "is" : "are"} {count} Goodwill {count === 1 ? "store" : "stores"}{" "}
-              within about {m.radiusMiles} miles of downtown {m.city}. Thriftly scores each one by how
-              well-off the surrounding neighborhoods are, since stores in higher-income areas tend to
-              get the better drop-offs.{" "}
-              {top?.neighborhood || top?.locality
-                ? `The ${top.neighborhood ?? top.locality} location ranks highest right now, at ${Math.round(top.score.total)} out of 100.`
-                : `The top-ranked store scores ${Math.round(top.score.total)} out of 100.`}
+              within about {c.radiusMiles} miles of {c.city}. Thriftly scores each one by how well-off
+              the surrounding neighborhoods are, since stores in higher-income areas tend to get the
+              better drop-offs. The full ranking is below, best odds first.
             </p>
           ) : (
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              We don&apos;t have scored Goodwill data for {m.city} just yet. The live locator works
+              We don&apos;t have scored Goodwill data for {c.city} just yet. The live locator works
               anywhere in the U.S., so you can search this area directly.
             </p>
           )}
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href={searchHref(m)}
+              href={searchHref(c, lat, lon)}
               className={cn(buttonVariants({ size: "lg" }), "h-11 gap-2 px-5 text-[15px]")}
             >
-              Open {m.city} on the live map
+              Open {c.city} on the live map
               <ArrowRight className="size-4" />
             </Link>
             <Link
@@ -208,25 +230,23 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
             </Link>
           </div>
 
-          {/* Ranked list */}
           {count > 0 && (
             <section className="mt-12">
               <h2 className="text-xl font-semibold tracking-tight">
-                Every Goodwill near {m.city}, ranked
+                Every Goodwill near {c.city}, ranked
               </h2>
               <p className="mt-1.5 text-[14px] text-muted-foreground">
                 Best odds first. Tap a store for directions.
               </p>
               <div className="mt-5">
-                <CityStores initial={stores} cityName={m.city} />
+                <CityStores initial={stores} cityName={c.city} />
               </div>
             </section>
           )}
 
-          {/* FAQ */}
           <section className="mt-14">
             <h2 className="text-xl font-semibold tracking-tight">
-              Goodwill in {m.city}: common questions
+              Goodwill in {c.city}: common questions
             </h2>
             <div className="mt-5 divide-y divide-border rounded-2xl border border-border bg-card">
               {faqs.map((f) => (
@@ -238,29 +258,32 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
             </div>
           </section>
 
-          {/* Internal links to other cities */}
-          <section className="mt-14">
-            <h2 className="text-xl font-semibold tracking-tight">Goodwill in other cities</h2>
-            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {related.map((r) => (
+          {related.length > 0 && (
+            <section className="mt-14">
+              <h2 className="text-xl font-semibold tracking-tight">More Goodwill in {c.stateName}</h2>
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {related.map((r) => (
+                  <Link
+                    key={r.slug}
+                    href={`/goodwill/${r.slug}`}
+                    className="group flex items-center gap-2 rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-medium transition-colors hover:border-foreground/20 hover:bg-accent"
+                  >
+                    <MapPin className="size-3.5 text-muted-foreground" />
+                    {r.city}
+                  </Link>
+                ))}
+              </div>
+              {stateSlug && (
                 <Link
-                  key={r.slug}
-                  href={`/goodwill/${r.slug}`}
-                  className="group flex items-center gap-2 rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-medium transition-colors hover:border-foreground/20 hover:bg-accent"
+                  href={`/goodwill/state/${stateSlug}`}
+                  className="mt-5 inline-flex items-center gap-1.5 text-[14px] font-medium text-foreground underline-offset-4 hover:underline"
                 >
-                  <MapPin className="size-3.5 text-muted-foreground" />
-                  {r.city}, {r.state}
+                  All {c.stateName} cities
+                  <ArrowRight className="size-3.5" />
                 </Link>
-              ))}
-            </div>
-            <Link
-              href="/goodwill"
-              className="mt-5 inline-flex items-center gap-1.5 text-[14px] font-medium text-foreground underline-offset-4 hover:underline"
-            >
-              See all cities
-              <ArrowRight className="size-3.5" />
-            </Link>
-          </section>
+              )}
+            </section>
+          )}
         </div>
       </main>
       <CityFooter />
