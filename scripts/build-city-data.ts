@@ -33,7 +33,12 @@ import { geocodeAddress } from "../lib/geocode";
 
 const OUT = join(process.cwd(), "data", "cities");
 const STALE_DAYS = 6;
-const CONCURRENCY = Number(process.env.CONCURRENCY ?? 3);
+// Deliberately gentle: 1 city at a time with a >1s gap. Geocoding hits
+// Nominatim (policy: max 1 request/second) and each city makes an Overpass
+// query, so this stays well within both services' limits and never triggers a
+// rate-limit. ~450 cities take a while, but it runs unattended in CI.
+const CONCURRENCY = Number(process.env.CONCURRENCY ?? 1);
+const GAP_MS = Number(process.env.GAP_MS ?? 1200);
 mkdirSync(OUT, { recursive: true });
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -88,7 +93,7 @@ async function main() {
       const c = queue.shift();
       if (!c) return;
       counts[await processCity(c)]++;
-      await sleep(250);
+      await sleep(GAP_MS);
     }
   };
   await Promise.all(Array.from({ length: CONCURRENCY }, worker));
