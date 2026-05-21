@@ -136,7 +136,7 @@ export default function Landing() {
 
         {/* Insight */}
         <section className="border-y border-border bg-card/50">
-          <div className="mx-auto max-w-6xl px-5 py-16">
+          <div className="reveal mx-auto max-w-6xl px-5 py-16">
             <div className="grid gap-10 sm:grid-cols-3">
               {[
                 { n: "01", t: "Find every Goodwill nearby", b: "Set your distance and see them all on one map." },
@@ -157,7 +157,7 @@ export default function Landing() {
 
         {/* How the score works */}
         <section id="how-it-works" className="scroll-mt-16">
-          <div className="mx-auto max-w-6xl px-5 py-20">
+          <div className="reveal mx-auto max-w-6xl px-5 py-20">
             <div className="max-w-2xl">
               <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
                 How the Goods Score works
@@ -214,7 +214,7 @@ export default function Landing() {
 
         {/* Browse by city */}
         <section className="border-t border-border">
-          <div className="mx-auto max-w-6xl px-5 py-16">
+          <div className="reveal mx-auto max-w-6xl px-5 py-16">
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               Browse Goodwills by city
             </h2>
@@ -249,7 +249,7 @@ export default function Landing() {
 
         {/* Final CTA */}
         <section className="px-5 pb-20">
-          <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-foreground px-8 py-16 text-center text-background sm:py-20">
+          <div className="reveal relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-foreground px-8 py-16 text-center text-background sm:py-20">
             {/* Subtle emerald glow + grid for depth, tied to the brand color. */}
             <div
               className="pointer-events-none absolute inset-0 opacity-[0.16]"
