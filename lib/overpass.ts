@@ -72,35 +72,35 @@ export function parseOverpass(data: OverpassResponse): Store[] {
 
 export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): Promise<Store[]> {
   const body = `data=${encodeURIComponent(buildQuery(center, radiusMiles))}`;
-  // Try each endpoint in order. A mirror intermittently returns HTTP 200 with
-  // zero elements when it's under load, so we treat "no stores" the same as an
-  // error and try the next endpoint rather than reporting an empty result. Each
-  // attempt is time-boxed so a slow/throttled mirror bails quickly to the next.
-  let anyResponded = false;
-  for (const endpoint of endpoints()) {
-    try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)",
-        },
-        body,
-        next: { revalidate: 86400 }, // cache a day
-        signal: AbortSignal.timeout(9000),
-      });
-      if (!res.ok) continue;
-      const data = (await res.json()) as OverpassResponse;
-      anyResponded = true;
-      const stores = parseOverpass(data);
-      if (stores.length > 0) return stores;
-    } catch {
-      // timeout/network: try the next endpoint
-    }
+  // Query all mirrors IN PARALLEL and take the first that returns stores. This is
+  // fast (the quickest healthy mirror wins) and resilient (one mirror being slow
+  // or rate-limited doesn't block the others). A single user search making a few
+  // concurrent requests is well within Overpass limits — the earlier throttle
+  // came from the bulk precompute, not from request-time lookups. Each response
+  // is cached a day (Next data cache), so repeat searches are instant.
+  const attempt = async (endpoint: string): Promise<Store[]> => {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "Thriftly/1.0 (+https://thriftly.xyz; michael@clarityrcm.com)",
+      },
+      body,
+      next: { revalidate: 86400 },
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) throw new Error(`Overpass ${res.status}`);
+    const stores = parseOverpass((await res.json()) as OverpassResponse);
+    // Treat an empty response as a miss so another mirror can answer (mirrors
+    // under load sometimes return 200 with zero elements).
+    if (stores.length === 0) throw new Error("Overpass empty");
+    return stores;
+  };
+  try {
+    return await Promise.any(endpoints().map(attempt));
+  } catch {
+    // Every mirror failed or returned empty. Return [] (the caller falls back to
+    // the bundled dataset, then to a graceful empty state).
+    return [];
   }
-  // Distinguish "every mirror was unreachable" (transient — caller should surface
-  // a retry, not a misleading empty state) from "a mirror answered with nothing"
-  // (genuinely no Goodwills in range).
-  if (!anyResponded) throw new Error("Overpass unavailable: all mirrors failed");
-  return [];
 }
