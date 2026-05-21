@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Crown, Navigation, Globe, Phone, ChevronDown } from "lucide-react";
 import type { ScoredStore } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -38,8 +39,14 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
   const title = store.locality || store.street || "Goodwill";
   const sub = store.locality ? store.street || store.address : store.address;
 
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (selected) ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [selected]);
+
   return (
     <div
+      ref={ref}
       role="button"
       tabIndex={0}
       aria-pressed={selected}
