@@ -37,7 +37,10 @@ describe("fetchGoodwillStores", () => {
       .spyOn(globalThis, "fetch")
       .mockResolvedValue(new Response(JSON.stringify(sample), { status: 200 }));
     const stores = await fetchGoodwillStores({ lat: 32.84, lon: -117.27 }, 10);
-    expect(spy).toHaveBeenCalledOnce();
+    // Races the public Overpass mirrors in parallel (Promise.any), so fetch
+    // fires once per mirror and the first success wins.
+    expect(spy).toHaveBeenCalled();
+    expect(spy.mock.calls[0]?.[1]?.method).toBe("POST");
     expect(stores.length).toBe(3);
   });
 });
