@@ -39,11 +39,15 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 async function fetchAllUSGoodwill(): Promise<Store[]> {
   const seen = new Map<string, Store>();
   for (const st of STATES) {
+    // Match the live query's breadth (lib/overpass.ts) so the dataset captures
+    // every store the live path would — otherwise stores tagged e.g.
+    // brand="Goodwill Industries" or without a shop tag (Fargo, Sioux Falls)
+    // slip through and fall to the slow live fallback at request time.
     const query = `[out:json][timeout:180];
 area["ISO3166-2"="US-${st.code}"][admin_level=4]->.s;
 (
-  nwr["brand"="Goodwill"](area.s);
-  nwr["name"~"^Goodwill"]["shop"](area.s);
+  nwr["brand"~"^Goodwill"](area.s);
+  nwr["name"~"^Goodwill"](area.s);
 );
 out center tags;`;
     try {

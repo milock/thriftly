@@ -87,7 +87,11 @@ export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): 
       },
       body,
       next: { revalidate: 86400 },
-      signal: AbortSignal.timeout(20000),
+      // Short timeout: the bundled dataset is the source of truth and covers
+      // virtually everything, so this fallback is rare. Failing fast means an
+      // area genuinely without a nearby store returns its "nearest is N mi away"
+      // hint quickly instead of hanging.
+      signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) throw new Error(`Overpass ${res.status}`);
     const stores = parseOverpass((await res.json()) as OverpassResponse);
