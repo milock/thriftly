@@ -34,7 +34,7 @@ export async function POST(request: Request) {
             (p as Point).lon <= 180,
         )
         // Cap the batch so a crafted request can't fan out into huge upstream load.
-        .slice(0, 40)
+        .slice(0, 60)
     : [];
 
   const enriched: Record<

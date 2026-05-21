@@ -15,13 +15,16 @@ interface OverpassResponse { elements: OverpassElement[] }
 
 function buildQuery(center: LatLng, radiusMiles: number): string {
   const radiusM = Math.round(radiusMiles * 1609.34);
-  const { lat, lon } = center;
+  const a = `around:${radiusM},${center.lat},${center.lon}`;
+  // Prefix match catches "Goodwill Store", "Goodwill Outlet", "Goodwill Donation
+  // Center", etc. - not just an exact "Goodwill" - while avoiding unrelated names
+  // that merely contain the word. Case-sensitive on purpose: Goodwill names are
+  // consistently capitalized, and the Overpass `,i` flag is unreliable on the
+  // primary endpoint (silently returns nothing).
   return `[out:json][timeout:25];
 (
-  nwr["brand"="Goodwill"](around:${radiusM},${lat},${lon});
-  nwr["brand"="Goodwill Industries"](around:${radiusM},${lat},${lon});
-  nwr["name"="Goodwill"](around:${radiusM},${lat},${lon});
-  nwr["name"="Goodwill Industries"](around:${radiusM},${lat},${lon});
+  nwr["brand"~"^Goodwill"](${a});
+  nwr["name"~"^Goodwill"](${a});
 );
 out center tags;`;
 }

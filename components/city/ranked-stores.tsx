@@ -53,7 +53,9 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                 </div>
                 <h3 className="mt-1 text-[15px] font-semibold leading-tight">
                   {s.name}
-                  {place ? `, ${place}` : ""}
+                  {place && (
+                    <span className="animate-in fade-in duration-500">, {place}</span>
+                  )}
                 </h3>
                 {addr && <p className="mt-0.5 text-[13px] text-muted-foreground">{addr}</p>}
                 <p className="mt-1 text-[12px] text-muted-foreground">

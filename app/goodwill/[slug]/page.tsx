@@ -4,10 +4,11 @@ import { cache } from "react";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import { getMetro, METROS, type Metro } from "@/lib/metros";
-import { locateStores, enrichStores } from "@/lib/locate";
+import { locateStores } from "@/lib/locate";
 import type { ScoredStore } from "@/lib/types";
-import { RankedStores } from "@/components/city/ranked-stores";
+import { CityStores } from "@/components/city/city-stores";
 import { CityHeader, CityFooter } from "@/components/city/chrome";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { JsonLd } from "@/components/json-ld";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -26,11 +27,10 @@ export const dynamicParams = true;
 // Wrapped in React cache so generateMetadata and the page share a single fetch.
 const getCityStores = cache(async (m: Metro): Promise<ScoredStore[]> => {
   try {
-    const stores = await locateStores({ lat: m.lat, lon: m.lon }, m.radiusMiles);
-    // City pages are server-rendered for SEO, so neighborhoods/addresses must be
-    // in the HTML. The loading.tsx skeleton + ISR cache hide this cost from users.
-    await enrichStores(stores);
-    return stores;
+    // Just the ranked list here (fast); neighborhoods/addresses are filled in
+    // client-side by <CityStores> so the page paints without waiting on the
+    // reverse-geocoder. ISR caches the result for a day.
+    return await locateStores({ lat: m.lat, lon: m.lon }, m.radiusMiles);
   } catch (err) {
     console.error(`city page locate failed: ${m.slug}`, err);
     return [];
@@ -154,6 +154,7 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
   return (
     <div className="flex min-h-dvh flex-col">
       <JsonLd data={jsonLd} />
+      <ScrollToTop />
       <CityHeader />
       <main className="flex-1">
         <div className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
@@ -219,7 +220,7 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
                 Best odds first. Tap a store for directions.
               </p>
               <div className="mt-5">
-                <RankedStores stores={stores} cityName={m.city} />
+                <CityStores initial={stores} cityName={m.city} />
               </div>
             </section>
           )}

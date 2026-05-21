@@ -64,6 +64,10 @@ export interface GoodsScore {
 export interface ScoredStore extends Store {
   distanceMiles: number;
   score: GoodsScore;
+  // True once reverse-geocode enrichment has run for this store (server-side or
+  // via /api/enrich). Lets the card show a title placeholder until the
+  // neighborhood resolves, instead of flashing a provisional value.
+  enriched?: boolean;
 }
 
 export interface StoreQuery {

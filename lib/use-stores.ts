@@ -18,9 +18,32 @@ export function useStores() {
   const reqId = useRef(0);
 
   // Fill in neighborhood + street addresses after the list has painted. Runs
-  // off the critical path so results show immediately; cards update when it
-  // returns. Silently no-ops on failure (cards keep their OSM data).
+  // off the critical path so results show immediately; cards mark themselves
+  // `enriched` (so the title placeholder resolves) and update when it returns.
   const enrich = useCallback(async (stores: ScoredStore[], id: number) => {
+    const apply = (enriched?: Record<string, Enrichment>) =>
+      setState((s) => {
+        if (reqId.current !== id) return s; // a newer search has taken over
+        return {
+          ...s,
+          stores: s.stores.map((st) => {
+            const e = enriched?.[`${st.location.lat},${st.location.lon}`];
+            if (!e) return { ...st, enriched: true };
+            const street = st.street ?? e.street;
+            const locality = st.locality ?? e.locality;
+            const region = st.region ?? e.region;
+            return {
+              ...st,
+              enriched: true,
+              neighborhood: st.neighborhood ?? e.neighborhood,
+              street,
+              locality,
+              region,
+              address: [street, locality, region].filter(Boolean).join(", ") || st.address,
+            };
+          }),
+        };
+      });
     try {
       const points = stores.map((s) => ({ lat: s.location.lat, lon: s.location.lon }));
       const res = await fetch("/api/enrich", {
@@ -28,29 +51,14 @@ export function useStores() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ points }),
       });
-      if (!res.ok) return;
+      if (!res.ok) {
+        apply(); // resolve the placeholders to their fallback titles
+        return;
+      }
       const { enriched } = (await res.json()) as { enriched: Record<string, Enrichment> };
-      if (reqId.current !== id) return; // a newer search has taken over
-      setState((s) => ({
-        ...s,
-        stores: s.stores.map((st) => {
-          const e = enriched[`${st.location.lat},${st.location.lon}`];
-          if (!e) return st;
-          const street = st.street ?? e.street;
-          const locality = st.locality ?? e.locality;
-          const region = st.region ?? e.region;
-          return {
-            ...st,
-            neighborhood: st.neighborhood ?? e.neighborhood,
-            street,
-            locality,
-            region,
-            address: [street, locality, region].filter(Boolean).join(", ") || st.address,
-          };
-        }),
-      }));
+      apply(enriched);
     } catch {
-      // ignore: enrichment is best-effort
+      apply();
     }
   }, []);
 

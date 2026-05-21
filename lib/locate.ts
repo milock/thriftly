@@ -1,7 +1,7 @@
 import type { ScoredStore, TractDemographics, LatLng } from "@/lib/types";
 import { fetchGoodwillStores } from "@/lib/overpass";
 import { fetchCountyDemographics } from "@/lib/census";
-import { getStateForPoint, reverseAddress } from "@/lib/geocode";
+import { getStateForPoint } from "@/lib/geocode";
 import { loadStateCentroids } from "@/lib/gazetteer";
 import { tractsWithinRadius, aggregateCatchment } from "@/lib/catchment";
 import { computeGoodsScore } from "@/lib/scoring";
@@ -60,46 +60,4 @@ export async function locateStores(
 
   scored.sort((a, b) => b.score.total - a.score.total);
   return scored;
-}
-
-// How many top-ranked stores to reverse-geocode per request.
-const ENRICH_LIMIT = 30;
-
-/**
- * Reverse-geocode the top-ranked stores to add the neighborhood ("Westwood")
- * and backfill any street/city OpenStreetMap was missing. Mutates in place.
- *
- * Kept separate from {@link locateStores} so the ranked list renders
- * immediately and enrichment runs off the critical path: server-side for the
- * SEO city pages (where it must be in the HTML), and via `/api/enrich` for the
- * client search (where cards fill in progressively). Low concurrency plus a
- * per-coordinate weekly cache keep it polite; it soft-fails, so a card just
- * keeps its OSM data if a lookup misses.
- */
-export async function enrichStores(stores: ScoredStore[]): Promise<void> {
-  await mapWithConcurrency(stores.slice(0, ENRICH_LIMIT), 3, async (s) => {
-    const rev = await reverseAddress(s.location.lat, s.location.lon);
-    if (!rev) return;
-    s.neighborhood = s.neighborhood ?? rev.neighborhood;
-    s.street = s.street ?? rev.street;
-    s.locality = s.locality ?? rev.locality;
-    s.region = s.region ?? rev.region;
-    s.address = [s.street, s.locality, s.region].filter(Boolean).join(", ") || s.address;
-  });
-}
-
-/** Run `fn` over `items` with at most `limit` in flight at once. */
-async function mapWithConcurrency<T>(
-  items: T[],
-  limit: number,
-  fn: (item: T) => Promise<void>,
-): Promise<void> {
-  let next = 0;
-  const worker = async () => {
-    while (next < items.length) {
-      const i = next++;
-      await fn(items[i]);
-    }
-  };
-  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
 }

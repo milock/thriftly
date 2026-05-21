@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
-import { SlidersHorizontal, List as ListIcon, Map as MapIcon } from "lucide-react";
+import { SlidersHorizontal, List as ListIcon, Map as MapIcon, ChevronDown } from "lucide-react";
 import type { LatLng } from "@/lib/types";
 import { useStores } from "@/lib/use-stores";
 import { applyFilters, DEFAULT_FILTERS, type Filters } from "@/lib/filters";
@@ -49,6 +49,7 @@ export default function AppPage() {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [areaLabel, setAreaLabel] = useState<string | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(true);
   const { stores, loading, error, search } = useStores();
   const isDesktop = useIsDesktop();
 
@@ -65,10 +66,12 @@ export default function AppPage() {
     ) {
       const qradius = parseFloat(p.get("radius") ?? "");
       const label = p.get("label");
+      const sel = p.get("sel");
       if (Number.isFinite(qradius)) {
         setFilters((f) => ({ ...f, radiusMiles: Math.min(100, Math.max(0.5, qradius)) }));
       }
       if (label) setAreaLabel(label);
+      if (sel) setSelectedId(sel);
       setCenter({ lat: qlat, lon: qlon });
       return;
     }
@@ -87,6 +90,19 @@ export default function AppPage() {
   useEffect(() => {
     search(center, filters.radiusMiles);
   }, [center, filters.radiusMiles, search]);
+
+  // Mirror the current view into the URL (shallow replace, no reload) so the
+  // page is shareable: opening the link restores the same location, radius, and
+  // selected store. The mount effect above reads these same params back.
+  useEffect(() => {
+    const p = new URLSearchParams();
+    p.set("lat", center.lat.toFixed(5));
+    p.set("lon", center.lon.toFixed(5));
+    p.set("radius", String(filters.radiusMiles));
+    if (areaLabel) p.set("label", areaLabel);
+    if (selectedId) p.set("sel", selectedId);
+    window.history.replaceState(null, "", `/search?${p.toString()}`);
+  }, [center, filters.radiusMiles, areaLabel, selectedId]);
 
   // Reverse-geocode the search center to show a friendly "near {place}" label.
   useEffect(() => {
@@ -160,8 +176,36 @@ export default function AppPage() {
       {isDesktop ? (
         <div className="grid min-h-0 flex-1 grid-cols-[400px_1fr]">
           <aside className="flex min-h-0 flex-col border-r">
-            <div className="border-b p-5">
-              <FilterPanel filters={filters} onChange={setFilters} />
+            <div className="border-b">
+              <button
+                type="button"
+                onClick={() => setFiltersOpen((v) => !v)}
+                aria-expanded={filtersOpen}
+                className="flex w-full items-center justify-between px-5 py-3 text-[13px] font-medium transition-colors hover:bg-accent/50"
+              >
+                <span className="flex items-center gap-2 text-muted-foreground">
+                  <SlidersHorizontal className="size-3.5" />
+                  Filters
+                </span>
+                <ChevronDown
+                  className={cn(
+                    "size-4 text-muted-foreground transition-transform duration-200",
+                    filtersOpen ? "rotate-180" : "",
+                  )}
+                />
+              </button>
+              <div
+                className={cn(
+                  "grid transition-[grid-template-rows] duration-200 ease-out",
+                  filtersOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                )}
+              >
+                <div className="overflow-hidden">
+                  <div className="px-5 pb-5">
+                    <FilterPanel filters={filters} onChange={setFilters} />
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="border-b px-5 py-2.5">
               <span className="text-[13px] font-medium text-muted-foreground">{resultLine}</span>

@@ -13,6 +13,7 @@ test.describe("landing page", () => {
   test("primary CTA launches the app", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("link", { name: /find stores near me/i }).click();
-    await expect(page).toHaveURL(/\/search$/);
+    // /search mirrors its state into the URL (shareable), so allow query params.
+    await expect(page).toHaveURL(/\/search(\?|$)/);
   });
 });

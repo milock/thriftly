@@ -1,10 +1,12 @@
 import { CityHeader, CityFooter } from "@/components/city/chrome";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 // Shown instantly while a city page renders (or its ISR cache warms), so a
 // click gives immediate feedback instead of looking frozen.
 export default function Loading() {
   return (
     <div className="flex min-h-dvh flex-col">
+      <ScrollToTop />
       <CityHeader />
       <main className="flex-1">
         <div className="mx-auto max-w-3xl px-5 py-12 sm:py-16">

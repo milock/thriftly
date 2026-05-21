@@ -38,10 +38,13 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
   const expanded = selected;
 
   // Lead with the neighborhood ("North Park") when we have it; fall back to the
-  // city, then the street. The sub-line carries the full street address.
+  // city, then the street. The sub-line carries the full street address. Until
+  // enrichment resolves, show a placeholder rather than flashing a provisional
+  // value that then changes.
   const title = store.neighborhood || store.locality || store.street || "Goodwill";
   const sub =
     [store.street, store.locality, store.region].filter(Boolean).join(", ") || store.address;
+  const resolved = store.enriched || !!store.neighborhood;
 
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -94,8 +97,22 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
               </span>
             )}
           </div>
-          <h3 className="mt-0.5 truncate text-[15px] font-semibold leading-tight">{title}</h3>
-          {sub && <p className="truncate text-[13px] text-muted-foreground">{sub}</p>}
+          {resolved ? (
+            <h3 className="animate-in fade-in mt-0.5 truncate text-[15px] font-semibold leading-tight duration-300">
+              {title}
+            </h3>
+          ) : (
+            <div className="mt-1.5 h-[15px] w-28 animate-pulse rounded bg-muted" aria-hidden />
+          )}
+          {resolved ? (
+            sub && (
+              <p className="animate-in fade-in truncate text-[13px] text-muted-foreground duration-300">
+                {sub}
+              </p>
+            )
+          ) : (
+            <div className="mt-1.5 h-[12px] w-40 animate-pulse rounded bg-muted" aria-hidden />
+          )}
           <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] text-muted-foreground">
             <span className="tabular">{formatDistance(store.distanceMiles)} away</span>
             {open !== null && (
