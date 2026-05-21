@@ -61,22 +61,20 @@ export async function locateStores(
   // OpenStreetMap usually has the store's location but spotty address tags, and
   // its `addr:city` is the municipality, not the neighborhood. Reverse-geocode
   // each store's coordinate to add the neighborhood ("North Park") and backfill
-  // any missing street/city. Best-effort and per-coordinate cached, in small
-  // concurrent batches so we stay polite to the geocoder.
-  const BATCH = 8;
-  for (let i = 0; i < scored.length; i += BATCH) {
-    await Promise.all(
-      scored.slice(i, i + BATCH).map(async (s) => {
-        const rev = await reverseAddress(s.location.lat, s.location.lon);
-        if (!rev) return;
-        s.neighborhood = s.neighborhood ?? rev.neighborhood;
-        s.street = s.street ?? rev.street;
-        s.locality = s.locality ?? rev.locality;
-        s.region = s.region ?? rev.region;
-        s.address = [s.street, s.locality, s.region].filter(Boolean).join(", ") || s.address;
-      }),
-    );
-  }
+  // any missing street/city. Run in parallel (one round-trip, not N) so it stays
+  // off the critical path; each lookup is per-coordinate cached for a week and
+  // fails soft, so a slow or rate-limited geocoder just leaves OSM data in place.
+  await Promise.all(
+    scored.map(async (s) => {
+      const rev = await reverseAddress(s.location.lat, s.location.lon);
+      if (!rev) return;
+      s.neighborhood = s.neighborhood ?? rev.neighborhood;
+      s.street = s.street ?? rev.street;
+      s.locality = s.locality ?? rev.locality;
+      s.region = s.region ?? rev.region;
+      s.address = [s.street, s.locality, s.region].filter(Boolean).join(", ") || s.address;
+    }),
+  );
 
   scored.sort((a, b) => b.score.total - a.score.total);
   return scored;

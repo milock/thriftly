@@ -111,6 +111,8 @@ export async function reverseAddress(lat: number, lon: number): Promise<ReverseA
     const res = await fetch(url, {
       headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
       next: { revalidate: 604800 },
+      // Cap a single lookup so one slow response can't stall the whole request.
+      signal: AbortSignal.timeout(4000),
     });
     if (!res.ok) return null;
     const data = await res.json();

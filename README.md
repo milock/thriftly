@@ -291,15 +291,18 @@ CENSUS_API_KEY=your_key_here
 ## Testing
 
 ```bash
-npm test           # Vitest - pure logic: scoring, catchment, distance, hours, filters, data clients
-npm run test:e2e   # Playwright - landing + app, desktop + mobile (API mocked for determinism)
+npm test           # Vitest - pure logic: scoring, catchment, distance, hours, filters, data clients, metros
+npm run test:e2e   # Playwright - landing + search + city hub, desktop + mobile (API mocked for determinism)
 npm run build      # production build + type check
 npx tsc --noEmit   # type check only
 ```
 
 Playwright runs two projects: `desktop` (Chrome 1440×900) and `mobile` (**Pixel 7** - a Chromium device,
-chosen so no separate WebKit download is needed). Geolocation is granted in the config; `/api/*` is
-intercepted with fixtures (`e2e/fixtures.ts`).
+chosen so no separate WebKit download is needed). Geolocation is granted in the config; on `/search`,
+`/api/*` is intercepted with fixtures (`e2e/fixtures.ts`); the `/goodwill` hub is static, so its tests
+are hermetic. The Playwright `webServer` runs the **production build** (`build && start`), not the dev
+server, so prebuilt routes serve instantly and there are no per-route Turbopack compiles to time out
+under parallel workers.
 
 ## Scripts
 
@@ -311,10 +314,13 @@ intercepted with fixtures (`e2e/fixtures.ts`).
 
 Vercel, connected to this GitHub repo (pushes to `main` auto-deploy).
 
-- **File tracing:** `/api/stores` reads `data/tract-centroids/*.json` at runtime via a dynamic path,
-  which Next's tracer can't detect. `next.config.ts` forces it into the function bundle:
+- **File tracing:** the store-scoring functions read `data/tract-centroids/*.json` at runtime via a
+  dynamic path, which Next's tracer can't detect. `next.config.ts` forces it into both bundles:
   ```ts
-  outputFileTracingIncludes: { "/api/stores": ["./data/tract-centroids/**/*"] }
+  outputFileTracingIncludes: {
+    "/api/stores": ["./data/tract-centroids/**/*"],
+    "/goodwill/[slug]": ["./data/tract-centroids/**/*"],
+  }
   ```
   Without this, deployed scores are all 0 (ENOENT on the data files).
 - **Env:** set `CENSUS_API_KEY` for Production/Preview/Development (`printf '%s' KEY | vercel env add …` - 
@@ -349,6 +355,15 @@ The non-obvious things this build surfaced - keep these in mind when extending i
 - **shadcn here is built on Base UI, not Radix.** There is **no `asChild`** - use the `render` prop, or
   apply `buttonVariants(...)` classes to a `<Link>`/element. Sliders expose **`onValueCommitted`** (fires
   on release) in addition to `onValueChange`, and `onValueChange` hands you `number | number[]`.
+- **Base UI `<Select.Value>` shows the raw value by default**, not the selected item's label, so the
+  trigger reads the slug (`score`) until you open it. Pass a render child to map it:
+  `<SelectValue>{(v) => SORT_LABELS[v]}</SelectValue>`.
+- **OSM store addresses are spotty, and `addr:city` is the municipality, not the neighborhood.** Many
+  Goodwill nodes have a location but no `addr:*` tags, so cards came up blank. Fix: reverse-geocode each
+  store's coordinate (Photon) in `lib/locate.ts` to backfill the street and surface the neighborhood
+  ("North Park") for the title. Run the lookups in parallel, per-coordinate cached for a week, each with
+  a 4s timeout and soft failure, so enrichment stays off the critical path. Directions always use lat/lon
+  (which is why they resolve to the real address even when a card had none).
 - **lucide-react dropped brand icons** - there is no `Github` export. Use an inline SVG (see
   `components/github-link.tsx`).
 - **Leaflet z-index fights app overlays.** Its panes/controls go up to ~1000, hiding popovers/dropdowns.
