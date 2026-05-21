@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { locateStores } from "@/lib/locate";
+import { locateStores, nearestStore } from "@/lib/locate";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -14,6 +14,11 @@ export async function GET(request: Request) {
 
   try {
     const stores = await locateStores({ lat, lon }, radiusMiles);
+    // Coverage gap: nothing in range. Hand back the single nearest store so the
+    // UI can offer to jump to it instead of showing a dead end.
+    if (stores.length === 0) {
+      return NextResponse.json({ stores, nearest: nearestStore({ lat, lon }) });
+    }
     return NextResponse.json({ stores });
   } catch (err) {
     console.error("/api/stores failed", err);

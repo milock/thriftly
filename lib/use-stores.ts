@@ -1,18 +1,24 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import type { LatLng, ScoredStore } from "@/lib/types";
+import type { LatLng, ScoredStore, NearestHint } from "@/lib/types";
 
 interface State {
   stores: ScoredStore[];
   loading: boolean;
   error: string | null;
+  nearest: NearestHint | null;
 }
 
 type Enrichment = Pick<ScoredStore, "neighborhood" | "street" | "locality" | "region">;
 
 export function useStores() {
-  const [state, setState] = useState<State>({ stores: [], loading: false, error: null });
+  const [state, setState] = useState<State>({
+    stores: [],
+    loading: false,
+    error: null,
+    nearest: null,
+  });
   // Tracks the latest search so a slow response from a superseded search can't
   // overwrite newer results (e.g. fast radius changes or "search this area").
   const reqId = useRef(0);
@@ -69,14 +75,14 @@ export function useStores() {
       try {
         const res = await fetch(`/api/stores?lat=${center.lat}&lon=${center.lon}&radius=${radiusMiles}`);
         if (!res.ok) throw new Error(`Request failed (${res.status})`);
-        const data = (await res.json()) as { stores: ScoredStore[] };
+        const data = (await res.json()) as { stores: ScoredStore[]; nearest?: NearestHint | null };
         if (reqId.current !== id) return; // superseded
         const stores = data.stores ?? [];
-        setState({ stores, loading: false, error: null });
+        setState({ stores, loading: false, error: null, nearest: data.nearest ?? null });
         if (stores.length) void enrich(stores, id);
       } catch (e) {
         if (reqId.current !== id) return;
-        setState({ stores: [], loading: false, error: (e as Error).message });
+        setState({ stores: [], loading: false, error: (e as Error).message, nearest: null });
       }
     },
     [enrich],

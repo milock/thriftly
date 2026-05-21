@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ScoredStore, TractDemographics, LatLng } from "@/lib/types";
+import type { ScoredStore, TractDemographics, LatLng, NearestHint } from "@/lib/types";
 import { fetchGoodwillStores } from "@/lib/overpass";
 import { fetchCountyDemographics } from "@/lib/census";
 import { getStateForPoint } from "@/lib/geocode";
@@ -50,6 +50,31 @@ export async function locateStores(
   } catch {
     return [];
   }
+}
+
+/**
+ * The single nearest store in the bundled national dataset, regardless of
+ * radius. Used to give a useful answer when a search center has no Goodwill in
+ * range (rural counties, remote areas): "nearest is 89 mi away in Redding, CA."
+ */
+export function nearestStore(center: LatLng): NearestHint | null {
+  let best: ScoredStore | null = null;
+  let bestMiles = Infinity;
+  for (const s of nationalDataset()) {
+    const d = haversineMiles(center, s.location);
+    if (d < bestMiles) {
+      bestMiles = d;
+      best = s;
+    }
+  }
+  if (!best) return null;
+  return {
+    name: best.name,
+    locality: best.locality,
+    region: best.region,
+    distanceMiles: bestMiles,
+    location: best.location,
+  };
 }
 
 /**

@@ -1,8 +1,9 @@
 "use client";
 
-import { SearchX, TriangleAlert } from "lucide-react";
-import type { ScoredStore } from "@/lib/types";
+import { SearchX, TriangleAlert, MapPin } from "lucide-react";
+import type { ScoredStore, NearestHint } from "@/lib/types";
 import { StoreCard } from "@/components/store-card";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   stores: ScoredStore[];
@@ -10,6 +11,10 @@ interface Props {
   error: string | null;
   selectedId: string | null;
   onSelect: (id: string | null) => void;
+  /** The closest store when none are in range, so we can offer to jump to it. */
+  nearest?: NearestHint | null;
+  /** Widen the search to include the nearest store (set radius to its distance). */
+  onExpand?: () => void;
 }
 
 function CardSkeleton() {
@@ -39,7 +44,15 @@ function EmptyState({ icon, title, body }: { icon: React.ReactNode; title: strin
   );
 }
 
-export function StoreList({ stores, loading, error, selectedId, onSelect }: Props) {
+export function StoreList({
+  stores,
+  loading,
+  error,
+  selectedId,
+  onSelect,
+  nearest,
+  onExpand,
+}: Props) {
   if (loading) {
     return (
       <div className="space-y-2.5">
@@ -59,6 +72,27 @@ export function StoreList({ stores, loading, error, selectedId, onSelect }: Prop
     );
   }
   if (stores.length === 0) {
+    if (nearest) {
+      const miles = Math.round(nearest.distanceMiles);
+      const place = [nearest.locality, nearest.region].filter(Boolean).join(", ");
+      const reachable = nearest.distanceMiles <= 100; // max search radius
+      return (
+        <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border px-6 py-14 text-center">
+          <div className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <MapPin className="size-5" />
+          </div>
+          <p className="text-sm font-medium">No Goodwill stores in range</p>
+          <p className="max-w-xs text-[13px] text-muted-foreground">
+            The nearest one is about {miles} mi away{place ? ` in ${place}` : ""}.
+          </p>
+          {reachable && onExpand && (
+            <Button variant="outline" size="sm" className="mt-2" onClick={onExpand}>
+              Search within {miles} mi
+            </Button>
+          )}
+        </div>
+      );
+    }
     return (
       <EmptyState
         icon={<SearchX className="size-5" />}

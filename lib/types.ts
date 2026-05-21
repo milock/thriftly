@@ -75,3 +75,16 @@ export interface StoreQuery {
   lon: number;
   radiusMiles: number;
 }
+
+/**
+ * The single closest Goodwill to a search center, returned when nothing falls
+ * within the requested radius. Lets the UI point a user in a coverage gap (rural
+ * counties, remote areas) at the nearest real store instead of a dead end.
+ */
+export interface NearestHint {
+  name: string;
+  locality?: string;
+  region?: string;
+  distanceMiles: number;
+  location: LatLng;
+}
