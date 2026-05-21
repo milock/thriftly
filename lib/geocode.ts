@@ -68,3 +68,54 @@ export async function reverseGeocode(lat: number, lon: number): Promise<string |
     return null;
   }
 }
+
+export interface PlaceSuggestion {
+  id: string;
+  label: string;
+  lat: number;
+  lon: number;
+}
+
+const PHOTON = "https://photon.komoot.io/api";
+
+/** Live address/ZIP autocomplete suggestions (Photon — built for typeahead). */
+export async function suggestPlaces(query: string): Promise<PlaceSuggestion[]> {
+  const q = query.trim();
+  if (q.length < 3) return [];
+  const url = `${PHOTON}/?q=${encodeURIComponent(q)}&limit=6&lang=en`;
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "goodwill-locator/1.0" },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const feats = Array.isArray(data?.features) ? data.features : [];
+    const out: PlaceSuggestion[] = [];
+    const seen = new Set<string>();
+    for (const f of feats) {
+      const p = f?.properties ?? {};
+      if (p.countrycode && p.countrycode !== "US") continue;
+      const coords = f?.geometry?.coordinates;
+      if (!Array.isArray(coords) || coords.length < 2) continue;
+      const primary =
+        p.name ||
+        [p.housenumber, p.street].filter(Boolean).join(" ") ||
+        p.postcode ||
+        p.city ||
+        p.county;
+      if (!primary) continue;
+      const rest = [p.city && p.city !== primary ? p.city : null, p.state]
+        .filter(Boolean)
+        .join(", ");
+      const label = [primary, rest].filter(Boolean).join(", ");
+      if (seen.has(label)) continue;
+      seen.add(label);
+      out.push({ id: `${coords[1]},${coords[0]}:${label}`, label, lat: coords[1], lon: coords[0] });
+      if (out.length >= 6) break;
+    }
+    return out;
+  } catch {
+    return [];
+  }
+}

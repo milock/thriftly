@@ -11,6 +11,8 @@ import { FilterPanel } from "@/components/filter-panel";
 import { StoreList } from "@/components/store-list";
 import { Methodology } from "@/components/methodology";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { CoffeeLink } from "@/components/coffee-link";
+import { GithubLink } from "@/components/github-link";
 import { Wordmark } from "@/components/wordmark";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -112,12 +114,13 @@ export default function AppPage() {
       stores={visible}
       selectedId={selectedId}
       onSelect={setSelectedId}
+      onSearchArea={relocate}
     />
   );
 
   return (
     <div className="flex h-dvh flex-col">
-      <header className="z-20 shrink-0 border-b bg-background/85 backdrop-blur">
+      <header className="relative z-30 shrink-0 border-b bg-background/85 backdrop-blur">
         <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
           <Wordmark />
           <div className="hidden flex-1 justify-center px-6 lg:flex">
@@ -125,6 +128,8 @@ export default function AppPage() {
           </div>
           <div className="flex items-center gap-0.5">
             <Methodology />
+            <GithubLink />
+            <CoffeeLink />
             <ThemeToggle />
           </div>
         </div>

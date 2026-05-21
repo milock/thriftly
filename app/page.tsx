@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { CoffeeLink } from "@/components/coffee-link";
+import { GithubLink, GithubMark, REPO_URL } from "@/components/github-link";
 import { ScoreRing } from "@/components/score-ring";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -56,8 +58,10 @@ export default function Landing() {
             >
               How it works
             </Link>
+            <GithubLink />
+            <CoffeeLink />
             <ThemeToggle />
-            <Link href="/app" className={cn(buttonVariants({ size: "sm" }), "h-9 gap-1.5 px-3.5")}>
+            <Link href="/search" className={cn(buttonVariants({ size: "sm" }), "h-9 gap-1.5 px-3.5")}>
               Launch app
               <ArrowRight className="size-3.5" />
             </Link>
@@ -70,7 +74,7 @@ export default function Landing() {
         <section className="relative overflow-hidden">
           <div className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)] opacity-70" />
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:pb-28 lg:pt-24">
-            <div className="relative">
+            <div className="animate-in fade-in slide-in-from-bottom-3 relative duration-700">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[12px] font-medium text-muted-foreground">
                 <Sparkles className="size-3.5" />
                 Built on U.S. Census + OpenStreetMap
@@ -85,7 +89,7 @@ export default function Landing() {
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
-                  href="/app"
+                  href="/search"
                   className={cn(buttonVariants({ size: "lg" }), "h-12 gap-2 px-6 text-[15px]")}
                 >
                   Find stores near me
@@ -99,12 +103,12 @@ export default function Landing() {
                 </Link>
               </div>
               <p className="mt-5 text-[13px] text-muted-foreground">
-                Free · No sign-up · Works anywhere in the U.S.
+                Free · No sign-up · Open source
               </p>
             </div>
 
             {/* Hero preview */}
-            <div className="relative">
+            <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both relative delay-150 duration-700">
               <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-muted/60 to-transparent blur-2xl" />
               <PreviewPanel />
             </div>
@@ -198,7 +202,7 @@ export default function Landing() {
               Drop in a ZIP code and see every Goodwill nearby, ranked by where the good stuff is.
             </p>
             <Link
-              href="/app"
+              href="/search"
               className={cn(buttonVariants({ size: "lg", variant: "secondary" }), "mt-8 h-12 gap-2 px-6 text-[15px]")}
             >
               Launch the locator
@@ -210,7 +214,18 @@ export default function Landing() {
 
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <Wordmark />
+          <div className="flex flex-col gap-2">
+            <Wordmark />
+            <a
+              href={REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-fit items-center gap-1.5 text-[13px] font-medium text-foreground underline-offset-4 hover:underline"
+            >
+              <GithubMark className="size-3.5" />
+              Open source on GitHub
+            </a>
+          </div>
           <p className="max-w-md leading-relaxed">
             Data from the{" "}
             <a

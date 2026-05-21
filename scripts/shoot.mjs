@@ -34,9 +34,9 @@ await shoot("/", "lp-desktop", desktop, { waitRing: true });
 await shoot("/", "lp-full", desktop, { waitRing: true, fullPage: true });
 await shoot("/", "lp-mobile", mobile, { waitRing: true });
 // App
-await shoot("/app", "app-desktop", desktop, { waitRing: true });
-await shoot("/app", "app-mobile", mobile, { waitRing: true });
-await shoot("/app", "app-mobile-map", mobile, { waitRing: true, tab: "map" });
+await shoot("/search", "app-desktop", desktop, { waitRing: true });
+await shoot("/search", "app-mobile", mobile, { waitRing: true });
+await shoot("/search", "app-mobile-map", mobile, { waitRing: true, tab: "map" });
 
 await browser.close();
 console.log("done:", TAG);

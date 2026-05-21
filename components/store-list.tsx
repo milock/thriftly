@@ -9,7 +9,7 @@ interface Props {
   loading: boolean;
   error: string | null;
   selectedId: string | null;
-  onSelect: (id: string) => void;
+  onSelect: (id: string | null) => void;
 }
 
 function CardSkeleton() {

@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  type Filters,
-  type SortKey,
-  RADIUS_STOPS,
-  SORT_LABELS,
-} from "@/lib/filters";
+import { useEffect, useState } from "react";
+import { type Filters, type SortKey, SORT_LABELS } from "@/lib/filters";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -23,29 +19,44 @@ interface Props {
   className?: string;
 }
 
-function radiusLabel(mi: number): string {
-  return mi < 1 ? `${mi} mi` : `${mi} mi`;
-}
-
 const toNum = (v: number | readonly number[]): number => (Array.isArray(v) ? v[0] : (v as number));
+
+// Smooth, non-linear radius mapping: a quadratic curve gives fine control close in
+// (0.5–10 mi) while still reaching 100 mi. The slider glides continuously; we only
+// commit (and refetch) on release.
+function pctToMiles(p: number): number {
+  const t = Math.max(0, Math.min(1, p / 100));
+  return 0.5 + 99.5 * t * t;
+}
+function milesToPct(m: number): number {
+  return Math.sqrt(Math.max(0, (m - 0.5) / 99.5)) * 100;
+}
+function snapMiles(m: number): number {
+  return m < 10 ? Math.round(m * 2) / 2 : Math.round(m);
+}
 
 export function FilterPanel({ filters, onChange, className }: Props) {
   const set = (patch: Partial<Filters>) => onChange({ ...filters, ...patch });
-  const radiusIndex = Math.max(0, RADIUS_STOPS.indexOf(filters.radiusMiles));
+  const [radiusPct, setRadiusPct] = useState(() => milesToPct(filters.radiusMiles));
+  useEffect(() => {
+    setRadiusPct(milesToPct(filters.radiusMiles));
+  }, [filters.radiusMiles]);
+  const draftMiles = snapMiles(pctToMiles(radiusPct));
 
   return (
     <div className={`space-y-6 ${className ?? ""}`}>
       <div className="space-y-2.5">
         <div className="flex items-baseline justify-between">
           <Label className="text-[13px] text-muted-foreground">Search radius</Label>
-          <span className="tabular text-[13px] font-semibold">{radiusLabel(filters.radiusMiles)}</span>
+          <span className="tabular text-[13px] font-semibold">{draftMiles} mi</span>
         </div>
         <Slider
           min={0}
-          max={RADIUS_STOPS.length - 1}
-          step={1}
-          value={[radiusIndex < 0 ? 6 : radiusIndex]}
-          onValueChange={(v) => set({ radiusMiles: RADIUS_STOPS[toNum(v)] })}
+          max={100}
+          step={0.5}
+          value={[radiusPct]}
+          onValueChange={(v) => setRadiusPct(toNum(v))}
+          onValueCommitted={(v) => set({ radiusMiles: snapMiles(pctToMiles(toNum(v))) })}
           aria-label="Search radius"
         />
         <div className="flex justify-between text-[10px] text-muted-foreground">
@@ -62,7 +73,7 @@ export function FilterPanel({ filters, onChange, className }: Props) {
         <Slider
           min={0}
           max={100}
-          step={5}
+          step={1}
           value={[filters.minScore]}
           onValueChange={(v) => set({ minScore: toNum(v) })}
           aria-label="Minimum Goods Score"
