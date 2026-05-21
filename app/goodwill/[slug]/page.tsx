@@ -72,19 +72,17 @@ export async function generateMetadata({
   const { slug } = await params;
   const m = getMetro(slug);
   if (!m) return {};
-  const stores = await getCityStores(m);
-  const count = stores.length;
+  // IMPORTANT: do NOT fetch store data here. generateMetadata blocks the whole
+  // response (including the loading.tsx skeleton), so awaiting Overpass/Census
+  // here is what made a click sit for ~10s before any loading state appeared.
+  // Build metadata from the static city record only.
   const title = `Best Goodwill stores in ${m.city}, ${m.state}`;
-  const description = count
-    ? `${count} Goodwill ${count === 1 ? "store" : "stores"} in ${m.city}, ${m.stateName}, ranked 0 to 100 by neighborhood affluence. See the top-rated locations with scores, directions, and a live map.`
-    : `Find Goodwill thrift stores near ${m.city}, ${m.stateName}, ranked by neighborhood affluence on a live map.`;
+  const description = `Find the best Goodwill thrift stores in ${m.city}, ${m.stateName}, ranked 0 to 100 by neighborhood affluence. See the top-rated locations with scores, directions, and a live map.`;
   return {
     title,
     description,
     alternates: { canonical: `/goodwill/${m.slug}` },
     openGraph: { title: `${title} | Thriftly`, description, url: `/goodwill/${m.slug}`, type: "website" },
-    // Don't index a city page with no store data; it has nothing unique to offer yet.
-    robots: count ? undefined : { index: false, follow: true },
   };
 }
 
