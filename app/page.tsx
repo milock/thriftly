@@ -95,7 +95,7 @@ export default function Landing() {
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:pb-28 lg:pt-24">
             <div className="animate-in fade-in slide-in-from-bottom-3 relative duration-700">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[12px] font-medium text-muted-foreground">
-                <Sparkles className="size-3.5" />
+                <Sparkles className="size-3.5 text-[var(--brand)]" />
                 Built on U.S. Census + OpenStreetMap
               </span>
               <h1 className="mt-5 text-[2.6rem] font-semibold leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.5rem]">
