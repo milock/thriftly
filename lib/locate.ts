@@ -58,24 +58,42 @@ export async function locateStores(
     };
   });
 
+  scored.sort((a, b) => b.score.total - a.score.total);
+
   // OpenStreetMap usually has the store's location but spotty address tags, and
   // its `addr:city` is the municipality, not the neighborhood. Reverse-geocode
-  // each store's coordinate to add the neighborhood ("North Park") and backfill
-  // any missing street/city. Run in parallel (one round-trip, not N) so it stays
-  // off the critical path; each lookup is per-coordinate cached for a week and
-  // fails soft, so a slow or rate-limited geocoder just leaves OSM data in place.
-  await Promise.all(
-    scored.map(async (s) => {
-      const rev = await reverseAddress(s.location.lat, s.location.lon);
-      if (!rev) return;
-      s.neighborhood = s.neighborhood ?? rev.neighborhood;
-      s.street = s.street ?? rev.street;
-      s.locality = s.locality ?? rev.locality;
-      s.region = s.region ?? rev.region;
-      s.address = [s.street, s.locality, s.region].filter(Boolean).join(", ") || s.address;
-    }),
-  );
+  // each store's coordinate to add the neighborhood ("Westwood") and backfill
+  // any missing street/city. Only the top-ranked stores (which is what people
+  // act on) and a low concurrency keep us polite to the geocoder and bound the
+  // cold-render time; each lookup is cached a week, so repeats are free.
+  await mapWithConcurrency(scored.slice(0, ENRICH_LIMIT), 3, async (s) => {
+    const rev = await reverseAddress(s.location.lat, s.location.lon);
+    if (!rev) return;
+    s.neighborhood = s.neighborhood ?? rev.neighborhood;
+    s.street = s.street ?? rev.street;
+    s.locality = s.locality ?? rev.locality;
+    s.region = s.region ?? rev.region;
+    s.address = [s.street, s.locality, s.region].filter(Boolean).join(", ") || s.address;
+  });
 
-  scored.sort((a, b) => b.score.total - a.score.total);
   return scored;
+}
+
+// How many top-ranked stores to reverse-geocode per request.
+const ENRICH_LIMIT = 30;
+
+/** Run `fn` over `items` with at most `limit` in flight at once. */
+async function mapWithConcurrency<T>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<void>,
+): Promise<void> {
+  let next = 0;
+  const worker = async () => {
+    while (next < items.length) {
+      const i = next++;
+      await fn(items[i]);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
 }

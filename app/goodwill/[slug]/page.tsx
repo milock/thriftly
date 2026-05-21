@@ -12,12 +12,14 @@ import { JsonLd } from "@/components/json-ld";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const SITE_URL = "https://thriftly.xyz";
+const SITE_URL = "https://www.thriftly.xyz";
 
-// Render each city page on first request and cache it for a day (ISR). This
-// keeps `next build` free of upstream API calls (no rate-limit risk, no chance
-// of caching an empty page from a transient build-time failure); the sitemap
-// drives crawl discovery, and the first crawl/visit warms the cache.
+// Cache each city page for a day (ISR): the first visit renders it (a skeleton
+// shows via loading.tsx), then it's served from cache for everyone until the
+// daily background refresh, not re-fetched per load. We deliberately don't
+// generateStaticParams: pre-rendering would run Overpass + Census + dozens of
+// reverse-geocodes per city during the build, and a transient build-time
+// failure would cache an empty page for a day.
 export const revalidate = 86400;
 export const dynamicParams = true;
 

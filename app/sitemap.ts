@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { METROS } from "@/lib/metros";
 
-const SITE_URL = "https://thriftly.xyz";
+// Must match the canonical host (www); apex URLs would redirect and GSC won't index them.
+const SITE_URL = "https://www.thriftly.xyz";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

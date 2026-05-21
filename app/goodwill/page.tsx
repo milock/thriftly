@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/json-ld";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const SITE_URL = "https://thriftly.xyz";
+const SITE_URL = "https://www.thriftly.xyz";
 
 export const metadata: Metadata = {
   title: "Goodwill stores by city",

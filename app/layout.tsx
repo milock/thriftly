@@ -5,7 +5,10 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { JsonLd } from "@/components/json-ld";
 import "./globals.css";
 
-const SITE_URL = "https://thriftly.xyz";
+// Canonical host. The site serves on www (apex 307-redirects to www), so every
+// emitted URL (canonical, OG, sitemap, JSON-LD) must use www to avoid pointing
+// search engines at redirecting URLs.
+const SITE_URL = "https://www.thriftly.xyz";
 const TITLE = "Thriftly: find the best Goodwill near you";
 const DESCRIPTION =
   "Find the best Goodwill near you. Thriftly ranks nearby thrift stores from 0 to 100 by neighborhood affluence, so you know where the best donations land.";

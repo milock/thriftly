@@ -105,27 +105,58 @@ const PHOTON_REVERSE = "https://photon.komoot.io/reverse";
  * week since a store's address doesn't move. Returns null on miss/error so the
  * caller keeps whatever it already had.
  */
-export async function reverseAddress(lat: number, lon: number): Promise<ReverseAddress | null> {
+async function reverseViaNominatim(lat: number, lon: number): Promise<ReverseAddress | null> {
+  const url = `${NOMINATIM_REVERSE}?lat=${lat}&lon=${lon}&format=json&zoom=18&addressdetails=1`;
+  const res = await fetch(url, {
+    headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
+    next: { revalidate: 604800 },
+    signal: AbortSignal.timeout(4500),
+  });
+  if (!res.ok) return null;
+  const a = (await res.json())?.address ?? {};
+  if (a.country_code && a.country_code !== "us") return null;
+  const street = [a.house_number, a.road].filter(Boolean).join(" ") || undefined;
+  const neighborhood = a.neighbourhood || a.suburb || a.quarter || a.city_district || undefined;
+  const locality = a.city || a.town || a.village || undefined;
+  const iso = a["ISO3166-2-lvl4"];
+  const region = typeof iso === "string" ? iso.split("-")[1] : toStateAbbr(a.state);
+  if (!street && !neighborhood && !locality) return null;
+  return { street, neighborhood, locality, region };
+}
+
+async function reverseViaPhoton(lat: number, lon: number): Promise<ReverseAddress | null> {
   const url = `${PHOTON_REVERSE}?lat=${lat}&lon=${lon}&lang=en`;
+  const res = await fetch(url, {
+    headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
+    next: { revalidate: 604800 },
+    signal: AbortSignal.timeout(4500),
+  });
+  if (!res.ok) return null;
+  const p = (await res.json())?.features?.[0]?.properties ?? {};
+  if (p.countrycode && p.countrycode !== "US") return null;
+  const street = [p.housenumber, p.street].filter(Boolean).join(" ") || undefined;
+  const neighborhood = p.district || p.suburb || p.neighbourhood || p.locality || undefined;
+  const locality = p.city || p.town || p.village || undefined;
+  const region = toStateAbbr(p.state);
+  if (!street && !neighborhood && !locality) return null;
+  return { street, neighborhood, locality, region };
+}
+
+/**
+ * Best-effort structured address for a coordinate, used to backfill store cards.
+ * Nominatim is primary (richest neighborhood data, e.g. "Westwood"); Photon is
+ * the fallback. Each is time-boxed and cached a week per coordinate, and the
+ * whole thing soft-fails so a slow/unavailable geocoder just leaves OSM data.
+ */
+export async function reverseAddress(lat: number, lon: number): Promise<ReverseAddress | null> {
   try {
-    const res = await fetch(url, {
-      headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
-      next: { revalidate: 604800 },
-      // Cap a single lookup so one slow response can't stall the whole request.
-      signal: AbortSignal.timeout(4000),
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const p = data?.features?.[0]?.properties ?? {};
-    if (p.countrycode && p.countrycode !== "US") return null;
-    const street = [p.housenumber, p.street].filter(Boolean).join(" ") || undefined;
-    // Photon exposes the neighborhood as `district` (e.g. "North Park"); fall
-    // back to other granularities. Keep the city separate as `locality`.
-    const neighborhood = p.district || p.suburb || p.neighbourhood || p.locality || undefined;
-    const locality = p.city || p.town || p.village || undefined;
-    const region = toStateAbbr(p.state);
-    if (!street && !neighborhood && !locality) return null;
-    return { street, neighborhood, locality, region };
+    const viaNominatim = await reverseViaNominatim(lat, lon);
+    if (viaNominatim) return viaNominatim;
+  } catch {
+    // fall through to Photon
+  }
+  try {
+    return await reverseViaPhoton(lat, lon);
   } catch {
     return null;
   }
