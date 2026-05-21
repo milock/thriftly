@@ -6,7 +6,7 @@ const NOMINATIM = "https://nominatim.openstreetmap.org/search";
 export async function geocodeAddress(query: string): Promise<LatLng | null> {
   const url = `${GEOCODER}/locations/onelineaddress?address=${encodeURIComponent(query)}&benchmark=Public_AR_Current&format=json`;
   try {
-    const res = await fetch(url, { next: { revalidate: 86400 } });
+    const res = await fetch(url, { next: { revalidate: 86400 }, signal: AbortSignal.timeout(6000) });
     if (res.ok) {
       const data = await res.json();
       const m = data?.result?.addressMatches?.[0];
@@ -19,6 +19,7 @@ export async function geocodeAddress(query: string): Promise<LatLng | null> {
   const nRes = await fetch(nUrl, {
     headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
     next: { revalidate: 86400 },
+    signal: AbortSignal.timeout(6000),
   });
   if (!nRes.ok) return null;
   let arr: unknown;
@@ -35,11 +36,14 @@ export async function getStateForPoint(p: LatLng): Promise<string | null> {
   const url =
     `${GEOCODER}/geographies/coordinates?x=${p.lon}&y=${p.lat}` +
     `&benchmark=Public_AR_Current&vintage=Census2020_Current&format=json`;
-  const res = await fetch(url, { next: { revalidate: 86400 } });
-  if (!res.ok) return null;
-  const data = await res.json();
-  const tract = data?.result?.geographies?.["Census Tracts"]?.[0];
-  return tract?.STATE ?? null;
+  try {
+    const res = await fetch(url, { next: { revalidate: 86400 }, signal: AbortSignal.timeout(6000) });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.result?.geographies?.["Census Tracts"]?.[0]?.STATE ?? null;
+  } catch {
+    return null; // timeout/network: skip scoring rather than hang the render
+  }
 }
 
 const NOMINATIM_REVERSE = "https://nominatim.openstreetmap.org/reverse";

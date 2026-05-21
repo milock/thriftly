@@ -2,12 +2,14 @@ import type { LatLng, Store } from "@/lib/types";
 
 const FR = "https://overpass.openstreetmap.fr/api/interpreter";
 const DE = "https://overpass-api.de/api/interpreter";
+const KUMI = "https://overpass.kumi.systems/api/interpreter";
 
-// Production uses .fr first. The precompute job sets OVERPASS_PRIMARY=de so its
+// Try multiple mirrors so one being slow/rate-limited doesn't blank results.
+// Production uses .fr first; the precompute job sets OVERPASS_PRIMARY=de so its
 // bulk traffic doesn't throttle the endpoint production depends on. Read at
 // call time so the precompute can set it after this module is imported.
 function endpoints(): string[] {
-  return process.env.OVERPASS_PRIMARY === "de" ? [DE, FR] : [FR, DE];
+  return process.env.OVERPASS_PRIMARY === "de" ? [DE, KUMI, FR] : [FR, DE, KUMI];
 }
 
 interface OverpassElement {

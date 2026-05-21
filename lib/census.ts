@@ -59,7 +59,8 @@ export async function fetchCountyDemographics(
   const detailUrl = `${BASE}?get=NAME,B19013_001E,B25077_001E,B25064_001E,B01003_001E${where}${key}`;
   const subjectUrl = `${BASE}/subject?get=NAME,S1501_C02_015E${where}${key}`;
 
-  const opts: RequestInit = { next: { revalidate: 2592000 } }; // 30 days
+  // Time-box so a slow Census response can't hang a page render for minutes.
+  const opts: RequestInit = { next: { revalidate: 2592000 }, signal: AbortSignal.timeout(8000) }; // 30 days
   const [detailRes, subjectRes] = await Promise.all([fetch(detailUrl, opts), fetch(subjectUrl, opts)]);
   if (!detailRes.ok) throw new Error(`Census detail ${detailRes.status}`);
   if (!subjectRes.ok) throw new Error(`Census subject ${subjectRes.status}`);
