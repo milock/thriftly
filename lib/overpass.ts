@@ -70,21 +70,22 @@ export function parseOverpass(data: OverpassResponse): Store[] {
 
 export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): Promise<Store[]> {
   const body = `data=${encodeURIComponent(buildQuery(center, radiusMiles))}`;
-  const opts: RequestInit = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)",
-    },
-    body,
-    next: { revalidate: 86400 }, // cache a day
-  };
   // Try each endpoint in order. A mirror intermittently returns HTTP 200 with
   // zero elements when it's under load, so we treat "no stores" the same as an
-  // error and try the next endpoint rather than reporting an empty result.
+  // error and try the next endpoint rather than reporting an empty result. Each
+  // attempt is time-boxed so a slow/throttled mirror bails quickly to the next.
   for (const endpoint of endpoints()) {
     try {
-      const res = await fetch(endpoint, opts);
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)",
+        },
+        body,
+        next: { revalidate: 86400 }, // cache a day
+        signal: AbortSignal.timeout(9000),
+      });
       if (!res.ok) continue;
       const data = (await res.json()) as OverpassResponse;
       const stores = parseOverpass(data);

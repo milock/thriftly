@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { WEIGHTS } from "@/lib/reference-ranges";
 import { FACTOR_LABELS, FACTOR_BLURB, scoreColor } from "@/lib/score-color";
 import { getCity } from "@/lib/cities";
+import { Meteors } from "@/components/meteors";
 import type { FactorKey } from "@/lib/types";
 
 const ORDER: FactorKey[] = [
@@ -90,6 +91,7 @@ export default function Landing() {
         {/* Hero */}
         <section className="relative overflow-hidden">
           <div className="bg-grid pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)] opacity-70" />
+          <Meteors count={14} />
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:pb-28 lg:pt-24">
             <div className="animate-in fade-in slide-in-from-bottom-3 relative duration-700">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[12px] font-medium text-muted-foreground">

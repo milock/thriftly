@@ -203,6 +203,43 @@
   font-size: 10px !important;
 }
 
+/* Subtle "meteors": thin streaks that drift diagonally across a hero surface. */
+.meteor {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  width: 1px;
+  border-radius: 9999px;
+  background: color-mix(in oklch, var(--foreground) 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--foreground) 12%, transparent);
+  animation-name: meteor;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  opacity: 0;
+}
+.meteor::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 1px;
+  background: linear-gradient(90deg, color-mix(in oklch, var(--foreground) 45%, transparent), transparent);
+}
+@keyframes meteor {
+  0% {
+    transform: rotate(215deg) translateX(0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: rotate(215deg) translateX(-780px);
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
