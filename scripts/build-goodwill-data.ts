@@ -28,29 +28,47 @@ import { fetchCountyDemographics } from "../lib/census";
 import { tractsWithinRadius, aggregateCatchment } from "../lib/catchment";
 import { computeGoodsScore } from "../lib/scoring";
 import { CATCHMENT_RADIUS_MILES } from "../lib/reference-ranges";
+import { STATES } from "../lib/cities";
 
 const OVERPASS = process.env.OVERPASS_URL ?? "https://overpass-api.de/api/interpreter";
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+// One small query PER STATE (sequential, gently paced), not one giant US query.
+// A whole-US query takes long enough to trip undici's headers timeout and stress
+// Overpass; per-state queries each return fast and stay well within limits.
 async function fetchAllUSGoodwill(): Promise<Store[]> {
-  const query = `[out:json][timeout:1200];
-area["ISO3166-1"="US"][admin_level=2]->.us;
+  const seen = new Map<string, Store>();
+  for (const st of STATES) {
+    const query = `[out:json][timeout:180];
+area["ISO3166-2"="US-${st.code}"][admin_level=4]->.s;
 (
-  nwr["brand"="Goodwill"](area.us);
-  nwr["name"~"^Goodwill"]["shop"](area.us);
+  nwr["brand"="Goodwill"](area.s);
+  nwr["name"~"^Goodwill"]["shop"](area.s);
 );
 out center tags;`;
-  const res = await fetch(OVERPASS, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      // Descriptive UA with contact, per OSM policy.
-      "User-Agent": "Thriftly/1.0 (+https://thriftly.xyz; michael@clarityrcm.com)",
-    },
-    body: `data=${encodeURIComponent(query)}`,
-    signal: AbortSignal.timeout(600_000),
-  });
-  if (!res.ok) throw new Error(`Overpass HTTP ${res.status}`);
-  return parseOverpass(await res.json());
+    try {
+      const res = await fetch(OVERPASS, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "User-Agent": "Thriftly/1.0 (+https://thriftly.xyz; michael@clarityrcm.com)",
+        },
+        body: `data=${encodeURIComponent(query)}`,
+        signal: AbortSignal.timeout(120_000),
+      });
+      if (!res.ok) {
+        console.error(`${st.code}: HTTP ${res.status}`);
+      } else {
+        const stores = parseOverpass(await res.json());
+        for (const s of stores) if (!seen.has(s.id)) seen.set(s.id, s);
+        console.log(`${st.code}: ${stores.length} stores (running total ${seen.size})`);
+      }
+    } catch (e) {
+      console.error(`${st.code}: ${(e as Error).message}`);
+    }
+    await sleep(6000); // gentle pause between states
+  }
+  return [...seen.values()];
 }
 
 function loadAllCentroids(): TractCentroid[] {
