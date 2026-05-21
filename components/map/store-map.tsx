@@ -5,7 +5,7 @@ import L from "leaflet";
 import { useEffect } from "react";
 import { useTheme } from "next-themes";
 import type { LatLng, ScoredStore } from "@/lib/types";
-import { scoreColor } from "@/lib/score-color";
+import { scoreColor, scoreInk } from "@/lib/score-color";
 import { formatDistance, directionsUrl } from "@/lib/format";
 
 interface Props {
@@ -20,11 +20,12 @@ const MI_TO_M = 1609.34;
 
 function pinIcon(score: number, selected: boolean): L.DivIcon {
   const color = scoreColor(score);
+  const ink = scoreInk(score);
   const size = selected ? 40 : 30;
   const ring = selected ? "box-shadow:0 0 0 3px rgba(0,0,0,0.55),0 2px 6px rgba(0,0,0,0.35);" : "box-shadow:0 1px 4px rgba(0,0,0,0.35);";
   return L.divIcon({
     className: "gw-pin",
-    html: `<div style="width:${size}px;height:${size}px;border-radius:9999px;background:${color};color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-geist-sans),system-ui,sans-serif;font-weight:600;font-size:${selected ? 14 : 12}px;border:2px solid #fff;${ring};transition:all .15s ease;">${Math.round(score)}</div>`,
+    html: `<div style="width:${size}px;height:${size}px;border-radius:9999px;background:${color};color:${ink};display:flex;align-items:center;justify-content:center;font-family:var(--font-geist-sans),system-ui,sans-serif;font-weight:700;font-size:${selected ? 14 : 12}px;border:2px solid #fff;${ring};transition:all .15s ease;">${Math.round(score)}</div>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
     popupAnchor: [0, -(size / 2)],

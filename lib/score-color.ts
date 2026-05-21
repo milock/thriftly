@@ -39,7 +39,7 @@ function oklchToRgb(L: number, C: number, H: number): string {
   return `rgb(${to255(lr)}, ${to255(lg)}, ${to255(lb)})`;
 }
 
-export function scoreColor(score: number): string {
+function interp(score: number): { L: number; C: number; H: number } {
   const s = Math.max(0, Math.min(100, score));
   let lo = STOPS[0];
   let hi = STOPS[STOPS.length - 1];
@@ -51,7 +51,17 @@ export function scoreColor(score: number): string {
     }
   }
   const t = (s - lo.at) / (hi.at - lo.at || 1);
-  return oklchToRgb(lerp(lo.l, hi.l, t), lerp(lo.c, hi.c, t), lerp(lo.h, hi.h, t));
+  return { L: lerp(lo.l, hi.l, t), C: lerp(lo.c, hi.c, t), H: lerp(lo.h, hi.h, t) };
+}
+
+export function scoreColor(score: number): string {
+  const { L, C, H } = interp(score);
+  return oklchToRgb(L, C, H);
+}
+
+/** Readable text color to place on a scoreColor fill (dark on light pins, white on dark). */
+export function scoreInk(score: number): string {
+  return interp(score).L > 0.66 ? "#1c1917" : "#ffffff";
 }
 
 export interface ScoreTier {
