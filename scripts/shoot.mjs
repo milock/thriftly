@@ -37,6 +37,11 @@ await shoot("/", "lp-mobile", mobile, { waitRing: true });
 await shoot("/search", "app-desktop", desktop, { waitRing: true });
 await shoot("/search", "app-mobile", mobile, { waitRing: true });
 await shoot("/search", "app-mobile-map", mobile, { waitRing: true, tab: "map" });
+// City landing page (ranked list + "updated/refresh" + FAQ)
+await shoot("/goodwill/san-diego-ca", "city-desktop", desktop, { fullPage: true });
+await shoot("/goodwill/san-diego-ca", "city-mobile", mobile);
+// City hub
+await shoot("/goodwill", "hub-desktop", desktop);
 
 await browser.close();
 console.log("done:", TAG);

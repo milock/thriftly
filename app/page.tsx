@@ -99,7 +99,8 @@ export default function Landing() {
                 Built on U.S. Census + OpenStreetMap
               </span>
               <h1 className="mt-5 text-[2.6rem] font-semibold leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.5rem]">
-                Find the Goodwill with the best&nbsp;stuff.
+                Find the Goodwill with the{" "}
+                <span className="text-[var(--brand)]">best&nbsp;stuff.</span>
               </h1>
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
                 Thrift stores in wealthier neighborhoods get better donations. We score every
@@ -143,8 +144,10 @@ export default function Landing() {
                 { n: "03", t: "Get a score out of 100", b: "Higher means better odds of a great haul." },
               ].map((s) => (
                 <div key={s.n}>
-                  <span className="tabular text-[13px] font-semibold text-muted-foreground">{s.n}</span>
-                  <h3 className="mt-2 text-lg font-semibold">{s.t}</h3>
+                  <span className="tabular block text-2xl font-semibold tracking-tight text-[var(--brand)]">
+                    {s.n}
+                  </span>
+                  <h3 className="mt-2.5 text-lg font-semibold">{s.t}</h3>
                   <p className="mt-1.5 text-[14px] leading-relaxed text-muted-foreground">{s.b}</p>
                 </div>
               ))}
@@ -246,20 +249,28 @@ export default function Landing() {
 
         {/* Final CTA */}
         <section className="px-5 pb-20">
-          <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl bg-foreground px-8 py-16 text-center text-background sm:py-20">
-            <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
-              Your next great thrift run starts here.
-            </h2>
-            <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-background/70">
-              Drop in a ZIP code and see every Goodwill nearby, ranked by where the good stuff is.
-            </p>
-            <Link
-              href="/search"
-              className={cn(buttonVariants({ size: "lg", variant: "secondary" }), "mt-8 h-12 gap-2 px-6 text-[15px]")}
-            >
-              Launch the locator
-              <ArrowRight className="size-4" />
-            </Link>
+          <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-foreground px-8 py-16 text-center text-background sm:py-20">
+            {/* Subtle emerald glow + grid for depth, tied to the brand color. */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.16]"
+              style={{ background: "radial-gradient(ellipse 55% 75% at 50% 0%, var(--brand), transparent)" }}
+            />
+            <div className="bg-grid pointer-events-none absolute inset-0 opacity-[0.04]" />
+            <div className="relative">
+              <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+                Your next great thrift run starts here.
+              </h2>
+              <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-background/70">
+                Drop in a ZIP code and see every Goodwill nearby, ranked by where the good stuff is.
+              </p>
+              <Link
+                href="/search"
+                className={cn(buttonVariants({ size: "lg", variant: "secondary" }), "mt-8 h-12 gap-2 px-6 text-[15px]")}
+              >
+                Launch the locator
+                <ArrowRight className="size-4" />
+              </Link>
+            </div>
           </div>
         </section>
       </main>
