@@ -9,6 +9,7 @@ import { applyFilters, DEFAULT_FILTERS, type Filters } from "@/lib/filters";
 import { LocationSearch } from "@/components/location-search";
 import { FilterPanel } from "@/components/filter-panel";
 import { StoreList } from "@/components/store-list";
+import { AddToOsm } from "@/components/add-to-osm";
 import { Methodology } from "@/components/methodology";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { CoffeeLink } from "@/components/coffee-link";
@@ -50,7 +51,7 @@ export default function AppPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [areaLabel, setAreaLabel] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(true);
-  const { stores, loading, error, search } = useStores();
+  const { stores, loading, error, nearest, search } = useStores();
   const isDesktop = useIsDesktop();
 
   // On first load: honor a deep link (?lat&lon[&radius][&label]) coming from a
@@ -131,14 +132,31 @@ export default function AppPage() {
         areaLabel ? ` near ${areaLabel}` : ""
       }`;
 
+  // Only surface the "nearest is N mi away" hint when the search genuinely found
+  // nothing in range — not when the user's own filters (min score) hid the
+  // results. The API only returns `nearest` when it found zero stores, so this
+  // also requires the unfiltered set to be empty.
+  const expandToNearest = () => {
+    if (!nearest) return;
+    setFilters((f) => ({ ...f, radiusMiles: Math.min(100, Math.ceil(nearest.distanceMiles)) }));
+  };
   const list = (
-    <StoreList
-      stores={visible}
-      loading={loading}
-      error={error}
-      selectedId={selectedId}
-      onSelect={setSelectedId}
-    />
+    <>
+      <StoreList
+        stores={visible}
+        loading={loading}
+        error={error}
+        selectedId={selectedId}
+        onSelect={setSelectedId}
+        nearest={stores.length === 0 ? nearest : null}
+        onExpand={expandToNearest}
+      />
+      {!loading && (
+        <div className="px-1 pt-4">
+          <AddToOsm lat={center.lat} lon={center.lon} />
+        </div>
+      )}
+    </>
   );
   const map = (
     <StoreMap

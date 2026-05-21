@@ -9,6 +9,7 @@ import { locateStores } from "@/lib/locate";
 import { geocodeAddress } from "@/lib/geocode";
 import type { ScoredStore } from "@/lib/types";
 import { CityStores } from "@/components/city/city-stores";
+import { AddToOsm } from "@/components/add-to-osm";
 import { CityHeader, CityFooter } from "@/components/city/chrome";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { JsonLd } from "@/components/json-ld";
@@ -241,6 +242,11 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
               <div className="mt-5">
                 <CityStores initial={stores} cityName={c.city} />
               </div>
+              {lat != null && lon != null && (
+                <div className="mt-4">
+                  <AddToOsm lat={lat} lon={lon} />
+                </div>
+              )}
             </section>
           )}
 
