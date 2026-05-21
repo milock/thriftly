@@ -3,42 +3,41 @@
  * `data/cities/<slug>.json`, so the city/state pages are statically pre-rendered
  * and served instantly. Neighborhoods resolve client-side via /api/enrich.
  *
- * Hits the deployed site's APIs (which hold the Census key server-side and are
- * Overpass-resilient), at low concurrency so it never throttles production.
- * Resumable (skips fresh files) and skips empty results.
+ * Computes directly (Overpass + Census), so it does NOT load production. Runs on
+ * a GitHub Actions runner (fresh IP, not rate-limited) on a weekly schedule, and
+ * uses the .de Overpass mirror so its bulk traffic never throttles the .fr mirror
+ * production depends on. Needs CENSUS_API_KEY in the environment (the workflow
+ * passes it; locally it's read from .env.local). Resumable; skips empty results.
  *
  * Run:  npx tsx scripts/build-city-data.ts                 # all cities
  *       npx tsx scripts/build-city-data.ts san-diego-ca    # specific slugs
- *       BASE_URL=http://localhost:3000 npx tsx scripts/build-city-data.ts
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { CITIES } from "../lib/cities";
 
-const BASE = process.env.BASE_URL ?? "https://www.thriftly.xyz";
+// Load .env.local (CENSUS_API_KEY) for local runs; pick the .de mirror. lib reads
+// these at call time, so setting them after the hoisted imports is fine.
+try {
+  for (const line of readFileSync(join(process.cwd(), ".env.local"), "utf8").split("\n")) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+  }
+} catch {
+  /* env already provided (e.g. CI) */
+}
+process.env.OVERPASS_PRIMARY = process.env.OVERPASS_PRIMARY ?? "de";
+
+import { CITIES } from "../lib/cities";
+import { locateStores } from "../lib/locate";
+import { geocodeAddress } from "../lib/geocode";
+
 const OUT = join(process.cwd(), "data", "cities");
 const STALE_DAYS = 6;
-const CONCURRENCY = Number(process.env.CONCURRENCY ?? 2);
+const CONCURRENCY = Number(process.env.CONCURRENCY ?? 3);
 mkdirSync(OUT, { recursive: true });
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 type City = (typeof CITIES)[number];
-
-async function geocode(c: City): Promise<{ lat: number; lon: number } | null> {
-  try {
-    const r = await fetch(`${BASE}/api/geocode?q=${encodeURIComponent(`${c.city}, ${c.state}`)}`);
-    if (!r.ok) return null;
-    return (await r.json()).location ?? null;
-  } catch {
-    return null;
-  }
-}
-
-async function fetchStores(lat: number, lon: number, radius: number) {
-  const r = await fetch(`${BASE}/api/stores?lat=${lat}&lon=${lon}&radius=${radius}`);
-  if (!r.ok) throw new Error(`stores HTTP ${r.status}`);
-  return (await r.json()).stores ?? [];
-}
 
 async function processCity(c: City): Promise<"done" | "skipped" | "empty" | "failed"> {
   const file = join(OUT, `${c.slug}.json`);
@@ -52,9 +51,9 @@ async function processCity(c: City): Promise<"done" | "skipped" | "empty" | "fai
     }
   }
   try {
-    const coords = await geocode(c);
+    const coords = await geocodeAddress(`${c.city}, ${c.state}`);
     if (!coords) return "failed";
-    const stores = await fetchStores(coords.lat, coords.lon, c.radiusMiles);
+    const stores = await locateStores(coords, c.radiusMiles);
     if (stores.length === 0) {
       if (existsSync(file)) rmSync(file); // never persist/keep an empty result
       console.log(`${c.slug}: 0 stores (skipped)`);

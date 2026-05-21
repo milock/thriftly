@@ -1,8 +1,9 @@
 name: Refresh city data
 
 # Re-runs the precompute weekly so the pre-rendered city/state pages stay current.
-# Hits the live site's public APIs (no secrets needed); commits any changes, which
-# auto-deploys via the Vercel git integration and re-pre-renders with fresh data.
+# Runs on a fresh runner IP, computing directly (Overpass .de mirror + Census), so
+# it never throttles the endpoints production depends on. Commits any changes,
+# which auto-deploys via the Vercel git integration and re-pre-renders.
 
 on:
   schedule:
@@ -15,15 +16,17 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: npm ci
       - name: Precompute city data
         run: npx tsx scripts/build-city-data.ts
         env:
-          BASE_URL: https://www.thriftly.xyz
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
       - name: Commit refreshed data
         run: |
           git config user.name "Michael Lock"
