@@ -202,8 +202,13 @@ export default function Landing() {
             {/* Features */}
             <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {FEATURES.map((f) => (
-                <div key={f.title} className="rounded-2xl border border-border bg-card p-5">
-                  <f.icon className="size-5 text-foreground" />
+                <div
+                  key={f.title}
+                  className="rounded-2xl border border-border bg-card p-5 transition-colors hover:border-foreground/15"
+                >
+                  <span className="flex size-10 items-center justify-center rounded-xl bg-[color-mix(in_oklch,var(--brand)_14%,transparent)] text-[var(--brand)]">
+                    <f.icon className="size-5" />
+                  </span>
                   <h3 className="mt-3 font-semibold">{f.title}</h3>
                   <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">{f.body}</p>
                 </div>
