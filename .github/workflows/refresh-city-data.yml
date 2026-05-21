@@ -1,9 +1,9 @@
 name: Refresh Goodwill data
 
-# Weekly: one nationwide Overpass query for all US Goodwill stores, scored offline
-# against bundled Census data, written to data/goodwill-us.json. Commits any
-# change, which auto-deploys via Vercel and re-pre-renders. No per-city queries,
-# no request-time upstream calls — policy-compliant and rate-limit-proof.
+# Weekly: per-state Overpass queries for every US Goodwill store (retried, mirror
+# fallback), scored offline against bundled Census data, written to
+# data/goodwill-us.json. Commits any change, which auto-deploys via Vercel and
+# re-pre-renders. No request-time upstream calls on the default path.
 
 on:
   schedule:
@@ -36,5 +36,14 @@ jobs:
             echo "No data changes."
           else
             git commit -m "chore: weekly Goodwill data refresh"
-            git push
+            # main may have moved while the (long) build ran, so rebase our data
+            # commit on top of the latest main before pushing. Retry a few times
+            # in case more commits land during the rebase.
+            for i in 1 2 3 4 5; do
+              git pull --rebase --autostash origin main && git push && exit 0
+              echo "push attempt $i failed; retrying in 5s"
+              sleep 5
+            done
+            echo "could not push after retries" >&2
+            exit 1
           fi
