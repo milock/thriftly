@@ -3,6 +3,7 @@
 import { MapContainer, TileLayer, Circle, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import { useEffect } from "react";
+import { useTheme } from "next-themes";
 import type { LatLng, ScoredStore } from "@/lib/types";
 import { scoreColor } from "@/lib/score-color";
 import { formatDistance, directionsUrl } from "@/lib/format";
@@ -63,6 +64,9 @@ function ViewController({
 
 export default function StoreMap({ center, radiusMiles, stores, selectedId, onSelect }: Props) {
   const selected = stores.find((s) => s.id === selectedId) ?? null;
+  const { resolvedTheme } = useTheme();
+  const dark = resolvedTheme === "dark";
+  const ringColor = dark ? "#a1a1aa" : "#52525b";
   return (
     <MapContainer
       center={[center.lat, center.lon]}
@@ -73,8 +77,9 @@ export default function StoreMap({ center, radiusMiles, stores, selectedId, onSe
       attributionControl
     >
       <TileLayer
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-        attribution='&copy; OpenStreetMap &copy; CARTO'
+        key={dark ? "dark" : "light"}
+        url={`https://{s}.basemaps.cartocdn.com/${dark ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png`}
+        attribution="&copy; OpenStreetMap &copy; CARTO"
         subdomains="abcd"
         maxZoom={19}
       />
@@ -82,10 +87,10 @@ export default function StoreMap({ center, radiusMiles, stores, selectedId, onSe
         center={[center.lat, center.lon]}
         radius={radiusMiles * MI_TO_M}
         pathOptions={{
-          color: "#52525b",
+          color: ringColor,
           weight: 1.5,
-          opacity: 0.45,
-          fillColor: "#52525b",
+          opacity: dark ? 0.6 : 0.45,
+          fillColor: ringColor,
           fillOpacity: 0.05,
           dashArray: "5 6",
         }}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Crown, Navigation, Globe, Phone, ChevronDown } from "lucide-react";
+import { Crown, Navigation, Globe, Phone, ChevronDown, Star } from "lucide-react";
 import type { ScoredStore } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ScoreRing } from "@/components/score-ring";
@@ -11,6 +11,7 @@ import { scoreTier, scoreColor } from "@/lib/score-color";
 import {
   formatDistance,
   directionsUrl,
+  mapsPlaceUrl,
   ensureHttp,
   prettyDomain,
   telUrl,
@@ -148,6 +149,15 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
             >
               <Navigation className="size-3.5" />
               Directions
+            </a>
+            <a
+              href={mapsPlaceUrl(store)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={ACTION}
+            >
+              <Star className="size-3.5" />
+              Reviews
             </a>
             {store.website && (
               <a

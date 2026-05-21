@@ -10,6 +10,7 @@ import { LocationSearch } from "@/components/location-search";
 import { FilterPanel } from "@/components/filter-panel";
 import { StoreList } from "@/components/store-list";
 import { Methodology } from "@/components/methodology";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Wordmark } from "@/components/wordmark";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -46,6 +47,7 @@ export default function AppPage() {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [located, setLocated] = useState(false);
+  const [areaLabel, setAreaLabel] = useState<string | null>(null);
   const { stores, loading, error, search } = useStores();
   const isDesktop = useIsDesktop();
 
@@ -67,6 +69,20 @@ export default function AppPage() {
     search(center, filters.radiusMiles);
   }, [center, filters.radiusMiles, search]);
 
+  // Reverse-geocode the search center to show a friendly "near {place}" label.
+  useEffect(() => {
+    let active = true;
+    fetch(`/api/reverse?lat=${center.lat}&lon=${center.lon}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (active && d) setAreaLabel(d.label);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [center]);
+
   const visible = useMemo(() => applyFilters(stores, filters), [stores, filters]);
 
   const relocate = (c: LatLng) => {
@@ -76,7 +92,9 @@ export default function AppPage() {
 
   const resultLine = loading
     ? "Searching nearby…"
-    : `${visible.length} store${visible.length === 1 ? "" : "s"} ranked`;
+    : `${visible.length} store${visible.length === 1 ? "" : "s"} ranked${
+        areaLabel ? ` near ${areaLabel}` : ""
+      }`;
 
   const list = (
     <StoreList
@@ -105,7 +123,10 @@ export default function AppPage() {
           <div className="hidden flex-1 justify-center px-6 lg:flex">
             <LocationSearch onLocate={relocate} className="w-full max-w-md" />
           </div>
-          <Methodology />
+          <div className="flex items-center gap-0.5">
+            <Methodology />
+            <ThemeToggle />
+          </div>
         </div>
         {!isDesktop && (
           <div className="px-4 pb-3 sm:px-5">

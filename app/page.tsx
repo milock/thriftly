@@ -13,6 +13,7 @@ import {
   Crown,
 } from "lucide-react";
 import { Wordmark } from "@/components/wordmark";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { ScoreRing } from "@/components/score-ring";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -55,6 +56,7 @@ export default function Landing() {
             >
               How it works
             </Link>
+            <ThemeToggle />
             <Link href="/app" className={cn(buttonVariants({ size: "sm" }), "h-9 gap-1.5 px-3.5")}>
               Launch app
               <ArrowRight className="size-3.5" />
@@ -210,8 +212,26 @@ export default function Landing() {
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <Wordmark />
           <p className="max-w-md leading-relaxed">
-            Data from the U.S. Census Bureau (ACS) and OpenStreetMap. The Goods Score estimates
-            donation quality, not live inventory, and store coverage may be incomplete.
+            Data from the{" "}
+            <a
+              href="https://www.census.gov/programs-surveys/acs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-foreground underline-offset-4 hover:underline"
+            >
+              U.S. Census Bureau (ACS)
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://www.openstreetmap.org/copyright"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-foreground underline-offset-4 hover:underline"
+            >
+              OpenStreetMap
+            </a>
+            . The Goods Score estimates donation quality, not live inventory, and store coverage
+            may be incomplete.
           </p>
         </div>
       </footer>

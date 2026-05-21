@@ -41,3 +41,30 @@ export async function getStateForPoint(p: LatLng): Promise<string | null> {
   const tract = data?.result?.geographies?.["Census Tracts"]?.[0];
   return tract?.STATE ?? null;
 }
+
+const NOMINATIM_REVERSE = "https://nominatim.openstreetmap.org/reverse";
+
+/** Friendly "City, ST" label for a coordinate (Nominatim reverse geocoding). */
+export async function reverseGeocode(lat: number, lon: number): Promise<string | null> {
+  const url = `${NOMINATIM_REVERSE}?lat=${lat}&lon=${lon}&format=json&zoom=12&addressdetails=1`;
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "goodwill-locator/1.0" },
+      next: { revalidate: 86400 },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const a = data?.address ?? {};
+    const place =
+      a.city || a.town || a.village || a.suburb || a.neighbourhood || a.hamlet || a.county;
+    const iso = a["ISO3166-2-lvl4"];
+    const stateAbbr = typeof iso === "string" ? iso.split("-")[1] : undefined;
+    if (place && stateAbbr) return `${place}, ${stateAbbr}`;
+    if (place) return place;
+    return typeof data?.display_name === "string"
+      ? data.display_name.split(",").slice(0, 2).join(", ").trim()
+      : null;
+  } catch {
+    return null;
+  }
+}

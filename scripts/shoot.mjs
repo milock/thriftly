@@ -7,9 +7,10 @@ const BASE = process.argv[2] || "http://localhost:3000";
 const TAG = process.argv[3] || "v";
 mkdirSync("screenshots", { recursive: true });
 
+const SCHEME = process.env.SCHEME === "dark" ? "dark" : "light";
 const browser = await chromium.launch();
-const desktop = { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 };
-const mobile = { ...devices["iPhone 13"] };
+const desktop = { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2, colorScheme: SCHEME };
+const mobile = { ...devices["iPhone 13"], colorScheme: SCHEME };
 
 async function shoot(path, name, ctxOpts, { waitRing = false, tab, fullPage = false } = {}) {
   const ctx = await browser.newContext(ctxOpts);
