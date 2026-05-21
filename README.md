@@ -13,7 +13,7 @@ lands.
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38BDF8?logo=tailwindcss&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-56%20passing-3FB950)
+![Tests](https://img.shields.io/badge/tests-44%20unit%20%2B%2029%20e2e-3FB950)
 ![Deployed on Vercel](https://img.shields.io/badge/Vercel-deployed-000000?logo=vercel&logoColor=white)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy_me_a_coffee-flanmorrison-FFDD00?logo=buymeacoffee&logoColor=000)](https://buymeacoffee.com/flanmorrison)
 
@@ -90,7 +90,15 @@ is never a black box. The methodology popover (`components/methodology.tsx`) exp
 
 ## Features
 
+- **Nationwide, instant** - every US Goodwill is in a weekly-refreshed bundled dataset, so any city
+  returns ranked results in milliseconds with no rate limits.
 - **Data-driven ranking** - transparent 0–100 Goods Score with a per-factor breakdown.
+- **Nearest-store fallback** - search a place with no Goodwill in range and it instantly tells you the
+  nearest one ("about 72 mi away") with a one-tap button to widen the radius to it.
+- **City pages with freshness + Refresh** - each `/goodwill/<city>` page shows when the data was last
+  updated and a Refresh button that runs an on-demand live OpenStreetMap lookup.
+- **Crowd-fix coverage gaps** - an "Add it on OpenStreetMap" prompt lets users add a missing/wrong
+  store, which flows into the next weekly refresh.
 - **Live map** - color-graded score pins, the search radius drawn as a dashed circle, a "you are here"
   center marker, fly-to on selection, and light/dark CARTO tiles.
 - **"Search this area"** - pan the map and re-search the new center at the same radius.
@@ -98,51 +106,63 @@ is never a black box. The methodology popover (`components/methodology.tsx`) exp
   **store hours** with a live "Open now" indicator. Cards expand/collapse; map ↔ list selection syncs.
 - **Live address/ZIP autocomplete** (Photon), plus "use my location" and auto-geolocation on load.
 - **Reverse-geocoded area label** ("21 stores ranked near San Diego, CA").
-- **Robust filters** - radius 0.5–100 mi (smooth, non-linear slider), minimum score, open-now, three sorts.
+- **Robust filters** - radius 0.5–100 mi (smooth, non-linear slider), minimum score, open-now, three
+  sorts. Collapsed by default (with a one-time caret nudge) to keep the focus on results.
 - **Dark mode** - system-aware with a manual toggle.
 - **Accessible** - keyboard-navigable cards, ARIA labels, contrast-aware map pins, `prefers-reduced-motion`.
 - **Responsive** - desktop split (filters + list / map); mobile tabs + bottom-sheet filters.
 
 ## Architecture
 
-On-demand server orchestration with aggressive caching. One Route Handler fans out to free/open
-sources, blends each store's catchment, scores it with pure logic, and returns a ranked list.
+**Bundled dataset first.** Every US Goodwill store is fetched, scored, and committed to a single
+bundled file (`data/goodwill-us.json`) by a weekly job. At request time the app just filters that
+in-memory dataset by location — no Overpass, Census, or geocoding on the request path, so search and
+city pages are instant (~5–200 ms) and can't be rate-limited.
 
 ```
-Browser (/search) ──(lat,lon,radius,filters)──▶ /api/stores  (server-only)
-                                                     │
-   ┌──────────────┬───────────────┬─────────────────┼───────────────┐
-   ▼              ▼               ▼                 ▼               ▼
- lib/overpass  lib/geocode    lib/census       lib/gazetteer    lib/scoring
- (OSM stores) (point→state)  (county ACS)     (tract centroids) (pure, tested)
-   │              │               │                 │               │
-   └──────────────┴──────▶ lib/catchment (radius select + weight) ──▶ ScoredStore[] ▶ client
+        weekly GitHub Action (scripts/build-goodwill-data.ts)
+   per-state Overpass (retry + 3-mirror fallback) ─▶ score offline vs Census ─▶ data/goodwill-us.json
+                                                                                        │ (committed, auto-deploys)
+                                                                                        ▼
+Browser ──(lat,lon,radius)──▶ /api/stores ─▶ lib/locate ─▶ filter bundled dataset ─▶ ScoredStore[]
+   │  city pages /goodwill/[slug] ─▶ lib/locate (same bundled dataset, via bundled city centroids)
+   │
+   └─ Refresh button / uncovered area ─▶ /api/stores?live=1 ─▶ live Overpass + Census (rare fallback)
 ```
 
-Other routes: `/api/geocode` (address → lat/lon), `/api/reverse` (lat/lon → place label),
-`/api/suggest` (autocomplete). Upstream calls are cached via the Next Data Cache
-(`fetch(..., { next: { revalidate } })`); tract centroids are read once from a bundled dataset and
-memoized in module scope.
+When a search finds nothing in range, the API returns the single nearest store so the UI can say
+"nearest is N mi away" — instantly, from the dataset, with no live call. A live lookup only runs for
+the on-demand **Refresh** button or if the bundled dataset ever fails to load.
+
+Other routes: `/api/enrich` (batch reverse-geocode store coords → neighborhood/street),
+`/api/geocode` (address → lat/lon), `/api/reverse` (lat/lon → place label), `/api/suggest`
+(autocomplete). Live calls are cached via the Next Data Cache (`fetch(..., { next: { revalidate } })`);
+the bundled dataset and tract centroids are read once and memoized in module scope.
 
 **Pure, unit-tested core** (no I/O): `scoring`, `catchment`, `distance`, `hours`, `filters`,
 `score-color`. **Data clients** (`overpass`, `census`, `geocode`, `gazetteer`) are tested with mocked
-`fetch`. The client is a single `useStores` hook + presentational components. The full scoring
-orchestration lives in `lib/locate.ts`, shared by `/api/stores` and the server-rendered city pages.
+`fetch`. The client is a single `useStores` hook + presentational components. The scoring
+orchestration lives in `lib/locate.ts` (bundled-first, live fallback), shared by `/api/stores` and the
+server-rendered city pages.
 
 ## SEO & local pages
 
 Thriftly is built to rank for "best goodwill in <city>" searches, not only to work once you arrive.
-A national hierarchy of pre-rendered pages covers every state and ~450 cities.
+A national hierarchy of pre-rendered pages covers every state and ~400 cities.
 
 - **Hierarchy** - `/goodwill` (all 50 states + DC) -> `/goodwill/state/[state]` (a state's cities) ->
   `/goodwill/[citySlug]` (ranked Goodwills for the city). The location dataset is `lib/cities.ts`
-  (city names per state; slugs like `san-diego-ca` are preserved from the original metros).
-- **Precomputed + pre-rendered** - `scripts/build-city-data.ts` geocodes every city and fetches its
-  ranked stores into `data/cities/<slug>.json`. City pages read that file (`lib/city-data.ts`) and
-  `generateStaticParams` pre-renders exactly the cities that have data, so `next build` makes **no**
-  upstream API calls. Cities not yet precomputed fall back to a live fetch on first request (ISR).
-  A weekly GitHub Action (`.github/workflows/refresh-city-data.yml`) re-runs the precompute and commits
-  changes, which auto-deploys. Neighborhoods resolve client-side via `/api/enrich` so pages paint fast.
+  (city names per state; slugs like `san-diego-ca`).
+- **Pre-rendered from bundled data** - every city page locates its stores by filtering the bundled
+  national dataset around a **bundled city centroid** (`data/city-centroids.json`, built once from the
+  static Census Gazetteer by `scripts/build-city-centroids.ts`; `lib/city-data.ts` reads it). There's
+  **no live geocoding** of city names (Nominatim is rate-limited, and a centroid that lands offshore —
+  e.g. San Francisco via the Farallon Islands — is corrected by an override). `generateStaticParams`
+  pre-renders **all** ~400 cities, and since locating a city is just an in-memory filter, `next build`
+  makes **no** upstream API calls. The weekly GitHub Action
+  (`.github/workflows/refresh-city-data.yml`) rebuilds the national dataset and commits it, which
+  auto-deploys. Each page also shows when the data was last refreshed plus a **Refresh** button that
+  runs an on-demand live OSM lookup. Neighborhoods resolve client-side via `/api/enrich` so pages paint fast.
 - **Per page** - localized title/description, an `ItemList` + `BreadcrumbList` + `FAQPage` in JSON-LD,
   and a CTA that deep-links into `/search` at that location.
 - **Metadata** - title template, keywords, canonical URLs (on the `www` host), robots, and Open Graph /
@@ -220,14 +240,22 @@ The score color is the one place color carries data, so it's engineered carefull
 
 All free / open, mostly keyless:
 
-- **Stores - OpenStreetMap Overpass API.** Queried by `brand`/`name = Goodwill` within `around:`
-  radius (primary `overpass.openstreetmap.fr`, fallback `overpass-api.de`). Parsed into
+- **Stores - OpenStreetMap Overpass API.** The weekly build queries **per US state**
+  (`area["ISO3166-2"="US-XX"]`, matching `brand`/`name ~ ^Goodwill`), retrying and cycling three
+  mirrors (`overpass-api.de`, `overpass.kumi.systems`, `overpass.openstreetmap.fr`) so a throttled
+  endpoint can't silently drop a state. Results are deduped and written to `data/goodwill-us.json`.
+  The on-demand Refresh / uncovered-area fallback uses the same query within an `around:` radius,
+  racing the mirrors in parallel. Parsed into
   `{ name, street, locality, region, location, openingHours, website, phone }`.
 - **Demographics - U.S. Census ACS 5-year API** (free key, set `CENSUS_API_KEY`). One call returns all
   tracts in a county: `B19013` (income), `B25077` (home value), `B25064` (rent), `B01003` (population),
   and subject table `S1501_C02_015E` (% bachelor's+). Missing-data sentinels (`-666666666`) → `null`.
 - **Tract centroids - U.S. Census Gazetteer** (2023 national tract file). Built once into per-state
   `data/tract-centroids/{stateFips}.json` via `scripts/build-centroids.mjs`; loaded + memoized at runtime.
+- **City centroids - U.S. Census Gazetteer Places** (2023 national places file). Matched against
+  `lib/cities.ts` into `data/city-centroids.json` by `scripts/build-city-centroids.ts`, so city pages
+  locate stores without live geocoding. Consolidated city-counties (Nashville-Davidson, etc.) and a
+  couple of offshore internal points (San Francisco) are corrected via supplement/override maps.
 - **Geocoding - U.S. Census Geocoder** (address → lat/lon and point → state FIPS), **Nominatim**
   fallback + reverse geocoding for the area label.
 - **Address & neighborhood enrichment - Photon reverse** (`photon.komoot.io/reverse`). OSM often has a
@@ -246,26 +274,30 @@ app/
   page.tsx                 landing page (/)
   search/{page,layout}.tsx the locator tool (/search) + its metadata
   goodwill/page.tsx        city hub (/goodwill)
-  goodwill/[slug]/page.tsx city landing pages + opengraph-image (local SEO, ISR)
-  api/{stores,geocode,reverse,suggest}/route.ts
+  goodwill/[slug]/page.tsx city landing pages + opengraph-image (local SEO, pre-rendered)
+  api/{stores,enrich,geocode,reverse,suggest}/route.ts   (stores?live=1 forces a live lookup)
   robots.ts · sitemap.ts · manifest.ts · opengraph-image.tsx · twitter-image.tsx
   layout.tsx · globals.css · icon.svg
 lib/
   scoring · catchment · distance · hours · score-color · filters · format   (pure, tested)
   reference-ranges                                                          (weights + ranges)
   overpass · census · geocode · gazetteer                                   (data clients)
-  locate                                                                    (shared orchestration)
-  metros                                                                    (curated cities for SEO)
+  locate                                                                    (bundled-first + live fallback)
+  cities                                                                    (states + ~400 cities for SEO)
+  city-data                                                                 (bundled city-centroid reader)
   use-stores · types · utils
 components/
   store-card · store-list · score-ring · score-breakdown · store-hours
-  filter-panel · location-search · methodology · wordmark · json-ld
-  theme-provider · theme-toggle · github-link · coffee-link
-  city/{ranked-stores,chrome}.tsx   (server-rendered city-page UI)
+  filter-panel · location-search · methodology · wordmark · json-ld · add-to-osm
+  meteors · scroll-to-top · theme-provider · theme-toggle · github-link · coffee-link
+  city/{ranked-stores,city-stores,chrome}.tsx   (city-page UI; city-stores adds Refresh)
   map/store-map.tsx        (Leaflet, dynamic ssr:false)
   ui/*                     (shadcn / Base UI primitives)
-data/tract-centroids/      bundled Census Gazetteer centroids (per state, committed)
-scripts/                   build-centroids.mjs · shoot.mjs (dev screenshots)
+data/
+  goodwill-us.json         bundled national dataset (all US stores, scored; weekly refresh)
+  city-centroids.json      bundled city center coords (Census Gazetteer)
+  tract-centroids/          bundled Census Gazetteer tract centroids (per state)
+scripts/                   build-goodwill-data.ts · build-city-centroids.ts · build-centroids.mjs · shoot.mjs
 __tests__/                 Vitest (scoring, catchment, distance, hours, filters, clients, gazetteer)
 e2e/                       Playwright (landing + app, desktop + mobile, mocked API)
 docs/superpowers/          original design spec + implementation plan
@@ -273,29 +305,28 @@ docs/superpowers/          original design spec + implementation plan
 
 ## Getting started
 
+The bundled datasets (`data/goodwill-us.json`, `data/city-centroids.json`, `data/tract-centroids/`)
+are committed, so the app runs out of the box:
+
 ```bash
 npm install
-
-# One-time: build the tract-centroid dataset.
-# Download + unzip the Census Gazetteer national tract file to /tmp/gaz_tracts, then:
-node scripts/build-centroids.mjs        # writes data/tract-centroids/*.json
-
 npm run dev                             # http://localhost:3000
 ```
 
+A `CENSUS_API_KEY` is only needed to **rebuild** the data (the weekly job / `scripts/build-goodwill-data.ts`)
+or to exercise the live Refresh path locally — not to run the app, which serves the committed dataset.
 Add a free [Census API key](https://api.census.gov/data/key_signup.html) to `.env.local`:
 
 ```bash
 CENSUS_API_KEY=your_key_here
 ```
 
-> The ACS API now **requires** a key (it used to work keyless at low volume). Without it, every store
-> scores 0.
+> The ACS API requires a key (it used to work keyless at low volume). Without it, the rebuild scores 0.
 
 ## Testing
 
 ```bash
-npm test           # Vitest - pure logic: scoring, catchment, distance, hours, filters, data clients, metros
+npm test           # Vitest - pure logic: scoring, catchment, distance, hours, filters, data clients, cities
 npm run test:e2e   # Playwright - landing + search + city hub, desktop + mobile (API mocked for determinism)
 npm run build      # production build + type check
 npx tsc --noEmit   # type check only
@@ -310,23 +341,34 @@ under parallel workers.
 
 ## Scripts
 
-- `scripts/build-centroids.mjs` - parse the Census Gazetteer into per-state centroid JSON (pure Node).
-- `scripts/shoot.mjs [baseUrl] [tag]` - capture landing + app screenshots across viewports.
+- `scripts/build-goodwill-data.ts` - the weekly national build: per-state Overpass queries (retry +
+  3-mirror fallback), offline Census scoring, written to `data/goodwill-us.json`. Run via the GitHub
+  Action or `CENSUS_API_KEY=… npx tsx scripts/build-goodwill-data.ts`.
+- `scripts/build-city-centroids.ts` - match `lib/cities.ts` against the Census Gazetteer Places file
+  into `data/city-centroids.json` (one-time; cities don't move). Needs the Gazetteer text file (see
+  the script header for the download).
+- `scripts/build-centroids.mjs` - parse the Census Gazetteer tract file into per-state centroid JSON.
+- `scripts/shoot.mjs [baseUrl] [tag]` - capture landing + app + city screenshots across viewports.
   `SCHEME=dark node scripts/shoot.mjs …` for dark mode.
 
 ## Deployment
 
 Vercel, connected to this GitHub repo (pushes to `main` auto-deploy).
 
-- **File tracing:** the store-scoring functions read `data/tract-centroids/*.json` at runtime via a
-  dynamic path, which Next's tracer can't detect. `next.config.ts` forces it into both bundles:
+- **File tracing:** the request-time code reads `data/goodwill-us.json`, `data/city-centroids.json`,
+  and `data/tract-centroids/*.json` via dynamic paths Next's tracer can't detect. `next.config.ts`
+  forces them into the bundles:
   ```ts
   outputFileTracingIncludes: {
-    "/api/stores": ["./data/tract-centroids/**/*"],
-    "/goodwill/[slug]": ["./data/tract-centroids/**/*"],
+    "/api/stores": ["./data/goodwill-us.json", "./data/tract-centroids/**/*"],
+    "/goodwill/[slug]": [
+      "./data/goodwill-us.json",
+      "./data/city-centroids.json",
+      "./data/tract-centroids/**/*",
+    ],
   }
   ```
-  Without this, deployed scores are all 0 (ENOENT on the data files).
+  Without this, deployed pages return no stores (ENOENT on the data files).
 - **Env:** set `CENSUS_API_KEY` for Production/Preview/Development (`printf '%s' KEY | vercel env add …` - 
   use `printf`, not `echo`, to avoid a trailing newline breaking the key).
 - **Domain:** `thriftly.xyz` (add DNS records shown in Vercel → Project → Domains).
@@ -353,6 +395,17 @@ Vercel, connected to this GitHub repo (pushes to `main` auto-deploy).
 
 The non-obvious things this build surfaced - keep these in mind when extending it:
 
+- **Don't hit Overpass per request at scale.** Bulk/concurrent Overpass queries get your IP throttled,
+  and the throttle *lingers* for hours; the public mirrors are shared and slow even when they aren't
+  penalizing you. For slowly-changing data like store locations, the fix is to build a **complete
+  bundled dataset weekly** (per-state, retried, mirror-fallback) and serve it from memory at request
+  time — instant and impossible to rate-limit. Reserve live Overpass for an on-demand Refresh, and
+  when the dataset has nothing in range, answer "nearest is N mi away" from the dataset instead of
+  hanging on a live call. (A too-narrow build query or a transient per-state failure silently drops
+  stores, which is why the build matches the live query exactly and retries empty states.)
+- **Census Gazetteer internal points can land in the water.** A place that includes offshore territory
+  (San Francisco + the Farallon Islands) gets an `INTPTLAT/LONG` out in the ocean, so a radius search
+  from it finds nothing. Override such centroids with a real downtown coordinate.
 - **Tailwind v4 uses OKLCH tokens.** `hsl(var(--muted))` produces `hsl(oklch(...))` → invalid. Use the
   Tailwind color utility (`stroke-muted`) or a real `rgb()`/`oklch()` value. (This is why the score
   scale outputs `rgb()`.)
@@ -395,7 +448,10 @@ The non-obvious things this build surfaced - keep these in mind when extending i
 
 ## Limitations
 
-- OSM Goodwill coverage has gaps - untagged stores won't appear.
+- OSM Goodwill coverage has gaps - a store untagged in OpenStreetMap won't appear until someone adds
+  it (the "Add it on OpenStreetMap" prompt + per-city Refresh button exist to close these gaps).
+- Data is refreshed weekly, so a brand-new store can be up to a week stale on the bundled dataset
+  (the Refresh button pulls live OSM on demand).
 - ACS median home **value** is self-reported, not sale price; catchment-weighted medians are a ranking
   heuristic, not a precise statistic.
 - The score estimates **donation quality, not live inventory**.
