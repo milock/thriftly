@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import { getCity, citiesInState, STATES, CITIES, type City } from "@/lib/cities";
 import { cityCentroid } from "@/lib/city-data";
-import { locateStores } from "@/lib/locate";
+import { locateStores, datasetGeneratedAt } from "@/lib/locate";
 import { geocodeAddress } from "@/lib/geocode";
 import type { ScoredStore } from "@/lib/types";
 import { CityStores } from "@/components/city/city-stores";
@@ -240,7 +240,14 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
                 Best odds first. Tap a store for directions.
               </p>
               <div className="mt-5">
-                <CityStores initial={stores} cityName={c.city} />
+                <CityStores
+                  initial={stores}
+                  cityName={c.city}
+                  lat={lat}
+                  lon={lon}
+                  radiusMiles={c.radiusMiles}
+                  generatedAt={datasetGeneratedAt()}
+                />
               </div>
               {lat != null && lon != null && (
                 <div className="mt-4">

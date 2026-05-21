@@ -14,16 +14,48 @@ import { CATCHMENT_RADIUS_MILES } from "@/lib/reference-ranges";
 // one Overpass query). Read once and memoized. This is the primary data source:
 // no Overpass/Census/geocoding at request time, so search and city pages are
 // instant and can't be rate-limited.
-let nationalCache: ScoredStore[] | null = null;
-function nationalDataset(): ScoredStore[] {
-  if (nationalCache) return nationalCache;
+interface Dataset {
+  generatedAt?: string;
+  stores: ScoredStore[];
+}
+let datasetCache: Dataset | null = null;
+function dataset(): Dataset {
+  if (datasetCache) return datasetCache;
   try {
     const raw = readFileSync(join(process.cwd(), "data", "goodwill-us.json"), "utf8");
-    nationalCache = (JSON.parse(raw).stores ?? []) as ScoredStore[];
+    const parsed = JSON.parse(raw) as Partial<Dataset>;
+    datasetCache = { generatedAt: parsed.generatedAt, stores: parsed.stores ?? [] };
   } catch {
-    nationalCache = [];
+    datasetCache = { stores: [] };
   }
-  return nationalCache;
+  return datasetCache;
+}
+function nationalDataset(): ScoredStore[] {
+  return dataset().stores;
+}
+
+/** When the bundled dataset was last refreshed (ISO string), for "updated" UI. */
+export function datasetGeneratedAt(): string | null {
+  return dataset().generatedAt ?? null;
+}
+
+/**
+ * Force a fresh live lookup (Overpass + Census) for an on-demand "Refresh" — used
+ * by the city-page refresh button to pick up stores added to OSM since the last
+ * weekly build. Falls back to the bundled dataset if the live mirrors are down or
+ * return nothing, so refresh never makes the list worse.
+ */
+export async function locateStoresFresh(
+  center: LatLng,
+  radiusMiles: number,
+): Promise<ScoredStore[]> {
+  try {
+    const live = await liveLocate(center, radiusMiles);
+    if (live.length > 0) return live;
+  } catch {
+    /* fall through to the bundled dataset */
+  }
+  return locateStores(center, radiusMiles);
 }
 
 /**
