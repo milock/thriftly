@@ -51,6 +51,13 @@ test("filters are reachable", async ({ page, isMobile }) => {
   await expect(page.getByText(/search radius/i)).toBeVisible();
 });
 
+test("the sort control shows its label at rest, not the raw value", async ({ page, isMobile }) => {
+  await page.goto("/search");
+  if (isMobile) await page.getByRole("button", { name: /^filters$/i }).click();
+  // The trigger must read "Goods Score" (the label), never the "score" slug.
+  await expect(page.getByText("Goods Score", { exact: true })).toBeVisible();
+});
+
 test("the map renders", async ({ page, isMobile }) => {
   await page.goto("/search");
   if (isMobile) await page.getByRole("tab", { name: /map/i }).click();

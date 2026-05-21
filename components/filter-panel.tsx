@@ -95,7 +95,7 @@ export function FilterPanel({ filters, onChange, className }: Props) {
         <Label className="text-[13px] text-muted-foreground">Sort by</Label>
         <Select value={filters.sort} onValueChange={(v) => set({ sort: v as SortKey })}>
           <SelectTrigger className="w-full">
-            <SelectValue />
+            <SelectValue>{(value) => SORT_LABELS[value as SortKey]}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             {(Object.keys(SORT_LABELS) as SortKey[]).map((k) => (
