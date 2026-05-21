@@ -8,6 +8,9 @@ export interface Store {
   name: string;
   location: LatLng;
   address?: string;
+  street?: string; // "7631 Girard Avenue"
+  locality?: string; // "La Jolla"
+  region?: string; // "CA"
   openingHours?: string;
   website?: string;
   phone?: string;

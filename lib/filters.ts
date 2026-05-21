@@ -1,4 +1,5 @@
 import type { ScoredStore } from "@/lib/types";
+import { parseHours, isOpenNow } from "@/lib/hours";
 
 export type SortKey = "score" | "distance" | "best-nearby";
 
@@ -9,18 +10,21 @@ export interface Filters {
   sort: SortKey;
 }
 
+/** Non-linear radius stops: fine control close in, coarse far out (0.5 → 100 mi). */
+export const RADIUS_STOPS = [0.5, 1, 2, 3, 5, 10, 15, 25, 50, 75, 100];
+
 export const DEFAULT_FILTERS: Filters = {
-  radiusMiles: 25,
+  radiusMiles: 15,
   minScore: 0,
   openNowOnly: false,
   sort: "score",
 };
 
-// MVP "open now": OSM opening_hours are too varied to parse reliably, so we do not
-// exclude on ambiguous hours. Future: integrate an opening_hours parser.
-function looksOpen(_hours?: string): boolean {
-  return true;
-}
+export const SORT_LABELS: Record<SortKey, string> = {
+  score: "Goods Score",
+  distance: "Distance",
+  "best-nearby": "Best nearby",
+};
 
 // "Best nearby": score with a mild distance penalty (2 pts per mile).
 function bestNearby(s: ScoredStore): number {
@@ -28,12 +32,13 @@ function bestNearby(s: ScoredStore): number {
 }
 
 export function applyFilters(stores: ScoredStore[], f: Filters): ScoredStore[] {
-  const filtered = stores.filter(
-    (s) =>
-      s.distanceMiles <= f.radiusMiles &&
-      s.score.total >= f.minScore &&
-      (!f.openNowOnly || looksOpen(s.openingHours)),
-  );
+  const filtered = stores.filter((s) => {
+    if (s.distanceMiles > f.radiusMiles) return false;
+    if (s.score.total < f.minScore) return false;
+    // Only hide stores we can confirm are closed; keep unknown-hours stores.
+    if (f.openNowOnly && isOpenNow(parseHours(s.openingHours)) === false) return false;
+    return true;
+  });
   const sorted = [...filtered];
   if (f.sort === "score") sorted.sort((a, b) => b.score.total - a.score.total);
   else if (f.sort === "distance") sorted.sort((a, b) => a.distanceMiles - b.distanceMiles);

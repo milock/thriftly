@@ -38,14 +38,18 @@ export function parseOverpass(data: OverpassResponse): Store[] {
     const id = `${el.type}/${el.id}`;
     if (seen.has(id)) continue;
     seen.add(id);
-    const addr = [tags["addr:housenumber"], tags["addr:street"], tags["addr:city"], tags["addr:state"]]
-      .filter(Boolean)
-      .join(" ");
+    const street = [tags["addr:housenumber"], tags["addr:street"]].filter(Boolean).join(" ");
+    const locality = tags["addr:city"];
+    const region = tags["addr:state"];
+    const addr = [street, locality, region].filter(Boolean).join(", ");
     stores.push({
       id,
       name,
       location: { lat, lon },
       address: addr || undefined,
+      street: street || undefined,
+      locality: locality || undefined,
+      region: region || undefined,
       openingHours: tags.opening_hours,
       website: tags.website ?? tags["contact:website"],
       phone: tags.phone ?? tags["contact:phone"],
