@@ -153,14 +153,17 @@ async function reverseViaPhoton(lat: number, lon: number): Promise<ReverseAddres
  * whole thing soft-fails so a slow/unavailable geocoder just leaves OSM data.
  */
 export async function reverseAddress(lat: number, lon: number): Promise<ReverseAddress | null> {
+  // Race both geocoders; the first usable result wins. Photon is usually faster
+  // and isn't rate-limited like Nominatim, so this avoids waiting on a throttled
+  // Nominatim before falling back.
   try {
-    const viaNominatim = await reverseViaNominatim(lat, lon);
-    if (viaNominatim) return viaNominatim;
-  } catch {
-    // fall through to Photon
-  }
-  try {
-    return await reverseViaPhoton(lat, lon);
+    return await Promise.any(
+      [reverseViaPhoton(lat, lon), reverseViaNominatim(lat, lon)].map(async (task) => {
+        const r = await task;
+        if (!r) throw new Error("empty");
+        return r;
+      }),
+    );
   } catch {
     return null;
   }

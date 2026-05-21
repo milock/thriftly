@@ -36,12 +36,12 @@ const nextConfig: NextConfig = {
   // Bundle the tract-centroid data into the functions that score stores at
   // runtime: the client API route and the server-rendered city landing pages.
   outputFileTracingIncludes: {
-    // Both read the bundled national dataset first; the live fallback reads the
-    // tract centroids. City pages also read their precomputed per-city files.
+    // Both serve from the bundled national dataset; the live fallback (rare)
+    // reads the tract centroids. City pages also read bundled city centroids.
     "/api/stores": ["./data/goodwill-us.json", "./data/tract-centroids/**/*"],
     "/goodwill/[slug]": [
       "./data/goodwill-us.json",
-      "./data/cities/**/*",
+      "./data/city-centroids.json",
       "./data/tract-centroids/**/*",
     ],
   },

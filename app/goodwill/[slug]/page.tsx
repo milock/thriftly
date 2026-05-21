@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
-import { getCity, citiesInState, STATES, type City } from "@/lib/cities";
-import { readCityData, precomputedSlugs } from "@/lib/city-data";
+import { getCity, citiesInState, STATES, CITIES, type City } from "@/lib/cities";
+import { cityCentroid } from "@/lib/city-data";
 import { locateStores } from "@/lib/locate";
 import { geocodeAddress } from "@/lib/geocode";
 import type { ScoredStore } from "@/lib/types";
@@ -20,11 +20,10 @@ const SITE_URL = "https://www.thriftly.xyz";
 export const revalidate = 86400;
 export const dynamicParams = true;
 
-// Pre-render only the cities that already have precomputed data, so the build
-// never calls Overpass/Census. Cities without data yet render on demand (ISR)
-// and get pre-rendered on the next build after the precompute job fills them in.
+// Pre-render every city. Each just filters the bundled national dataset by the
+// bundled centroid — no Overpass/Census/geocoding at build or request time.
 export function generateStaticParams() {
-  return precomputedSlugs().map((slug) => ({ slug }));
+  return CITIES.map((c) => ({ slug: c.slug }));
 }
 
 interface CityResult {
@@ -33,20 +32,21 @@ interface CityResult {
   lon: number | null;
 }
 
-// Prefer precomputed data (instant); fall back to a live fetch for cities the
-// precompute job hasn't covered yet. React cache dedupes within a render.
+// Locate the city via its bundled centroid, then filter the national dataset.
+// No live geocoding (Nominatim is rate-limited). Only an unbundled city (none,
+// since all are matched) would fall back to a live geocode. React cache dedupes.
 const getCityResult = cache(async (c: City): Promise<CityResult> => {
-  const data = readCityData(c.slug);
-  if (data) return { stores: data.stores, lat: data.lat, lon: data.lon };
-  try {
-    const coords = await geocodeAddress(`${c.city}, ${c.state}`);
-    if (!coords) return { stores: [], lat: null, lon: null };
-    const stores = await locateStores(coords, c.radiusMiles);
-    return { stores, lat: coords.lat, lon: coords.lon };
-  } catch (err) {
-    console.error(`city page fallback failed: ${c.slug}`, err);
-    return { stores: [], lat: null, lon: null };
+  let coords = cityCentroid(c.slug);
+  if (!coords) {
+    try {
+      coords = await geocodeAddress(`${c.city}, ${c.state}`);
+    } catch {
+      coords = null;
+    }
   }
+  if (!coords) return { stores: [], lat: null, lon: null };
+  const stores = await locateStores(coords, c.radiusMiles);
+  return { stores, lat: coords.lat, lon: coords.lon };
 });
 
 function stateSlugFor(code: string): string | undefined {

@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       if (rev) enriched[`${p.lat},${p.lon}`] = rev;
     }
   };
-  await Promise.all(Array.from({ length: Math.min(3, points.length) }, worker));
+  await Promise.all(Array.from({ length: Math.min(8, points.length) }, worker));
 
   return NextResponse.json({ enriched });
 }
