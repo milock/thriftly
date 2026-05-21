@@ -4,25 +4,25 @@ import { GeistMono } from "geist/font/mono";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
-const TITLE = "Goodwill Locator — find the best thrift near you";
+const TITLE = "Thriftly — find the best Goodwill near you";
 const DESCRIPTION =
   "Rank nearby Goodwill stores by neighborhood affluence to find where the best donations land.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://goodwill-locator.vercel.app"),
+  metadataBase: new URL("https://thriftly.xyz"),
   title: TITLE,
   description: DESCRIPTION,
-  applicationName: "Goodwill Locator",
+  applicationName: "Thriftly",
   openGraph: {
     type: "website",
-    url: "https://goodwill-locator.vercel.app",
-    siteName: "Goodwill Locator",
+    url: "https://thriftly.xyz",
+    siteName: "Thriftly",
     title: TITLE,
     description: DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Goodwill Locator",
+    title: "Thriftly",
     description: "Find the Goodwill with the best stuff, ranked by neighborhood affluence.",
   },
 };

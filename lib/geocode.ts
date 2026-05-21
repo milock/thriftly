@@ -17,7 +17,7 @@ export async function geocodeAddress(query: string): Promise<LatLng | null> {
   }
   const nUrl = `${NOMINATIM}?q=${encodeURIComponent(query)}&format=json&countrycodes=us&limit=1`;
   const nRes = await fetch(nUrl, {
-    headers: { "User-Agent": "goodwill-locator/1.0" },
+    headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
     next: { revalidate: 86400 },
   });
   if (!nRes.ok) return null;
@@ -49,7 +49,7 @@ export async function reverseGeocode(lat: number, lon: number): Promise<string |
   const url = `${NOMINATIM_REVERSE}?lat=${lat}&lon=${lon}&format=json&zoom=12&addressdetails=1`;
   try {
     const res = await fetch(url, {
-      headers: { "User-Agent": "goodwill-locator/1.0" },
+      headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
       next: { revalidate: 86400 },
     });
     if (!res.ok) return null;
@@ -85,7 +85,7 @@ export async function suggestPlaces(query: string): Promise<PlaceSuggestion[]> {
   const url = `${PHOTON}/?q=${encodeURIComponent(q)}&limit=6&lang=en`;
   try {
     const res = await fetch(url, {
-      headers: { "User-Agent": "goodwill-locator/1.0" },
+      headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
       next: { revalidate: 3600 },
     });
     if (!res.ok) return [];

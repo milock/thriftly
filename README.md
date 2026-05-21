@@ -1,14 +1,14 @@
 <div align="center">
 
-# 🛍️ Goodwill Locator
+# 🛍️ Thriftly
 
 ### Find the Goodwill with the best stuff.
 
-Thrift stores in wealthier neighborhoods get better donations. **Goodwill Locator** ranks every
+Thrift stores in wealthier neighborhoods get better donations. **Thriftly** ranks every
 Goodwill near you `0–100` by the affluence of its surrounding area — so you hunt where the treasure
 actually is.
 
-[**▶ Live demo → goodwill-locator.vercel.app**](https://goodwill-locator.vercel.app)
+[**▶ Live demo → thriftly.xyz**](https://thriftly.xyz)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
@@ -17,7 +17,7 @@ actually is.
 ![Deployed on Vercel](https://img.shields.io/badge/Vercel-deployed-000000?logo=vercel&logoColor=white)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy_me_a_coffee-flanmorrison-FFDD00?logo=buymeacoffee&logoColor=000)](https://buymeacoffee.com/flanmorrison)
 
-<img src="docs/preview-landing.png" alt="Goodwill Locator landing page" width="860" />
+<img src="docs/preview-landing.png" alt="Thriftly landing page" width="860" />
 
 </div>
 
@@ -26,7 +26,7 @@ actually is.
 ## The idea
 
 A Goodwill is only as good as what gets dropped off — and donations skew with local wealth. Instead
-of guessing, Goodwill Locator quantifies it: for every nearby store it pulls the demographics of the
+of guessing, Thriftly quantifies it: for every nearby store it pulls the demographics of the
 **census tracts within ~3 miles**, blends them by population and distance, and produces a single,
 explainable **Goods Score**.
 

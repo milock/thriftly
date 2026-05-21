@@ -64,7 +64,7 @@ export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): 
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      "User-Agent": "goodwill-locator/1.0 (https://github.com/goodwill-locator)",
+      "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)",
     },
     body,
     next: { revalidate: 86400 }, // cache a day

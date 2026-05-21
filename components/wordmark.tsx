@@ -10,7 +10,7 @@ export function Wordmark({ href = "/", className }: { href?: string; className?:
       <span className="flex size-7 items-center justify-center rounded-lg bg-foreground text-background">
         <MapPin className="size-4" />
       </span>
-      <span className="text-[15px] font-semibold tracking-tight">Goodwill Locator</span>
+      <span className="text-[15px] font-semibold tracking-tight">Thriftly</span>
     </Link>
   );
 }

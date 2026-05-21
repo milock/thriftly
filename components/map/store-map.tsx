@@ -201,7 +201,8 @@ export default function StoreMap({
                       href={directionsUrl(s)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[12px] font-medium text-background no-underline transition-opacity hover:opacity-90"
+                      style={{ color: "var(--background)", textDecoration: "none" }}
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[12px] font-medium transition-opacity hover:opacity-90"
                     >
                       <Navigation className="size-3.5" />
                       Directions
@@ -210,7 +211,8 @@ export default function StoreMap({
                       href={mapsPlaceUrl(s)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-[12px] font-medium text-foreground no-underline transition-colors hover:bg-accent"
+                      style={{ color: "var(--foreground)", textDecoration: "none" }}
+                      className="inline-flex items-center justify-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-accent"
                     >
                       <Star className="size-3.5" />
                       Reviews

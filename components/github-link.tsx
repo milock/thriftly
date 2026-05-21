@@ -1,7 +1,7 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export const REPO_URL = "https://github.com/milock/goodwill-locator";
+export const REPO_URL = "https://github.com/milock/thriftly";
 
 export function GithubMark({ className }: { className?: string }) {
   return (
