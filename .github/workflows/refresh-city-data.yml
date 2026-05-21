@@ -1,9 +1,9 @@
-name: Refresh city data
+name: Refresh Goodwill data
 
-# Re-runs the precompute weekly so the pre-rendered city/state pages stay current.
-# Runs on a fresh runner IP, computing directly (Overpass .de mirror + Census), so
-# it never throttles the endpoints production depends on. Commits any changes,
-# which auto-deploys via the Vercel git integration and re-pre-renders.
+# Weekly: one nationwide Overpass query for all US Goodwill stores, scored offline
+# against bundled Census data, written to data/goodwill-us.json. Commits any
+# change, which auto-deploys via Vercel and re-pre-renders. No per-city queries,
+# no request-time upstream calls — policy-compliant and rate-limit-proof.
 
 on:
   schedule:
@@ -16,25 +16,25 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: npm ci
-      - name: Precompute city data
-        run: npx tsx scripts/build-city-data.ts
+      - name: Build national Goodwill dataset
+        run: npx tsx scripts/build-goodwill-data.ts
         env:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
       - name: Commit refreshed data
         run: |
           git config user.name "Michael Lock"
           git config user.email "30240899+milock@users.noreply.github.com"
-          git add data/cities
+          git add data/goodwill-us.json
           if git diff --cached --quiet; then
-            echo "No city-data changes."
+            echo "No data changes."
           else
-            git commit -m "chore: weekly city-data refresh"
+            git commit -m "chore: weekly Goodwill data refresh"
             git push
           fi
