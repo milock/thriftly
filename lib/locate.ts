@@ -42,7 +42,14 @@ export async function locateStores(
     .filter((s) => s.distanceMiles <= radiusMiles)
     .sort((a, b) => b.score.total - a.score.total);
   if (hits.length > 0) return hits;
-  return liveLocate(center, radiusMiles);
+  // Dataset miss (an area not covered yet): try a live lookup, but degrade to an
+  // empty result rather than an error if the live mirrors are unavailable — the
+  // weekly national dataset is what gives full coverage.
+  try {
+    return await liveLocate(center, radiusMiles);
+  } catch {
+    return [];
+  }
 }
 
 /**
