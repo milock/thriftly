@@ -45,3 +45,7 @@ next-env.d.ts
 /test-results
 /playwright-report
 /playwright/.cache
+
+# ad-hoc dev screenshot helpers
+scripts/_*.mjs
+screenshots/
