@@ -240,6 +240,27 @@
   }
 }
 
+/* One-time nudge on the Filters caret so first-time visitors notice it's
+   expandable. Disabled automatically under prefers-reduced-motion below. */
+@keyframes caret-hint {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(3px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(2px);
+  }
+}
+.animate-caret-hint {
+  animation: caret-hint 1.1s ease-in-out 2;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

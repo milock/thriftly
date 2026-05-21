@@ -44,8 +44,8 @@ export function FilterPanel({ filters, onChange, className }: Props) {
   const draftMiles = snapMiles(pctToMiles(radiusPct));
 
   return (
-    <div className={`space-y-6 ${className ?? ""}`}>
-      <div className="space-y-2.5">
+    <div className={`space-y-4 ${className ?? ""}`}>
+      <div className="space-y-2">
         <div className="flex items-baseline justify-between">
           <Label className="text-[13px] text-muted-foreground">Search radius</Label>
           <span className="tabular text-[13px] font-semibold">{draftMiles} mi</span>
@@ -65,7 +65,7 @@ export function FilterPanel({ filters, onChange, className }: Props) {
         </div>
       </div>
 
-      <div className="space-y-2.5">
+      <div className="space-y-2">
         <div className="flex items-baseline justify-between">
           <Label className="text-[13px] text-muted-foreground">Minimum Goods Score</Label>
           <span className="tabular text-[13px] font-semibold">{filters.minScore}</span>

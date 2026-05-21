@@ -37,19 +37,26 @@ export async function locateStores(
   center: LatLng,
   radiusMiles: number,
 ): Promise<ScoredStore[]> {
-  const hits = nationalDataset()
+  const data = nationalDataset();
+  const hits = data
     .map((s) => ({ ...s, distanceMiles: haversineMiles(center, s.location) }))
     .filter((s) => s.distanceMiles <= radiusMiles)
     .sort((a, b) => b.score.total - a.score.total);
   if (hits.length > 0) return hits;
-  // Dataset miss (an area not covered yet): try a live lookup, but degrade to an
-  // empty result rather than an error if the live mirrors are unavailable — the
-  // weekly national dataset is what gives full coverage.
-  try {
-    return await liveLocate(center, radiusMiles);
-  } catch {
-    return [];
+  // Nothing in range. If the national dataset loaded fine, this is a genuinely
+  // sparse area (rural county, remote region) — return instantly and let the
+  // caller surface the nearest store. We do NOT hit live Overpass per request:
+  // the dataset is the complete US source, so a live call would just add a
+  // multi-second hang without finding anything the dataset doesn't already have.
+  // Only fall back to live if the dataset itself failed to load (empty file).
+  if (data.length === 0) {
+    try {
+      return await liveLocate(center, radiusMiles);
+    } catch {
+      return [];
+    }
   }
+  return [];
 }
 
 /**

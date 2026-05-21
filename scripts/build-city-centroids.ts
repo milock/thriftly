@@ -42,6 +42,15 @@ for (const line of readFileSync(GAZ, "utf8").split("\n").slice(1)) {
   if (!prev || aland > prev.aland) map.set(key, { lat, lon, aland });
 }
 
+// Corrections that take precedence over the Gazetteer's internal point, which
+// is wrong for a couple of places: San Francisco's lands in the Pacific (the
+// Farallon Islands are part of the county), and "Kailua" matches Kailua-Kona on
+// the Big Island instead of Oahu's Kailua near Honolulu's stores.
+const OVERRIDE: Record<string, { lat: number; lon: number }> = {
+  "san-francisco-ca": { lat: 37.7749, lon: -122.4194 },
+  "kailua-hi": { lat: 21.3925, lon: -157.7401 },
+};
+
 // Consolidated city-counties / townships the Gazetteer names differently
 // (Nashville-Davidson, Augusta-Richmond, Indianapolis balance, etc.).
 const SUPPLEMENT: Record<string, { lat: number; lon: number }> = {
@@ -63,7 +72,7 @@ const SUPPLEMENT: Record<string, { lat: number; lon: number }> = {
 const out: Record<string, { lat: number; lon: number }> = {};
 const unmatched: string[] = [];
 for (const c of CITIES) {
-  const hit = map.get(`${c.state}|${norm(c.city)}`) ?? SUPPLEMENT[c.slug];
+  const hit = OVERRIDE[c.slug] ?? map.get(`${c.state}|${norm(c.city)}`) ?? SUPPLEMENT[c.slug];
   if (hit) out[c.slug] = { lat: hit.lat, lon: hit.lon };
   else unmatched.push(c.slug);
 }

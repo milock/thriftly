@@ -50,7 +50,14 @@ export default function AppPage() {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [areaLabel, setAreaLabel] = useState<string | null>(null);
-  const [filtersOpen, setFiltersOpen] = useState(true);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  // Briefly nudge the Filters caret on first load so it's discoverable while
+  // collapsed; clears on a timer or as soon as the user opens the panel.
+  const [caretHint, setCaretHint] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setCaretHint(false), 2600);
+    return () => clearTimeout(t);
+  }, []);
   const { stores, loading, error, nearest, search } = useStores();
   const isDesktop = useIsDesktop();
 
@@ -197,9 +204,12 @@ export default function AppPage() {
             <div className="border-b">
               <button
                 type="button"
-                onClick={() => setFiltersOpen((v) => !v)}
+                onClick={() => {
+                  setFiltersOpen((v) => !v);
+                  setCaretHint(false);
+                }}
                 aria-expanded={filtersOpen}
-                className="flex w-full items-center justify-between px-5 py-3 text-[13px] font-medium transition-colors hover:bg-accent/50"
+                className="flex w-full items-center justify-between px-5 py-2.5 text-[13px] font-medium transition-colors hover:bg-accent/50"
               >
                 <span className="flex items-center gap-2 text-muted-foreground">
                   <SlidersHorizontal className="size-3.5" />
@@ -209,6 +219,7 @@ export default function AppPage() {
                   className={cn(
                     "size-4 text-muted-foreground transition-transform duration-200",
                     filtersOpen ? "rotate-180" : "",
+                    caretHint && !filtersOpen ? "animate-caret-hint text-foreground" : "",
                   )}
                 />
               </button>
@@ -219,7 +230,7 @@ export default function AppPage() {
                 )}
               >
                 <div className="overflow-hidden">
-                  <div className="px-5 pb-5">
+                  <div className="px-5 pb-4 pt-1">
                     <FilterPanel filters={filters} onChange={setFilters} />
                   </div>
                 </div>
