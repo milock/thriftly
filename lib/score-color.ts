@@ -86,8 +86,8 @@ export const FACTOR_LABELS: Record<string, string> = {
 };
 
 export const FACTOR_BLURB: Record<string, string> = {
-  medianHomeValue: "Higher property values signal more disposable income — and better cast-offs.",
-  medianHouseholdIncome: "Wealthier households donate higher-quality goods more often.",
-  pctBachelorsPlus: "Education correlates with brand-name and well-kept donations.",
-  medianGrossRent: "Captures affluence in renter-heavy areas home value misses.",
+  medianHomeValue: "Pricier homes usually mean more spending money, and nicer cast-offs.",
+  medianHouseholdIncome: "Higher-income households tend to donate better stuff.",
+  pctBachelorsPlus: "More college grads tracks with brand-name, well-kept donations.",
+  medianGrossRent: "Catches wealth in renter-heavy areas that home values miss.",
 };

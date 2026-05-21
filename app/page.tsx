@@ -38,7 +38,7 @@ const FACTOR_ICONS: Record<FactorKey, typeof Home> = {
 };
 
 const FEATURES = [
-  { icon: Sparkles, title: "Ranked by real data", body: "Every store gets a 0–100 Goods Score from Census affluence data — no guesswork." },
+  { icon: Sparkles, title: "Ranked by real data", body: "Every store gets a 0 to 100 score from U.S. Census data, so you're not guessing." },
   { icon: MapPinned, title: "Live map", body: "See every nearby Goodwill as a color-graded pin, with your search radius drawn in." },
   { icon: Navigation, title: "Directions & hours", body: "One tap to Google Maps directions, store hours, phone, and website." },
   { icon: SlidersHorizontal, title: "Powerful filters", body: "Dial radius from a half-mile to 100, set a minimum score, or show only what's open." },
@@ -84,8 +84,7 @@ export default function Landing() {
               </h1>
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
                 Thrift stores in wealthier neighborhoods get better donations. We score every
-                Goodwill near you by the affluence of its surrounding area — so you hunt where the
-                treasure actually is.
+                Goodwill near you by how well-off the surrounding area is, so you know where to look.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
@@ -120,9 +119,9 @@ export default function Landing() {
           <div className="mx-auto max-w-6xl px-5 py-16">
             <div className="grid gap-10 sm:grid-cols-3">
               {[
-                { n: "01", t: "We map every Goodwill near you", b: "Pulled live from OpenStreetMap within your chosen radius." },
-                { n: "02", t: "We read the neighborhood", b: "U.S. Census data for the census tracts around each store — income, home value, education, rent." },
-                { n: "03", t: "We score it 0–100", b: "A weighted, distance-blended Goods Score tells you where the best donations land." },
+                { n: "01", t: "Find every Goodwill nearby", b: "Set your distance and see them all on one map." },
+                { n: "02", t: "See the neighborhood behind each", b: "We check how well-off the surrounding area is." },
+                { n: "03", t: "Get a score out of 100", b: "Higher means better odds of a great haul." },
               ].map((s) => (
                 <div key={s.n}>
                   <span className="tabular text-[13px] font-semibold text-muted-foreground">{s.n}</span>
@@ -142,9 +141,8 @@ export default function Landing() {
                 How the Goods Score works
               </h2>
               <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-                For each store we blend the demographics of every census tract within about three
-                miles — weighted by population and distance — then score four signals of local
-                affluence:
+                For each store, we look at the neighborhoods within about three miles, weighted by how
+                many people live there and how close they are. Four things drive the score:
               </p>
             </div>
 

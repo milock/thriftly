@@ -132,7 +132,7 @@
     text-rendering: optimizeLegibility;
   }
   ::selection {
-    background: color-mix(in oklch, var(--brand) 22%, transparent);
+    background: color-mix(in oklch, var(--foreground) 14%, transparent);
   }
 }
 
