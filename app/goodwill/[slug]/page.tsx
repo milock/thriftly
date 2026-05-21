@@ -4,7 +4,7 @@ import { cache } from "react";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import { getMetro, METROS, type Metro } from "@/lib/metros";
-import { locateStores } from "@/lib/locate";
+import { locateStores, enrichStores } from "@/lib/locate";
 import type { ScoredStore } from "@/lib/types";
 import { RankedStores } from "@/components/city/ranked-stores";
 import { CityHeader, CityFooter } from "@/components/city/chrome";
@@ -26,7 +26,11 @@ export const dynamicParams = true;
 // Wrapped in React cache so generateMetadata and the page share a single fetch.
 const getCityStores = cache(async (m: Metro): Promise<ScoredStore[]> => {
   try {
-    return await locateStores({ lat: m.lat, lon: m.lon }, m.radiusMiles);
+    const stores = await locateStores({ lat: m.lat, lon: m.lon }, m.radiusMiles);
+    // City pages are server-rendered for SEO, so neighborhoods/addresses must be
+    // in the HTML. The loading.tsx skeleton + ISR cache hide this cost from users.
+    await enrichStores(stores);
+    return stores;
   } catch (err) {
     console.error(`city page locate failed: ${m.slug}`, err);
     return [];

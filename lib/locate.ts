@@ -59,14 +59,25 @@ export async function locateStores(
   });
 
   scored.sort((a, b) => b.score.total - a.score.total);
+  return scored;
+}
 
-  // OpenStreetMap usually has the store's location but spotty address tags, and
-  // its `addr:city` is the municipality, not the neighborhood. Reverse-geocode
-  // each store's coordinate to add the neighborhood ("Westwood") and backfill
-  // any missing street/city. Only the top-ranked stores (which is what people
-  // act on) and a low concurrency keep us polite to the geocoder and bound the
-  // cold-render time; each lookup is cached a week, so repeats are free.
-  await mapWithConcurrency(scored.slice(0, ENRICH_LIMIT), 3, async (s) => {
+// How many top-ranked stores to reverse-geocode per request.
+const ENRICH_LIMIT = 30;
+
+/**
+ * Reverse-geocode the top-ranked stores to add the neighborhood ("Westwood")
+ * and backfill any street/city OpenStreetMap was missing. Mutates in place.
+ *
+ * Kept separate from {@link locateStores} so the ranked list renders
+ * immediately and enrichment runs off the critical path: server-side for the
+ * SEO city pages (where it must be in the HTML), and via `/api/enrich` for the
+ * client search (where cards fill in progressively). Low concurrency plus a
+ * per-coordinate weekly cache keep it polite; it soft-fails, so a card just
+ * keeps its OSM data if a lookup misses.
+ */
+export async function enrichStores(stores: ScoredStore[]): Promise<void> {
+  await mapWithConcurrency(stores.slice(0, ENRICH_LIMIT), 3, async (s) => {
     const rev = await reverseAddress(s.location.lat, s.location.lon);
     if (!rev) return;
     s.neighborhood = s.neighborhood ?? rev.neighborhood;
@@ -75,12 +86,7 @@ export async function locateStores(
     s.region = s.region ?? rev.region;
     s.address = [s.street, s.locality, s.region].filter(Boolean).join(", ") || s.address;
   });
-
-  return scored;
 }
-
-// How many top-ranked stores to reverse-geocode per request.
-const ENRICH_LIMIT = 30;
 
 /** Run `fn` over `items` with at most `limit` in flight at once. */
 async function mapWithConcurrency<T>(

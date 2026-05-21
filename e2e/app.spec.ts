@@ -5,6 +5,7 @@ test.beforeEach(async ({ page }) => {
   await page.route("**/api/stores**", (route) => route.fulfill({ json: storesResponse }));
   await page.route("**/api/geocode**", (route) => route.fulfill({ json: geocodeResponse }));
   await page.route("**/api/reverse**", (route) => route.fulfill({ json: { label: "San Diego, CA" } }));
+  await page.route("**/api/enrich**", (route) => route.fulfill({ json: { enriched: {} } }));
 });
 
 test("ranks stores and crowns the best find", async ({ page }) => {

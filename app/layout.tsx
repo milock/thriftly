@@ -99,7 +99,6 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${GeistSans.variable} ${GeistMono.variable} h-full`}
-      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <body className="bg-background text-foreground min-h-full antialiased">
