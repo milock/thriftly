@@ -1,7 +1,14 @@
 import type { LatLng, Store } from "@/lib/types";
 
-const ENDPOINT = "https://overpass.openstreetmap.fr/api/interpreter";
-const FALLBACK = "https://overpass-api.de/api/interpreter";
+const FR = "https://overpass.openstreetmap.fr/api/interpreter";
+const DE = "https://overpass-api.de/api/interpreter";
+
+// Production uses .fr first. The precompute job sets OVERPASS_PRIMARY=de so its
+// bulk traffic doesn't throttle the endpoint production depends on. Read at
+// call time so the precompute can set it after this module is imported.
+function endpoints(): string[] {
+  return process.env.OVERPASS_PRIMARY === "de" ? [DE, FR] : [FR, DE];
+}
 
 interface OverpassElement {
   type: string;
@@ -72,14 +79,19 @@ export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): 
     body,
     next: { revalidate: 86400 }, // cache a day
   };
-  let res: Response;
-  try {
-    res = await fetch(ENDPOINT, opts);
-    if (!res.ok) throw new Error(`Overpass ${res.status}`);
-  } catch {
-    res = await fetch(FALLBACK, opts);
-    if (!res.ok) throw new Error(`Overpass fallback ${res.status}`);
+  // Try each endpoint in order. A mirror intermittently returns HTTP 200 with
+  // zero elements when it's under load, so we treat "no stores" the same as an
+  // error and try the next endpoint rather than reporting an empty result.
+  for (const endpoint of endpoints()) {
+    try {
+      const res = await fetch(endpoint, opts);
+      if (!res.ok) continue;
+      const data = (await res.json()) as OverpassResponse;
+      const stores = parseOverpass(data);
+      if (stores.length > 0) return stores;
+    } catch {
+      // try the next endpoint
+    }
   }
-  const data = (await res.json()) as OverpassResponse;
-  return parseOverpass(data);
+  return [];
 }
