@@ -1,11 +1,16 @@
 import { test, expect } from "@playwright/test";
-import { storesResponse, geocodeResponse } from "./fixtures";
+import { storesResponse, photonReverseResponse } from "./fixtures";
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/stores**", (route) => route.fulfill({ json: storesResponse }));
-  await page.route("**/api/geocode**", (route) => route.fulfill({ json: geocodeResponse }));
-  await page.route("**/api/reverse**", (route) => route.fulfill({ json: { label: "San Diego, CA" } }));
   await page.route("**/api/enrich**", (route) => route.fulfill({ json: { enriched: {} } }));
+  // Geocoding runs client-side against Photon (the user's own IP). Stub the
+  // reverse call ("near {place}" label) and the typeahead/geocode endpoint.
+  // Regex (not glob) so the cross-origin URL + query string matches reliably.
+  await page.route(/photon\.komoot\.io\/reverse/, (route) =>
+    route.fulfill({ json: photonReverseResponse }),
+  );
+  await page.route(/photon\.komoot\.io\/api/, (route) => route.fulfill({ json: { features: [] } }));
 });
 
 test("ranks stores and crowns the best find", async ({ page }) => {

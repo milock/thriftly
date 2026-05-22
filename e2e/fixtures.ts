@@ -45,4 +45,7 @@ export const storesResponse = {
   ],
 };
 
-export const geocodeResponse = { location: { lat: 32.84, lon: -117.27 } };
+// Photon reverse-geocode shape — yields the "near San Diego, CA" label.
+export const photonReverseResponse = {
+  features: [{ properties: { city: "San Diego", state: "California", countrycode: "US" } }],
+};

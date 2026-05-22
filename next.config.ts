@@ -9,7 +9,10 @@ const ContentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://*.basemaps.cartocdn.com",
   "font-src 'self' data:",
-  "connect-src 'self'",
+  // Geocoding runs in the browser (the user's own IP) against the OSM geocoders —
+  // the server's datacenter IP gets rate-limited/blocked, so client-side is the
+  // only path that works everywhere. These two origins must be reachable.
+  "connect-src 'self' https://photon.komoot.io https://nominatim.openstreetmap.org",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

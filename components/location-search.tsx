@@ -3,22 +3,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Search, LocateFixed, LoaderCircle, MapPin } from "lucide-react";
 import type { LatLng } from "@/lib/types";
+import { suggestPlaces, geocodeAddress, type PlaceSuggestion } from "@/lib/geocode-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-interface Suggestion {
-  id: string;
-  label: string;
-  lat: number;
-  lon: number;
-}
+type Suggestion = PlaceSuggestion;
 
 interface Props {
   onLocate: (c: LatLng) => void;
+  /** Current map center; biases typeahead + geocoding toward the user's area. */
+  bias?: LatLng;
   className?: string;
 }
 
-export function LocationSearch({ onLocate, className }: Props) {
+export function LocationSearch({ onLocate, bias, className }: Props) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
@@ -41,22 +39,17 @@ export function LocationSearch({ onLocate, className }: Props) {
     }
     const ctrl = new AbortController();
     const timer = setTimeout(async () => {
-      try {
-        const res = await fetch(`/api/suggest?q=${encodeURIComponent(q)}`, { signal: ctrl.signal });
-        if (!res.ok) return;
-        const data = (await res.json()) as { suggestions: Suggestion[] };
-        setSuggestions(data.suggestions ?? []);
-        setActive(-1);
-        setOpen((data.suggestions ?? []).length > 0);
-      } catch {
-        /* aborted or offline */
-      }
+      const results = await suggestPlaces(q, bias, ctrl.signal);
+      if (ctrl.signal.aborted) return;
+      setSuggestions(results);
+      setActive(-1);
+      setOpen(results.length > 0);
     }, 250);
     return () => {
       clearTimeout(timer);
       ctrl.abort();
     };
-  }, [query]);
+  }, [query, bias]);
 
   function choose(s: Suggestion) {
     skipNext.current = true;
@@ -70,11 +63,8 @@ export function LocationSearch({ onLocate, className }: Props) {
     if (!query.trim()) return;
     setBusy(true);
     try {
-      const res = await fetch(`/api/geocode?q=${encodeURIComponent(query)}`);
-      if (res.ok) {
-        const data = (await res.json()) as { location: LatLng | null };
-        if (data.location) onLocate(data.location);
-      }
+      const location = await geocodeAddress(query, bias);
+      if (location) onLocate(location);
     } finally {
       setBusy(false);
       setOpen(false);

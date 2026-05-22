@@ -1,4 +1,5 @@
 import type { LatLng } from "@/lib/types";
+import { toStateAbbr } from "@/lib/us-states";
 
 const GEOCODER = "https://geocoding.geo.census.gov/geocoder";
 const NOMINATIM = "https://nominatim.openstreetmap.org/search";
@@ -47,52 +48,6 @@ export async function getStateForPoint(p: LatLng): Promise<string | null> {
 }
 
 const NOMINATIM_REVERSE = "https://nominatim.openstreetmap.org/reverse";
-
-/** Friendly "City, ST" label for a coordinate (Nominatim reverse geocoding). */
-export async function reverseGeocode(lat: number, lon: number): Promise<string | null> {
-  const url = `${NOMINATIM_REVERSE}?lat=${lat}&lon=${lon}&format=json&zoom=12&addressdetails=1`;
-  try {
-    const res = await fetch(url, {
-      headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
-      next: { revalidate: 86400 },
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const a = data?.address ?? {};
-    const place =
-      a.city || a.town || a.village || a.suburb || a.neighbourhood || a.hamlet || a.county;
-    const iso = a["ISO3166-2-lvl4"];
-    const stateAbbr = typeof iso === "string" ? iso.split("-")[1] : undefined;
-    if (place && stateAbbr) return `${place}, ${stateAbbr}`;
-    if (place) return place;
-    return typeof data?.display_name === "string"
-      ? data.display_name.split(",").slice(0, 2).join(", ").trim()
-      : null;
-  } catch {
-    return null;
-  }
-}
-
-// Photon returns the full state name ("California"); cards want the postal code.
-const US_STATE_ABBR: Record<string, string> = {
-  alabama: "AL", alaska: "AK", arizona: "AZ", arkansas: "AR", california: "CA",
-  colorado: "CO", connecticut: "CT", delaware: "DE", "district of columbia": "DC",
-  florida: "FL", georgia: "GA", hawaii: "HI", idaho: "ID", illinois: "IL",
-  indiana: "IN", iowa: "IA", kansas: "KS", kentucky: "KY", louisiana: "LA",
-  maine: "ME", maryland: "MD", massachusetts: "MA", michigan: "MI", minnesota: "MN",
-  mississippi: "MS", missouri: "MO", montana: "MT", nebraska: "NE", nevada: "NV",
-  "new hampshire": "NH", "new jersey": "NJ", "new mexico": "NM", "new york": "NY",
-  "north carolina": "NC", "north dakota": "ND", ohio: "OH", oklahoma: "OK",
-  oregon: "OR", pennsylvania: "PA", "rhode island": "RI", "south carolina": "SC",
-  "south dakota": "SD", tennessee: "TN", texas: "TX", utah: "UT", vermont: "VT",
-  virginia: "VA", washington: "WA", "west virginia": "WV", wisconsin: "WI", wyoming: "WY",
-};
-
-function toStateAbbr(state: unknown): string | undefined {
-  if (typeof state !== "string") return undefined;
-  if (/^[A-Z]{2}$/.test(state)) return state;
-  return US_STATE_ABBR[state.trim().toLowerCase()];
-}
 
 export interface ReverseAddress {
   street?: string; // "1145 Artesia Blvd"
@@ -166,56 +121,5 @@ export async function reverseAddress(lat: number, lon: number): Promise<ReverseA
     );
   } catch {
     return null;
-  }
-}
-
-export interface PlaceSuggestion {
-  id: string;
-  label: string;
-  lat: number;
-  lon: number;
-}
-
-const PHOTON = "https://photon.komoot.io/api";
-
-/** Live address/ZIP autocomplete suggestions (Photon — built for typeahead). */
-export async function suggestPlaces(query: string): Promise<PlaceSuggestion[]> {
-  const q = query.trim();
-  if (q.length < 3) return [];
-  const url = `${PHOTON}/?q=${encodeURIComponent(q)}&limit=6&lang=en`;
-  try {
-    const res = await fetch(url, {
-      headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    const feats = Array.isArray(data?.features) ? data.features : [];
-    const out: PlaceSuggestion[] = [];
-    const seen = new Set<string>();
-    for (const f of feats) {
-      const p = f?.properties ?? {};
-      if (p.countrycode && p.countrycode !== "US") continue;
-      const coords = f?.geometry?.coordinates;
-      if (!Array.isArray(coords) || coords.length < 2) continue;
-      const primary =
-        p.name ||
-        [p.housenumber, p.street].filter(Boolean).join(" ") ||
-        p.postcode ||
-        p.city ||
-        p.county;
-      if (!primary) continue;
-      const rest = [p.city && p.city !== primary ? p.city : null, p.state]
-        .filter(Boolean)
-        .join(", ");
-      const label = [primary, rest].filter(Boolean).join(", ");
-      if (seen.has(label)) continue;
-      seen.add(label);
-      out.push({ id: `${coords[1]},${coords[0]}:${label}`, label, lat: coords[1], lon: coords[0] });
-      if (out.length >= 6) break;
-    }
-    return out;
-  } catch {
-    return [];
   }
 }

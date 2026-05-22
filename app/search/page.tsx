@@ -7,6 +7,7 @@ import type { LatLng } from "@/lib/types";
 import { useStores } from "@/lib/use-stores";
 import { applyFilters, DEFAULT_FILTERS, type Filters } from "@/lib/filters";
 import { LocationSearch } from "@/components/location-search";
+import { reverseLabel } from "@/lib/geocode-client";
 import { FilterPanel } from "@/components/filter-panel";
 import { StoreList } from "@/components/store-list";
 import { AddToOsm } from "@/components/add-to-osm";
@@ -115,12 +116,9 @@ export default function AppPage() {
   // Reverse-geocode the search center to show a friendly "near {place}" label.
   useEffect(() => {
     let active = true;
-    fetch(`/api/reverse?lat=${center.lat}&lon=${center.lon}`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => {
-        if (active && d) setAreaLabel(d.label);
-      })
-      .catch(() => {});
+    reverseLabel(center.lat, center.lon).then((label) => {
+      if (active && label) setAreaLabel(label);
+    });
     return () => {
       active = false;
     };
@@ -182,7 +180,7 @@ export default function AppPage() {
         <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
           <Wordmark />
           <div className="hidden flex-1 justify-center px-6 lg:flex">
-            <LocationSearch onLocate={relocate} className="w-full max-w-md" />
+            <LocationSearch onLocate={relocate} bias={center} className="w-full max-w-md" />
           </div>
           <div className="flex items-center gap-0.5">
             <Methodology />
@@ -193,7 +191,7 @@ export default function AppPage() {
         </div>
         {!isDesktop && (
           <div className="px-4 pb-3 sm:px-5">
-            <LocationSearch onLocate={relocate} />
+            <LocationSearch onLocate={relocate} bias={center} />
           </div>
         )}
       </header>
