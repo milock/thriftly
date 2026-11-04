@@ -84,3 +84,10 @@ test('restores a shared search location and radius', async ({page}) => {
   await search;
   await expect(page).toHaveURL(/lat=40.71000.*lon=-74.01000.*radius=10/);
 });
+
+test('shows store addresses while neighborhood enrichment is unavailable', async ({page}) => {
+  await page.route('**/api/enrich**', () => new Promise(() => {}));
+  await page.goto('/search');
+  await expect(page.getByRole('heading', {name:'La Jolla'})).toBeVisible();
+  await expect(page.getByText('7631 Girard Avenue, La Jolla, CA', {exact:true}).first()).toBeVisible();
+});

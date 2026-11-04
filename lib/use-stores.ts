@@ -24,8 +24,7 @@ export function useStores() {
   const reqId = useRef(0);
 
   // Fill in neighborhood + street addresses after the list has painted. Runs
-  // off the critical path so results show immediately; cards mark themselves
-  // `enriched` (so the title placeholder resolves) and update when it returns.
+  // off the critical path so existing names and addresses show immediately.
   const enrich = useCallback(async (stores: ScoredStore[], id: number) => {
     const apply = (enriched?: Record<string, Enrichment>) =>
       setState((s) => {
@@ -58,7 +57,7 @@ export function useStores() {
         body: JSON.stringify({ points }),
       });
       if (!res.ok) {
-        apply(); // resolve the placeholders to their fallback titles
+        apply(); // keep the existing names and addresses
         return;
       }
       const { enriched } = (await res.json()) as { enriched: Record<string, Enrichment> };
