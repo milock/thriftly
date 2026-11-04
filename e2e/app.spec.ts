@@ -2,6 +2,12 @@ import { test, expect } from "@playwright/test";
 import { storesResponse, photonReverseResponse } from "./fixtures";
 
 test.beforeEach(async ({ page }) => {
+  // Keep CI off community tile infrastructure; real tiles are visually checked
+  // once during release verification.
+  await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({
+    contentType:'image/png',
+    body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/l9sAAAAASUVORK5CYII=','base64')
+  }));
   await page.route("**/api/stores**", (route) => route.fulfill({ json: storesResponse }));
   await page.route("**/api/enrich**", (route) => route.fulfill({ json: { enriched: {} } }));
   // Geocoding runs client-side against Photon (the user's own IP). Stub the
@@ -69,6 +75,9 @@ test("the map renders", async ({ page, isMobile }) => {
   await page.goto("/search");
   if (isMobile) await page.getByRole("tab", { name: /map/i }).click();
   await expect(page.locator(".leaflet-container").first()).toBeVisible();
+  await expect(page.locator('.leaflet-tile-loaded').first()).toBeVisible();
+  await expect(page.locator('.leaflet-tile').first()).toHaveAttribute('src', /^https:\/\/tile\.openstreetmap\.org\//);
+  await expect(page.locator('.leaflet-control-attribution a', {hasText:'OpenStreetMap'})).toHaveAttribute('href','https://www.openstreetmap.org/copyright');
 });
 
 test("mobile exposes list and map tabs", async ({ page, isMobile }) => {

@@ -136,10 +136,9 @@ export default function StoreMap({
         attributionControl
       >
         <TileLayer
-          key={dark ? "dark" : "light"}
-          url={`https://{s}.basemaps.cartocdn.com/${dark ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png`}
-          attribution="&copy; OpenStreetMap &copy; CARTO"
-          subdomains="abcd"
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          className="thriftly-basemap"
           maxZoom={19}
         />
         <Circle

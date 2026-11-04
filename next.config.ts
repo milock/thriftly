@@ -8,7 +8,7 @@ const ContentSecurityPolicy = [
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "script-src-attr 'none'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://*.basemaps.cartocdn.com",
+  "img-src 'self' data: blob: https://tile.openstreetmap.org",
   "font-src 'self' data:",
   // Geocoding runs in the browser (the user's own IP) against the OSM geocoders —
   // the server's datacenter IP gets rate-limited/blocked, so client-side is the

@@ -295,3 +295,8 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Keep the key-free basemap readable in dark mode without recoloring markers. */
+.dark .thriftly-basemap {
+  filter: invert(1) hue-rotate(180deg) brightness(0.8) saturate(0.7);
+}
