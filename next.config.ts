@@ -6,6 +6,7 @@ const ContentSecurityPolicy = [
   "default-src 'self'",
   // 'unsafe-eval' is needed only by the dev HMR runtime; production stays strict.
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  "script-src-attr 'none'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://*.basemaps.cartocdn.com",
   "font-src 'self' data:",

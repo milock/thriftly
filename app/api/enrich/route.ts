@@ -2,12 +2,18 @@ import { NextResponse } from 'next/server';
 import { reverseAddress } from '@/lib/geocode';
 import { isKnownStorePoint } from '@/lib/locate';
 
+export const maxDuration = 60;
+
 const MAX_BYTES = 16_384;
 interface Point { lat: number; lon: number }
 
 export async function POST(request: Request) {
   const origin = request.headers.get('origin');
-  if ((origin && origin !== new URL(request.url).origin) || request.headers.get('sec-fetch-site') === 'cross-site') {
+  // Next can use an internal hostname in request.url behind a reverse proxy.
+  // Host is the browser's target authority; preserve the trusted URL scheme.
+  const url = new URL(request.url);
+  const expectedOrigin = `${url.protocol}//${request.headers.get('host') ?? url.host}`;
+  if ((origin && origin !== expectedOrigin) || request.headers.get('sec-fetch-site') === 'cross-site') {
     return NextResponse.json({error:'same-origin requests required'}, {status:403});
   }
   if (request.headers.get('content-type')?.split(';')[0].trim() !== 'application/json') {

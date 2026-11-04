@@ -11,5 +11,6 @@ const app = next({dev:false, hostname:'127.0.0.1', port:3107});
 await app.prepare();
 const handle = app.getRequestHandler();
 createServer({key:readFileSync('.cache/test-tls/key.pem'), cert:readFileSync('.cache/test-tls/cert.pem')}, (req,res) => {
+  req.headers['x-forwarded-proto'] = 'https';
   handle(req,res);
 }).listen(3107,'127.0.0.1', () => console.log('Test server ready: https://127.0.0.1:3107'));

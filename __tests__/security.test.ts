@@ -60,3 +60,7 @@ it('serves ordinary searches from the dataset without upstream calls', async () 
   expect(data.generatedAt).toBeTruthy();
   expect(fetch).not.toHaveBeenCalled();
 });
+it('accepts the target Host behind a reverse proxy', async () => {
+  const response = await POST(new Request('https://localhost/api/enrich', {method:'POST',headers:{'Content-Type':'application/json',Host:'www.thriftly.xyz',Origin:'https://www.thriftly.xyz'},body:'{"points":[]}'}));
+  expect(response.status).toBe(200);
+});

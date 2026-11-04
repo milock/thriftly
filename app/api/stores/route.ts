@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { locateStores, locateStoresFresh, nearestStore, datasetGeneratedAt } from "@/lib/locate";
 
+export const maxDuration = 60;
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const lat = Number(searchParams.get("lat") ?? NaN);
