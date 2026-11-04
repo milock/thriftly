@@ -39,8 +39,8 @@ const FACTOR_ICONS: Record<FactorKey, typeof Home> = {
 };
 
 const FEATURES = [
-  { icon: Sparkles, title: "Ranked by real data", body: "Every store gets a 0 to 100 score from U.S. Census data, so you're not guessing." },
-  { icon: MapPinned, title: "Live map", body: "See every nearby Goodwill as a color-graded pin, with your search radius drawn in." },
+  { icon: Sparkles, title: "Ranked by real data", body: "Compare 0 to 100 neighborhood scores calculated from U.S. Census data." },
+  { icon: MapPinned, title: "Live map", body: "See mapped Goodwill locations as colored pins, with your search radius drawn in." },
   { icon: Navigation, title: "Directions & hours", body: "One tap to Google Maps directions, store hours, phone, and website." },
   { icon: SlidersHorizontal, title: "Powerful filters", body: "Dial radius from a half-mile to 100, set a minimum score, or show only what's open." },
 ];
@@ -98,12 +98,12 @@ export default function Landing() {
                 Built on U.S. Census + OpenStreetMap
               </span>
               <h1 className="mt-5 text-[2.6rem] font-semibold leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.5rem]">
-                Find the Goodwill with the{" "}
-                <span className="text-[var(--brand)]">best&nbsp;stuff.</span>
+                Find Goodwill stores{" "}
+                <span className="text-[var(--brand)]">near&nbsp;you.</span>
               </h1>
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
-                Thrift stores in wealthier neighborhoods get better donations. We score every
-                Goodwill near you by how well-off the surrounding area is, so you know where to look.
+                Compare mapped Goodwill locations by neighborhood Census data, with addresses
+                and directions to help plan your trip. A score cannot tell you what is on the shelves.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
@@ -136,11 +136,12 @@ export default function Landing() {
         {/* Insight */}
         <section className="border-y border-border bg-card/50">
           <div className="reveal mx-auto max-w-6xl px-5 py-16">
+            <h2 className="sr-only">Plan a Goodwill shopping trip</h2>
             <div className="grid gap-10 sm:grid-cols-3">
               {[
-                { n: "01", t: "Find every Goodwill nearby", b: "Set your distance and see them all on one map." },
+                { n: "01", t: "Find mapped Goodwill locations", b: "Set your distance and compare the locations in our dataset." },
                 { n: "02", t: "See the neighborhood behind each", b: "We check how well-off the surrounding area is." },
-                { n: "03", t: "Get a score out of 100", b: "Higher means better odds of a great haul." },
+                { n: "03", t: "Get a score out of 100", b: "Higher scores reflect higher neighborhood Census measures." },
               ].map((s) => (
                 <div key={s.n}>
                   <span className="tabular block text-2xl font-semibold tracking-tight text-[var(--brand)]">
@@ -265,7 +266,7 @@ export default function Landing() {
                 Your next great thrift run starts here.
               </h2>
               <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-background/70">
-                Drop in a ZIP code and see every Goodwill nearby, ranked by where the good stuff is.
+                Enter a ZIP code to compare mapped Goodwill locations and neighborhood scores.
               </p>
               <Link
                 href="/search"
@@ -312,8 +313,8 @@ export default function Landing() {
             >
               OpenStreetMap
             </a>
-            . The Goods Score estimates donation quality, not live inventory, and store coverage
-            may be incomplete.
+            . The Goods Score describes neighborhood Census data, not inventory or customer reviews.
+            Store coverage may be incomplete. <Link className="underline" href="/how-we-score">Read the scoring methodology</Link>.
           </p>
         </div>
       </footer>
@@ -331,7 +332,7 @@ function PreviewPanel() {
   return (
     <div className="rounded-2xl border border-border bg-card p-3 shadow-xl shadow-black/[0.06]">
       <div className="flex items-center justify-between px-2 py-1.5">
-        <span className="text-[12px] font-medium text-muted-foreground">Goodwills near La Jolla, CA</span>
+        <span className="text-[12px] font-medium text-muted-foreground">Example: Goodwills near La Jolla, CA</span>
         <span className="tabular text-[12px] text-muted-foreground">3 ranked</span>
       </div>
       <div className="space-y-2">

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { STATES } from "@/lib/cities";
@@ -9,12 +10,11 @@ import { cn } from "@/lib/utils";
 
 const SITE_URL = "https://www.thriftly.xyz";
 
-export const metadata: Metadata = {
-  title: "Goodwill stores by state",
-  description:
-    "Browse the best Goodwill thrift stores across all 50 states, by city, each ranked 0 to 100 by neighborhood affluence. Find the top-rated Goodwill locations near you.",
-  alternates: { canonical: "/goodwill" },
-};
+export const metadata: Metadata = pageMetadata(
+  "Goodwill stores by state",
+  "Browse mapped Goodwill locations across all 50 states and DC. Compare city guides with addresses, directions and Census-based neighborhood scores.",
+  "/goodwill",
+);
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -58,9 +58,9 @@ export default function GoodwillHub() {
             Goodwill stores by state
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Pick a state, then a city, to see every Goodwill nearby ranked by the wealth of the
-            surrounding neighborhoods. Better-off areas tend to get better donations, so the ranking
-            points you to the best odds of a good haul.
+            Choose a state and city to compare mapped Goodwill locations, addresses and directions.
+            Goods Scores use neighborhood Census data; they do not measure inventory or customer
+            reviews. Store coverage may be incomplete.
           </p>
 
           <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">

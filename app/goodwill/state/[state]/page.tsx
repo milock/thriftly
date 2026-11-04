@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
@@ -25,13 +26,8 @@ export async function generateMetadata({
   const s = getState(state);
   if (!s) return {};
   const title = `Best Goodwill stores in ${s.name}`;
-  const description = `Browse Goodwill thrift stores across ${s.name} by city, each ranked 0 to 100 by neighborhood affluence. Find the top-rated Goodwill locations near you.`;
-  return {
-    title,
-    description,
-    alternates: { canonical: `/goodwill/state/${s.slug}` },
-    openGraph: { title: `${title} | Thriftly`, description, url: `/goodwill/state/${s.slug}`, type: "website" },
-  };
+  const description = `Browse Goodwill thrift stores across ${s.name} by city, each ranked 0 to 100 by neighborhood affluence. Compare mapped locations and neighborhood scores.`;
+  return pageMetadata(title, description, `/goodwill/state/${s.slug}`);
 }
 
 export default async function StatePage({ params }: { params: Promise<{ state: string }> }) {
@@ -88,9 +84,9 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
             Best Goodwill stores in {s.name}
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Pick a city to see every Goodwill nearby, ranked by the wealth of the surrounding
-            neighborhoods. Better-off areas tend to get better donations, so the ranking points you to
-            the best odds of a good haul.
+            Pick a city to compare mapped Goodwill locations, addresses and directions.
+            Goods Scores describe surrounding neighborhoods using Census data. They do not
+            measure inventory or customer reviews, and store coverage may be incomplete.
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">

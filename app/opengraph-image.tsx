@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Thriftly: find the best Goodwill near you";
+export const alt = "Thriftly: find Goodwill stores near you";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -44,7 +44,7 @@ export default function OpengraphImage() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
           <div style={{ fontSize: 78, fontWeight: 700, lineHeight: 1.05, letterSpacing: -2, maxWidth: 900 }}>
-            Find the Goodwill with the best stuff.
+            Find Goodwill stores near you.
           </div>
           <div style={{ fontSize: 34, color: "#a1a1aa", maxWidth: 880, lineHeight: 1.3 }}>
             Every nearby thrift store, ranked 0 to 100 by neighborhood affluence.

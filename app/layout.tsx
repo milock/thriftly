@@ -10,9 +10,9 @@ import "./globals.css";
 // emitted URL (canonical, OG, sitemap, JSON-LD) must use www to avoid pointing
 // search engines at redirecting URLs.
 const SITE_URL = "https://www.thriftly.xyz";
-const TITLE = "Thriftly: find the best Goodwill near you";
+const TITLE = "Thriftly: find Goodwill stores near you";
 const DESCRIPTION =
-  "Find the best Goodwill near you. Thriftly ranks nearby thrift stores from 0 to 100 by neighborhood affluence, so you know where the best donations land.";
+  "Find Goodwill stores near you. Compare mapped locations, addresses and directions, with Census-based neighborhood scores to help plan your next thrift trip.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: TITLE,
-    description: "Find the Goodwill with the best stuff, ranked by neighborhood affluence.",
+    description: "Compare mapped Goodwill locations, directions and neighborhood scores.",
   },
 };
 

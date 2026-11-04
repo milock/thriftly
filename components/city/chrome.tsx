@@ -32,10 +32,10 @@ export function CityFooter() {
   return (
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-5xl flex-col gap-3 px-5 py-8 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <Wordmark />
+        <div className="flex flex-col gap-2"><Wordmark /><Link href="/how-we-score">How we score stores</Link></div>
         <p className="max-w-md leading-relaxed">
-          Scores estimate donation quality from U.S. Census neighborhood data, not live inventory.
-          Store coverage comes from OpenStreetMap and may be incomplete.{" "}
+          Scores describe U.S. Census neighborhood data, not inventory or customer reviews.
+          Store coverage comes from OpenStreetMap and may be incomplete. Thriftly is independent of Goodwill.{" "}
           <a
             href={REPO_URL}
             target="_blank"

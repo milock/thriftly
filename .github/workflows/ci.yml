@@ -2,7 +2,7 @@ name: Verify application
 on:
   pull_request:
   push:
-    branches: [main, security/november-2026]
+    branches: [main, security/november-2026, seo/november-2026]
 permissions:
   contents: read
 jobs:

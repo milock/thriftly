@@ -58,6 +58,14 @@ export async function locateStoresFresh(
   return {stores: await locateStores(center, radiusMiles), generatedAt: datasetGeneratedAt()};
 }
 
+/** Deterministic local data only: safe for indexability checks and sitemaps. */
+export function locateBundledStores(center: LatLng, radiusMiles: number): ScoredStore[] {
+  return nationalDataset()
+    .map(s => ({...s, distanceMiles:haversineMiles(center,s.location)}))
+    .filter(s => s.distanceMiles <= radiusMiles)
+    .sort((a,b) => b.score.total-a.score.total);
+}
+
 /**
  * Find scored Goodwill stores around a point, sorted best-first. Filters the
  * bundled national dataset first (instant, network-free, throttle-proof); for
@@ -70,10 +78,7 @@ export async function locateStores(
   radiusMiles: number,
 ): Promise<ScoredStore[]> {
   const data = nationalDataset();
-  const hits = data
-    .map((s) => ({ ...s, distanceMiles: haversineMiles(center, s.location) }))
-    .filter((s) => s.distanceMiles <= radiusMiles)
-    .sort((a, b) => b.score.total - a.score.total);
+  const hits = locateBundledStores(center, radiusMiles);
   if (hits.length > 0) return hits;
   // Nothing in range. If the national dataset loaded fine, this is a genuinely
   // sparse area (rural county, remote region) — return instantly and let the

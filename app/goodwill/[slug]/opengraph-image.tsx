@@ -55,7 +55,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         </div>
 
         <div style={{ fontSize: 30, color: "#a1a1aa" }}>
-          Every nearby thrift store, ranked 0 to 100 by neighborhood affluence.
+          Mapped Goodwill locations with Census-based neighborhood scores.
         </div>
       </div>
     ),
