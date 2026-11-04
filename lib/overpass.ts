@@ -9,6 +9,8 @@ const KUMI = "https://overpass.private.coffee/api/interpreter";
 // bulk traffic doesn't throttle the endpoint production depends on. Read at
 // call time so the precompute can set it after this module is imported.
 function endpoints(): string[] {
+  const configured = process.env.OVERPASS_URL?.trim();
+  if (configured) return [configured];
   return process.env.OVERPASS_PRIMARY === "de" ? [DE, KUMI, FR] : [FR, DE, KUMI];
 }
 

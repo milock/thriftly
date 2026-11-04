@@ -31,7 +31,15 @@ describe("parseOverpass", () => {
 });
 
 describe("fetchGoodwillStores", () => {
-  afterEach(() => vi.restoreAllMocks());
+  afterEach(() => {vi.restoreAllMocks(); vi.unstubAllEnvs();});
+
+  it("uses only the configured server-side provider when supplied", async () => {
+    vi.stubEnv('OVERPASS_URL','https://provider.example/interpreter');
+    const spy=vi.spyOn(globalThis,'fetch').mockResolvedValue(new Response(JSON.stringify(sample)));
+    expect(await fetchGoodwillStores({lat:32.84,lon:-117.27},10)).toHaveLength(3);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy.mock.calls[0][0]).toBe('https://provider.example/interpreter');
+  });
 
   it("POSTs an Overpass query and returns parsed stores", async () => {
     const spy = vi

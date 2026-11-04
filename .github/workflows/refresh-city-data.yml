@@ -39,6 +39,7 @@ jobs:
         run: npm run build:data
         env:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+          OVERPASS_URL: ${{ secrets.OVERPASS_URL }}
       - name: Save checkpoints even when upstream is unavailable
         if: always()
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4

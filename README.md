@@ -462,3 +462,27 @@ If Thriftly helped you score a great haul, you can
 [**buy me a coffee ☕**](https://buymeacoffee.com/flanmorrison).
 
 MIT - see [LICENSE](LICENSE).
+
+
+### Refresh provider configuration and failure recovery
+
+The refresh rejects missing states, failed Census counties, coverage losses above
+10%, partial Overpass responses, and source snapshots older than seven days.
+It preserves the last complete dataset on any failure. Recent state checkpoints
+are reused only when their source timestamp is valid.
+
+For a hosted Overpass provider, set the full interpreter endpoint in the
+GitHub Actions secret `OVERPASS_URL`. If the endpoint contains a key, keep it
+in that secret, never in this repository. The same server-only Vercel environment
+variable enables that provider for the optional live-refresh API. Ordinary
+search continues to use the bundled dataset. Public mirrors are the default
+when the variable is empty; they do not provide an availability guarantee.
+
+Re-run the Refresh Goodwill data workflow after correcting the provider.
+A successful main-branch run validates and builds the dataset before committing
+it for deployment. Check the run's result; an enabled schedule alone does not
+mean data is current.
+
+Basemap tiles use OpenStreetMap standard tiles with visible attribution and
+normal browser caching. They do not require a CARTO key. Do not add bulk tile
+prefetching or offline-download features to this public tile service.

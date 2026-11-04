@@ -34,7 +34,7 @@ import { STATES } from "../lib/cities";
 // Overpass mirrors, tried in turn on retry so one throttling/flaky endpoint
 // doesn't leave a state empty. The primary can be overridden via OVERPASS_URL.
 const MIRRORS = [
-  process.env.OVERPASS_URL ?? "https://overpass.openstreetmap.fr/api/interpreter",
+  process.env.OVERPASS_URL?.trim() || "https://overpass.openstreetmap.fr/api/interpreter",
   "https://overpass-api.de/api/interpreter",
   "https://overpass.private.coffee/api/interpreter",
 ];
