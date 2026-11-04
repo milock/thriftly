@@ -19,6 +19,6 @@ jobs:
       - run: npm audit --audit-level=moderate
       - run: npm run lint
       - run: npm test
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:e2e
       - run: npm run typecheck
