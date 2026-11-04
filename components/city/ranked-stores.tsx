@@ -1,3 +1,4 @@
+import { safeWebsiteUrl } from "@/lib/format";
 import { Crown, Navigation, ExternalLink } from "lucide-react";
 import type { ScoredStore } from "@/lib/types";
 import { scoreColor, scoreInk, scoreTier } from "@/lib/score-color";
@@ -15,6 +16,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
   return (
     <ol className="space-y-3">
       {stores.map((s, i) => {
+        const website = safeWebsiteUrl(s.website);
         const total = Math.round(s.score.total);
         const tier = scoreTier(s.score.total);
         const place = s.neighborhood || s.locality;
@@ -73,9 +75,9 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                     <Navigation className="size-3.5" />
                     Directions
                   </a>
-                  {s.website && (
+                  {website && (
                     <a
-                      href={s.website}
+                      href={website}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"

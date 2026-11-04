@@ -49,3 +49,6 @@ next-env.d.ts
 # ad-hoc dev screenshot helpers
 scripts/_*.mjs
 screenshots/
+
+.cache/
+data/*.tmp

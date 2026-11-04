@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { type Filters, type SortKey, SORT_LABELS } from "@/lib/filters";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -38,9 +38,11 @@ function snapMiles(m: number): number {
 export function FilterPanel({ filters, onChange, className }: Props) {
   const set = (patch: Partial<Filters>) => onChange({ ...filters, ...patch });
   const [radiusPct, setRadiusPct] = useState(() => milesToPct(filters.radiusMiles));
-  useEffect(() => {
+  const [previousRadius, setPreviousRadius] = useState(filters.radiusMiles);
+  if (previousRadius !== filters.radiusMiles) {
+    setPreviousRadius(filters.radiusMiles);
     setRadiusPct(milesToPct(filters.radiusMiles));
-  }, [filters.radiusMiles]);
+  }
   const draftMiles = snapMiles(pctToMiles(radiusPct));
 
   return (

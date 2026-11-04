@@ -1,48 +1,46 @@
-import { NextResponse } from "next/server";
-import { reverseAddress } from "@/lib/geocode";
+import { NextResponse } from 'next/server';
+import { reverseAddress } from '@/lib/geocode';
+import { isKnownStorePoint } from '@/lib/locate';
 
-interface Point {
-  lat: number;
-  lon: number;
-}
+const MAX_BYTES = 16_384;
+interface Point { lat: number; lon: number }
 
-/**
- * Reverse-geocode a batch of store coordinates so the client search can fill in
- * neighborhood + street addresses progressively, after the ranked list has
- * already painted. Each lookup is cached a week server-side. Browsers can't call
- * the upstream geocoders directly (CORS + CSP), so this proxies it.
- */
 export async function POST(request: Request) {
+  const origin = request.headers.get('origin');
+  if ((origin && origin !== new URL(request.url).origin) || request.headers.get('sec-fetch-site') === 'cross-site') {
+    return NextResponse.json({error:'same-origin requests required'}, {status:403});
+  }
+  if (request.headers.get('content-type')?.split(';')[0].trim() !== 'application/json') {
+    return NextResponse.json({error:'JSON required'}, {status:415});
+  }
+  // Bound streamed bytes too; Content-Length is optional and cannot be trusted.
+  const reader = request.body?.getReader();
+  if (!reader) return NextResponse.json({error:'body required'}, {status:400});
+  let size = 0;
+  let text = '';
+  const decoder = new TextDecoder();
   let body: unknown;
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "invalid JSON" }, { status: 400 });
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > MAX_BYTES) {
+        await reader.cancel();
+        return NextResponse.json({error:'body too large'}, {status:413});
+      }
+      text += decoder.decode(value, {stream:true});
+    }
+    body = JSON.parse(text + decoder.decode());
+  } catch { return NextResponse.json({error:'invalid JSON'}, {status:400}); }
+  finally { reader.releaseLock(); }
+  const raw = (body as {points?: unknown})?.points;
+  if (!Array.isArray(raw) || raw.length > 60 || !raw.every(p =>
+    p && Number.isFinite(p.lat) && Number.isFinite(p.lon) && isKnownStorePoint(p.lat, p.lon))) {
+    return NextResponse.json({error:'up to 60 published store coordinates required'}, {status:400});
   }
-
-  const raw = (body as { points?: unknown })?.points;
-  const points: Point[] = Array.isArray(raw)
-    ? raw
-        .filter(
-          (p): p is Point =>
-            !!p &&
-            typeof (p as Point).lat === "number" &&
-            typeof (p as Point).lon === "number" &&
-            (p as Point).lat >= -90 &&
-            (p as Point).lat <= 90 &&
-            (p as Point).lon >= -180 &&
-            (p as Point).lon <= 180,
-        )
-        // Cap the batch so a crafted request can't fan out into huge upstream load.
-        .slice(0, 60)
-    : [];
-
-  const enriched: Record<
-    string,
-    { neighborhood?: string; street?: string; locality?: string; region?: string }
-  > = {};
-
-  // Small worker pool: polite to the geocoder, bounded latency.
+  const points: Point[] = [...new Map(raw.map(p => [`${p.lat},${p.lon}`, p])).values()].slice(0, 20);
+  const enriched: Record<string, Awaited<ReturnType<typeof reverseAddress>>> = {};
   let next = 0;
   const worker = async () => {
     while (next < points.length) {
@@ -51,7 +49,6 @@ export async function POST(request: Request) {
       if (rev) enriched[`${p.lat},${p.lon}`] = rev;
     }
   };
-  await Promise.all(Array.from({ length: Math.min(8, points.length) }, worker));
-
-  return NextResponse.json({ enriched });
+  await Promise.all(Array.from({length: Math.min(2, points.length)}, worker));
+  return NextResponse.json({enriched});
 }

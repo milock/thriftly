@@ -55,3 +55,14 @@ export function prettyDomain(url: string): string {
     return url;
   }
 }
+
+/** Only navigable HTTP(S) URLs from untrusted OSM tags. */
+export function safeWebsiteUrl(value: string | undefined): string | null {
+  if (!value || /[\u0000-\u0020\u007f]/.test(value) || value.startsWith("//")) return null;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(value) && !/^https?:\/\//i.test(value)) return null;
+  try {
+    const url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
+    if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || !url.hostname.includes('.')) return null;
+    return url.href;
+  } catch { return null; }
+}

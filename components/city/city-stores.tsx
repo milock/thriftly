@@ -28,7 +28,7 @@ function relativeTime(iso: string | null): string {
 // to whatever OSM already had so the list still renders.
 async function enrichStores(list: ScoredStore[]): Promise<ScoredStore[]> {
   try {
-    const points = list.map((s) => ({ lat: s.location.lat, lon: s.location.lon }));
+    const points = list.slice(0, 60).map((s) => ({ lat: s.location.lat, lon: s.location.lon }));
     const res = await fetch("/api/enrich", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -83,9 +83,9 @@ export function CityStores({
   // client agree on first paint (no hydration mismatch) and "just now" ages.
   const [label, setLabel] = useState<string | null>(null);
   useEffect(() => {
-    setLabel(relativeTime(updatedAt));
+    const first = setTimeout(() => setLabel(relativeTime(updatedAt)), 0);
     const id = setInterval(() => setLabel(relativeTime(updatedAt)), 60_000);
-    return () => clearInterval(id);
+    return () => { clearTimeout(first); clearInterval(id); };
   }, [updatedAt]);
 
   useEffect(() => {
@@ -106,15 +106,17 @@ export function CityStores({
     try {
       const res = await fetch(`/api/stores?lat=${lat}&lon=${lon}&radius=${radiusMiles}&live=1`);
       if (res.ok) {
-        const data = (await res.json()) as { stores?: ScoredStore[] };
+        const data = (await res.json()) as { stores?: ScoredStore[]; generatedAt?: string | null };
         const fresh = data.stores ?? [];
         if (fresh.length) setStores(await enrichStores(fresh));
-        setUpdatedAt(new Date().toISOString());
+        setUpdatedAt(data.generatedAt ?? generatedAt ?? null);
       }
+    } catch {
+      // Keep the last usable results when a refresh is unavailable.
     } finally {
       setRefreshing(false);
     }
-  }, [canRefresh, refreshing, lat, lon, radiusMiles]);
+  }, [canRefresh, refreshing, lat, lon, radiusMiles, generatedAt]);
 
   return (
     <div>

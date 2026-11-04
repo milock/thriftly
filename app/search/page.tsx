@@ -66,7 +66,10 @@ export default function AppPage() {
   // city landing page; otherwise center on the visitor's actual location
   // (which itself falls back to the default).
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
+    // Read once after hydration; defer updates to avoid a synchronous effect cascade.
+    const initialQuery = window.location.search;
+    const timer = setTimeout(() => {
+    const p = new URLSearchParams(initialQuery);
     const qlat = parseFloat(p.get("lat") ?? "");
     const qlon = parseFloat(p.get("lon") ?? "");
     if (
@@ -93,7 +96,8 @@ export default function AppPage() {
       () => {},
       { enableHighAccuracy: true, timeout: 8000 },
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {

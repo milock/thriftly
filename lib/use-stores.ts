@@ -51,7 +51,7 @@ export function useStores() {
         };
       });
     try {
-      const points = stores.map((s) => ({ lat: s.location.lat, lon: s.location.lon }));
+      const points = stores.slice(0, 60).map((s) => ({ lat: s.location.lat, lon: s.location.lon }));
       const res = await fetch("/api/enrich", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -6,6 +6,7 @@ const cache = new Map<string, TractCentroid[]>();
 const DATA_DIR = join(process.cwd(), "data", "tract-centroids");
 
 export function loadStateCentroids(stateFips: string): TractCentroid[] {
+  if (!/^\d{2}$/.test(stateFips)) return [];
   if (cache.has(stateFips)) return cache.get(stateFips)!;
   const file = join(DATA_DIR, `${stateFips}.json`);
   const data: TractCentroid[] = existsSync(file)

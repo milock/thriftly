@@ -41,6 +41,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     // Both serve from the bundled national dataset; the live fallback (rare)
     // reads the tract centroids. City pages also read bundled city centroids.
+    "/api/enrich": ["./data/goodwill-us.json"],
     "/api/stores": ["./data/goodwill-us.json", "./data/tract-centroids/**/*"],
     "/goodwill/[slug]": [
       "./data/goodwill-us.json",

@@ -29,7 +29,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
   // otherwise the map center moving (which it does after every search) would
   // re-fire the typeahead and reopen the panel on a settled query.
   const biasRef = useRef(bias);
-  biasRef.current = bias;
+  useEffect(() => { biasRef.current = bias; }, [bias]);
 
   // Debounced live suggestions. Opens the panel and shows a loading state the
   // instant a usable query is typed, so the few-hundred-ms Photon round trip
@@ -41,14 +41,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
       return;
     }
     const q = query.trim();
-    if (q.length < 3) {
-      setSuggestions([]);
-      setLoading(false);
-      setOpen(false);
-      return;
-    }
-    setLoading(true);
-    setOpen(true);
+    if (q.length < 3) return;
     const ctrl = new AbortController();
     const timer = setTimeout(async () => {
       const results = await suggestPlaces(q, biasRef.current, ctrl.signal);
@@ -126,7 +119,14 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
         )}
         <Input
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            setQuery(value);
+            const usable = value.trim().length >= 3;
+            setLoading(usable);
+            setOpen(usable);
+            if (!usable) setSuggestions([]);
+          }}
           onKeyDown={onKeyDown}
           onFocus={() => query.trim().length >= 3 && setOpen(true)}
           onBlur={() => setTimeout(() => setOpen(false), 120)}

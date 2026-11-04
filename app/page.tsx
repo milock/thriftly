@@ -6,7 +6,6 @@ import {
   GraduationCap,
   KeyRound,
   Navigation,
-  Clock,
   SlidersHorizontal,
   MapPinned,
   Sparkles,

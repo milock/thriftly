@@ -77,3 +77,10 @@ test("mobile exposes list and map tabs", async ({ page, isMobile }) => {
   await expect(page.getByRole("tab", { name: /list/i })).toBeVisible();
   await expect(page.getByRole("tab", { name: /map/i })).toBeVisible();
 });
+
+test('restores a shared search location and radius', async ({page}) => {
+  const search = page.waitForRequest(r => r.url().includes('/api/stores?lat=40.71&lon=-74.01&radius=10'));
+  await page.goto('/search?lat=40.71&lon=-74.01&radius=10&label=New%20York');
+  await search;
+  await expect(page).toHaveURL(/lat=40.71000.*lon=-74.01000.*radius=10/);
+});

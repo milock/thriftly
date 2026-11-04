@@ -2,7 +2,7 @@ import type { LatLng, Store } from "@/lib/types";
 
 const FR = "https://overpass.openstreetmap.fr/api/interpreter";
 const DE = "https://overpass-api.de/api/interpreter";
-const KUMI = "https://overpass.kumi.systems/api/interpreter";
+const KUMI = "https://overpass.private.coffee/api/interpreter";
 
 // Try multiple mirrors so one being slow/rate-limited doesn't blank results.
 // Production uses .fr first; the precompute job sets OVERPASS_PRIMARY=de so its

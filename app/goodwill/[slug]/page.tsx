@@ -61,8 +61,8 @@ function searchHref(c: City, lat: number | null, lon: number | null): string {
 }
 
 function buildFaqs(c: City, stores: ScoredStore[]) {
-  const count = stores.length;
   const top = stores[0];
+  const count = stores.length;
   const topPlace = top?.neighborhood ?? top?.locality ?? c.city;
   return [
     {
@@ -109,7 +109,6 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
 
   const { stores, lat, lon } = await getCityResult(c);
   const count = stores.length;
-  const top = stores[0];
   const faqs = buildFaqs(c, stores);
   const stateSlug = stateSlugFor(c.state);
 

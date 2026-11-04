@@ -48,14 +48,14 @@ export function datasetGeneratedAt(): string | null {
 export async function locateStoresFresh(
   center: LatLng,
   radiusMiles: number,
-): Promise<ScoredStore[]> {
+): Promise<{ stores: ScoredStore[]; generatedAt: string | null }> {
   try {
     const live = await liveLocate(center, radiusMiles);
-    if (live.length > 0) return live;
+    if (live.length > 0) return {stores: live, generatedAt: new Date().toISOString()};
   } catch {
     /* fall through to the bundled dataset */
   }
-  return locateStores(center, radiusMiles);
+  return {stores: await locateStores(center, radiusMiles), generatedAt: datasetGeneratedAt()};
 }
 
 /**
@@ -137,12 +137,14 @@ async function liveLocate(center: LatLng, radiusMiles: number): Promise<ScoredSt
   }
 
   const demoByGeoid = new Map<string, TractDemographics>();
-  await Promise.allSettled(
-    [...neededCounties].map(async (sscc) => {
+  const counties = [...neededCounties];
+  // Bound upstream fan-out; any failed county keeps the last complete dataset.
+  for (let offset = 0; offset < counties.length; offset += 4) {
+    await Promise.all(counties.slice(offset, offset + 4).map(async (sscc) => {
       const list = await fetchCountyDemographics(sscc.slice(0, 2), sscc.slice(2, 5));
       for (const d of list) demoByGeoid.set(d.geoid, d);
-    }),
-  );
+    }));
+  }
 
   const scored: ScoredStore[] = stores.map((store, i) => {
     const weighted = perStoreTracts[i]
@@ -161,4 +163,9 @@ async function liveLocate(center: LatLng, radiusMiles: number): Promise<ScoredSt
 
   scored.sort((a, b) => b.score.total - a.score.total);
   return scored;
+}
+
+/** Restrict enrichment to the finite set of published store coordinates. */
+export function isKnownStorePoint(lat: number, lon: number): boolean {
+  return nationalDataset().some(s => s.location.lat === lat && s.location.lon === lon);
 }

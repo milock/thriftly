@@ -47,8 +47,6 @@ export async function getStateForPoint(p: LatLng): Promise<string | null> {
   }
 }
 
-const NOMINATIM_REVERSE = "https://nominatim.openstreetmap.org/reverse";
-
 export interface ReverseAddress {
   street?: string; // "1145 Artesia Blvd"
   neighborhood?: string; // "North Park"
@@ -64,25 +62,6 @@ const PHOTON_REVERSE = "https://photon.komoot.io/reverse";
  * week since a store's address doesn't move. Returns null on miss/error so the
  * caller keeps whatever it already had.
  */
-async function reverseViaNominatim(lat: number, lon: number): Promise<ReverseAddress | null> {
-  const url = `${NOMINATIM_REVERSE}?lat=${lat}&lon=${lon}&format=json&zoom=18&addressdetails=1`;
-  const res = await fetch(url, {
-    headers: { "User-Agent": "thriftly/1.0 (+https://thriftly.xyz)" },
-    next: { revalidate: 604800 },
-    signal: AbortSignal.timeout(4500),
-  });
-  if (!res.ok) return null;
-  const a = (await res.json())?.address ?? {};
-  if (a.country_code && a.country_code !== "us") return null;
-  const street = [a.house_number, a.road].filter(Boolean).join(" ") || undefined;
-  const neighborhood = a.neighbourhood || a.suburb || a.quarter || a.city_district || undefined;
-  const locality = a.city || a.town || a.village || undefined;
-  const iso = a["ISO3166-2-lvl4"];
-  const region = typeof iso === "string" ? iso.split("-")[1] : toStateAbbr(a.state);
-  if (!street && !neighborhood && !locality) return null;
-  return { street, neighborhood, locality, region };
-}
-
 async function reverseViaPhoton(lat: number, lon: number): Promise<ReverseAddress | null> {
   const url = `${PHOTON_REVERSE}?lat=${lat}&lon=${lon}&lang=en`;
   const res = await fetch(url, {
@@ -101,25 +80,7 @@ async function reverseViaPhoton(lat: number, lon: number): Promise<ReverseAddres
   return { street, neighborhood, locality, region };
 }
 
-/**
- * Best-effort structured address for a coordinate, used to backfill store cards.
- * Nominatim is primary (richest neighborhood data, e.g. "Westwood"); Photon is
- * the fallback. Each is time-boxed and cached a week per coordinate, and the
- * whole thing soft-fails so a slow/unavailable geocoder just leaves OSM data.
- */
+/** Cached Photon lookup. Do not fan out bulk requests to public Nominatim. */
 export async function reverseAddress(lat: number, lon: number): Promise<ReverseAddress | null> {
-  // Race both geocoders; the first usable result wins. Photon is usually faster
-  // and isn't rate-limited like Nominatim, so this avoids waiting on a throttled
-  // Nominatim before falling back.
-  try {
-    return await Promise.any(
-      [reverseViaPhoton(lat, lon), reverseViaNominatim(lat, lon)].map(async (task) => {
-        const r = await task;
-        if (!r) throw new Error("empty");
-        return r;
-      }),
-    );
-  } catch {
-    return null;
-  }
+  try { return await reverseViaPhoton(lat, lon); } catch { return null; }
 }

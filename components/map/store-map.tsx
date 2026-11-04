@@ -58,43 +58,43 @@ function ViewController({
   center,
   radiusMiles,
   selected,
-  programmatic,
+  programmaticRef,
 }: {
   center: LatLng;
   radiusMiles: number;
   selected: ScoredStore | null;
-  programmatic: RefObject<boolean>;
+  programmaticRef: RefObject<boolean>;
 }) {
   const map = useMap();
   // Fit the viewport to the search radius whenever location or radius changes,
   // so the whole circle stays visible (even at 100 mi).
   useEffect(() => {
-    programmatic.current = true;
+    programmaticRef.current = true;
     const bounds = L.latLng(center.lat, center.lon).toBounds(radiusMiles * MI_TO_M * 2);
     map.fitBounds(bounds, { padding: [48, 48], animate: true });
-  }, [center, radiusMiles, map, programmatic]);
+  }, [center, radiusMiles, map, programmaticRef]);
   useEffect(() => {
     if (selected) {
-      programmatic.current = true;
+      programmaticRef.current = true;
       map.flyTo([selected.location.lat, selected.location.lon], Math.max(map.getZoom(), 13), {
         duration: 0.6,
       });
     }
-  }, [selected, map, programmatic]);
+  }, [selected, map, programmaticRef]);
   return null;
 }
 
 function MoveWatcher({
-  programmatic,
+  programmaticRef,
   onMoved,
 }: {
-  programmatic: RefObject<boolean>;
+  programmaticRef: RefObject<boolean>;
   onMoved: (c: LatLng) => void;
 }) {
   const map = useMapEvents({
     moveend: () => {
-      if (programmatic.current) {
-        programmatic.current = false;
+      if (programmaticRef.current) {
+        programmaticRef.current = false;
         return;
       }
       const c = map.getCenter();
@@ -116,7 +116,7 @@ export default function StoreMap({
   const { resolvedTheme } = useTheme();
   const dark = resolvedTheme === "dark";
   const ringColor = dark ? "#a1a1aa" : "#52525b";
-  const programmatic = useRef(false);
+  const programmaticRef = useRef(false);
   const [movedCenter, setMovedCenter] = useState<LatLng | null>(null);
 
   // Show "Search this area" once the user pans meaningfully away from the search center.
@@ -159,9 +159,9 @@ export default function StoreMap({
           center={center}
           radiusMiles={radiusMiles}
           selected={selected}
-          programmatic={programmatic}
+          programmaticRef={programmaticRef}
         />
-        <MoveWatcher programmatic={programmatic} onMoved={handleMoved} />
+        <MoveWatcher programmaticRef={programmaticRef} onMoved={handleMoved} />
         {stores.map((s) => {
           const open = isOpenNow(parseHours(s.openingHours));
           return (

@@ -12,7 +12,7 @@ import {
   formatDistance,
   directionsUrl,
   mapsPlaceUrl,
-  ensureHttp,
+  safeWebsiteUrl,
   prettyDomain,
   telUrl,
 } from "@/lib/format";
@@ -158,10 +158,10 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
               <Star className="size-3.5" />
               Reviews
             </a>
-            {store.website && (
-              <a href={ensureHttp(store.website)} target="_blank" rel="noopener noreferrer" className={ACTION}>
+            {safeWebsiteUrl(store.website) && (
+              <a href={safeWebsiteUrl(store.website)!} target="_blank" rel="noopener noreferrer" className={ACTION}>
                 <Globe className="size-3.5" />
-                <span className="max-w-[10rem] truncate">{prettyDomain(store.website)}</span>
+                <span className="max-w-[10rem] truncate">{prettyDomain(store.website!)}</span>
               </a>
             )}
             {store.phone && (
