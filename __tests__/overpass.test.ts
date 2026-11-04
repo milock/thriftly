@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { parseOverpass, fetchGoodwillStores } from "@/lib/overpass";
+import { parseOverpass, fetchGoodwillStores, assertCurrentOverpass } from "@/lib/overpass";
 
 const sample = {
+  osm3s: {timestamp_osm_base:new Date().toISOString()},
   elements: [
     {
       type: "node", id: 1, lat: 32.84, lon: -117.27,
@@ -42,5 +43,21 @@ describe("fetchGoodwillStores", () => {
     expect(spy).toHaveBeenCalled();
     expect(spy.mock.calls[0]?.[1]?.method).toBe("POST");
     expect(stores.length).toBe(3);
+  });
+});
+
+describe('upstream freshness', () => {
+  it('rejects stale, missing, future, and partial source responses', () => {
+    const now=Date.now();
+    for(const body of [
+      {},
+      {osm3s:{timestamp_osm_base:'invalid'}},
+      {osm3s:{timestamp_osm_base:new Date(now-8*86400000).toISOString()}},
+      {osm3s:{timestamp_osm_base:new Date(now+86400000).toISOString()}},
+      {osm3s:{timestamp_osm_base:new Date(now).toISOString()},remark:'runtime error: timeout'}
+    ]) expect(()=>assertCurrentOverpass(body)).toThrow();
+  });
+  it('accepts a recent complete source snapshot', () => {
+    expect(()=>assertCurrentOverpass(sample)).not.toThrow();
   });
 });

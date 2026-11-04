@@ -2,8 +2,8 @@
  * Builds the bundled national Goodwill dataset (`data/goodwill-us.json`) that the
  * app serves at request time. Runs weekly on a GitHub runner.
  *
- * Per the OSM usage research: ONE nationwide Overpass query (a few thousand
- * features), then score every store OFFLINE against the bundled Census tract
+ * Bounded per-state Overpass queries collect the national store list,
+ * then score every store offline against the bundled Census tract
  * centroids + Census ACS. No per-city queries, no Nominatim, no request-time
  * upstream calls. Needs CENSUS_API_KEY in the environment for scoring.
  *
@@ -23,7 +23,7 @@ try {
 }
 
 import type { Store, ScoredStore, TractCentroid, TractDemographics } from "../lib/types";
-import { parseOverpass } from "../lib/overpass";
+import { parseOverpass, assertCurrentOverpass } from "../lib/overpass";
 import { fetchCountyDemographics } from "../lib/census";
 import { tractsWithinRadius, aggregateCatchment } from "../lib/catchment";
 import { computeGoodsScore } from "../lib/scoring";
@@ -52,6 +52,7 @@ async function fetchState(code: string): Promise<Store[]> {
   const checkpoint = join(cacheDir, `${code}.json`);
   try {
     const saved = JSON.parse(readFileSync(checkpoint, 'utf8'));
+    assertCurrentOverpass({osm3s:{timestamp_osm_base:saved.sourceTimestamp}});
     if (Date.now() - saved.fetchedAt < 24 * 60 * 60 * 1000 && saved.stores?.length) return saved.stores;
   } catch { /* no recent checkpoint */ }
   // Match the live query's breadth (lib/overpass.ts): prefix match on brand or
@@ -79,9 +80,11 @@ out center tags;`;
       if (!res.ok) {
         console.error(`  ${code} attempt ${attempt + 1} (${host(endpoint)}): HTTP ${res.status}`);
       } else {
-        const stores = parseOverpass(await res.json());
+        const data = await res.json();
+        assertCurrentOverpass(data);
+        const stores = parseOverpass(data);
         if (stores.length > 0) {
-          writeFileSync(checkpoint, JSON.stringify({fetchedAt:Date.now(),stores}));
+          writeFileSync(checkpoint, JSON.stringify({fetchedAt:Date.now(),sourceTimestamp:data.osm3s.timestamp_osm_base,stores}));
           return stores;
         }
         console.error(`  ${code} attempt ${attempt + 1} (${host(endpoint)}): 0 stores, retrying`);

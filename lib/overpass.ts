@@ -20,7 +20,20 @@ interface OverpassElement {
   center?: { lat: number; lon: number };
   tags?: Record<string, string | undefined>;
 }
-interface OverpassResponse { elements: OverpassElement[] }
+interface OverpassResponse {
+  elements: OverpassElement[];
+  osm3s?: {timestamp_osm_base?: string};
+  remark?: string;
+}
+
+/** An HTTP 200 can still contain stale data or a partial timeout response. */
+export function assertCurrentOverpass(data: {osm3s?: {timestamp_osm_base?: string}; remark?: string}) {
+  const stamp = Date.parse(data.osm3s?.timestamp_osm_base ?? '');
+  const age = Date.now() - stamp;
+  if (!Number.isFinite(stamp) || age > 7 * 86400000 || age < -300000 || data.remark) {
+    throw new Error('Overpass source is stale, undated, or incomplete');
+  }
+}
 
 function buildQuery(center: LatLng, radiusMiles: number): string {
   const radiusM = Math.round(radiusMiles * 1609.34);
@@ -94,7 +107,9 @@ export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): 
       signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) throw new Error(`Overpass ${res.status}`);
-    const stores = parseOverpass((await res.json()) as OverpassResponse);
+    const data = (await res.json()) as OverpassResponse;
+    assertCurrentOverpass(data);
+    const stores = parseOverpass(data);
     // Treat an empty response as a miss so another mirror can answer (mirrors
     // under load sometimes return 200 with zero elements).
     if (stores.length === 0) throw new Error("Overpass empty");
