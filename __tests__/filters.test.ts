@@ -22,3 +22,10 @@ describe("applyFilters", () => {
     expect(out.map((s) => s.id)).toEqual(["b", "a", "c"]);
   });
 });
+
+
+it("open-now filter includes only stores with confirmed local hours", () => {
+  const known = { ...store("known", 80, 2), openingHours: "24/7", timezone: "America/Los_Angeles" };
+  const unknown = { ...store("unknown", 80, 2), openingHours: "24/7" };
+  expect(applyFilters([known, unknown], { ...DEFAULT_FILTERS, openNowOnly: true }).map((s) => s.id)).toEqual(["known"]);
+});

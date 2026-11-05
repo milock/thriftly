@@ -22,7 +22,7 @@ test.beforeEach(async ({ page }) => {
 test("ranks stores and crowns the best find", async ({ page }) => {
   await page.goto("/search");
   await expect(page.getByRole("img", { name: /goods score 89/i })).toBeVisible();
-  await expect(page.getByText(/best find/i)).toBeVisible();
+  await expect(page.getByText(/highest score/i)).toBeVisible();
   await expect(page.getByRole("heading", { name: "La Jolla" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Pacific Beach" })).toBeVisible();
 });

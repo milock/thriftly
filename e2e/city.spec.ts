@@ -21,7 +21,7 @@ test.describe("local SEO hierarchy", () => {
   test("a precomputed city page renders its ranked stores", async ({ page }) => {
     await page.goto("/goodwill/san-diego-ca");
     await expect(
-      page.getByRole("heading", { name: /best goodwill stores in san diego, ca/i }),
+      page.getByRole("heading", { name: /goodwill stores in san diego, ca/i }),
     ).toBeVisible();
     await expect(page.getByRole("heading", { name: /mapped goodwill locations near san diego/i })).toBeVisible();
     // Stores come from committed precomputed data, so they're in the SSR HTML.

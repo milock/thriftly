@@ -2,7 +2,7 @@
  * Builds the bundled national Goodwill dataset (`data/goodwill-us.json`) that the
  * app serves at request time. Runs weekly on a GitHub runner.
  *
- * Bounded per-state Overpass queries collect the national store list,
+ * Published AllThePlaces extracts provide classified national shopping locations,
  * then score every store offline against the bundled Census tract
  * centroids + Census ACS. No per-city queries, no Nominatim, no request-time
  * upstream calls. Needs CENSUS_API_KEY in the environment for scoring.
@@ -28,8 +28,10 @@ import { fetchCountyDemographics } from "../lib/census";
 import { tractsWithinRadius, aggregateCatchment } from "../lib/catchment";
 import { computeGoodsScore } from "../lib/scoring";
 import { CATCHMENT_RADIUS_MILES } from "../lib/reference-ranges";
-import { assertRefreshQuality } from "../lib/refresh-quality";
+import { assertRefreshQuality, assertSourceSnapshot } from "../lib/refresh-quality";
+import {parseAtpStores, type AtpSnapshot} from "../lib/atp-stores";
 import { STATES } from "../lib/cities";
+import { deduplicateStores } from "../lib/store-classification";
 
 // Overpass mirrors, tried in turn on retry so one throttling/flaky endpoint
 // doesn't leave a state empty. The primary can be overridden via OVERPASS_URL.
@@ -120,6 +122,46 @@ async function fetchAllUSGoodwill(): Promise<Store[]> {
   return [...seen.values()];
 }
 
+interface SourcePartition { sourceUrl: string; fetchedAt: string; sha256: string; osm3s: {timestamp_osm_base: string}; elements: Parameters<typeof parseOverpass>[0]['elements'] }
+let sourceMetadata: {source: string; sourceUpdatedAt: string; runId?:string; license?:string; attempts?:unknown[]; partitions: {state:string; sourceUrl:string; sourceUpdatedAt:string; sha256:string; candidates:number; publicStores:number}[]}|undefined;
+let classificationReview: Store[]=[];
+function readAtpStores(): Store[] {
+  const snapshot=JSON.parse(readFileSync(join(process.cwd(),'.cache','atp','goodwill.json'),'utf8')) as AtpSnapshot;
+  assertSourceSnapshot(snapshot.sourceUpdatedAt,{allowHistorical:process.env.ALLOW_HISTORICAL_STORE_SOURCE==='1'});
+  const previous=JSON.parse(readFileSync(join(process.cwd(),'data','goodwill-us.json'),'utf8')) as {sourceUpdatedAt?:string;generatedAt?:string;stores:Store[]};
+  if(Date.parse(snapshot.sourceUpdatedAt)<Date.parse(previous.sourceUpdatedAt??previous.generatedAt??'')) throw new Error('Refusing to replace a newer store source with an older one');
+  const parsed=parseAtpStores(snapshot,previous.stores);
+  classificationReview=parsed.review;
+  const partitions=STATES.map(state=>({state:state.code,sourceUrl:snapshot.sourceUrl,sourceUpdatedAt:snapshot.sourceUpdatedAt,sha256:snapshot.sha256,candidates:snapshot.data.features.filter(f=>f.properties['addr:state']===state.code&&f.properties['addr:country']==='US').length,publicStores:parsed.stores.filter(s=>s.region===state.code).length}));
+  const empty=partitions.filter(p=>!p.publicStores).map(p=>p.state);
+  if(empty.length)throw new Error(`ATP lacks shopping coverage for: ${empty.join(', ')}`);
+  sourceMetadata={source:'alltheplaces-goodwill',sourceUpdatedAt:snapshot.sourceUpdatedAt,runId:snapshot.runId,license:'CC0-1.0',attempts:snapshot.attempts,partitions};
+  console.log(`ATP: ${parsed.stores.length} shopping locations; ${parsed.review.length} non-shopping/unknown records withheld; ${parsed.matched} legacy IDs retained`);
+  return parsed.stores;
+}
+
+function readGeofabrikStores(): Store[] {
+  const seen = new Map<string,Store>();
+  const rejected = new Map<string,Store>();
+  const partitions: NonNullable<typeof sourceMetadata>['partitions']=[];
+  for (const state of STATES) {
+    const body=JSON.parse(readFileSync(join(process.cwd(),'.cache','geofabrik',`${state.code}.json`),'utf8')) as SourcePartition;
+    assertCurrentOverpass(body);
+    if (!body.elements.length) throw new Error(`Empty Geofabrik candidate partition: ${state.code}`);
+    const options={source:'geofabrik-openstreetmap',sourceUrl:body.sourceUrl,fetchedAt:body.fetchedAt};
+    const all=parseOverpass(body,{...options,includeNonRetail:true});
+    const stores=parseOverpass(body,options);
+    if (!stores.length) throw new Error(`No classified shopping locations in ${state.code}; review before publishing`);
+    const ids=new Set(stores.map(s=>s.id));
+    for(const candidate of all) if(!ids.has(candidate.id)) rejected.set(candidate.id,candidate);
+    for(const store of stores) seen.set(store.id,store);
+    partitions.push({state:state.code,sourceUrl:body.sourceUrl,sourceUpdatedAt:body.osm3s.timestamp_osm_base,sha256:body.sha256,candidates:body.elements.length,publicStores:stores.length});
+  }
+  sourceMetadata={source:'geofabrik-openstreetmap',sourceUpdatedAt:partitions.map(p=>p.sourceUpdatedAt).sort()[0],partitions};
+  classificationReview=[...rejected.values()];
+  return deduplicateStores([...seen.values()]);
+}
+
 function loadAllCentroids(): TractCentroid[] {
   const dir = join(process.cwd(), "data", "tract-centroids");
   const all: TractCentroid[] = [];
@@ -130,9 +172,11 @@ function loadAllCentroids(): TractCentroid[] {
 }
 
 async function main() {
-  console.log("querying US Goodwill stores (one bounded query per state)...");
-  const stores = await fetchAllUSGoodwill();
+  const source=process.env.STORE_SOURCE ?? 'atp';
+  console.log(`loading US Goodwill shopping locations from ${source}...`);
+  const stores = source === 'overpass' ? await fetchAllUSGoodwill() : source === 'geofabrik' ? readGeofabrikStores() : readAtpStores();
   console.log(`fetched ${stores.length} stores`);
+  if(new Set(stores.map(s=>s.id)).size!==stores.length)throw new Error("Duplicate public store IDs");
   if (stores.length < 100) throw new Error(`suspiciously few stores (${stores.length}); aborting`);
 
   const centroids = loadAllCentroids();
@@ -190,10 +234,18 @@ async function main() {
   const previous = JSON.parse(readFileSync(destination, 'utf8')) as {stores: ScoredStore[]};
   assertRefreshQuality({previousCount:previous.stores.length, count:scored.length,
     emptyStates:[], failedCounties, scoredCount,
-    previousScoredCount:previous.stores.filter(s => s.score.total > 0).length});
+    previousScoredCount:previous.stores.filter(s => s.score.total > 0).length,
+    unclassifiedCount:scored.filter(s => !['retail','outlet'].includes(s.facilityType ?? '')).length,
+    missingTimezoneCount:scored.filter(s => !s.timezone).length});
+  const provenanceDir=join(process.cwd(),'data','provenance');
+  mkdirSync(provenanceDir,{recursive:true});
+  if(sourceMetadata) {
+    writeFileSync(join(provenanceDir,'goodwill-sources.json'),JSON.stringify({...sourceMetadata,generatedAt:new Date().toISOString()},null,2)+'\n');
+    writeFileSync(join(provenanceDir,'goodwill-review.json'),JSON.stringify({sourceUpdatedAt:sourceMetadata.sourceUpdatedAt,count:classificationReview.length,records:classificationReview},null,2)+'\n');
+  }
   writeFileSync(
     destination + '.tmp',
-    JSON.stringify({ generatedAt: new Date().toISOString(), count: scored.length, stores: scored }),
+    JSON.stringify({ generatedAt: new Date().toISOString(), sourceUpdatedAt:sourceMetadata?.sourceUpdatedAt, source:sourceMetadata?.source ?? 'openstreetmap-overpass', count: scored.length, stores: scored }),
   );
   renameSync(destination + '.tmp', destination);
   console.log(`wrote data/goodwill-us.json: ${scored.length} stores (${scoredCount} with a score)`);

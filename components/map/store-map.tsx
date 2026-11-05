@@ -1,7 +1,10 @@
 "use client";
 
+import { useTranslations, useLocale } from "next-intl";
+
 import {
   MapContainer,
+  ZoomControl,
   TileLayer,
   Circle,
   Marker,
@@ -12,7 +15,7 @@ import {
 import L from "leaflet";
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { useTheme } from "next-themes";
-import { Search, Star, Navigation } from "lucide-react";
+import { Search, Star, Navigation, X } from "lucide-react";
 import type { LatLng, ScoredStore } from "@/lib/types";
 import { scoreColor, scoreInk } from "@/lib/score-color";
 import { formatDistance, directionsUrl, mapsPlaceUrl } from "@/lib/format";
@@ -31,16 +34,16 @@ interface Props {
 
 const MI_TO_M = 1609.34;
 
-function pinIcon(score: number, selected: boolean): L.DivIcon {
-  const color = scoreColor(score);
-  const ink = scoreInk(score);
+function pinIcon(score: number, selected: boolean, locale: string, scored = true): L.DivIcon {
+  const color = scored ? scoreColor(score) : "#71717a";
+  const ink = scored ? scoreInk(score) : "#ffffff";
   const size = selected ? 40 : 30;
   const ring = selected
     ? "box-shadow:0 0 0 3px rgba(0,0,0,0.55),0 2px 6px rgba(0,0,0,0.35);"
     : "box-shadow:0 1px 4px rgba(0,0,0,0.35);";
   return L.divIcon({
     className: "gw-pin",
-    html: `<div style="width:${size}px;height:${size}px;border-radius:9999px;background:${color};color:${ink};display:flex;align-items:center;justify-content:center;font-family:var(--font-geist-sans),system-ui,sans-serif;font-weight:700;font-size:${selected ? 14 : 12}px;border:2px solid #fff;${ring};transition:all .15s ease;">${Math.round(score)}</div>`,
+    html: `<div style="width:${size}px;height:${size}px;border-radius:9999px;background:${color};color:${ink};display:flex;align-items:center;justify-content:center;font-family:var(--font-geist-sans),system-ui,sans-serif;font-weight:700;font-size:${selected ? 14 : 12}px;border:2px solid #fff;${ring};transition:all .15s ease;">${scored ? new Intl.NumberFormat(locale).format(Math.round(score)) : "—"}</div>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
     popupAnchor: [0, -(size / 2)],
@@ -53,6 +56,12 @@ const centerIcon = L.divIcon({
   iconSize: [18, 18],
   iconAnchor: [9, 9],
 });
+
+function PopupClose() {
+  const map = useMap();
+  const t = useTranslations("ui");
+  return <button type="button" aria-label={t("close")} onClick={() => map.closePopup()} className="absolute end-1 top-1 flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"><X className="size-4" aria-hidden /></button>;
+}
 
 function ViewController({
   center,
@@ -112,6 +121,8 @@ export default function StoreMap({
   onSelect,
   onSearchArea,
 }: Props) {
+  const t = useTranslations("ui");
+  const locale = useLocale();
   const selected = stores.find((s) => s.id === selectedId) ?? null;
   const { resolvedTheme } = useTheme();
   const dark = resolvedTheme === "dark";
@@ -126,18 +137,19 @@ export default function StoreMap({
   };
 
   return (
-    <div className="relative h-full w-full">
+    <div dir="ltr" className="relative h-full w-full">
       <MapContainer
         center={[center.lat, center.lon]}
         zoom={11}
         className="h-full w-full"
         scrollWheelZoom
-        zoomControl
+        zoomControl={false}
         attributionControl
       >
+        <ZoomControl zoomInTitle={t("zoomIn")} zoomOutTitle={t("zoomOut")} />
         <TileLayer
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution={`&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> ${t("contributors")}`}
           className="thriftly-basemap"
           maxZoom={19}
         />
@@ -162,19 +174,22 @@ export default function StoreMap({
         />
         <MoveWatcher programmaticRef={programmaticRef} onMoved={handleMoved} />
         {stores.map((s) => {
-          const open = isOpenNow(parseHours(s.openingHours));
+          const open = isOpenNow(parseHours(s.openingHours), new Date(), s.timezone);
           return (
             <Marker
+              title={s.name}
+              alt={s.name}
               key={s.id}
               position={[s.location.lat, s.location.lon]}
-              icon={pinIcon(s.score.total, s.id === selectedId)}
+              icon={pinIcon(s.score.total, s.id === selectedId, locale, s.score.catchment.tractCount > 0)}
               zIndexOffset={s.id === selectedId ? 1000 : 0}
               eventHandlers={{ click: () => onSelect(s.id) }}
             >
-              <Popup>
-                <div className="w-60 p-3.5">
+              <Popup closeButton={false}>
+                <div dir={locale === "ar" ? "rtl" : "ltr"} className="relative w-60 p-3.5 pt-8">
+                  <PopupClose />
                   <div className="flex items-start gap-3">
-                    <ScoreRing score={s.score.total} size={46} strokeWidth={4} />
+                    {s.score.catchment.tractCount > 0 ? <ScoreRing score={s.score.total} size={46} strokeWidth={4} /> : <span className="text-xs text-muted-foreground">{t("notScored")}</span>}
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[14px] font-semibold leading-tight text-foreground">
                         {s.locality || s.street || "Goodwill"}
@@ -183,12 +198,12 @@ export default function StoreMap({
                         <p className="truncate text-[12px] text-muted-foreground">{s.street}</p>
                       )}
                       <p className="mt-0.5 text-[12px] text-muted-foreground">
-                        <span className="tabular">{formatDistance(s.distanceMiles)} away</span>
+                        <span className="tabular">{t("away", { distance: formatDistance(s.distanceMiles, locale) })}</span>
                         {open !== null && (
                           <>
                             {" · "}
                             <span style={open ? { color: "var(--brand)", fontWeight: 500 } : undefined}>
-                              {open ? "Open now" : "Closed"}
+                              {open ? t("open") : t("closed")}
                             </span>
                           </>
                         )}
@@ -204,7 +219,7 @@ export default function StoreMap({
                       className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[12px] font-medium transition-opacity hover:opacity-90"
                     >
                       <Navigation className="size-3.5" />
-                      Directions
+                      {t("directions")}
                     </a>
                     <a
                       href={mapsPlaceUrl(s)}
@@ -214,7 +229,7 @@ export default function StoreMap({
                       className="inline-flex items-center justify-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-accent"
                     >
                       <Star className="size-3.5" />
-                      Reviews
+                      {t("reviews")}
                     </a>
                   </div>
                 </div>
@@ -234,7 +249,7 @@ export default function StoreMap({
           className="animate-in fade-in slide-in-from-top-2 absolute left-1/2 top-3 z-[500] flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-2 text-[13px] font-medium text-foreground shadow-lg transition-colors hover:bg-accent"
         >
           <Search className="size-3.5" />
-          Search this area
+          {t("searchArea")}
         </button>
       )}
     </div>

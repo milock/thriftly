@@ -1,4 +1,6 @@
 import type { LatLng, Store } from "@/lib/types";
+import { classifyGoodwill, deduplicateStores } from "@/lib/store-classification";
+import tzLookup from "tz-lookup";
 
 const FR = "https://overpass.openstreetmap.fr/api/interpreter";
 const DE = "https://overpass-api.de/api/interpreter";
@@ -53,15 +55,17 @@ function buildQuery(center: LatLng, radiusMiles: number): string {
 out center tags;`;
 }
 
-export function parseOverpass(data: OverpassResponse): Store[] {
+export function parseOverpass(data: OverpassResponse, options: {includeNonRetail?: boolean; source?: string; sourceUrl?: string; fetchedAt?: string} = {}): Store[] {
   const seen = new Set<string>();
   const stores: Store[] = [];
   for (const el of data.elements) {
     const tags = el.tags ?? {};
     const name = tags.name ?? tags.brand ?? "Goodwill";
+    const classification = classifyGoodwill(tags);
+    if (!classification.publicShopping && !options.includeNonRetail) continue;
     const lat = el.lat ?? el.center?.lat;
     const lon = el.lon ?? el.center?.lon;
-    if (lat == null || lon == null) continue;
+    if (lat == null || lon == null || !Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) continue;
     const id = `${el.type}/${el.id}`;
     if (seen.has(id)) continue;
     seen.add(id);
@@ -78,11 +82,21 @@ export function parseOverpass(data: OverpassResponse): Store[] {
       locality: locality || undefined,
       region: region || undefined,
       openingHours: tags.opening_hours,
+      timezone: tzLookup(lat, lon),
+      facilityType: classification.facilityType,
+      sourceTags: Object.fromEntries(Object.entries(tags).filter((entry): entry is [string,string] => typeof entry[1] === 'string')),
+      provenance: {
+        source: options.source ?? 'openstreetmap', sourceId: id,
+        sourceUrl: options.sourceUrl ?? `https://www.openstreetmap.org/${id}`,
+        sourceUpdatedAt: data.osm3s?.timestamp_osm_base,
+        fetchedAt: options.fetchedAt,
+        classificationBasis: classification.basis,
+      },
       website: tags.website ?? tags["contact:website"],
       phone: tags.phone ?? tags["contact:phone"],
     });
   }
-  return stores;
+  return deduplicateStores(stores);
 }
 
 export async function fetchGoodwillStores(center: LatLng, radiusMiles: number): Promise<Store[]> {

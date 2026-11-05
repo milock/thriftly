@@ -3,7 +3,9 @@ import * as locate from '@/lib/locate';
 afterEach(()=>vi.restoreAllMocks());
 import sitemap from '@/app/sitemap';
 import {pageMetadata,SITE_URL} from '@/lib/seo';
-import {generateMetadata} from '@/app/goodwill/[slug]/page';
+import {generateMetadata} from '@/app/[locale]/goodwill/[slug]/page';
+vi.mock('@/i18n/navigation',()=>({Link:()=>null,useRouter:()=>({}),usePathname:()=>'/'}));
+vi.mock('next-intl/server',()=>({setRequestLocale:()=>{},getTranslations:async()=>((key:string)=>key)}));
 
 it('excludes empty city pages and invented modification dates from the sitemap',()=>{
   const entries=sitemap(); const urls=entries.map(x=>x.url);
@@ -25,7 +27,7 @@ it('keeps city-specific identity in canonical, Open Graph and Twitter',()=>{
 });
 it('noindexes uncovered cities but keeps covered cities indexable',async()=>{
   const empty=vi.spyOn(locate,'locateBundledStores').mockReturnValue([]);
-  expect((await generateMetadata({params:Promise.resolve({slug:'phoenix-az'})})).robots).toMatchObject({index:false,follow:true});
+  expect((await generateMetadata({params:Promise.resolve({slug:'phoenix-az',locale:'en'})})).robots).toMatchObject({index:false,follow:true});
   empty.mockRestore();
-  expect((await generateMetadata({params:Promise.resolve({slug:'los-angeles-ca'})})).robots).toMatchObject({index:true,follow:true});
+  expect((await generateMetadata({params:Promise.resolve({slug:'los-angeles-ca',locale:'en'})})).robots).toMatchObject({index:true,follow:true});
 });

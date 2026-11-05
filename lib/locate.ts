@@ -11,11 +11,12 @@ import { haversineMiles } from "@/lib/distance";
 import { CATCHMENT_RADIUS_MILES } from "@/lib/reference-ranges";
 
 // The bundled, pre-scored national Goodwill dataset (built by the weekly job from
-// one Overpass query). Read once and memoized. This is the primary data source:
+// classified source snapshots). Read once and memoized. This is the primary data source:
 // no Overpass/Census/geocoding at request time, so search and city pages are
 // instant and can't be rate-limited.
 interface Dataset {
   generatedAt?: string;
+  sourceUpdatedAt?: string;
   stores: ScoredStore[];
 }
 let datasetCache: Dataset | null = null;
@@ -24,7 +25,7 @@ function dataset(): Dataset {
   try {
     const raw = readFileSync(join(process.cwd(), "data", "goodwill-us.json"), "utf8");
     const parsed = JSON.parse(raw) as Partial<Dataset>;
-    datasetCache = { generatedAt: parsed.generatedAt, stores: parsed.stores ?? [] };
+    datasetCache = { generatedAt: parsed.generatedAt, sourceUpdatedAt: parsed.sourceUpdatedAt, stores: parsed.stores ?? [] };
   } catch {
     datasetCache = { stores: [] };
   }
@@ -36,7 +37,7 @@ function nationalDataset(): ScoredStore[] {
 
 /** When the bundled dataset was last refreshed (ISO string), for "updated" UI. */
 export function datasetGeneratedAt(): string | null {
-  return dataset().generatedAt ?? null;
+  return dataset().sourceUpdatedAt ?? dataset().generatedAt ?? null;
 }
 
 /**

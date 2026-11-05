@@ -1,0 +1,206 @@
+[
+  {
+    "code": "AL",
+    "slug": "alabama"
+  },
+  {
+    "code": "AK",
+    "slug": "alaska"
+  },
+  {
+    "code": "AZ",
+    "slug": "arizona"
+  },
+  {
+    "code": "AR",
+    "slug": "arkansas"
+  },
+  {
+    "code": "CA",
+    "slug": "california"
+  },
+  {
+    "code": "CO",
+    "slug": "colorado"
+  },
+  {
+    "code": "CT",
+    "slug": "connecticut"
+  },
+  {
+    "code": "DE",
+    "slug": "delaware"
+  },
+  {
+    "code": "FL",
+    "slug": "florida"
+  },
+  {
+    "code": "GA",
+    "slug": "georgia"
+  },
+  {
+    "code": "HI",
+    "slug": "hawaii"
+  },
+  {
+    "code": "ID",
+    "slug": "idaho"
+  },
+  {
+    "code": "IL",
+    "slug": "illinois"
+  },
+  {
+    "code": "IN",
+    "slug": "indiana"
+  },
+  {
+    "code": "IA",
+    "slug": "iowa"
+  },
+  {
+    "code": "KS",
+    "slug": "kansas"
+  },
+  {
+    "code": "KY",
+    "slug": "kentucky"
+  },
+  {
+    "code": "LA",
+    "slug": "louisiana"
+  },
+  {
+    "code": "ME",
+    "slug": "maine"
+  },
+  {
+    "code": "MD",
+    "slug": "maryland"
+  },
+  {
+    "code": "MA",
+    "slug": "massachusetts"
+  },
+  {
+    "code": "MI",
+    "slug": "michigan"
+  },
+  {
+    "code": "MN",
+    "slug": "minnesota"
+  },
+  {
+    "code": "MS",
+    "slug": "mississippi"
+  },
+  {
+    "code": "MO",
+    "slug": "missouri"
+  },
+  {
+    "code": "MT",
+    "slug": "montana"
+  },
+  {
+    "code": "NE",
+    "slug": "nebraska"
+  },
+  {
+    "code": "NV",
+    "slug": "nevada"
+  },
+  {
+    "code": "NH",
+    "slug": "new-hampshire"
+  },
+  {
+    "code": "NJ",
+    "slug": "new-jersey"
+  },
+  {
+    "code": "NM",
+    "slug": "new-mexico"
+  },
+  {
+    "code": "NY",
+    "slug": "new-york"
+  },
+  {
+    "code": "NC",
+    "slug": "north-carolina"
+  },
+  {
+    "code": "ND",
+    "slug": "north-dakota"
+  },
+  {
+    "code": "OH",
+    "slug": "ohio"
+  },
+  {
+    "code": "OK",
+    "slug": "oklahoma"
+  },
+  {
+    "code": "OR",
+    "slug": "oregon"
+  },
+  {
+    "code": "PA",
+    "slug": "pennsylvania"
+  },
+  {
+    "code": "RI",
+    "slug": "rhode-island"
+  },
+  {
+    "code": "SC",
+    "slug": "south-carolina"
+  },
+  {
+    "code": "SD",
+    "slug": "south-dakota"
+  },
+  {
+    "code": "TN",
+    "slug": "tennessee"
+  },
+  {
+    "code": "TX",
+    "slug": "texas"
+  },
+  {
+    "code": "UT",
+    "slug": "utah"
+  },
+  {
+    "code": "VT",
+    "slug": "vermont"
+  },
+  {
+    "code": "VA",
+    "slug": "virginia"
+  },
+  {
+    "code": "WA",
+    "slug": "washington"
+  },
+  {
+    "code": "WV",
+    "slug": "west-virginia"
+  },
+  {
+    "code": "WI",
+    "slug": "wisconsin"
+  },
+  {
+    "code": "WY",
+    "slug": "wyoming"
+  },
+  {
+    "code": "DC",
+    "slug": "district-of-columbia"
+  }
+]

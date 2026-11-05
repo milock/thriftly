@@ -8,7 +8,7 @@ test('city metadata, visible source date and methodology are aligned',async({pag
   await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content',/Los Angeles/);
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content','https://www.thriftly.xyz/goodwill/los-angeles-ca');
   await expect(page.getByText('Store dataset:',{exact:false}).first()).toBeVisible();
-  await expect(page.getByRole('link',{name:'How the score works'})).toHaveAttribute('href','/how-we-score');
+  await expect(page.getByRole('link',{name:'How the Goods Score works'})).toHaveAttribute('href','/how-we-score');
 });
 test('new outlet guide has sourced addresses and links back to the city',async({page})=>{
   await page.goto('/goodwill/los-angeles-ca/outlets');

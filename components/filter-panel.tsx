@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations, useLocale } from "next-intl";
+
 import { useState } from "react";
 import { type Filters, type SortKey, SORT_LABELS } from "@/lib/filters";
 import { Slider } from "@/components/ui/slider";
@@ -36,6 +38,8 @@ function snapMiles(m: number): number {
 }
 
 export function FilterPanel({ filters, onChange, className }: Props) {
+  const t = useTranslations("ui");
+  const locale = useLocale();
   const set = (patch: Partial<Filters>) => onChange({ ...filters, ...patch });
   const [radiusPct, setRadiusPct] = useState(() => milesToPct(filters.radiusMiles));
   const [previousRadius, setPreviousRadius] = useState(filters.radiusMiles);
@@ -49,8 +53,8 @@ export function FilterPanel({ filters, onChange, className }: Props) {
     <div className={`space-y-4 ${className ?? ""}`}>
       <div className="space-y-2">
         <div className="flex items-baseline justify-between">
-          <Label className="text-[13px] text-muted-foreground">Search radius</Label>
-          <span className="tabular text-[13px] font-semibold">{draftMiles} mi</span>
+          <Label className="text-[13px] text-muted-foreground">{t("radius")}</Label>
+          <span className="tabular text-[13px] font-semibold">{new Intl.NumberFormat(locale).format(draftMiles)} mi</span>
         </div>
         <Slider
           min={0}
@@ -59,7 +63,7 @@ export function FilterPanel({ filters, onChange, className }: Props) {
           value={[radiusPct]}
           onValueChange={(v) => setRadiusPct(toNum(v))}
           onValueCommitted={(v) => set({ radiusMiles: snapMiles(pctToMiles(toNum(v))) })}
-          aria-label="Search radius"
+          aria-label={t("radius")}
         />
         <div className="flex justify-between text-[10px] text-muted-foreground">
           <span>0.5 mi</span>
@@ -69,7 +73,7 @@ export function FilterPanel({ filters, onChange, className }: Props) {
 
       <div className="space-y-2">
         <div className="flex items-baseline justify-between">
-          <Label className="text-[13px] text-muted-foreground">Minimum Goods Score</Label>
+          <Label className="text-[13px] text-muted-foreground">{t("minScore")}</Label>
           <span className="tabular text-[13px] font-semibold">{filters.minScore}</span>
         </div>
         <Slider
@@ -78,13 +82,13 @@ export function FilterPanel({ filters, onChange, className }: Props) {
           step={1}
           value={[filters.minScore]}
           onValueChange={(v) => set({ minScore: toNum(v) })}
-          aria-label="Minimum Goods Score"
+          aria-label={t("minScore")}
         />
       </div>
 
       <div className="flex items-center justify-between">
         <Label htmlFor="open-now" className="text-[13px] text-muted-foreground">
-          Open now only
+          {t("openOnly")}
         </Label>
         <Switch
           id="open-now"
@@ -94,15 +98,15 @@ export function FilterPanel({ filters, onChange, className }: Props) {
       </div>
 
       <div className="space-y-2">
-        <Label className="text-[13px] text-muted-foreground">Sort by</Label>
+        <Label className="text-[13px] text-muted-foreground">{t("sort")}</Label>
         <Select value={filters.sort} onValueChange={(v) => set({ sort: v as SortKey })}>
           <SelectTrigger className="w-full">
-            <SelectValue>{(value) => SORT_LABELS[value as SortKey]}</SelectValue>
+            <SelectValue>{(value) => t(value as SortKey)}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             {(Object.keys(SORT_LABELS) as SortKey[]).map((k) => (
               <SelectItem key={k} value={k}>
-                {SORT_LABELS[k]}
+                {t(k)}
               </SelectItem>
             ))}
           </SelectContent>

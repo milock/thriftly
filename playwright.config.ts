@@ -33,6 +33,6 @@ export default defineConfig({
     url: "https://127.0.0.1:3107",
     reuseExistingServer: false,
     ignoreHTTPSErrors: true,
-    timeout: 180_000,
+    timeout: 600_000,
   },
 });

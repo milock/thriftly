@@ -35,8 +35,8 @@ export function applyFilters(stores: ScoredStore[], f: Filters): ScoredStore[] {
   const filtered = stores.filter((s) => {
     if (s.distanceMiles > f.radiusMiles) return false;
     if (s.score.total < f.minScore) return false;
-    // Only hide stores we can confirm are closed; keep unknown-hours stores.
-    if (f.openNowOnly && isOpenNow(parseHours(s.openingHours)) === false) return false;
+    // A live-only filter must exclude unknown store-local hours.
+    if (f.openNowOnly && isOpenNow(parseHours(s.openingHours), new Date(), s.timezone) !== true) return false;
     return true;
   });
   const sorted = [...filtered];

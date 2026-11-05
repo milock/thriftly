@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -12,13 +13,14 @@ export function GithubMark({ className }: { className?: string }) {
 }
 
 export function GithubLink({ className }: { className?: string }) {
+  const t = useTranslations("ui");
   return (
     <a
       href={REPO_URL}
       target="_blank"
       rel="noopener noreferrer"
-      title="View source on GitHub"
-      aria-label="View source on GitHub"
+      title={t("github")}
+      aria-label={t("github")}
       className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "size-9", className)}
     >
       <GithubMark className="size-4" />

@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Thriftly: find the best Goodwill near you",
+    name: "Thriftly",
     short_name: "Thriftly",
     description:
-      "Find the best Goodwill near you, ranked 0 to 100 by neighborhood affluence.",
+      "Mapped Goodwill locations and neighborhood Census scores.",
     start_url: "/",
     display: "standalone",
     background_color: "#fafafa",

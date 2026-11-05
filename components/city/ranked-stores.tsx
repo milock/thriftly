@@ -1,3 +1,4 @@
+import { useTranslations, useLocale } from "next-intl";
 import { safeWebsiteUrl } from "@/lib/format";
 import { Crown, Navigation, ExternalLink } from "lucide-react";
 import type { ScoredStore } from "@/lib/types";
@@ -13,10 +14,13 @@ function directionsUrl(s: ScoredStore): string {
  * fully crawlable and the page paints instantly. Semantic <ol> conveys rank.
  */
 export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; cityName: string }) {
+  const t = useTranslations("ui");
+  const locale = useLocale();
   return (
     <ol className="space-y-3">
       {stores.map((s, i) => {
         const website = safeWebsiteUrl(s.website);
+        const scored = s.score.catchment.tractCount > 0;
         const total = Math.round(s.score.total);
         const tier = scoreTier(s.score.total);
         const place = s.neighborhood || s.locality;
@@ -26,7 +30,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
             key={s.id}
             className="relative overflow-hidden rounded-2xl border border-border bg-card p-4 sm:p-5"
           >
-            {i === 0 && (
+            {i === 0 && scored && (
               <div
                 className="absolute inset-x-0 top-0 h-[3px]"
                 style={{ background: scoreColor(s.score.total) }}
@@ -35,21 +39,21 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
             <div className="flex items-start gap-4">
               <div
                 className="tabular flex size-12 shrink-0 items-center justify-center rounded-full text-[17px] font-bold"
-                style={{ backgroundColor: scoreColor(s.score.total), color: scoreInk(s.score.total) }}
-                aria-label={`Goods Score ${total} out of 100`}
+                style={scored ? { backgroundColor: scoreColor(s.score.total), color: scoreInk(s.score.total) } : { backgroundColor: "var(--muted)", color: "var(--muted-foreground)" }}
+                aria-label={scored ? t("scoreAria", { score: total }) : t("notScored")}
               >
-                {total}
+                {scored ? new Intl.NumberFormat(locale).format(total) : "—"}
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="tabular text-[12px] font-medium text-muted-foreground">#{i + 1}</span>
                   <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">
-                    {tier.label}
+                    {scored ? t(tier.label) : t("notScored")}
                   </span>
-                  {i === 0 && (
+                  {i === 0 && scored && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-foreground px-2 py-0.5 text-[10px] font-semibold text-background">
                       <Crown className="size-2.5" />
-                      Best find
+                      {t("bestFind")}
                     </span>
                   )}
                 </div>
@@ -59,11 +63,12 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                     <span className="animate-in fade-in duration-500">, {place}</span>
                   )}
                 </h3>
-                {addr && <p className="mt-0.5 text-[13px] text-muted-foreground">{addr}</p>}
+                {s.facilityType && <p className="mt-1 text-xs text-muted-foreground">{t(s.facilityType)}</p>}
+                {addr && <p className="mt-0.5 text-[13px] text-muted-foreground"><bdi dir="ltr">{addr}</bdi></p>}
                 <p className="mt-1 text-[12px] text-muted-foreground">
-                  <span className="tabular">{s.distanceMiles.toFixed(1)} mi</span> from downtown {cityName}
+                  {t("downtown", { distance: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(s.distanceMiles) + " mi", city: cityName })}
                   {" · "}
-                  {tier.blurb}
+                  {scored ? t("band", { band: t(tier.label) }) : t("notScored")}
                 </p>
                 <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px]">
                   <a
@@ -73,7 +78,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                     className="inline-flex items-center gap-1.5 font-medium text-foreground underline-offset-4 hover:underline"
                   >
                     <Navigation className="size-3.5" />
-                    Directions
+                    {t("directions")}
                   </a>
                   {website && (
                     <a
@@ -83,7 +88,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                       className="inline-flex items-center gap-1.5 font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
                     >
                       <ExternalLink className="size-3.5" />
-                      Website
+                      {t("website")}
                     </a>
                   )}
                 </div>

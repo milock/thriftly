@@ -13,6 +13,19 @@ export interface Store {
   locality?: string; // city, "San Diego"
   region?: string; // "CA"
   openingHours?: string;
+  /** IANA time zone at the store, independent of the shopper's browser zone. */
+  timezone?: string;
+  facilityType?: 'retail' | 'outlet' | 'donation' | 'warehouse' | 'office' | 'services' | 'unknown';
+  sourceTags?: Record<string, string>;
+  sourceAliases?: string[];
+  provenance?: {
+    source: string;
+    sourceId: string;
+    sourceUrl?: string;
+    sourceUpdatedAt?: string;
+    fetchedAt?: string;
+    classificationBasis?: string;
+  };
   website?: string;
   phone?: string;
 }

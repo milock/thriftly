@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -37,6 +38,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  experimental: {globalNotFound: true},
   // Bundle the tract-centroid data into the functions that score stores at
   // runtime: the client API route and the server-rendered city landing pages.
   outputFileTracingIncludes: {
@@ -44,7 +46,7 @@ const nextConfig: NextConfig = {
     // reads the tract centroids. City pages also read bundled city centroids.
     "/api/enrich": ["./data/goodwill-us.json"],
     "/api/stores": ["./data/goodwill-us.json", "./data/tract-centroids/**/*"],
-    "/goodwill/[slug]": [
+    "/[locale]/goodwill/[slug]": [
       "./data/goodwill-us.json",
       "./data/city-centroids.json",
       "./data/tract-centroids/**/*",
@@ -55,4 +57,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default createNextIntlPlugin("./i18n/request.ts")(nextConfig);

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { SearchX, TriangleAlert, MapPin } from "lucide-react";
 import type { ScoredStore, NearestHint } from "@/lib/types";
 import { StoreCard } from "@/components/store-card";
@@ -53,6 +55,7 @@ export function StoreList({
   nearest,
   onExpand,
 }: Props) {
+  const t = useTranslations("ui");
   if (loading) {
     return (
       <div className="space-y-2.5">
@@ -66,8 +69,8 @@ export function StoreList({
     return (
       <EmptyState
         icon={<TriangleAlert className="size-5" />}
-        title="Couldn’t load stores"
-        body="Something went wrong reaching the data sources. Try again in a moment."
+        title={t("loadError")}
+        body={t("loadRetry")}
       />
     );
   }
@@ -81,13 +84,13 @@ export function StoreList({
           <div className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <MapPin className="size-5" />
           </div>
-          <p className="text-sm font-medium">No Goodwill stores in range</p>
+          <p className="text-sm font-medium">{t("noStores")}</p>
           <p className="max-w-xs text-[13px] text-muted-foreground">
-            The nearest one is about {miles} mi away{place ? ` in ${place}` : ""}.
+            {t("nearest", { miles, place })}
           </p>
           {reachable && onExpand && (
             <Button variant="outline" size="sm" className="mt-2" onClick={onExpand}>
-              Search within {miles} mi
+              {t("within", { miles })}
             </Button>
           )}
         </div>
@@ -96,8 +99,8 @@ export function StoreList({
     return (
       <EmptyState
         icon={<SearchX className="size-5" />}
-        title="No Goodwill stores in range"
-        body="Widen your radius, lower the minimum score, or search a different location."
+        title={t("noStores")}
+        body={t("widen")}
       />
     );
   }

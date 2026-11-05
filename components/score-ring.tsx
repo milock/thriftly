@@ -1,3 +1,4 @@
+import { useTranslations, useLocale } from "next-intl";
 import { scoreColor } from "@/lib/score-color";
 
 interface Props {
@@ -8,6 +9,8 @@ interface Props {
 }
 
 export function ScoreRing({ score, size = 60, strokeWidth = 5, className }: Props) {
+  const t = useTranslations("ui");
+  const locale = useLocale();
   const r = (size - strokeWidth) / 2;
   const circ = 2 * Math.PI * r;
   const pct = Math.max(0, Math.min(100, score)) / 100;
@@ -18,7 +21,7 @@ export function ScoreRing({ score, size = 60, strokeWidth = 5, className }: Prop
       height={size}
       viewBox={`0 0 ${size} ${size}`}
       role="img"
-      aria-label={`Goods score ${Math.round(score)} of 100`}
+      aria-label={t("scoreAria", { score: Math.round(score) })}
       className={`block shrink-0 ${className ?? ""}`}
     >
       <circle
@@ -50,7 +53,7 @@ export function ScoreRing({ score, size = 60, strokeWidth = 5, className }: Prop
         className="fill-foreground font-semibold tabular"
         style={{ fontSize: size * 0.34, letterSpacing: "-0.02em" }}
       >
-        {Math.round(score)}
+        {new Intl.NumberFormat(locale).format(Math.round(score))}
       </text>
     </svg>
   );

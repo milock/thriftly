@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { MapPin } from "lucide-react";
 
 export function Wordmark({ href = "/", className }: { href?: string; className?: string }) {

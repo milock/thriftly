@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations, useLocale } from "next-intl";
+
 import { useCallback, useEffect, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import type { ScoredStore } from "@/lib/types";
@@ -8,20 +10,14 @@ import { cn } from "@/lib/utils";
 
 type Enrichment = Pick<ScoredStore, "neighborhood" | "street" | "locality" | "region">;
 
-function relativeTime(iso: string | null): string {
-  if (!iso) return "recently";
-  const then = new Date(iso).getTime();
-  if (Number.isNaN(then)) return "recently";
-  const s = Math.max(0, Math.round((Date.now() - then) / 1000));
-  if (s < 45) return "just now";
-  const m = Math.round(s / 60);
-  if (m < 60) return `${m} min ago`;
-  const h = Math.round(m / 60);
-  if (h < 24) return `${h} hour${h > 1 ? "s" : ""} ago`;
-  const d = Math.round(h / 24);
-  if (d < 30) return `${d} day${d > 1 ? "s" : ""} ago`;
-  const mo = Math.round(d / 30);
-  return `${mo} month${mo > 1 ? "s" : ""} ago`;
+function relativeTime(iso: string | null, locale: string, fallback: string): string {
+  if (!iso || Number.isNaN(new Date(iso).getTime())) return fallback;
+  const seconds = Math.min(0, Math.round((new Date(iso).getTime() - Date.now()) / 1000));
+  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+  if (seconds > -60) return formatter.format(0, "minute");
+  if (seconds > -3600) return formatter.format(Math.round(seconds / 60), "minute");
+  if (seconds > -86400) return formatter.format(Math.round(seconds / 3600), "hour");
+  return formatter.format(Math.round(seconds / 86400), "day");
 }
 
 // Reverse-geocode store coords into neighborhood + street addresses. Soft-fails
@@ -76,6 +72,8 @@ export function CityStores({
   radiusMiles?: number;
   generatedAt?: string | null;
 }) {
+  const t = useTranslations("ui");
+  const locale = useLocale();
   const [stores, setStores] = useState(initial);
   const [updatedAt, setUpdatedAt] = useState<string | null>(generatedAt ?? null);
   const [refreshing, setRefreshing] = useState(false);
@@ -83,10 +81,10 @@ export function CityStores({
   // client agree on first paint (no hydration mismatch) and "just now" ages.
   const [label, setLabel] = useState<string | null>(null);
   useEffect(() => {
-    const first = setTimeout(() => setLabel(relativeTime(updatedAt)), 0);
-    const id = setInterval(() => setLabel(relativeTime(updatedAt)), 60_000);
+    const first = setTimeout(() => setLabel(relativeTime(updatedAt, locale, t("recent"))), 0);
+    const id = setInterval(() => setLabel(relativeTime(updatedAt, locale, t("recent"))), 60_000);
     return () => { clearTimeout(first); clearInterval(id); };
-  }, [updatedAt]);
+  }, [updatedAt, locale, t]);
 
   useEffect(() => {
     let active = true;
@@ -121,7 +119,7 @@ export function CityStores({
   return (
     <div>
       <div className="mb-3 flex items-center justify-between gap-3 text-[12px] text-muted-foreground">
-        <span>Updated {label ?? "recently"}</span>
+        <span>{t("updated", { time: label ?? t("recent") })}</span>
         {canRefresh && (
           <button
             type="button"
@@ -130,7 +128,7 @@ export function CityStores({
             className="inline-flex items-center gap-1.5 underline-offset-4 transition-colors hover:text-foreground hover:underline disabled:opacity-60"
           >
             <RefreshCw className={cn("size-3.5", refreshing && "animate-spin")} />
-            {refreshing ? "Refreshing…" : "Refresh"}
+            {refreshing ? t("refreshing") : t("refresh")}
           </button>
         )}
       </div>

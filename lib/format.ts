@@ -1,30 +1,21 @@
 import type { LatLng } from "@/lib/types";
 
-export function formatCurrency(value: number | null, opts?: { perMonth?: boolean }): string {
+export function formatCurrency(value: number | null, opts?: { perMonth?: boolean; locale?: string }): string {
   if (value == null) return "—";
-  return `$${Math.round(value).toLocaleString()}${opts?.perMonth ? "/mo" : ""}`;
+  return new Intl.NumberFormat(opts?.locale ?? "en", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value) + (opts?.perMonth ? "/mo" : "");
 }
-
-export function formatCompactCurrency(value: number | null): string {
-  if (value == null) return "—";
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(value >= 10_000_000 ? 0 : 1)}M`;
-  if (value >= 1_000) return `$${Math.round(value / 1000)}K`;
-  return `$${Math.round(value)}`;
+export function formatCompactCurrency(value: number | null, locale = "en"): string {
+  return value == null ? "—" : new Intl.NumberFormat(locale, { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
-
-export function formatPercent(value: number | null): string {
-  return value == null ? "—" : `${Math.round(value)}%`;
+export function formatPercent(value: number | null, locale = "en"): string {
+  return value == null ? "—" : new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 0 }).format(value / 100);
 }
-
-export function formatDistance(miles: number): string {
-  if (miles < 0.1) return "< 0.1 mi";
-  if (miles < 10) return `${miles.toFixed(1)} mi`;
-  return `${Math.round(miles)} mi`;
+export function formatDistance(miles: number, locale = "en"): string {
+  const n = new Intl.NumberFormat(locale, { minimumFractionDigits: miles < 10 ? 1 : 0, maximumFractionDigits: miles < 10 ? 1 : 0 });
+  return `${miles < 0.1 ? "< " : ""}${n.format(Math.max(0.1, miles))} mi`;
 }
-
-export function formatPopulation(value: number): string {
-  if (value >= 1000) return `${(value / 1000).toFixed(value >= 100000 ? 0 : 1)}k`;
-  return `${value}`;
+export function formatPopulation(value: number, locale = "en"): string {
+  return new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
 
 /** Google Maps turn-by-turn directions to the store's exact coordinates. */

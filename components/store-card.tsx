@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations, useLocale } from "next-intl";
+
 import { useEffect, useRef } from "react";
 import { Crown, Navigation, Globe, Phone, ChevronDown, Star } from "lucide-react";
 import type { ScoredStore } from "@/lib/types";
@@ -29,12 +31,15 @@ const ACTION =
   "inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[12px] font-medium text-foreground transition-colors hover:bg-accent active:scale-[0.97]";
 
 export function StoreCard({ store, rank, selected, onSelect }: Props) {
+  const t = useTranslations("ui");
+  const locale = useLocale();
+  const scored = store.score.catchment.tractCount > 0;
   const tier = scoreTier(store.score.total);
   const color = scoreColor(store.score.total);
   const week = parseHours(store.openingHours);
-  const open = isOpenNow(week);
-  const today = todayHours(week);
-  const best = rank === 1;
+  const open = isOpenNow(week, new Date(), store.timezone);
+  const today = todayHours(week, new Date(), store.timezone, locale, { closed: t("closed"), allDay: t("allDay") });
+  const best = scored && rank === 1;
   const expanded = selected;
 
   // Lead with the neighborhood ("North Park") when we have it; fall back to the
@@ -66,7 +71,7 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
         }
       }}
       className={cn(
-        "group relative scroll-mt-2 overflow-hidden rounded-xl border bg-card text-left outline-none transition-all duration-200",
+        "group relative scroll-mt-2 overflow-hidden rounded-xl border bg-card text-start outline-none transition-all duration-200",
         "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
         selected
           ? "border-foreground/25 shadow-md"
@@ -79,9 +84,9 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
 
       <div className="flex items-start gap-3.5 p-4">
         <div className="flex flex-col items-center gap-1 pt-0.5">
-          <ScoreRing score={store.score.total} size={56} />
-          <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color }}>
-            {tier.label}
+          {scored ? <ScoreRing score={store.score.total} size={56} /> : <span className="flex size-14 items-center justify-center rounded-full bg-muted text-2xl text-muted-foreground" aria-label={t("notScored")}>—</span>}
+          <span className="max-w-16 text-center text-[10px] font-semibold tracking-wide" style={{ color }}>
+            {scored ? t(tier.label) : t("notScored")}
           </span>
         </div>
 
@@ -91,23 +96,24 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
             {best && (
               <span className="inline-flex items-center gap-1 rounded-full bg-foreground px-1.5 py-0.5 text-[10px] font-semibold text-background">
                 <Crown className="size-2.5" />
-                Best find
+                {t("bestFind")}
               </span>
             )}
           </div>
           <h3 className="mt-0.5 truncate text-[15px] font-semibold leading-tight">
-            {title}
+            <bdi>{title}</bdi>
           </h3>
+          {store.facilityType && <p className="mt-1 text-xs text-muted-foreground">{t(store.facilityType)}</p>}
           {sub && (
-            <p className="truncate text-[13px] text-muted-foreground">{sub}</p>
+            <p className="truncate text-[13px] text-muted-foreground"><bdi dir="ltr">{sub}</bdi></p>
           )}
           <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] text-muted-foreground">
-            <span className="tabular">{formatDistance(store.distanceMiles)} away</span>
+            <span className="tabular">{t("away", { distance: formatDistance(store.distanceMiles, locale) })}</span>
             {open !== null && (
               <>
                 <span aria-hidden>·</span>
                 <span className="font-medium" style={open ? { color: "var(--brand)" } : undefined}>
-                  {open ? "Open now" : "Closed"}
+                  {open ? t("open") : t("closed")}
                 </span>
               </>
             )}
@@ -140,11 +146,11 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
               className={cn(ACTION, "border-foreground bg-foreground text-background hover:bg-foreground/90")}
             >
               <Navigation className="size-3.5" />
-              Directions
+              {t("directions")}
             </a>
             <a href={mapsPlaceUrl(store)} target="_blank" rel="noopener noreferrer" className={ACTION}>
               <Star className="size-3.5" />
-              Reviews
+              {t("reviews")}
             </a>
             {safeWebsiteUrl(store.website) && (
               <a href={safeWebsiteUrl(store.website)!} target="_blank" rel="noopener noreferrer" className={ACTION}>
@@ -155,10 +161,10 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
             {store.phone && (
               <a href={telUrl(store.phone)} className={ACTION}>
                 <Phone className="size-3.5" />
-                Call
+                {t("call")}
               </a>
             )}
-            {week && <StoreHours week={week} />}
+            {week && <StoreHours week={week} timezone={store.timezone} />}
           </div>
         </div>
       )}

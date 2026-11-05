@@ -1,9 +1,8 @@
 name: Refresh Goodwill data
 
-# Weekly: per-state Overpass queries for every US Goodwill store (retried, mirror
-# fallback), scored offline against bundled Census data, written to
-# data/goodwill-us.json. Commits any change, which auto-deploys via Vercel and
-# re-pre-renders. No request-time upstream calls on the default path.
+# Weekly: published AllThePlaces Goodwill snapshots, classified retail/outlet locations,
+# then Census scoring. Public Overpass is not required for the scheduled build.
+# Invalid source partitions or coverage regressions preserve the published file.
 
 on:
   schedule:
@@ -32,33 +31,39 @@ jobs:
       - name: Restore recent state checkpoints
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
-          path: .cache/refresh
-          key: refresh-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: refresh-
+          path: .cache/atp
+          key: atp-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: atp-
+      - name: Fetch latest successful published Goodwill source
+        id: source
+        run: node --import tsx scripts/fetch-atp-goodwill.ts
       - name: Build national Goodwill dataset
+        if: steps.source.outputs.changed == 'true'
         run: npm run build:data
         env:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
-          OVERPASS_URL: ${{ secrets.OVERPASS_URL }}
+          STORE_SOURCE: atp
       - name: Save checkpoints even when upstream is unavailable
         if: always()
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
-          path: .cache/refresh
-          key: refresh-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .cache/atp
+          key: atp-${{ github.run_id }}-${{ github.run_attempt }}
       - run: npm run build
       - name: Save validated dataset
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: goodwill-dataset
-          path: data/goodwill-us.json
+          path: |
+            data/goodwill-us.json
+            data/provenance/*.json
           retention-days: 7
       - name: Commit refreshed data
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/goodwill-us.json
+          git add data/goodwill-us.json data/provenance
           if git diff --cached --quiet; then
             echo "No data changes."
           else

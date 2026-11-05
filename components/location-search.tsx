@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { useEffect, useRef, useState } from "react";
 import { Search, LocateFixed, LoaderCircle, MapPin } from "lucide-react";
 import type { LatLng } from "@/lib/types";
@@ -17,6 +19,8 @@ interface Props {
 }
 
 export function LocationSearch({ onLocate, bias, className }: Props) {
+  const t = useTranslations("ui");
+  const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
@@ -68,9 +72,13 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
   async function geocodeRaw() {
     if (!query.trim()) return;
     setBusy(true);
+    setError(null);
     try {
       const location = await geocodeAddress(query, bias);
       if (location) onLocate(location);
+      else setError(t("geocodeError"));
+    } catch {
+      setError(t("geocodeError"));
     } finally {
       setBusy(false);
       setOpen(false);
@@ -97,25 +105,26 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
   }
 
   function useMyLocation() {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) { setError(t("locationError")); return; }
+    setError(null);
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLocating(false);
         onLocate({ lat: pos.coords.latitude, lon: pos.coords.longitude });
       },
-      () => setLocating(false),
+      () => { setLocating(false); setError(t("locationError")); },
       { enableHighAccuracy: true, timeout: 10000 },
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className={`flex items-center gap-2 ${className ?? ""}`}>
+    <form onSubmit={onSubmit} className={`relative flex items-center gap-2 ${className ?? ""}`}>
       <div className="relative flex-1">
         {loading ? (
-          <LoaderCircle className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
+          <LoaderCircle className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
         ) : (
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         )}
         <Input
           value={query}
@@ -130,13 +139,13 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
           onKeyDown={onKeyDown}
           onFocus={() => query.trim().length >= 3 && setOpen(true)}
           onBlur={() => setTimeout(() => setOpen(false), 120)}
-          placeholder="ZIP code or address"
-          aria-label="Search by ZIP code or address"
+          placeholder={t("zip")}
+          aria-label={t("searchAddress")}
           role="combobox"
           aria-expanded={open}
           aria-autocomplete="list"
           autoComplete="off"
-          className="h-10 pl-9 pr-3"
+          className="h-10 ps-9 pe-3"
         />
         {open && query.trim().length >= 3 && (
           <ul className="animate-in fade-in slide-in-from-top-1 absolute left-0 right-0 top-[calc(100%+6px)] z-50 overflow-hidden rounded-xl border border-border bg-popover py-1 shadow-lg duration-150">
@@ -150,7 +159,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
                       choose(s);
                     }}
                     onMouseEnter={() => setActive(i)}
-                    className={`flex w-full items-center gap-2 px-3 py-2 text-left text-[13px] transition-colors ${
+                    className={`flex w-full items-center gap-2 px-3 py-2 text-start text-[13px] transition-colors ${
                       i === active ? "bg-accent" : ""
                     }`}
                   >
@@ -164,12 +173,12 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
                 {loading ? (
                   <>
                     <LoaderCircle className="size-3.5 shrink-0 animate-spin" />
-                    Searching…
+                    {t("searching")}
                   </>
                 ) : (
                   <>
                     <MapPin className="size-3.5 shrink-0" />
-                    No matches — try a ZIP or “City, ST”
+                    {t("noMatches")}
                   </>
                 )}
               </li>
@@ -178,7 +187,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
         )}
       </div>
       <Button type="submit" disabled={busy} className="h-10 shrink-0">
-        {busy ? <LoaderCircle className="size-4 animate-spin" /> : "Search"}
+        {busy ? <LoaderCircle className="size-4 animate-spin" /> : t("search")}
       </Button>
       <Button
         type="button"
@@ -186,12 +195,13 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
         size="icon"
         onClick={useMyLocation}
         disabled={locating}
-        title="Use my location"
-        aria-label="Use my location"
+        title={t("myLocation")}
+        aria-label={t("myLocation")}
         className="size-10 shrink-0"
       >
         {locating ? <LoaderCircle className="size-4 animate-spin" /> : <LocateFixed className="size-4" />}
       </Button>
+      {error && <p role="alert" className="absolute inset-x-0 top-full z-50 mt-1 rounded-md border border-border bg-popover p-3 text-sm text-popover-foreground shadow-md">{error}</p>}
     </form>
   );
 }
