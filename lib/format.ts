@@ -2,22 +2,22 @@ import type { LatLng } from "@/lib/types";
 
 export function formatCurrency(value: number | null, opts?: { perMonth?: boolean; locale?: string }): string {
   if (value == null) return "—";
-  return new Intl.NumberFormat(opts?.locale ?? "en", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value) + (opts?.perMonth ? "/mo" : "");
+  return new Intl.NumberFormat(opts?.locale ?? "en", { numberingSystem: opts?.locale === "ar" ? "arab" : "latn", style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value) + (opts?.perMonth ? "/mo" : "");
 }
 export function formatCompactCurrency(value: number | null, locale = "en"): string {
-  return value == null ? "—" : new Intl.NumberFormat(locale, { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 }).format(value);
+  return value == null ? "—" : new Intl.NumberFormat(locale, { numberingSystem: locale === "ar" ? "arab" : "latn", style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
 export function formatPercent(value: number | null, locale = "en"): string {
-  return value == null ? "—" : new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 0 }).format(value / 100);
+  return value == null ? "—" : new Intl.NumberFormat(locale, { numberingSystem: locale === "ar" ? "arab" : "latn", style: "percent", maximumFractionDigits: 0 }).format(value / 100);
 }
 // Fixed unit labels avoid server/browser CLDR spacing differences during hydration.
 const MILE_UNITS: Record<string, string> = {en:"mi", es:"mi", "zh-Hans":"英里", "zh-Hant":"英里", tl:"mi", vi:"dặm", ar:"ميل"};
 export function formatDistance(miles: number, locale = "en"): string {
-  const n = new Intl.NumberFormat(locale, { minimumFractionDigits: miles < 10 ? 1 : 0, maximumFractionDigits: miles < 10 ? 1 : 0 });
+  const n = new Intl.NumberFormat(locale, { numberingSystem: locale === "ar" ? "arab" : "latn", minimumFractionDigits: miles < 10 ? 1 : 0, maximumFractionDigits: miles < 10 ? 1 : 0 });
   return `${miles < 0.1 ? "< " : ""}${n.format(Math.max(0.1, miles))}${locale.startsWith("zh") ? "" : " "}${MILE_UNITS[locale] ?? "mi"}`;
 }
 export function formatPopulation(value: number, locale = "en"): string {
-  return new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }).format(value);
+  return new Intl.NumberFormat(locale, { numberingSystem: locale === "ar" ? "arab" : "latn", notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
 
 /** Google Maps turn-by-turn directions to the store's exact coordinates. */

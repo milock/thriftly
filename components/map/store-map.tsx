@@ -43,7 +43,7 @@ function pinIcon(score: number, selected: boolean, locale: string, scored = true
     : "box-shadow:0 1px 4px rgba(0,0,0,0.35);";
   return L.divIcon({
     className: "gw-pin",
-    html: `<div style="width:${size}px;height:${size}px;border-radius:9999px;background:${color};color:${ink};display:flex;align-items:center;justify-content:center;font-family:var(--font-geist-sans),system-ui,sans-serif;font-weight:700;font-size:${selected ? 14 : 12}px;border:2px solid #fff;${ring};transition:all .15s ease;">${scored ? new Intl.NumberFormat(locale).format(Math.round(score)) : "—"}</div>`,
+    html: `<div style="width:${size}px;height:${size}px;border-radius:9999px;background:${color};color:${ink};display:flex;align-items:center;justify-content:center;font-family:var(--font-geist-sans),system-ui,sans-serif;font-weight:700;font-size:${selected ? 14 : 12}px;border:2px solid #fff;${ring};transition:all .15s ease;">${scored ? new Intl.NumberFormat(locale, {numberingSystem: locale === "ar" ? "arab" : "latn"}).format(Math.round(score)) : "—"}</div>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
     popupAnchor: [0, -(size / 2)],

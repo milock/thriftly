@@ -22,6 +22,10 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
  await page.goto(prefix+'/goodwill/los-angeles-ca');
  await page.waitForLoadState('networkidle');
  await expect(page.locator('h1')).toBeVisible();
+ const numberingSystem = locale === "ar" ? "arab" : "latn";
+ const runtimeNumbers = await page.evaluate(({locale, numberingSystem}) => ({explicit: new Intl.NumberFormat(locale,{numberingSystem}).format(12.3), default: new Intl.NumberFormat(locale).format(12.3)}), {locale,numberingSystem});
+ if(locale === "ar") console.log("Arabic runtime defaults", {server:new Intl.NumberFormat(locale).format(12.3),browser:runtimeNumbers.default});
+ expect(runtimeNumbers.explicit).toBe(new Intl.NumberFormat(locale,{numberingSystem}).format(12.3));
  expect(errors).toEqual([]);
 });
 test('language switch retains map coordinates and filters',async({page})=>{

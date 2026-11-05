@@ -42,7 +42,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                 style={scored ? { backgroundColor: scoreColor(s.score.total), color: scoreInk(s.score.total) } : { backgroundColor: "var(--muted)", color: "var(--muted-foreground)" }}
                 aria-label={scored ? t("scoreAria", { score: total }) : t("notScored")}
               >
-                {scored ? new Intl.NumberFormat(locale).format(total) : "—"}
+                {scored ? new Intl.NumberFormat(locale, {numberingSystem: locale === "ar" ? "arab" : "latn"}).format(total) : "—"}
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">

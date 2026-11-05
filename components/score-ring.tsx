@@ -53,7 +53,7 @@ export function ScoreRing({ score, size = 60, strokeWidth = 5, className }: Prop
         className="fill-foreground font-semibold tabular"
         style={{ fontSize: size * 0.34, letterSpacing: "-0.02em" }}
       >
-        {new Intl.NumberFormat(locale).format(Math.round(score))}
+        {new Intl.NumberFormat(locale, {numberingSystem: locale === "ar" ? "arab" : "latn"}).format(Math.round(score))}
       </text>
     </svg>
   );
