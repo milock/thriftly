@@ -18,10 +18,9 @@ export function Methodology() {
   const t = useTranslations("ui");
   return (
     <Popover>
-      <PopoverTrigger className="inline-flex min-h-11 items-center gap-1.5 rounded-md text-[13px] font-medium text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
+      <PopoverTrigger aria-label={t("howScoring")} className="inline-flex size-11 shrink-0 items-center justify-center gap-1.5 rounded-md text-[13px] font-medium text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring lg:w-auto lg:px-2">
         <Info className="size-4" />
-        <span className="hidden sm:inline">{t("howScoring")}</span>
-        <span className="sm:hidden">{t("scoring")}</span>
+        <span className="hidden lg:inline">{t("howScoring")}</span>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-[22rem] max-w-[calc(100vw-2rem)] max-h-[80dvh] overflow-y-auto p-0">
         <div className="border-b p-4">

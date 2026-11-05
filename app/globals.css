@@ -306,4 +306,45 @@
 input { caret-color: var(--brand); }
 h1, h2 { text-wrap: balance; }
 p { text-wrap: pretty; }
+.reading-page { line-height: 1.7; }
+.reading-page section > p, .reading-page section > ul { max-width: 68ch; color: var(--muted-foreground); }
+.reading-page th:last-child, .reading-page td:last-child { text-align: end; font-variant-numeric: tabular-nums; }
+.reading-page a { text-underline-offset: .2em; }
+/* Arabic subset is self-hosted under OFL-1.1; Latin continues to use Geist. */
+/* arabic */
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/fonts/noto-sans-arabic.woff2) format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC7, U+10EC9-10EEE, U+10EF0-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+
+html[lang="ar"], html[lang="ar"] .leaflet-container { font-family: "Noto Sans Arabic", var(--font-geist-sans), sans-serif; }
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3 { letter-spacing: 0; }
+/* Common phone gutters protect controls from landscape cutouts. */
+.site-gutter {
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+.search-list-panel { padding-left: max(.75rem, env(safe-area-inset-left)); padding-right: max(.75rem, env(safe-area-inset-right)); }
+header { padding-top: env(safe-area-inset-top); }
+@media (min-width: 640px) {
+  .site-gutter { padding-left: max(1.25rem, env(safe-area-inset-left)); padding-right: max(1.25rem, env(safe-area-inset-right)); }
+}
+@media (min-width: 560px) and (max-width: 1023px) and (max-height: 500px) {
+  .search-header { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .75rem; padding: .5rem max(1rem, env(safe-area-inset-right)) .5rem max(1rem, env(safe-area-inset-left)); }
+  .search-header-row { display: contents; }
+  .search-header-row > a { grid-column: 1; grid-row: 1; }
+  .search-mobile-location { grid-column: 2; grid-row: 1; padding: 0; }
+  .search-utilities { grid-column: 3; grid-row: 1; }
+  .search-utilities > label { width: 2.75rem; border: 0; padding: 0; }
+  .search-utilities select { position: absolute; inset: 0; width: 100%; opacity: 0; }
+  .search-result-summary { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding-top: .375rem; padding-bottom: .375rem; }
+  .search-result-summary p + p { margin: 0; flex-shrink: 0; }
+  [data-mobile-toolbar] { padding-top: .25rem; padding-bottom: max(.25rem, env(safe-area-inset-bottom)); }
+}
+@media (max-width: 1023px) { .leaflet-control-zoom a { width: 44px !important; height: 44px !important; line-height: 44px !important; } }
 @media (pointer: coarse) { .leaflet-control-zoom a { width: 44px !important; height: 44px !important; line-height: 44px !important; } }

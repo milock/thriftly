@@ -4,7 +4,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
-import { SlidersHorizontal, List as ListIcon, Map as MapIcon, ChevronDown } from "lucide-react";
+import { SlidersHorizontal, List as ListIcon, Map as MapIcon, ChevronDown, ArrowRight } from "lucide-react";
 import type { LatLng } from "@/lib/types";
 import { useStores } from "@/lib/use-stores";
 import { formatDistance } from "@/lib/format";
@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import {
   Sheet,
   SheetContent,
+  SheetClose,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -202,22 +203,22 @@ export default function AppPage() {
 
   return (
     <div className="flex h-dvh flex-col">
-      <header className="relative z-30 shrink-0 border-b bg-background/85 backdrop-blur">
-        <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 sm:px-5">
+      <header className="search-header relative z-30 shrink-0 border-b bg-background">
+        <div className="search-header-row site-gutter flex items-center justify-between gap-2 py-2">
           <Wordmark />
           <div className="hidden flex-1 justify-center px-6 lg:flex">
             <LocationSearch onLocate={relocate} bias={center} className="w-full max-w-md" />
           </div>
-          <div className="flex items-center gap-0.5">
+          <div className="search-utilities flex items-center gap-0.5">
             <Methodology />
             <LanguageSwitcher />
-            <GithubLink className="hidden sm:inline-flex" />
-            <CoffeeLink className="hidden sm:inline-flex" />
+            <GithubLink className="hidden lg:inline-flex" />
+            <CoffeeLink className="hidden lg:inline-flex" />
             <ThemeToggle />
           </div>
         </div>
         {!isDesktop && (
-          <div className="px-4 pb-3 sm:px-5">
+          <div className="search-mobile-location site-gutter pb-3">
             <LocationSearch onLocate={relocate} bias={center} />
           </div>
         )}
@@ -275,43 +276,51 @@ export default function AppPage() {
           <div className="relative min-h-0">{map}</div>
         </div>
       ) : (
-        <Tabs defaultValue="list" className="flex min-h-0 flex-1 flex-col">
-          <div className="flex items-center justify-between flex-wrap gap-2 border-b px-4 py-2">
-            <Sheet>
-              <SheetTrigger
-                className={cn(buttonVariants({ variant: "outline", size: "sm" }), "min-h-11 gap-1.5 px-3")}
-              >
-                <SlidersHorizontal className="size-4" />
-                {t("filters")}{filterCount > 0 && <span className="tabular ms-1">({filterCount})</span>}
-              </SheetTrigger>
-              <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-2xl">
-                <SheetHeader>
-                  <SheetTitle>{t("filters")}{filterCount > 0 && <span className="tabular ms-1">({filterCount})</span>}</SheetTitle>
-                </SheetHeader>
-                <div className="px-4 pb-8">
-                  <FilterPanel filters={filters} onChange={setFilters} hoursAvailable={hoursAvailable} />
-                    {filterCount > 0 && <button type="button" className="mt-3 min-h-11 text-sm font-medium underline underline-offset-4" onClick={() => setFilters(DEFAULT_FILTERS)}>{t("resetFilters")}</button>}
-                </div>
-              </SheetContent>
-            </Sheet>
-            <span role="status" aria-live="polite" className="order-last w-full text-sm text-muted-foreground">{resultLine} · {t(filters.sort)} · {formatDistance(filters.radiusMiles, locale)}</span>
-            <TabsList className="h-11">
-              <TabsTrigger value="list" className="min-h-11 gap-1.5 text-sm">
-                <ListIcon className="size-3.5" />
-                {t("list")}
-              </TabsTrigger>
-              <TabsTrigger value="map" className="min-h-11 gap-1.5 text-sm">
-                <MapIcon className="size-3.5" />
-                {t("map")}
-              </TabsTrigger>
-            </TabsList>
+        <Tabs defaultValue="list" className="flex min-h-0 flex-1 flex-col gap-0">
+          <div className="search-result-summary site-gutter shrink-0 border-b py-2.5">
+            <p role="status" aria-live="polite" className="text-sm font-medium">{resultLine}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">{t(filters.sort)} · {formatDistance(filters.radiusMiles, locale)}</p>
           </div>
-          <TabsContent value="list" className="scroll-thin min-h-0 flex-1 overflow-y-auto p-4">
+          <TabsContent value="list" className="search-list-panel scroll-thin min-h-0 flex-1 overflow-y-auto overscroll-contain p-3 sm:p-4">
             {list}
           </TabsContent>
           <TabsContent value="map" className="min-h-0 flex-1">
             {map}
           </TabsContent>
+          <div data-mobile-toolbar className="site-gutter flex shrink-0 items-center gap-3 border-t bg-background pt-2 pb-[max(.5rem,env(safe-area-inset-bottom))]">
+            <TabsList className="h-auto min-h-12 flex-1 p-1">
+              <TabsTrigger value="list" className="min-h-11 gap-2 text-sm">
+                <ListIcon className="size-4" />
+                {t("list")}
+              </TabsTrigger>
+              <TabsTrigger value="map" className="min-h-11 gap-2 text-sm">
+                <MapIcon className="size-4" />
+                {t("map")}
+              </TabsTrigger>
+            </TabsList>
+            <Sheet>
+              <SheetTrigger
+                className={cn(buttonVariants({ variant: "outline", size: "sm" }), "min-h-12 gap-1.5 px-3")}
+              >
+                <SlidersHorizontal className="size-4" />
+                {t("filters")}{filterCount > 0 && <span className="tabular ms-1">({filterCount})</span>}
+              </SheetTrigger>
+              <SheetContent side="bottom" className="max-h-[90dvh] gap-0 overflow-hidden rounded-t-2xl">
+                <SheetHeader className="shrink-0 border-b py-5 pe-16">
+                  <SheetTitle>{t("filters")}{filterCount > 0 && <span className="tabular ms-1">({filterCount})</span>}</SheetTitle>
+                </SheetHeader>
+                <div className="min-h-0 overflow-y-auto overscroll-contain px-5 py-5">
+                  <FilterPanel filters={filters} onChange={setFilters} hoursAvailable={hoursAvailable} />
+                </div>
+                <div className="flex shrink-0 flex-wrap items-center gap-2 border-t px-5 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
+                  {filterCount > 0 && <button type="button" className="min-h-11 px-2 text-sm font-medium underline underline-offset-4" onClick={() => setFilters(DEFAULT_FILTERS)}>{t("resetFilters")}</button>}
+                  <SheetClose className={cn(buttonVariants(), "ms-auto min-h-12 h-auto flex-1 gap-2 whitespace-normal py-3")}>
+                    {t("showResults", {count: visible.length})}<ArrowRight className="size-4 shrink-0 rtl:rotate-180" />
+                  </SheetClose>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </Tabs>
       )}
       </main>

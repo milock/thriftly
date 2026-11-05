@@ -95,5 +95,6 @@
   "hoursUnavailable": "Chưa có giờ mở cửa của các cửa hàng này. Hãy kiểm tra trang web của đơn vị vận hành.",
   "locationFallback": "Không lấy được vị trí. Đang hiển thị San Diego; hãy tìm thành phố hoặc mã ZIP của bạn.",
   "skipMain": "Chuyển đến nội dung chính",
-  "refreshFailed": "Không thể làm mới. Kết quả trước đó vẫn được hiển thị."
+  "refreshFailed": "Không thể làm mới. Kết quả trước đó vẫn được hiển thị.",
+  "showResults": "Xem {count} cửa hàng"
 }

@@ -60,7 +60,7 @@ const centerIcon = L.divIcon({
 function PopupClose() {
   const map = useMap();
   const t = useTranslations("ui");
-  return <button type="button" aria-label={t("close")} onClick={() => map.closePopup()} className="absolute end-1 top-1 flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"><X className="size-4" aria-hidden /></button>;
+  return <button type="button" aria-label={t("close")} onClick={() => map.closePopup()} className="absolute end-1 top-1 flex size-11 items-center justify-center rounded-md text-muted-foreground hover:bg-muted"><X className="size-4" aria-hidden /></button>;
 }
 
 function ViewController({
@@ -137,7 +137,7 @@ export default function StoreMap({
   };
 
   return (
-    <div dir="ltr" className="relative h-full w-full">
+    <div dir="ltr" className="relative isolate h-full w-full">
       <MapContainer
         center={[center.lat, center.lon]}
         zoom={11}
@@ -186,16 +186,16 @@ export default function StoreMap({
               eventHandlers={{ click: () => onSelect(s.id) }}
             >
               <Popup closeButton={false}>
-                <div dir={locale === "ar" ? "rtl" : "ltr"} className="relative w-60 p-3.5 pt-8">
+                <div dir={locale === "ar" ? "rtl" : "ltr"} className="relative max-h-[min(28rem,calc(100dvh-11rem))] w-64 max-w-[calc(100vw-3rem)] overflow-y-auto overscroll-contain p-4 pt-12">
                   <PopupClose />
                   <div className="flex items-start gap-3">
                     {s.score.catchment.tractCount > 0 ? <ScoreRing score={s.score.total} size={46} strokeWidth={4} /> : <span className="text-xs text-muted-foreground">{t("notScored")}</span>}
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[14px] font-semibold leading-tight text-foreground">
+                      <p className="break-words text-base font-semibold leading-tight text-foreground">
                         {s.locality || s.street || "Goodwill"}
                       </p>
                       {s.street && s.locality && (
-                        <p className="truncate text-[12px] text-muted-foreground">{s.street}</p>
+                        <p className="break-words text-sm leading-relaxed text-muted-foreground"><bdi dir="ltr">{s.street}</bdi></p>
                       )}
                       <p className="mt-0.5 text-[12px] text-muted-foreground">
                         <span className="tabular">{t("away", { distance: formatDistance(s.distanceMiles, locale) })}</span>
@@ -210,13 +210,13 @@ export default function StoreMap({
                       </p>
                     </div>
                   </div>
-                  <div className="mt-3 flex gap-2">
+                  <div className="mt-3 flex flex-wrap gap-2">
                     <a
                       href={directionsUrl(s)}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ color: "var(--background)", textDecoration: "none" }}
-                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-md bg-foreground px-3 py-1.5 text-[12px] font-medium transition-opacity hover:opacity-90"
+                      className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-md bg-foreground px-3 py-2 text-sm font-medium transition-opacity hover:opacity-90"
                     >
                       <Navigation className="size-3.5" />
                       {t("directions")}
@@ -226,7 +226,7 @@ export default function StoreMap({
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ color: "var(--foreground)", textDecoration: "none" }}
-                      className="inline-flex items-center justify-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-[12px] font-medium transition-colors hover:bg-accent"
+                      className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-border bg-background px-3 py-2 text-sm font-medium transition-colors hover:bg-accent"
                     >
                       <Star className="size-3.5" />
                       {t("reviews")}
@@ -246,7 +246,7 @@ export default function StoreMap({
             onSearchArea(movedCenter);
             setMovedCenter(null);
           }}
-          className="animate-in fade-in slide-in-from-top-2 absolute left-1/2 top-3 z-[500] flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-2 text-[13px] font-medium text-foreground shadow-lg transition-colors hover:bg-accent"
+          className="animate-in fade-in slide-in-from-top-2 absolute left-1/2 top-3 z-[500] flex min-h-11 max-w-[calc(100%-7rem)] -translate-x-1/2 items-center justify-center gap-1.5 rounded-full bg-card px-4 py-2 text-center text-sm font-medium text-foreground shadow-lg transition-colors hover:bg-accent"
         >
           <Search className="size-3.5" />
           {t("searchArea")}

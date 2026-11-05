@@ -53,7 +53,7 @@ const jsonLd = {
       <JsonLd data={jsonLd} />
       <CityHeader />
       <main id="main-content" tabIndex={-1} className="flex-1">
-        <div className="mx-auto max-w-5xl px-5 py-14 sm:py-20">
+        <div className="site-gutter mx-auto max-w-5xl py-8 sm:py-14">
           <nav aria-label={t("breadcrumb")} className="text-[13px] text-muted-foreground">
             <Link href="/" className="hover:text-foreground">
               {t("home")}
@@ -64,30 +64,30 @@ const jsonLd = {
           <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
             {t("hub")}
           </h1>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          <p className="mt-3 max-w-2xl text-base leading-relaxed sm:text-lg text-muted-foreground">
             {t("hubIntro")}
           </p>
 
-          <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="mt-7 grid grid-cols-1 gap-x-8 min-[400px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {sorted.map((s) => (
               <Link
                 key={s.slug}
                 href={`/goodwill/state/${s.slug}`}
-                className="group flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-foreground/20 hover:bg-accent"
+                className="group flex min-h-14 items-center justify-between gap-3 border-b border-border py-3 transition-colors hover:text-brand"
               >
                 <span className="font-medium">{s.name}</span>
-                <ArrowRight className="size-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
               </Link>
             ))}
           </div>
 
-          <div className="mt-12 rounded-2xl border border-border bg-card/50 p-6 text-center">
+          <div className="mt-10 border-t border-border pt-6">
             <p className="text-[15px] text-muted-foreground">
               {t("exact")}
             </p>
             <Link
               href="/search"
-              className={cn(buttonVariants({ size: "lg" }), "mt-4 min-h-11 h-auto whitespace-normal py-3 gap-2 px-5 text-[15px]")}
+              className={cn(buttonVariants({ size: "lg" }), "mt-4 w-full sm:w-auto min-h-11 h-auto whitespace-normal py-3 gap-2 px-5 text-[15px]")}
             >
               {t("search")}
               <ArrowRight className="size-4" />

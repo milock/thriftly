@@ -20,14 +20,14 @@ export function LanguageSwitcher() {
   // Native selects can receive input before React attaches event handlers.
   const hydrated = useSyncExternalStore(subscribe, () => true, () => false);
   return (
-    <label className="relative inline-flex h-11 max-w-40 shrink-0 items-center gap-1 rounded-md border border-border px-2 focus-within:ring-2 focus-within:ring-ring">
+    <label title={t("language")} className="relative inline-flex size-11 shrink-0 items-center justify-center gap-1 rounded-md focus-within:ring-2 focus-within:ring-ring sm:w-auto sm:max-w-40 sm:border sm:border-border sm:px-2">
       <Languages className="size-4 shrink-0" aria-hidden />
       <span className="sr-only">{t("language")}</span>
       <select
         value={locale}
         disabled={!hydrated}
         aria-label={t("language")}
-        className="h-full min-w-0 max-w-32 cursor-pointer bg-background text-base text-foreground outline-none"
+        className="absolute inset-0 size-full cursor-pointer opacity-0 sm:static sm:h-full sm:w-auto sm:min-w-0 sm:max-w-32 sm:bg-background sm:text-base sm:text-foreground sm:opacity-100 sm:outline-none"
         onChange={(event) => {
           // A document navigation keeps pending map history updates from canceling
           // the locale transition and applies the new document direction atomically.

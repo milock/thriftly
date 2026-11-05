@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -14,16 +14,17 @@ export function CityHeader() {
   const t = useTranslations("ui");
   return (
     <header className="sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur">
-      <div className="mx-auto flex min-h-14 max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-2 sm:px-5">
+      <div className="site-gutter mx-auto flex min-h-14 max-w-5xl items-center justify-between gap-2 py-2">
         <Wordmark />
-        <nav className="flex flex-wrap items-center justify-end gap-1 sm:gap-2">
+        <nav className="flex items-center justify-end gap-1 sm:gap-2">
           <LanguageSwitcher />
-          <GithubLink className="hidden sm:inline-flex" />
-          <CoffeeLink className="hidden sm:inline-flex" />
+          <GithubLink className="hidden lg:inline-flex" />
+          <CoffeeLink className="hidden lg:inline-flex" />
           <ThemeToggle />
-          <Link href="/search" className={cn(buttonVariants({ size: "sm" }), "h-11 gap-1.5 px-3.5")}>
-            {t("launch")}
-            <ArrowRight className="size-3.5" />
+          <Link href="/search" className={cn(buttonVariants({ size: "sm" }), "size-11 gap-1.5 p-0 sm:w-auto sm:px-3.5")}>
+            <Search className="size-4 sm:hidden" aria-hidden />
+            <span className="sr-only sm:not-sr-only">{t("launch")}</span>
+            <ArrowRight className="hidden size-3.5 sm:block rtl:rotate-180" aria-hidden />
           </Link>
         </nav>
       </div>

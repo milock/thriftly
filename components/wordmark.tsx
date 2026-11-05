@@ -5,7 +5,7 @@ export function Wordmark({ href = "/", className }: { href?: string; className?:
   return (
     <Link
       href={href}
-      className={`inline-flex items-center gap-2 transition-opacity hover:opacity-80 ${className ?? ""}`}
+      className={`inline-flex min-h-11 shrink-0 items-center gap-2 transition-opacity hover:opacity-80 ${className ?? ""}`}
     >
       <span className="flex size-7 items-center justify-center rounded-lg bg-foreground text-background">
         <MapPin className="size-4" />

@@ -95,5 +95,6 @@
   "hoursUnavailable": "这些门店暂无营业时间。请查看运营方的网站。",
   "locationFallback": "无法获取位置。当前显示圣迭戈；请搜索您的城市或邮政编码。",
   "skipMain": "跳到主要内容",
-  "refreshFailed": "刷新失败。仍显示之前的结果。"
+  "refreshFailed": "刷新失败。仍显示之前的结果。",
+  "showResults": "查看 {count} 家门店"
 }

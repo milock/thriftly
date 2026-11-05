@@ -4,7 +4,7 @@ import { cache } from "react";
 import { pageMetadata } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ArrowRight, MapPin } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { getCity, citiesInState, STATES, CITIES, type City } from "@/lib/cities";
 import { cityCentroid } from "@/lib/city-data";
 import { locateBundledStores, datasetGeneratedAt } from "@/lib/locate";
@@ -155,7 +155,7 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
       <ScrollToTop />
       <CityHeader />
       <main id="main-content" tabIndex={-1} className="flex-1">
-        <div className="mx-auto max-w-3xl px-5 py-8 sm:py-12">
+        <div className="site-gutter mx-auto max-w-3xl py-6 sm:py-12">
           <nav aria-label={t("breadcrumb")} className="text-[13px] text-muted-foreground">
             <Link href="/" className="hover:text-foreground">
               {t("home")}
@@ -192,36 +192,31 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
             </p>
           )}
 
-          <p className="mt-3 text-sm text-muted-foreground">
-            {t("dataset")}: <time dateTime={datasetGeneratedAt() ?? undefined}>
-              {datasetGeneratedAt() ? new Intl.DateTimeFormat(locale, {dateStyle: "long", timeZone: "UTC"}).format(new Date(datasetGeneratedAt()!)) : t("dateUnavailable")}
-            </time>. {t("independent")}
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-1">
             <Link
               href={searchHref(c, lat, lon)}
-              className={cn(buttonVariants({ size: "lg" }), "min-h-11 h-auto whitespace-normal py-3 gap-2 px-5 text-[15px]")}
+              className={cn(buttonVariants({ size: "lg" }), "min-h-12 h-auto w-full sm:w-auto whitespace-normal py-3 gap-2 px-5 text-[15px]")}
             >
               {t("openCity", {city: c.city})}
-              <ArrowRight className="size-4" />
+              <ArrowRight className="size-4 shrink-0 rtl:rotate-180" />
             </Link>
             <Link
               href="/how-we-score"
-              className={cn(buttonVariants({ variant: "outline", size: "lg" }), "min-h-11 h-auto whitespace-normal py-3 px-5 text-[15px]")}
+              className="inline-flex min-h-11 items-center text-sm font-medium text-muted-foreground underline underline-offset-4 hover:text-foreground"
             >
               {t("scoreHow")}
             </Link>
           </div>
 
           {count > 0 && (
-            <section className="mt-8">
+            <section className="mt-6">
               <h2 className="text-xl font-semibold tracking-tight">
                 {t("mapped", {city: c.city})}
               </h2>
               <p className="mt-1.5 text-[14px] text-muted-foreground">
                 {t("sorted")}
               </p>
-              <div className="mt-5">
+              <div className="mt-3">
                 <CityStores
                   initial={stores}
                   cityName={c.city}
@@ -240,6 +235,11 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
             </section>
           )}
 
+          <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+            {t("dataset")}: <time dateTime={datasetGeneratedAt() ?? undefined}>
+              {datasetGeneratedAt() ? new Intl.DateTimeFormat(locale, {dateStyle: "long", timeZone: "UTC"}).format(new Date(datasetGeneratedAt()!)) : t("dateUnavailable")}
+            </time>. {t("independent")}
+          </p>
           {c.slug === "los-angeles-ca" && <aside className="mt-10 rounded-xl border border-border p-5">
             <h2 className="text-lg font-semibold">{t("outletQuestion")}</h2>
             <Link className="mt-2 inline-block underline" href="/goodwill/los-angeles-ca/outlets">{t("outletLink")}</Link>
@@ -248,12 +248,12 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
             <h2 className="text-xl font-semibold tracking-tight">
               {t("faqTitle", {city: c.city})}
             </h2>
-            <div className="mt-5 divide-y divide-border rounded-2xl border border-border bg-card">
+            <div className="mt-4 divide-y divide-border border-y border-border">
               {faqs.map((f) => (
-                <div key={f.q} className="p-5">
-                  <h3 className="font-semibold">{f.q}</h3>
-                  <p className="mt-1.5 text-[14px] leading-relaxed text-muted-foreground">{f.a}</p>
-                </div>
+                <details key={f.q} className="group py-1">
+                  <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 font-medium [&::-webkit-details-marker]:hidden"><h3>{f.q}</h3><ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden /></summary>
+                  <p className="pb-5 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+                </details>
               ))}
             </div>
           </section>
@@ -261,25 +261,25 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
           {related.length > 0 && (
             <section className="mt-14">
               <h2 className="text-xl font-semibold tracking-tight">{t("more", {place: c.stateName})}</h2>
-              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              <div className="mt-4 grid grid-cols-1 gap-x-8 min-[400px]:grid-cols-2 sm:grid-cols-3">
                 {related.map((r) => (
                   <Link
                     key={r.slug}
                     href={`/goodwill/${r.slug}`}
-                    className="group flex items-center gap-2 rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-medium transition-colors hover:border-foreground/20 hover:bg-accent"
+                    className="group flex min-h-14 items-center justify-between gap-3 border-b border-border py-3 text-sm font-medium transition-colors hover:text-brand"
                   >
-                    <MapPin className="size-3.5 text-muted-foreground" />
                     {r.city}
+                    <ArrowRight className="size-4 shrink-0 text-muted-foreground rtl:rotate-180" />
                   </Link>
                 ))}
               </div>
               {stateSlug && (
                 <Link
                   href={`/goodwill/state/${stateSlug}`}
-                  className="mt-5 inline-flex items-center gap-1.5 text-[14px] font-medium text-foreground underline-offset-4 hover:underline"
+                  className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-medium text-foreground underline-offset-4 hover:underline"
                 >
                   {t("allCities", {place: c.stateName})}
-                  <ArrowRight className="size-3.5" />
+                  <ArrowRight className="size-3.5 shrink-0 rtl:rotate-180" />
                 </Link>
               )}
             </section>

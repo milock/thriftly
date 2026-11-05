@@ -124,14 +124,14 @@ export function CityStores({
 
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between gap-3 text-[12px] text-muted-foreground">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs text-muted-foreground">
         <span>{t("updated", { time: label ?? initialDateLabel ?? updatedAt?.slice(0, 10) ?? t("recent") })}</span>
         {canRefresh && (
           <button
             type="button"
             onClick={refresh}
             disabled={refreshing}
-            className="inline-flex min-h-11 items-center gap-1.5 underline-offset-4 transition-colors hover:text-foreground hover:underline disabled:opacity-60"
+            className="ms-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 underline-offset-4 transition-colors hover:text-foreground hover:underline disabled:opacity-60"
           >
             <RefreshCw className={cn("size-3.5", refreshing && "animate-spin")} />
             {refreshing ? t("refreshing") : t("refresh")}

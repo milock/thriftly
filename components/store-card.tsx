@@ -29,7 +29,7 @@ interface Props {
 }
 
 const ACTION =
-  "inline-flex min-h-11 items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[12px] font-medium text-foreground transition-colors hover:bg-accent active:scale-[0.97]";
+  "inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-md border border-border bg-background px-3 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent active:scale-[0.97]";
 
 export function StoreCard({ store, rank, selected, highest = false, onSelect }: Props) {
   const t = useTranslations("ui");
@@ -66,7 +66,7 @@ export function StoreCard({ store, rank, selected, highest = false, onSelect }: 
         "group relative scroll-mt-2 overflow-hidden rounded-xl border bg-card text-start outline-none transition-all duration-200",
         "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
         selected
-          ? "border-foreground/40"
+          ? "border-brand/60"
           : "border-border hover:border-foreground/30",
       )}
     >
@@ -74,33 +74,29 @@ export function StoreCard({ store, rank, selected, highest = false, onSelect }: 
         <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: color }} aria-hidden />
       )}
 
-      <div className="relative flex items-start gap-3.5 p-4">
+      <div className="relative grid grid-cols-[minmax(0,1fr)_3.5rem] gap-x-3 gap-y-2 p-4">
         <button type="button" data-store-toggle aria-label={title} aria-expanded={expanded} onClick={toggle} className="absolute inset-0 z-10 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-ring" />
-        <div className="flex flex-col items-center gap-1 pt-0.5">
-          {scored ? <ScoreRing score={store.score.total} size={56} /> : <span className="flex size-14 items-center justify-center rounded-full bg-muted text-2xl text-muted-foreground" aria-label={t("notScored")}>—</span>}
-          <span className="max-w-16 text-center text-xs font-medium text-muted-foreground">
-            {scored ? t(tier.label) : t("notScored")}
-          </span>
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <span className="tabular text-[11px] font-medium text-muted-foreground">#{rank}</span>
-            {best && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-foreground px-1.5 py-0.5 text-[10px] font-semibold text-background">
-                <Crown className="size-2.5" />
+        <div className="min-w-0 self-center">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            <span className="tabular font-medium">#{rank}</span>
+            {best ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-foreground px-2 py-0.5 text-[11px] font-semibold text-background">
+                <Crown className="size-3" />
                 {t("bestFind")}
               </span>
-            )}
+            ) : <span>{scored ? t(tier.label) : t("notScored")}</span>}
           </div>
-          <h3 className="mt-0.5 break-words text-base font-semibold leading-tight">
+          <h3 className="mt-1 break-words text-[17px] font-semibold leading-snug">
             <bdi>{title}</bdi>
           </h3>
-          {store.facilityType && <p className="mt-1 text-xs text-muted-foreground">{t(store.facilityType)}</p>}
-          {sub && (
-            <p className="mt-1 break-words text-sm leading-relaxed text-muted-foreground"><bdi dir="ltr">{sub}</bdi></p>
-          )}
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] text-muted-foreground">
+        </div>
+        <div className="self-start">
+          {scored ? <ScoreRing score={store.score.total} size={56} /> : <span className="flex size-14 items-center justify-center rounded-full bg-muted text-2xl text-muted-foreground" aria-label={t("notScored")}>—</span>}
+        </div>
+        {sub && <p data-store-address className="col-span-2 break-words text-sm leading-relaxed text-muted-foreground"><bdi dir="ltr">{sub}</bdi></p>}
+        <div className="col-span-2 flex items-end justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
+            {store.facilityType && <><span>{t(store.facilityType)}</span><span aria-hidden>·</span></>}
             <span className="tabular">{t("away", { distance: formatDistance(store.distanceMiles, locale) })}</span>
             {open !== null && (
               <>
@@ -117,15 +113,14 @@ export function StoreCard({ store, rank, selected, highest = false, onSelect }: 
               </>
             )}
           </div>
-        </div>
-
-        <ChevronDown
+          <ChevronDown
           className={cn(
-            "mt-1 size-4 shrink-0 text-muted-foreground/50 transition-transform duration-300",
+            "size-4 shrink-0 text-muted-foreground transition-transform duration-300",
             expanded && "rotate-180",
           )}
           aria-hidden
-        />
+          />
+        </div>
       </div>
 
       {expanded && (
@@ -135,7 +130,7 @@ export function StoreCard({ store, rank, selected, highest = false, onSelect }: 
               href={directionsUrl(store)}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(ACTION, "border-foreground bg-foreground text-background hover:bg-foreground/90")}
+              className={cn(ACTION, "basis-full border-foreground bg-foreground text-background hover:bg-foreground/90")}
             >
               <Navigation className="size-3.5" />
               {t("directions")}

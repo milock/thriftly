@@ -95,5 +95,6 @@
   "hoursUnavailable": "Walang oras ng pagbubukas para sa mga tindahang ito. Tingnan ang website ng operator.",
   "locationFallback": "Hindi makuha ang lokasyon. San Diego ang ipinapakita; hanapin ang iyong lungsod o ZIP code.",
   "skipMain": "Lumaktaw sa pangunahing nilalaman",
-  "refreshFailed": "Hindi nagtagumpay ang pag-refresh. Nakikita pa rin ang mga naunang resulta."
+  "refreshFailed": "Hindi nagtagumpay ang pag-refresh. Nakikita pa rin ang mga naunang resulta.",
+  "showResults": "Tingnan ang {count} tindahan"
 }

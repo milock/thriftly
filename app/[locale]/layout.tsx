@@ -13,7 +13,7 @@ import '../globals.css';
 
 export function generateStaticParams() { return locales.map(locale=>({locale})); }
 export const viewport: Viewport = {
-  width:'device-width',initialScale:1,
+  width:'device-width',initialScale:1,viewportFit:'cover',
   themeColor:[{media:'(prefers-color-scheme: light)',color:'#fafafa'},{media:'(prefers-color-scheme: dark)',color:'#18181b'}],
 };
 export async function generateMetadata({params}:{params:Promise<{locale:string}>}):Promise<Metadata> {

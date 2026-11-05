@@ -123,7 +123,8 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
 
   return (
     <form onSubmit={onSubmit} className={`relative flex items-center gap-2 ${className ?? ""}`}>
-      <div className="relative flex-1">
+      <div className="min-w-0 flex-1">
+        <div className="relative">
         {loading ? (
           <LoaderCircle className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
         ) : (
@@ -152,8 +153,9 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
           autoComplete="off"
           className="h-11 ps-9 pe-3 text-base"
         />
+        </div>
         {open && query.trim().length >= 3 && (
-          <ul id={listId} role="listbox" aria-label={t("searchAddress")} className="animate-in fade-in slide-in-from-top-1 absolute left-0 right-0 top-[calc(100%+6px)] z-50 overflow-hidden rounded-xl border border-border bg-popover py-1 shadow-lg duration-150">
+          <ul id={listId} role="listbox" aria-label={t("searchAddress")} className="animate-in fade-in slide-in-from-top-1 absolute inset-x-0 top-[calc(100%+6px)] z-50 max-h-[min(20rem,50dvh)] overflow-y-auto rounded-xl border border-border bg-popover py-1 shadow-lg duration-150">
             {suggestions.length > 0 ? (
               suggestions.map((s, i) => (
                 <li key={s.id} id={`${listId}-${i}`} role="option" aria-selected={i === active}
@@ -168,7 +170,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
                     }`}
                   >
                     <MapPin className="size-3.5 shrink-0 text-muted-foreground" />
-                    <span className="truncate">{s.label}</span>
+                    <span className="min-w-0 break-words leading-relaxed">{s.label}</span>
                 </li>
               ))
             ) : (
@@ -189,8 +191,8 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
           </ul>
         )}
       </div>
-      <Button type="submit" aria-label={t("search")} disabled={busy} className="h-11 shrink-0">
-        {busy ? <LoaderCircle className="size-4 animate-spin" /> : t("search")}
+      <Button type="submit" aria-label={t("search")} disabled={busy} className="size-11 shrink-0 p-0 sm:w-auto sm:px-4">
+        {busy ? <LoaderCircle className="size-4 animate-spin" /> : <><Search className="size-4 sm:hidden" /><span className="hidden sm:inline">{t("search")}</span></>}
       </Button>
       <Button
         type="button"

@@ -9,14 +9,14 @@ export function ScoreBreakdown({ score }: { score: GoodsScore }) {
   if (score.catchment.tractCount === 0) return <p className="text-sm text-muted-foreground">{t("notScored")}</p>;
   const keys = Object.keys(score.factors) as Array<keyof GoodsScore["factors"]>;
   return (
-    <div className="space-y-2.5">
+    <div className="space-y-3 border-t border-border pt-4">
       {keys.map((key) => {
         const f = score.factors[key];
         return (
           <div key={key} className="space-y-1.5">
-            <div className="flex items-baseline justify-between gap-2 text-[13px]">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[13px]">
               <span className="text-muted-foreground">{t(key)}</span>
-              <span className="font-medium tabular">{f.value == null ? "—" : key === "pctBachelorsPlus" ? formatPercent(f.value, locale) : key === "medianGrossRent" ? t("monthly", { amount: formatCurrency(f.value, { locale }) }) : formatCurrency(f.value, { locale })}</span>
+              <span className="tabular ms-auto max-w-full break-words font-medium">{f.value == null ? "—" : key === "pctBachelorsPlus" ? formatPercent(f.value, locale) : key === "medianGrossRent" ? t("monthly", { amount: formatCurrency(f.value, { locale }) }) : formatCurrency(f.value, { locale })}</span>
             </div>
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
               <div

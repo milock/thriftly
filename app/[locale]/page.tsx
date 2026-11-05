@@ -65,22 +65,22 @@ export default async function Landing({params}: {params: Promise<{locale: string
     <div className="flex min-h-dvh flex-col">
       {/* Nav */}
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur">
-        <div className="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-2 px-5 py-2">
+        <div className="site-gutter mx-auto flex min-h-14 max-w-6xl items-center justify-between gap-2 py-2">
           <Wordmark />
-          <nav className="flex flex-wrap items-center justify-end gap-1 sm:gap-3">
+          <nav className="flex items-center justify-end gap-1 sm:gap-3">
             <Link
               href="#how-it-works"
-              className="hidden rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground sm:block"
+              className="hidden rounded-md px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground lg:block"
             >
               {t("howWorks")}
             </Link>
             <LanguageSwitcher />
-            <GithubLink className="hidden sm:inline-flex" />
-            <CoffeeLink className="hidden sm:inline-flex" />
+            <GithubLink className="hidden lg:inline-flex" />
+            <CoffeeLink className="hidden lg:inline-flex" />
             <ThemeToggle />
             <Link href="/search" className={cn(buttonVariants({ size: "sm" }), "hidden h-11 gap-1.5 px-3.5 sm:inline-flex")}>
               {t("launch")}
-              <ArrowRight className="size-3.5" />
+              <ArrowRight className="size-3.5 shrink-0 rtl:rotate-180" />
             </Link>
           </nav>
         </div>
@@ -89,31 +89,28 @@ export default async function Landing({params}: {params: Promise<{locale: string
       <main id="main-content" tabIndex={-1} className="flex-1">
         {/* Hero */}
         <section className="relative overflow-hidden">
-          <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-14 pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:pb-28 lg:pt-24">
+          <div className="site-gutter mx-auto grid max-w-6xl items-center gap-7 pb-10 pt-8 sm:gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:pb-24 lg:pt-20">
             <div className="animate-in fade-in slide-in-from-bottom-3 relative motion-reduce:animate-none duration-700">
-              <h1 className="text-[2.6rem] font-semibold leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.5rem]">
+              <h1 className="text-[2.5rem] font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.5rem]">
                 {t("hero")}
               </h1>
-              <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
+              <p className="mt-4 max-w-xl text-base leading-relaxed sm:text-lg text-muted-foreground">
                 {t("heroBody")}
               </p>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
+              <div className="mt-6 flex flex-col items-stretch gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
                 <Link
                   href="/search"
                   className={cn(buttonVariants({ size: "lg" }), "min-h-12 h-auto whitespace-normal py-3 gap-2 px-6 text-[15px]")}
                 >
                   {t("find")}
-                  <ArrowRight className="size-4" />
-                </Link>
-                <Link
-                  href="#how-it-works"
-                  className={cn(buttonVariants({ variant: "outline", size: "lg" }), "min-h-12 h-auto whitespace-normal py-3 px-6 text-[15px]")}
-                >
-                  {t("seeHow")}
+                  <ArrowRight className="size-4 shrink-0 rtl:rotate-180" />
                 </Link>
               </div>
-              <Link href="/goodwill" className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-medium underline underline-offset-4">{t("browse")} <ArrowRight className="size-4 rtl:rotate-180" /></Link>
-              <p className="mt-3 text-[13px] text-muted-foreground">
+              <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-0 text-sm font-medium">
+                <Link href="#how-it-works" className="inline-flex min-h-11 items-center text-muted-foreground underline underline-offset-4 hover:text-foreground">{t("seeHow")}</Link>
+                <Link href="/goodwill" className="inline-flex min-h-11 items-center gap-2 underline underline-offset-4">{t("browse")} <ArrowRight className="size-4 shrink-0 rtl:rotate-180" /></Link>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
                 {t("free")}
               </p>
             </div>
@@ -126,18 +123,52 @@ export default async function Landing({params}: {params: Promise<{locale: string
           </div>
         </section>
 
+        {/* Browse by city */}
+        <section className="border-t border-border">
+          <div className="reveal site-gutter mx-auto max-w-6xl py-12 sm:py-16">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {t("browse")}
+            </h2>
+            <p className="mt-3 max-w-xl text-muted-foreground">
+              {t("browseIntro")}
+            </p>
+            <div className="mt-6 grid grid-cols-1 gap-x-6 min-[360px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+              {POPULAR_CITY_SLUGS.map((slug) => {
+                const c = getCity(slug);
+                if (!c) return null;
+                return (
+                  <Link
+                    key={slug}
+                    href={`/goodwill/${slug}`}
+                    className="flex min-h-12 items-center border-b border-border py-3 text-sm font-medium transition-colors hover:text-brand"
+                  >
+                    {c.city}, {c.state}
+                  </Link>
+                );
+              })}
+              <Link
+                href="/goodwill"
+                className="col-span-full mt-3 inline-flex min-h-11 w-fit items-center gap-2 text-sm font-semibold underline underline-offset-4"
+              >
+                {t("allStates")}
+                <ArrowRight className="size-3.5 shrink-0 rtl:rotate-180" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Insight */}
         <section className="border-y border-border bg-card/50">
-          <div className="reveal mx-auto max-w-6xl px-5 py-16">
+          <div className="reveal site-gutter mx-auto max-w-6xl py-12 sm:py-16">
             <h2 className="sr-only">{t("plan")}</h2>
-            <div className="grid gap-10 sm:grid-cols-3">
+            <div className="grid gap-7 sm:grid-cols-3 sm:gap-10">
               {[0, 1, 2].map((s) => (
-                <div key={s}>
-                  <span className="tabular block text-2xl font-semibold tracking-tight text-[var(--brand)]">
-                    {String(s + 1).padStart(2, "0")}
+                <div key={s} className="grid grid-cols-[2rem_1fr] gap-x-3 sm:block">
+                  <span className="tabular row-span-2 block text-xl font-semibold tracking-tight text-[var(--brand)]">
+                    {s + 1}
                   </span>
-                  <h3 className="mt-2.5 text-lg font-semibold">{t(`step${s}Title`)}</h3>
-                  <p className="mt-1.5 text-[14px] leading-relaxed text-muted-foreground">{t(`step${s}Body`)}</p>
+                  <h3 className="text-lg font-semibold sm:mt-2.5">{t(`step${s}Title`)}</h3>
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">{t(`step${s}Body`)}</p>
                 </div>
               ))}
             </div>
@@ -146,17 +177,17 @@ export default async function Landing({params}: {params: Promise<{locale: string
 
         {/* How the score works */}
         <section id="how-it-works" className="scroll-mt-16">
-          <div className="reveal mx-auto max-w-6xl px-5 py-20">
+          <div className="reveal site-gutter mx-auto max-w-6xl py-12 sm:py-20">
             <div className="max-w-2xl">
               <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
                 {t("scoreHow")}
               </h2>
-              <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-base leading-relaxed text-muted-foreground sm:text-lg">
                 {t("scoreIntro")}
               </p>
             </div>
 
-            <div className="mt-10 grid gap-x-10 sm:grid-cols-2">
+            <div className="mt-7 grid gap-x-10 sm:mt-10 sm:grid-cols-2">
               {ORDER.map((key) => {
                 const Icon = FACTOR_ICONS[key];
                 const color = scoreColor(60 + WEIGHTS[key] * 90);
@@ -167,7 +198,7 @@ export default async function Landing({params}: {params: Promise<{locale: string
                   >
                     <span
                       className="flex size-11 shrink-0 items-center justify-center rounded-xl"
-                      style={{ backgroundColor: `color-mix(in oklch, ${color} 16%, transparent)`, color }}
+                      style={{ color }}
                     >
                       <Icon className="size-5" />
                     </span>
@@ -178,7 +209,7 @@ export default async function Landing({params}: {params: Promise<{locale: string
                           {t("weight", {value: Math.round(WEIGHTS[key] * 100)})}
                         </span>
                       </div>
-                      <p className="mt-1 text-[14px] leading-relaxed text-muted-foreground">
+                      <p className="mt-1 text-[15px] leading-relaxed text-muted-foreground">
                         {t(`factorBody_${key}`)}
                       </p>
                     </div>
@@ -198,55 +229,16 @@ export default async function Landing({params}: {params: Promise<{locale: string
                     <Icon className="size-5" />
                   </span>
                   <h3 className="font-semibold">{t(`feature${i}Title`)}</h3>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">{t(`feature${i}Body`)}</p>
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">{t(`feature${i}Body`)}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Browse by city */}
-        <section className="border-t border-border">
-          <div className="reveal mx-auto max-w-6xl px-5 py-16">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              {t("browse")}
-            </h2>
-            <p className="mt-3 max-w-xl text-muted-foreground">
-              {t("browseIntro")}
-            </p>
-            <div className="mt-7 flex flex-wrap gap-2.5">
-              {POPULAR_CITY_SLUGS.map((slug) => {
-                const c = getCity(slug);
-                if (!c) return null;
-                return (
-                  <Link
-                    key={slug}
-                    href={`/goodwill/${slug}`}
-                    className="rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:border-foreground/20 hover:text-foreground"
-                  >
-                    {c.city}, {c.state}
-                  </Link>
-                );
-              })}
-              <Link
-                href="/goodwill"
-                className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-[13px] font-medium text-background"
-              >
-                {t("allStates")}
-                <ArrowRight className="size-3.5" />
-              </Link>
-            </div>
-          </div>
-        </section>
-
         {/* Final CTA */}
-        <section className="px-5 pb-20">
-          <div className="reveal relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-foreground px-8 py-16 text-center text-background sm:py-20">
-            {/* Subtle emerald glow + grid for depth, tied to the brand color. */}
-            <div
-              className="pointer-events-none absolute inset-0 opacity-[0.16]"
-              style={{ background: "radial-gradient(ellipse 55% 75% at 50% 0%, var(--brand), transparent)" }}
-            />
+        <section className="site-gutter pb-12 sm:pb-20">
+          <div className="reveal mx-auto max-w-6xl rounded-2xl bg-foreground px-6 py-10 text-start text-background sm:px-8 sm:py-16 sm:text-center">
             <div className="relative">
               <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
                 {t("cta")}
@@ -259,7 +251,7 @@ export default async function Landing({params}: {params: Promise<{locale: string
                 className={cn(buttonVariants({ size: "lg", variant: "secondary" }), "mt-8 min-h-12 h-auto whitespace-normal py-3 gap-2 px-6 text-[15px]")}
               >
                 {t("locator")}
-                <ArrowRight className="size-4" />
+                <ArrowRight className="size-4 shrink-0 rtl:rotate-180" />
               </Link>
             </div>
           </div>
@@ -276,7 +268,7 @@ export default async function Landing({params}: {params: Promise<{locale: string
               rel="noopener noreferrer"
               className="inline-flex w-fit items-center gap-1.5 text-[13px] font-medium text-foreground underline-offset-4 hover:underline"
             >
-              <GithubMark className="size-3.5" />
+              <GithubMark className="size-3.5 shrink-0 rtl:rotate-180" />
               {t("github")}
             </a>
           </div>
@@ -317,7 +309,7 @@ async function PreviewPanel() {
   ];
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-card">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b px-5 py-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 sm:px-5">
         <span className="text-[12px] font-medium text-muted-foreground">{t("example")}</span>
         <span className="tabular text-[12px] text-muted-foreground">{t("ranked", {count: 3})}</span>
       </div>
@@ -327,11 +319,11 @@ async function PreviewPanel() {
           return (
             <div
               key={s.rank}
-              className="relative overflow-hidden p-5"
+              className="relative overflow-hidden px-4 py-3.5 sm:p-5"
             >
               {s.best && <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: color }} />}
               <div className="flex items-center gap-3.5">
-                <ScoreRing score={s.score} size={52} />
+                <ScoreRing score={s.score} size={48} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <span className="tabular text-[11px] font-medium text-muted-foreground">#{s.rank}</span>
