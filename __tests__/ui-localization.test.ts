@@ -25,6 +25,8 @@ describe("UI locale catalogs", () => {
     expect(formatCurrency(1000, {locale:"en"})).toBe("$1,000");
     expect(formatCurrency(1000, {locale:"es"})).toContain("US$");
     expect(formatDistance(2.5, "es")).toMatch(/2,5\smi/);
+    expect(formatDistance(2.5, "zh-Hant")).toBe("2.5英里");
+    expect(formatDistance(2.5, "vi")).toBe("2,5 dặm");
   });
 });
 

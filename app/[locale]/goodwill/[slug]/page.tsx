@@ -229,6 +229,7 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
                   lon={lon}
                   radiusMiles={c.radiusMiles}
                   generatedAt={datasetGeneratedAt()}
+                  initialDateLabel={datasetGeneratedAt() ? new Intl.DateTimeFormat(locale, {dateStyle: "medium", timeZone: "UTC"}).format(new Date(datasetGeneratedAt()!)) : undefined}
                 />
               </div>
               {lat != null && lon != null && (

@@ -64,6 +64,7 @@ export function CityStores({
   lon,
   radiusMiles,
   generatedAt,
+  initialDateLabel,
 }: {
   initial: ScoredStore[];
   cityName: string;
@@ -71,6 +72,7 @@ export function CityStores({
   lon?: number | null;
   radiusMiles?: number;
   generatedAt?: string | null;
+  initialDateLabel?: string;
 }) {
   const t = useTranslations("ui");
   const locale = useLocale();
@@ -123,7 +125,7 @@ export function CityStores({
   return (
     <div>
       <div className="mb-3 flex items-center justify-between gap-3 text-[12px] text-muted-foreground">
-        <span>{t("updated", { time: label ?? (updatedAt ? new Intl.DateTimeFormat(locale, {dateStyle:"medium",timeZone:"UTC"}).format(new Date(updatedAt)) : t("recent")) })}</span>
+        <span>{t("updated", { time: label ?? initialDateLabel ?? updatedAt?.slice(0, 10) ?? t("recent") })}</span>
         {canRefresh && (
           <button
             type="button"

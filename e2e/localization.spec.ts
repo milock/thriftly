@@ -2,6 +2,7 @@ import {test,expect} from '@playwright/test';
 const locales=['en','es','zh-Hans','zh-Hant','tl','vi','ar'];
 for(const locale of locales) test(`${locale}: complete localized navigation and metadata`,async({page,request})=>{
  const prefix=locale==='en'?'':`/${locale}`;
+ await page.route('**/api/enrich**',r=>r.fulfill({json:{enriched:{}}}));
  const errors:string[]=[]; page.on('pageerror',e=>errors.push(e.message));
  await page.goto(prefix||'/');
  await expect(page.locator('html')).toHaveAttribute('lang',locale);
@@ -17,6 +18,10 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
   expect(html).toContain(`href="https://www.thriftly.xyz${prefix+path}"`);
   expect(html).not.toContain('MISSING_MESSAGE');
  }
+ // Hydrate real city content too: server and browser CLDR date data can differ.
+ await page.goto(prefix+'/goodwill/los-angeles-ca');
+ await page.waitForLoadState('networkidle');
+ await expect(page.locator('h1')).toBeVisible();
  expect(errors).toEqual([]);
 });
 test('language switch retains map coordinates and filters',async({page})=>{
