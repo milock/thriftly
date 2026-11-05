@@ -17,6 +17,9 @@ interface Props {
   nearest?: NearestHint | null;
   /** Widen the search to include the nearest store (set radius to its distance). */
   onExpand?: () => void;
+  onReset?: () => void;
+  onRetry?: () => void;
+  filteredOut?: boolean;
 }
 
 function CardSkeleton() {
@@ -53,7 +56,7 @@ export function StoreList({
   selectedId,
   onSelect,
   nearest,
-  onExpand,
+  onExpand, onReset, onRetry, filteredOut,
 }: Props) {
   const t = useTranslations("ui");
   if (loading) {
@@ -67,14 +70,15 @@ export function StoreList({
   }
   if (error) {
     return (
-      <EmptyState
+      <div><EmptyState
         icon={<TriangleAlert className="size-5" />}
         title={t("loadError")}
         body={t("loadRetry")}
-      />
+      /><Button onClick={onRetry} className="mt-3 min-h-11 w-full">{t("retry")}</Button></div>
     );
   }
   if (stores.length === 0) {
+    if (filteredOut) return <div><EmptyState icon={<SearchX className="size-5" />} title={t("filteredEmpty")} body={t("filteredHelp")} /><Button onClick={onReset} className="mt-3 min-h-11 w-full">{t("resetFilters")}</Button></div>;
     if (nearest) {
       const miles = Math.round(nearest.distanceMiles);
       const place = [nearest.locality, nearest.region].filter(Boolean).join(", ");
@@ -110,10 +114,9 @@ export function StoreList({
       {stores.map((s, i) => (
         <li
           key={s.id}
-          className="animate-in fade-in slide-in-from-bottom-1 fill-mode-both"
-          style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
+
         >
-          <StoreCard store={s} rank={i + 1} selected={s.id === selectedId} onSelect={onSelect} />
+          <StoreCard store={s} rank={i + 1} highest={s.score.catchment.tractCount > 0 && s.score.total === Math.max(...stores.filter(x => x.score.catchment.tractCount > 0).map(x => x.score.total))} selected={s.id === selectedId} onSelect={onSelect} />
         </li>
       ))}
     </ul>

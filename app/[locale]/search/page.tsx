@@ -1,12 +1,14 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import { SlidersHorizontal, List as ListIcon, Map as MapIcon, ChevronDown } from "lucide-react";
 import type { LatLng } from "@/lib/types";
 import { useStores } from "@/lib/use-stores";
+import { formatDistance } from "@/lib/format";
+import { parseHours } from "@/lib/hours";
 import { applyFilters, DEFAULT_FILTERS, type Filters } from "@/lib/filters";
 import { LocationSearch } from "@/components/location-search";
 import { reverseLabel } from "@/lib/geocode-client";
@@ -51,6 +53,8 @@ function useIsDesktop() {
 
 export default function AppPage() {
   const t = useTranslations("ui");
+  const locale = useLocale();
+  const [locationUnavailable, setLocationUnavailable] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const [center, setCenter] = useState<LatLng>(SAN_DIEGO);
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
@@ -89,18 +93,21 @@ export default function AppPage() {
       if (Number.isFinite(qradius)) {
         setFilters((f) => ({ ...f, radiusMiles: Math.min(100, Math.max(0.5, qradius)) }));
       }
+      const minScore = Number(p.get("minScore") ?? 0);
+      const sort = p.get("sort");
+      setFilters(f => ({...f, minScore: Number.isFinite(minScore) ? Math.max(0, Math.min(100, minScore)) : 0, openNowOnly: p.get("open") === "1", sort: sort === "distance" || sort === "best-nearby" ? sort : "score"}));
       if (label) setAreaLabel(label);
       if (sel) setSelectedId(sel);
       setCenter({ lat: qlat, lon: qlon });
       return;
     }
-    if (typeof navigator === "undefined" || !navigator.geolocation) return;
+    if (typeof navigator === "undefined" || !navigator.geolocation) { setLocationUnavailable(true); return; }
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setSelectedId(null);
         setCenter({ lat: pos.coords.latitude, lon: pos.coords.longitude });
       },
-      () => {},
+      () => setLocationUnavailable(true),
       { enableHighAccuracy: true, timeout: 8000 },
     );
     }, 0);
@@ -120,10 +127,13 @@ export default function AppPage() {
     p.set("lat", center.lat.toFixed(5));
     p.set("lon", center.lon.toFixed(5));
     p.set("radius", String(filters.radiusMiles));
+    if (filters.minScore) p.set("minScore", String(filters.minScore));
+    if (filters.openNowOnly) p.set("open", "1");
+    if (filters.sort !== "score") p.set("sort", filters.sort);
     if (areaLabel) p.set("label", areaLabel);
     if (canonicalSelectedId) p.set("sel", canonicalSelectedId);
     window.history.replaceState(null, "", `${window.location.pathname}?${p.toString()}${window.location.hash}`);
-  }, [initialized, center, filters.radiusMiles, areaLabel, canonicalSelectedId]);
+  }, [initialized, center, filters, areaLabel, canonicalSelectedId]);
 
   // Reverse-geocode the search center to show a friendly "near {place}" label.
   useEffect(() => {
@@ -140,10 +150,14 @@ export default function AppPage() {
   const visible = useMemo(() => applyFilters(stores, filters), [stores, filters]);
 
   const relocate = (c: LatLng) => {
+    setLocationUnavailable(false);
     setCenter(c);
     setSelectedId(null);
   };
 
+  const filterCount = Number(filters.minScore > 0) + Number(filters.openNowOnly) + Number(filters.sort !== "score") + Number(filters.radiusMiles !== DEFAULT_FILTERS.radiusMiles);
+  const hoursAvailable = stores.some(s => s.timezone && parseHours(s.openingHours));
+  const resetFilters = () => setFilters({...DEFAULT_FILTERS, radiusMiles: filters.radiusMiles});
   const resultLine = loading ? t("searchNearby") : areaLabel ? t("resultsNear", { count: visible.length, place: areaLabel }) : t("results", { count: visible.length });
 
   // Only surface the "nearest is N mi away" hint when the search genuinely found
@@ -164,6 +178,9 @@ export default function AppPage() {
         onSelect={setSelectedId}
         nearest={stores.length === 0 ? nearest : null}
         onExpand={expandToNearest}
+        filteredOut={stores.length > 0}
+        onReset={resetFilters}
+        onRetry={() => search(center, filters.radiusMiles)}
       />
       {!loading && (
         <div className="px-1 pt-4">
@@ -206,8 +223,11 @@ export default function AppPage() {
         )}
       </header>
 
+      {locationUnavailable && <p role="status" className="border-b bg-muted px-4 py-2 text-sm">{t("locationFallback")}</p>}
+      <main id="main-content" tabIndex={-1} className="flex min-h-0 flex-1 flex-col">
+      <h1 className="sr-only">{t("searchAddress")}</h1>
       {isDesktop ? (
-        <div className="grid min-h-0 flex-1 grid-cols-[400px_1fr]">
+        <div className="grid min-h-0 flex-1 grid-cols-[minmax(360px,30%)_1fr]">
           <aside className="flex min-h-0 flex-col border-e">
             <div className="border-b">
               <button
@@ -217,11 +237,12 @@ export default function AppPage() {
                   setCaretHint(false);
                 }}
                 aria-expanded={filtersOpen}
+                aria-controls="desktop-filters"
                 className="flex w-full items-center justify-between px-5 py-2.5 text-[13px] font-medium transition-colors hover:bg-accent/50"
               >
                 <span className="flex items-center gap-2 text-muted-foreground">
                   <SlidersHorizontal className="size-3.5" />
-                  {t("filters")}
+                  {t("filters")}{filterCount > 0 && <span className="tabular ms-1">({filterCount})</span>}
                 </span>
                 <ChevronDown
                   className={cn(
@@ -231,7 +252,7 @@ export default function AppPage() {
                   )}
                 />
               </button>
-              <div
+              <div id="desktop-filters" inert={!filtersOpen} aria-hidden={!filtersOpen}
                 className={cn(
                   "grid transition-[grid-template-rows] duration-200 ease-out",
                   filtersOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
@@ -239,13 +260,15 @@ export default function AppPage() {
               >
                 <div className="overflow-hidden">
                   <div className="px-5 pb-4 pt-1">
-                    <FilterPanel filters={filters} onChange={setFilters} />
+                    <FilterPanel filters={filters} onChange={setFilters} hoursAvailable={hoursAvailable} />
+                    {filterCount > 0 && <button type="button" className="mt-3 min-h-11 text-sm font-medium underline underline-offset-4" onClick={() => setFilters(DEFAULT_FILTERS)}>{t("resetFilters")}</button>}
                   </div>
                 </div>
               </div>
             </div>
             <div className="border-b px-5 py-2.5">
-              <span className="text-[13px] font-medium text-muted-foreground">{resultLine}</span>
+              <p role="status" aria-live="polite" className="text-sm font-medium">{resultLine}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{t(filters.sort)} · {formatDistance(filters.radiusMiles, locale)}</p>
             </div>
             <div className="scroll-thin min-h-0 flex-1 overflow-y-auto p-4">{list}</div>
           </aside>
@@ -256,27 +279,28 @@ export default function AppPage() {
           <div className="flex items-center justify-between flex-wrap gap-2 border-b px-4 py-2">
             <Sheet>
               <SheetTrigger
-                className={cn(buttonVariants({ variant: "outline", size: "sm" }), "h-9 gap-1.5 px-3")}
+                className={cn(buttonVariants({ variant: "outline", size: "sm" }), "min-h-11 gap-1.5 px-3")}
               >
                 <SlidersHorizontal className="size-4" />
-                {t("filters")}
+                {t("filters")}{filterCount > 0 && <span className="tabular ms-1">({filterCount})</span>}
               </SheetTrigger>
-              <SheetContent side="bottom" className="rounded-t-2xl">
+              <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-2xl">
                 <SheetHeader>
-                  <SheetTitle>{t("filters")}</SheetTitle>
+                  <SheetTitle>{t("filters")}{filterCount > 0 && <span className="tabular ms-1">({filterCount})</span>}</SheetTitle>
                 </SheetHeader>
                 <div className="px-4 pb-8">
-                  <FilterPanel filters={filters} onChange={setFilters} />
+                  <FilterPanel filters={filters} onChange={setFilters} hoursAvailable={hoursAvailable} />
+                    {filterCount > 0 && <button type="button" className="mt-3 min-h-11 text-sm font-medium underline underline-offset-4" onClick={() => setFilters(DEFAULT_FILTERS)}>{t("resetFilters")}</button>}
                 </div>
               </SheetContent>
             </Sheet>
-            <span className="text-[12px] text-muted-foreground">{resultLine}</span>
-            <TabsList className="h-9">
-              <TabsTrigger value="list" className="gap-1.5 text-xs">
+            <span role="status" aria-live="polite" className="order-last w-full text-sm text-muted-foreground">{resultLine} · {t(filters.sort)} · {formatDistance(filters.radiusMiles, locale)}</span>
+            <TabsList className="h-11">
+              <TabsTrigger value="list" className="min-h-11 gap-1.5 text-sm">
                 <ListIcon className="size-3.5" />
                 {t("list")}
               </TabsTrigger>
-              <TabsTrigger value="map" className="gap-1.5 text-xs">
+              <TabsTrigger value="map" className="min-h-11 gap-1.5 text-sm">
                 <MapIcon className="size-3.5" />
                 {t("map")}
               </TabsTrigger>
@@ -290,6 +314,7 @@ export default function AppPage() {
           </TabsContent>
         </Tabs>
       )}
+      </main>
     </div>
   );
 }

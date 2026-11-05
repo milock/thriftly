@@ -1,5 +1,5 @@
 import { useTranslations, useLocale } from "next-intl";
-import { safeWebsiteUrl } from "@/lib/format";
+import { safeWebsiteUrl, formatDistance } from "@/lib/format";
 import { Crown, Navigation, ExternalLink } from "lucide-react";
 import type { ScoredStore } from "@/lib/types";
 import { scoreColor, scoreInk, scoreTier } from "@/lib/score-color";
@@ -17,7 +17,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
   const t = useTranslations("ui");
   const locale = useLocale();
   return (
-    <ol className="space-y-3">
+    <ol className="divide-y divide-border border-y border-border">
       {stores.map((s, i) => {
         const website = safeWebsiteUrl(s.website);
         const scored = s.score.catchment.tractCount > 0;
@@ -28,7 +28,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
         return (
           <li
             key={s.id}
-            className="relative overflow-hidden rounded-2xl border border-border bg-card p-4 sm:p-5"
+            className="relative py-6"
           >
             {i === 0 && scored && (
               <div
@@ -57,16 +57,16 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                     </span>
                   )}
                 </div>
-                <h3 className="mt-1 text-[15px] font-semibold leading-tight">
+                <h3 className="mt-1 text-base font-semibold leading-tight">
                   {s.name}
                   {place && (
                     <span className="animate-in fade-in duration-500">, {place}</span>
                   )}
                 </h3>
                 {s.facilityType && <p className="mt-1 text-xs text-muted-foreground">{t(s.facilityType)}</p>}
-                {addr && <p className="mt-0.5 text-[13px] text-muted-foreground"><bdi dir="ltr">{addr}</bdi></p>}
+                {addr && <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground"><bdi dir="ltr">{addr}</bdi></p>}
                 <p className="mt-1 text-[12px] text-muted-foreground">
-                  {t("downtown", { distance: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(s.distanceMiles) + " mi", city: cityName })}
+                  {t("downtown", { distance: formatDistance(s.distanceMiles, locale), city: cityName })}
                   {" · "}
                   {scored ? t("band", { band: t(tier.label) }) : t("notScored")}
                 </p>
@@ -75,7 +75,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                     href={directionsUrl(s)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 font-medium text-foreground underline-offset-4 hover:underline"
+                    className="inline-flex min-h-11 items-center gap-1.5 font-medium text-foreground underline-offset-4 hover:underline"
                   >
                     <Navigation className="size-3.5" />
                     {t("directions")}
@@ -85,7 +85,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                       href={website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                      className="inline-flex min-h-11 items-center gap-1.5 font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
                     >
                       <ExternalLink className="size-3.5" />
                       {t("website")}

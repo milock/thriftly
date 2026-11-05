@@ -300,3 +300,10 @@
 .dark .thriftly-basemap {
   filter: invert(1) hue-rotate(180deg) brightness(0.8) saturate(0.7);
 }
+
+/* Shared interaction floor for links and native controls. */
+:where(a, button, select, input):focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+input { caret-color: var(--brand); }
+h1, h2 { text-wrap: balance; }
+p { text-wrap: pretty; }
+@media (pointer: coarse) { .leaflet-control-zoom a { width: 44px !important; height: 44px !important; line-height: 44px !important; } }

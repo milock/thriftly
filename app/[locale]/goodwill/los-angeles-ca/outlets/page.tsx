@@ -19,7 +19,7 @@ export default async function LosAngelesOutlets({params}: {params: Promise<{loca
   setRequestLocale(locale);
   const t = await getTranslations('pages');
   const base = SITE_URL + (locale === 'en' ? '' : `/${locale}`);
-  return <div className="flex min-h-dvh flex-col"><CityHeader/><main className="mx-auto w-full max-w-3xl flex-1 space-y-8 px-5 py-12">
+  return <div className="flex min-h-dvh flex-col"><CityHeader/><main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-3xl flex-1 space-y-8 px-5 py-12">
     <JsonLd data={{'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
       {name:t('home'),item:base},{name:t('laStores'),item:base+'/goodwill/los-angeles-ca'},{name:t('laOutlets'),item:base+'/goodwill/los-angeles-ca/outlets'}
     ].map((x,i)=>({'@type':'ListItem',position:i+1,...x}))}}/>

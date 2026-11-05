@@ -87,5 +87,13 @@
   "zoomOut": "缩小",
   "searchMetaTitle": "查找 Goodwill 门店 | Thriftly",
   "searchMetaDescription": "搜索附近的 Goodwill 门店，比较社区评分，并查看营业时间和路线。",
-  "notScored": "暂无评分"
+  "notScored": "暂无评分",
+  "resetFilters": "重置筛选条件",
+  "retry": "重试",
+  "filteredEmpty": "没有符合筛选条件的门店",
+  "filteredHelp": "清除筛选条件以查看此区域的门店。",
+  "hoursUnavailable": "这些门店暂无营业时间。请查看运营方的网站。",
+  "locationFallback": "无法获取位置。当前显示圣迭戈；请搜索您的城市或邮政编码。",
+  "skipMain": "跳到主要内容",
+  "refreshFailed": "刷新失败。仍显示之前的结果。"
 }

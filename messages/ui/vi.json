@@ -87,5 +87,13 @@
   "zoomOut": "Thu nhỏ",
   "searchMetaTitle": "Tìm cửa hàng Goodwill | Thriftly",
   "searchMetaDescription": "Tìm Goodwill gần đây, so sánh điểm khu dân cư và xem giờ mở cửa cùng chỉ đường.",
-  "notScored": "Chưa có điểm"
+  "notScored": "Chưa có điểm",
+  "resetFilters": "Đặt lại bộ lọc",
+  "retry": "Thử lại",
+  "filteredEmpty": "Không có cửa hàng phù hợp với bộ lọc",
+  "filteredHelp": "Xóa bộ lọc để xem các cửa hàng trong khu vực này.",
+  "hoursUnavailable": "Chưa có giờ mở cửa của các cửa hàng này. Hãy kiểm tra trang web của đơn vị vận hành.",
+  "locationFallback": "Không lấy được vị trí. Đang hiển thị San Diego; hãy tìm thành phố hoặc mã ZIP của bạn.",
+  "skipMain": "Chuyển đến nội dung chính",
+  "refreshFailed": "Không thể làm mới. Kết quả trước đó vẫn được hiển thị."
 }

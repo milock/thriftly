@@ -24,13 +24,14 @@ interface Props {
   store: ScoredStore;
   rank: number;
   selected: boolean;
+  highest?: boolean;
   onSelect: (id: string | null) => void;
 }
 
 const ACTION =
-  "inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[12px] font-medium text-foreground transition-colors hover:bg-accent active:scale-[0.97]";
+  "inline-flex min-h-11 items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-[12px] font-medium text-foreground transition-colors hover:bg-accent active:scale-[0.97]";
 
-export function StoreCard({ store, rank, selected, onSelect }: Props) {
+export function StoreCard({ store, rank, selected, highest = false, onSelect }: Props) {
   const t = useTranslations("ui");
   const locale = useLocale();
   const scored = store.score.catchment.tractCount > 0;
@@ -39,7 +40,7 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
   const week = parseHours(store.openingHours);
   const open = isOpenNow(week, new Date(), store.timezone);
   const today = todayHours(week, new Date(), store.timezone, locale, { closed: t("closed"), allDay: t("allDay") });
-  const best = scored && rank === 1;
+  const best = scored && highest;
   const expanded = selected;
 
   // Lead with the neighborhood ("North Park") when we have it; fall back to the
@@ -51,7 +52,7 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
 
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (selected) ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    if (selected) ref.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "nearest" });
   }, [selected]);
 
   // Clicking the card toggles its expanded/selected state.
@@ -60,32 +61,24 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
   return (
     <div
       ref={ref}
-      role="button"
-      tabIndex={0}
-      aria-expanded={expanded}
-      onClick={toggle}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          toggle();
-        }
-      }}
+      data-store-card
       className={cn(
         "group relative scroll-mt-2 overflow-hidden rounded-xl border bg-card text-start outline-none transition-all duration-200",
         "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
         selected
-          ? "border-foreground/25 shadow-md"
-          : "border-border hover:-translate-y-px hover:border-foreground/15 hover:shadow-sm",
+          ? "border-foreground/40"
+          : "border-border hover:border-foreground/30",
       )}
     >
       {best && (
         <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: color }} aria-hidden />
       )}
 
-      <div className="flex items-start gap-3.5 p-4">
+      <div className="relative flex items-start gap-3.5 p-4">
+        <button type="button" data-store-toggle aria-label={title} aria-expanded={expanded} onClick={toggle} className="absolute inset-0 z-10 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-ring" />
         <div className="flex flex-col items-center gap-1 pt-0.5">
           {scored ? <ScoreRing score={store.score.total} size={56} /> : <span className="flex size-14 items-center justify-center rounded-full bg-muted text-2xl text-muted-foreground" aria-label={t("notScored")}>—</span>}
-          <span className="max-w-16 text-center text-[10px] font-semibold tracking-wide" style={{ color }}>
+          <span className="max-w-16 text-center text-xs font-medium text-muted-foreground">
             {scored ? t(tier.label) : t("notScored")}
           </span>
         </div>
@@ -100,12 +93,12 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
               </span>
             )}
           </div>
-          <h3 className="mt-0.5 truncate text-[15px] font-semibold leading-tight">
+          <h3 className="mt-0.5 break-words text-base font-semibold leading-tight">
             <bdi>{title}</bdi>
           </h3>
           {store.facilityType && <p className="mt-1 text-xs text-muted-foreground">{t(store.facilityType)}</p>}
           {sub && (
-            <p className="truncate text-[13px] text-muted-foreground"><bdi dir="ltr">{sub}</bdi></p>
+            <p className="mt-1 break-words text-sm leading-relaxed text-muted-foreground"><bdi dir="ltr">{sub}</bdi></p>
           )}
           <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] text-muted-foreground">
             <span className="tabular">{t("away", { distance: formatDistance(store.distanceMiles, locale) })}</span>
@@ -136,8 +129,7 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
       </div>
 
       {expanded && (
-        <div className="animate-in fade-in slide-in-from-top-1 space-y-3.5 border-t px-4 pb-4 pt-3.5 duration-200">
-          <ScoreBreakdown score={store.score} />
+        <div className="space-y-3.5 border-t px-4 pb-4 pt-3.5">
           <div className="flex flex-wrap gap-2" onClick={(e) => e.stopPropagation()}>
             <a
               href={directionsUrl(store)}
@@ -166,6 +158,7 @@ export function StoreCard({ store, rank, selected, onSelect }: Props) {
             )}
             {week && <StoreHours week={week} timezone={store.timezone} />}
           </div>
+          <ScoreBreakdown score={store.score} />
         </div>
       )}
     </div>

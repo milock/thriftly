@@ -154,8 +154,8 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
       <JsonLd data={jsonLd} />
       <ScrollToTop />
       <CityHeader />
-      <main className="flex-1">
-        <div className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
+      <main id="main-content" tabIndex={-1} className="flex-1">
+        <div className="mx-auto max-w-3xl px-5 py-8 sm:py-12">
           <nav aria-label={t("breadcrumb")} className="text-[13px] text-muted-foreground">
             <Link href="/" className="hover:text-foreground">
               {t("home")}
@@ -183,11 +183,11 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
           </h1>
 
           {count > 0 ? (
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+            <p className="mt-3 text-base leading-relaxed sm:text-lg text-muted-foreground">
               {t("cityIntro", {count, radius: c.radiusMiles, city: c.city})}
             </p>
           ) : (
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+            <p className="mt-3 text-base leading-relaxed sm:text-lg text-muted-foreground">
               {t("cityEmpty", {city: c.city})}
             </p>
           )}
@@ -214,7 +214,7 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
           </div>
 
           {count > 0 && (
-            <section className="mt-12">
+            <section className="mt-8">
               <h2 className="text-xl font-semibold tracking-tight">
                 {t("mapped", {city: c.city})}
               </h2>

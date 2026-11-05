@@ -65,7 +65,7 @@ export default async function Landing({params}: {params: Promise<{locale: string
     <div className="flex min-h-dvh flex-col">
       {/* Nav */}
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/80 backdrop-blur">
-        <div className="mx-auto flex min-h-14 max-w-6xl items-center justify-between gap-2 px-5 py-2">
+        <div className="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-2 px-5 py-2">
           <Wordmark />
           <nav className="flex flex-wrap items-center justify-end gap-1 sm:gap-3">
             <Link
@@ -75,10 +75,10 @@ export default async function Landing({params}: {params: Promise<{locale: string
               {t("howWorks")}
             </Link>
             <LanguageSwitcher />
-            <GithubLink />
-            <CoffeeLink />
+            <GithubLink className="hidden sm:inline-flex" />
+            <CoffeeLink className="hidden sm:inline-flex" />
             <ThemeToggle />
-            <Link href="/search" className={cn(buttonVariants({ size: "sm" }), "h-9 gap-1.5 px-3.5")}>
+            <Link href="/search" className={cn(buttonVariants({ size: "sm" }), "hidden h-11 gap-1.5 px-3.5 sm:inline-flex")}>
               {t("launch")}
               <ArrowRight className="size-3.5" />
             </Link>
@@ -86,11 +86,11 @@ export default async function Landing({params}: {params: Promise<{locale: string
         </div>
       </header>
 
-      <main className="flex-1">
+      <main id="main-content" tabIndex={-1} className="flex-1">
         {/* Hero */}
         <section className="relative overflow-hidden">
-          <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:pb-28 lg:pt-24">
-            <div className="animate-in fade-in slide-in-from-bottom-3 relative duration-700">
+          <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-14 pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:pb-28 lg:pt-24">
+            <div className="animate-in fade-in slide-in-from-bottom-3 relative motion-reduce:animate-none duration-700">
               <h1 className="text-[2.6rem] font-semibold leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.5rem]">
                 {t("hero")}
               </h1>
@@ -112,14 +112,15 @@ export default async function Landing({params}: {params: Promise<{locale: string
                   {t("seeHow")}
                 </Link>
               </div>
-              <p className="mt-5 text-[13px] text-muted-foreground">
+              <Link href="/goodwill" className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-medium underline underline-offset-4">{t("browse")} <ArrowRight className="size-4 rtl:rotate-180" /></Link>
+              <p className="mt-3 text-[13px] text-muted-foreground">
                 {t("free")}
               </p>
             </div>
 
             {/* Hero preview */}
             <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both relative delay-150 duration-700">
-              <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-muted/60 to-transparent blur-2xl" />
+
               <PreviewPanel />
             </div>
           </div>
@@ -155,14 +156,14 @@ export default async function Landing({params}: {params: Promise<{locale: string
               </p>
             </div>
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            <div className="mt-10 grid gap-x-10 sm:grid-cols-2">
               {ORDER.map((key) => {
                 const Icon = FACTOR_ICONS[key];
                 const color = scoreColor(60 + WEIGHTS[key] * 90);
                 return (
                   <div
                     key={key}
-                    className="flex gap-4 rounded-2xl border border-border bg-card p-5"
+                    className="flex gap-4 border-t border-border py-6"
                   >
                     <span
                       className="flex size-11 shrink-0 items-center justify-center rounded-xl"
@@ -187,16 +188,16 @@ export default async function Landing({params}: {params: Promise<{locale: string
             </div>
 
             {/* Features */}
-            <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-12 grid gap-x-10 gap-y-8 border-t border-border pt-8 sm:grid-cols-2">
               {FEATURES.map((Icon, i) => (
                 <div
                   key={i}
-                  className="rounded-2xl border border-border bg-card p-5 transition-colors hover:border-foreground/15"
+                  className="relative ps-14"
                 >
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-[color-mix(in_oklch,var(--brand)_14%,transparent)] text-[var(--brand)]">
+                  <span className="absolute start-0 top-0 flex size-10 items-center justify-center text-[var(--brand)]">
                     <Icon className="size-5" />
                   </span>
-                  <h3 className="mt-3 font-semibold">{t(`feature${i}Title`)}</h3>
+                  <h3 className="font-semibold">{t(`feature${i}Title`)}</h3>
                   <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">{t(`feature${i}Body`)}</p>
                 </div>
               ))}
@@ -315,18 +316,18 @@ async function PreviewPanel() {
     { rank: 3, score: 61, title: "Clairemont", street: "Clairemont Mesa Blvd", dist: 5.4, open: false, best: false },
   ];
   return (
-    <div className="rounded-2xl border border-border bg-card p-3 shadow-xl shadow-black/[0.06]">
-      <div className="flex items-center justify-between px-2 py-1.5">
+    <div className="overflow-hidden rounded-2xl border border-border bg-card">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b px-5 py-4">
         <span className="text-[12px] font-medium text-muted-foreground">{t("example")}</span>
         <span className="tabular text-[12px] text-muted-foreground">{t("ranked", {count: 3})}</span>
       </div>
-      <div className="space-y-2">
+      <div className="divide-y divide-border">
         {sample.map((s) => {
           const color = scoreColor(s.score);
           return (
             <div
               key={s.rank}
-              className="relative overflow-hidden rounded-xl border border-border bg-background p-3.5"
+              className="relative overflow-hidden p-5"
             >
               {s.best && <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: color }} />}
               <div className="flex items-center gap-3.5">
@@ -345,10 +346,7 @@ async function PreviewPanel() {
                   <p className="truncate text-[12px] text-muted-foreground">{s.street}</p>
                   <p className="mt-1 text-[12px] text-muted-foreground">
                     <span className="tabular">{t("away", {distance: s.dist})}</span>
-                    {" · "}
-                    <span style={s.open ? { color: "var(--brand)", fontWeight: 500 } : undefined}>
-                      {s.open ? t("open") : t("closed")}
-                    </span>
+
                   </p>
                 </div>
               </div>

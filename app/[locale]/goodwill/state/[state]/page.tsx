@@ -72,7 +72,7 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
       <JsonLd data={jsonLd} />
       <ScrollToTop />
       <CityHeader />
-      <main className="flex-1">
+      <main id="main-content" tabIndex={-1} className="flex-1">
         <div className="mx-auto max-w-3xl px-5 py-12 sm:py-16">
           <nav aria-label={t("breadcrumb")} className="text-[13px] text-muted-foreground">
             <Link href="/" className="hover:text-foreground">

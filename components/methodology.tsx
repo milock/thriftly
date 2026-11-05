@@ -18,12 +18,12 @@ export function Methodology() {
   const t = useTranslations("ui");
   return (
     <Popover>
-      <PopoverTrigger className="inline-flex items-center gap-1.5 rounded-md text-[13px] font-medium text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
+      <PopoverTrigger className="inline-flex min-h-11 items-center gap-1.5 rounded-md text-[13px] font-medium text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
         <Info className="size-4" />
         <span className="hidden sm:inline">{t("howScoring")}</span>
         <span className="sm:hidden">{t("scoring")}</span>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[22rem] p-0">
+      <PopoverContent align="end" className="w-[22rem] max-w-[calc(100vw-2rem)] max-h-[80dvh] overflow-y-auto p-0">
         <div className="border-b p-4">
           <h3 className="text-sm font-semibold">{t("score")}</h3>
           <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">

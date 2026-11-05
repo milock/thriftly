@@ -20,7 +20,7 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       aria-label={t("theme")}
-      className="size-9"
+      className="size-11"
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
       {/* Avoid hydration mismatch: render a stable icon until mounted. */}

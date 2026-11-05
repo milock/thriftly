@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useId } from "react";
 import { Search, LocateFixed, LoaderCircle, MapPin } from "lucide-react";
 import type { LatLng } from "@/lib/types";
 import { suggestPlaces, geocodeAddress, type PlaceSuggestion } from "@/lib/geocode-client";
@@ -20,6 +20,7 @@ interface Props {
 
 export function LocationSearch({ onLocate, bias, className }: Props) {
   const t = useTranslations("ui");
+  const listId = useId();
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -61,6 +62,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
   }, [query]);
 
   function choose(s: Suggestion) {
+    setError(null);
     skipNext.current = true;
     setQuery(s.label);
     setSuggestions([]);
@@ -92,6 +94,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
   }
 
   function onKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Escape") { setOpen(false); return; }
     if (!open || suggestions.length === 0) return;
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -144,28 +147,28 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
           role="combobox"
           aria-expanded={open}
           aria-autocomplete="list"
+          aria-controls={open ? listId : undefined}
+          aria-activedescendant={open && active >= 0 ? `${listId}-${active}` : undefined}
           autoComplete="off"
-          className="h-10 ps-9 pe-3"
+          className="h-11 ps-9 pe-3 text-base"
         />
         {open && query.trim().length >= 3 && (
-          <ul className="animate-in fade-in slide-in-from-top-1 absolute left-0 right-0 top-[calc(100%+6px)] z-50 overflow-hidden rounded-xl border border-border bg-popover py-1 shadow-lg duration-150">
+          <ul id={listId} role="listbox" aria-label={t("searchAddress")} className="animate-in fade-in slide-in-from-top-1 absolute left-0 right-0 top-[calc(100%+6px)] z-50 overflow-hidden rounded-xl border border-border bg-popover py-1 shadow-lg duration-150">
             {suggestions.length > 0 ? (
               suggestions.map((s, i) => (
-                <li key={s.id}>
-                  <button
-                    type="button"
+                <li key={s.id} id={`${listId}-${i}`} role="option" aria-selected={i === active}
                     onMouseDown={(e) => {
                       e.preventDefault();
-                      choose(s);
+
                     }}
+                    onClick={() => choose(s)}
                     onMouseEnter={() => setActive(i)}
-                    className={`flex w-full items-center gap-2 px-3 py-2 text-start text-[13px] transition-colors ${
+                    className={`flex min-h-11 w-full cursor-pointer items-center gap-2 px-3 py-2 text-start text-[13px] transition-colors ${
                       i === active ? "bg-accent" : ""
                     }`}
                   >
                     <MapPin className="size-3.5 shrink-0 text-muted-foreground" />
                     <span className="truncate">{s.label}</span>
-                  </button>
                 </li>
               ))
             ) : (
@@ -186,7 +189,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
           </ul>
         )}
       </div>
-      <Button type="submit" disabled={busy} className="h-10 shrink-0">
+      <Button type="submit" aria-label={t("search")} disabled={busy} className="h-11 shrink-0">
         {busy ? <LoaderCircle className="size-4 animate-spin" /> : t("search")}
       </Button>
       <Button
@@ -197,7 +200,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
         disabled={locating}
         title={t("myLocation")}
         aria-label={t("myLocation")}
-        className="size-10 shrink-0"
+        className="size-11 shrink-0"
       >
         {locating ? <LoaderCircle className="size-4 animate-spin" /> : <LocateFixed className="size-4" />}
       </Button>

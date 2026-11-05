@@ -2,6 +2,7 @@
 
 import { useTranslations, useLocale } from "next-intl";
 
+import { formatDistance } from "@/lib/format";
 import { useState } from "react";
 import { type Filters, type SortKey, SORT_LABELS } from "@/lib/filters";
 import { Slider } from "@/components/ui/slider";
@@ -19,6 +20,7 @@ interface Props {
   filters: Filters;
   onChange: (next: Filters) => void;
   className?: string;
+  hoursAvailable?: boolean;
 }
 
 const toNum = (v: number | readonly number[]): number => (Array.isArray(v) ? v[0] : (v as number));
@@ -37,7 +39,7 @@ function snapMiles(m: number): number {
   return m < 10 ? Math.round(m * 2) / 2 : Math.round(m);
 }
 
-export function FilterPanel({ filters, onChange, className }: Props) {
+export function FilterPanel({ filters, onChange, className, hoursAvailable = true }: Props) {
   const t = useTranslations("ui");
   const locale = useLocale();
   const set = (patch: Partial<Filters>) => onChange({ ...filters, ...patch });
@@ -54,7 +56,7 @@ export function FilterPanel({ filters, onChange, className }: Props) {
       <div className="space-y-2">
         <div className="flex items-baseline justify-between">
           <Label className="text-[13px] text-muted-foreground">{t("radius")}</Label>
-          <span className="tabular text-[13px] font-semibold">{new Intl.NumberFormat(locale).format(draftMiles)} mi</span>
+          <span className="tabular text-[13px] font-semibold">{formatDistance(draftMiles, locale)}</span>
         </div>
         <Slider
           min={0}
@@ -64,10 +66,11 @@ export function FilterPanel({ filters, onChange, className }: Props) {
           onValueChange={(v) => setRadiusPct(toNum(v))}
           onValueCommitted={(v) => set({ radiusMiles: snapMiles(pctToMiles(toNum(v))) })}
           aria-label={t("radius")}
+          aria-valuetext={`${formatDistance(draftMiles, locale)}`}
         />
         <div className="flex justify-between text-[10px] text-muted-foreground">
-          <span>0.5 mi</span>
-          <span>100 mi</span>
+          <span>{formatDistance(0.5, locale)}</span>
+          <span>{formatDistance(100, locale)}</span>
         </div>
       </div>
 
@@ -92,15 +95,18 @@ export function FilterPanel({ filters, onChange, className }: Props) {
         </Label>
         <Switch
           id="open-now"
+          disabled={!hoursAvailable && !filters.openNowOnly}
+          aria-describedby={!hoursAvailable ? "hours-unavailable" : undefined}
           checked={filters.openNowOnly}
           onCheckedChange={(v) => set({ openNowOnly: v })}
         />
       </div>
 
+      {!hoursAvailable && <p id="hours-unavailable" className="text-sm leading-relaxed text-muted-foreground">{t("hoursUnavailable")}</p>}
       <div className="space-y-2">
         <Label className="text-[13px] text-muted-foreground">{t("sort")}</Label>
         <Select value={filters.sort} onValueChange={(v) => set({ sort: v as SortKey })}>
-          <SelectTrigger className="w-full">
+          <SelectTrigger aria-label={t("sort")} className="min-h-11 w-full">
             <SelectValue>{(value) => t(value as SortKey)}</SelectValue>
           </SelectTrigger>
           <SelectContent>

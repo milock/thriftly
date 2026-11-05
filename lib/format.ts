@@ -11,8 +11,8 @@ export function formatPercent(value: number | null, locale = "en"): string {
   return value == null ? "—" : new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 0 }).format(value / 100);
 }
 export function formatDistance(miles: number, locale = "en"): string {
-  const n = new Intl.NumberFormat(locale, { minimumFractionDigits: miles < 10 ? 1 : 0, maximumFractionDigits: miles < 10 ? 1 : 0 });
-  return `${miles < 0.1 ? "< " : ""}${n.format(Math.max(0.1, miles))} mi`;
+  const n = new Intl.NumberFormat(locale, { style: "unit", unit: "mile", unitDisplay: "short", minimumFractionDigits: miles < 10 ? 1 : 0, maximumFractionDigits: miles < 10 ? 1 : 0 });
+  return `${miles < 0.1 ? "< " : ""}${n.format(Math.max(0.1, miles))}`;
 }
 export function formatPopulation(value: number, locale = "en"): string {
   return new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }).format(value);

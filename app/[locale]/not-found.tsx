@@ -15,7 +15,7 @@ export default async function NotFound() {
         </div>
       </header>
 
-      <main className="relative flex flex-1 items-center overflow-hidden">
+      <main id="main-content" tabIndex={-1} className="relative flex flex-1 items-center overflow-hidden">
         <div
           className="bg-grid pointer-events-none absolute inset-0 opacity-60 [mask-image:radial-gradient(ellipse_55%_50%_at_50%_30%,black,transparent)]"
         />

@@ -29,18 +29,18 @@ test("ranks stores and crowns the best find", async ({ page }) => {
 
 test("a card exposes actions when expanded", async ({ page }) => {
   await page.goto("/search");
-  const best = page.locator('[role="button"]', { hasText: "La Jolla" }).first();
-  await best.click();
+  const best = page.locator('[data-store-card]', { hasText: "La Jolla" }).first();
+  await best.locator("[data-store-toggle]").click();
   await expect(best.getByRole("link", { name: /directions/i })).toBeVisible();
   await expect(best.getByRole("link", { name: /reviews/i })).toBeVisible();
 });
 
 test("clicking an expanded card collapses it", async ({ page }) => {
   await page.goto("/search");
-  const card = page.locator('[role="button"]', { hasText: "La Jolla" }).first();
-  await card.click();
+  const card = page.locator('[data-store-card]', { hasText: "La Jolla" }).first();
+  await card.locator("[data-store-toggle]").click();
   await expect(card.getByRole("link", { name: /directions/i })).toBeVisible();
-  await card.click();
+  await card.locator("[data-store-toggle]").click();
   await expect(card.getByRole("link", { name: /directions/i })).toHaveCount(0);
 });
 
@@ -51,9 +51,9 @@ test("shows the reverse-geocoded search area", async ({ page }) => {
 
 test("selecting a non-top card expands its actions", async ({ page }) => {
   await page.goto("/search");
-  const card = page.locator('[role="button"]', { hasText: "Pacific Beach" }).first();
+  const card = page.locator('[data-store-card]', { hasText: "Pacific Beach" }).first();
   await expect(card.getByRole("link", { name: /directions/i })).toHaveCount(0);
-  await card.click();
+  await card.locator("[data-store-toggle]").click();
   await expect(card.getByRole("link", { name: /directions/i })).toBeVisible();
 });
 
@@ -68,7 +68,7 @@ test("the sort control shows its label at rest, not the raw value", async ({ pag
   await page.goto("/search");
   await page.getByRole("button", { name: /^filters$/i }).click();
   // The trigger must read "Goods Score" (the label), never the "score" slug.
-  await expect(page.getByText("Goods Score", { exact: true })).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "Sort by" })).toContainText("Goods Score");
 });
 
 test("the map renders", async ({ page, isMobile }) => {
@@ -99,4 +99,44 @@ test('shows store addresses while neighborhood enrichment is unavailable', async
   await page.goto('/search');
   await expect(page.getByRole('heading', {name:'La Jolla'})).toBeVisible();
   await expect(page.getByText('7631 Girard Avenue, La Jolla, CA', {exact:true}).first()).toBeVisible();
+});
+
+
+test('keyboard activation of a store action does not collapse its details', async ({page}) => {
+  await page.goto('/search');
+  const card = page.locator('[data-store-card]', {hasText:'La Jolla'}).first();
+  await card.locator('[data-store-toggle]').focus();
+  await page.keyboard.press('Enter');
+  const directions = card.getByRole('link',{name:/directions/i});
+  await directions.focus();
+  const popupPromise = page.waitForEvent('popup');
+  await page.keyboard.press('Enter');
+  const popup = await popupPromise; await popup.close();
+  await expect(card.locator('[data-store-toggle]')).toHaveAttribute('aria-expanded','true');
+});
+test('shared filters survive hydration and can be cleared from an empty result', async ({page}) => {
+  await page.goto('/search?lat=32.84&lon=-117.27&minScore=100&sort=distance');
+  await expect(page.getByText('No stores match these filters')).toBeVisible();
+  await page.getByRole('button',{name:'Reset filters', exact:true}).first().click();
+  await expect(page.getByRole('heading',{name:'La Jolla'})).toBeVisible();
+  await expect(page).not.toHaveURL(/minScore=100/);
+});
+test('highest-score badge follows the score when sorting by distance', async ({page}) => {
+  const sorted = structuredClone(storesResponse);
+  sorted.stores[0].distanceMiles = 5;
+  sorted.stores[1].distanceMiles = 1;
+  await page.route('**/api/stores**',r=>r.fulfill({json:sorted}));
+  await page.goto('/search?lat=32.84&lon=-117.27&sort=distance');
+  await expect(page.locator('[data-store-card]').first()).toContainText('Pacific Beach');
+  await expect(page.locator('[data-store-card]',{hasText:'La Jolla'})).toContainText('Highest score');
+  await expect(page.locator('[data-store-card]').first()).not.toContainText('Highest score');
+});
+test('unknown hours cannot silently hide the entire result set', async ({page}) => {
+  const unknown = structuredClone(storesResponse);
+  for(const store of unknown.stores) store.openingHours = '';
+  await page.route('**/api/stores**',r=>r.fulfill({json:unknown}));
+  await page.goto('/search');
+  await page.getByRole('button',{name:/^filters$/i}).click();
+  await expect(page.getByRole('switch')).toBeDisabled();
+  await expect(page.getByText(/hours are unavailable/i)).toBeVisible();
 });

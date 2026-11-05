@@ -87,5 +87,13 @@
   "zoomOut": "縮小",
   "searchMetaTitle": "尋找 Goodwill 門市 | Thriftly",
   "searchMetaDescription": "搜尋附近的 Goodwill 門市，比較社區評分，並查看營業時間和路線。",
-  "notScored": "尚未評分"
+  "notScored": "尚未評分",
+  "resetFilters": "重設篩選條件",
+  "retry": "重試",
+  "filteredEmpty": "沒有符合篩選條件的門市",
+  "filteredHelp": "清除篩選條件以查看此區域的門市。",
+  "hoursUnavailable": "這些門市暫無營業時間。請查看營運方的網站。",
+  "locationFallback": "無法取得位置。目前顯示聖地牙哥；請搜尋您的城市或郵遞區號。",
+  "skipMain": "跳至主要內容",
+  "refreshFailed": "重新整理失敗。仍顯示先前的結果。"
 }

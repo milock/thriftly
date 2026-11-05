@@ -76,6 +76,7 @@ export function CityStores({
   const locale = useLocale();
   const [stores, setStores] = useState(initial);
   const [updatedAt, setUpdatedAt] = useState<string | null>(generatedAt ?? null);
+  const [refreshError, setRefreshError] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   // Compute the relative label only after mount + on a timer, so the server and
   // client agree on first paint (no hydration mismatch) and "just now" ages.
@@ -101,8 +102,10 @@ export function CityStores({
   const refresh = useCallback(async () => {
     if (!canRefresh || refreshing) return;
     setRefreshing(true);
+    setRefreshError(false);
     try {
       const res = await fetch(`/api/stores?lat=${lat}&lon=${lon}&radius=${radiusMiles}&live=1`);
+      if (!res.ok) throw new Error("Refresh unavailable");
       if (res.ok) {
         const data = (await res.json()) as { stores?: ScoredStore[]; generatedAt?: string | null };
         const fresh = data.stores ?? [];
@@ -110,6 +113,7 @@ export function CityStores({
         setUpdatedAt(data.generatedAt ?? generatedAt ?? null);
       }
     } catch {
+      setRefreshError(true);
       // Keep the last usable results when a refresh is unavailable.
     } finally {
       setRefreshing(false);
@@ -119,19 +123,20 @@ export function CityStores({
   return (
     <div>
       <div className="mb-3 flex items-center justify-between gap-3 text-[12px] text-muted-foreground">
-        <span>{t("updated", { time: label ?? t("recent") })}</span>
+        <span>{t("updated", { time: label ?? (updatedAt ? new Intl.DateTimeFormat(locale, {dateStyle:"medium",timeZone:"UTC"}).format(new Date(updatedAt)) : t("recent")) })}</span>
         {canRefresh && (
           <button
             type="button"
             onClick={refresh}
             disabled={refreshing}
-            className="inline-flex items-center gap-1.5 underline-offset-4 transition-colors hover:text-foreground hover:underline disabled:opacity-60"
+            className="inline-flex min-h-11 items-center gap-1.5 underline-offset-4 transition-colors hover:text-foreground hover:underline disabled:opacity-60"
           >
             <RefreshCw className={cn("size-3.5", refreshing && "animate-spin")} />
             {refreshing ? t("refreshing") : t("refresh")}
           </button>
         )}
       </div>
+      {refreshError && <p role="alert" className="mb-4 text-sm text-muted-foreground">{t("refreshFailed")}</p>}
       <RankedStores stores={stores} cityName={cityName} />
     </div>
   );

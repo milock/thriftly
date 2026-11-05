@@ -20,7 +20,7 @@ export function LanguageSwitcher() {
   // Native selects can receive input before React attaches event handlers.
   const hydrated = useSyncExternalStore(subscribe, () => true, () => false);
   return (
-    <label className="relative inline-flex h-9 max-w-40 shrink-0 items-center gap-1 rounded-md border border-border px-2 focus-within:ring-2 focus-within:ring-ring">
+    <label className="relative inline-flex h-11 max-w-40 shrink-0 items-center gap-1 rounded-md border border-border px-2 focus-within:ring-2 focus-within:ring-ring">
       <Languages className="size-4 shrink-0" aria-hidden />
       <span className="sr-only">{t("language")}</span>
       <select

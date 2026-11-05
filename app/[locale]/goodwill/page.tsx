@@ -52,7 +52,7 @@ const jsonLd = {
     <div className="flex min-h-dvh flex-col">
       <JsonLd data={jsonLd} />
       <CityHeader />
-      <main className="flex-1">
+      <main id="main-content" tabIndex={-1} className="flex-1">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:py-20">
           <nav aria-label={t("breadcrumb")} className="text-[13px] text-muted-foreground">
             <Link href="/" className="hover:text-foreground">

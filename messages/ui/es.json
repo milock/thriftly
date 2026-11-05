@@ -87,5 +87,13 @@
   "zoomOut": "Alejar",
   "searchMetaTitle": "Encuentra tiendas Goodwill | Thriftly",
   "searchMetaDescription": "Busca tiendas Goodwill cercanas, compara puntuaciones de barrios y consulta horarios y rutas.",
-  "notScored": "Sin puntuación"
+  "notScored": "Sin puntuación",
+  "resetFilters": "Restablecer filtros",
+  "retry": "Intentar de nuevo",
+  "filteredEmpty": "Ninguna tienda coincide con estos filtros",
+  "filteredHelp": "Borra los filtros para ver las tiendas de esta zona.",
+  "hoursUnavailable": "No hay horarios disponibles para estas tiendas. Consulta el sitio web del operador.",
+  "locationFallback": "Ubicación no disponible. Mostramos San Diego; busca tu ciudad o código postal.",
+  "skipMain": "Saltar al contenido principal",
+  "refreshFailed": "No se pudo actualizar. Se siguen mostrando los resultados anteriores."
 }

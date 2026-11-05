@@ -21,7 +21,7 @@ export function CityHeader() {
           <GithubLink className="hidden sm:inline-flex" />
           <CoffeeLink className="hidden sm:inline-flex" />
           <ThemeToggle />
-          <Link href="/search" className={cn(buttonVariants({ size: "sm" }), "h-9 gap-1.5 px-3.5")}>
+          <Link href="/search" className={cn(buttonVariants({ size: "sm" }), "h-11 gap-1.5 px-3.5")}>
             {t("launch")}
             <ArrowRight className="size-3.5" />
           </Link>

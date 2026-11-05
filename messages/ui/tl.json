@@ -87,5 +87,13 @@
   "zoomOut": "Paliitin",
   "searchMetaTitle": "Maghanap ng Goodwill | Thriftly",
   "searchMetaDescription": "Maghanap ng kalapit na Goodwill, ihambing ang marka ng lugar, at tingnan ang oras at direksiyon.",
-  "notScored": "Walang marka"
+  "notScored": "Walang marka",
+  "resetFilters": "I-reset ang mga filter",
+  "retry": "Subukan muli",
+  "filteredEmpty": "Walang tindahang tugma sa mga filter",
+  "filteredHelp": "Alisin ang mga filter para makita ang mga tindahan sa lugar na ito.",
+  "hoursUnavailable": "Walang oras ng pagbubukas para sa mga tindahang ito. Tingnan ang website ng operator.",
+  "locationFallback": "Hindi makuha ang lokasyon. San Diego ang ipinapakita; hanapin ang iyong lungsod o ZIP code.",
+  "skipMain": "Lumaktaw sa pangunahing nilalaman",
+  "refreshFailed": "Hindi nagtagumpay ang pag-refresh. Nakikita pa rin ang mga naunang resulta."
 }

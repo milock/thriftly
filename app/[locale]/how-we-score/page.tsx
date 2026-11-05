@@ -15,7 +15,7 @@ export default async function MethodologyPage({params}: {params: Promise<{locale
   const {locale} = await params;
   setRequestLocale(locale);
   const t = await getTranslations('pages');
-  return <div className="flex min-h-dvh flex-col"><CityHeader/><main className="mx-auto w-full max-w-3xl flex-1 space-y-8 px-5 py-12">
+  return <div className="flex min-h-dvh flex-col"><CityHeader/><main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-3xl flex-1 space-y-8 px-5 py-12">
     <nav aria-label={t('breadcrumb')}><Link href="/">{t('home')}</Link> / {t('methodShort')}</nav>
     <h1 className="text-4xl font-semibold tracking-tight">{t('methodTitle')}</h1>
     <p className="text-lg">{t('methodIntro')}</p>

@@ -34,9 +34,11 @@ export default async function LocaleLayout({children,params}:{children:React.Rea
   setRequestLocale(locale);
   const messages=await getMessages();
   const t=await getTranslations({locale,namespace:'pages'});
+  const ui=await getTranslations({locale,namespace:"ui"});
   const url=SITE_URL+localizedPath('/',locale);
   return <html lang={locale} dir={locale==='ar'?'rtl':'ltr'} className={`${GeistSans.variable} ${GeistMono.variable} h-full`} suppressHydrationWarning>
     <body className="bg-background text-foreground min-h-full antialiased">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[1000] focus:rounded-md focus:bg-background focus:p-4 focus:text-foreground">{ui("skipMain")}</a>
       <JsonLd data={{'@context':'https://schema.org','@graph':[
         {'@type':'WebSite','@id':`${url}#website`,url,name:'Thriftly',inLanguage:locale,description:t('meta.homeDescription'),publisher:{'@id':`${SITE_URL}/#org`}},
         {'@type':'Organization','@id':`${SITE_URL}/#org`,name:'Thriftly',url:SITE_URL,logo:`${SITE_URL}/icon.svg`},
