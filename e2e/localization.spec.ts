@@ -18,8 +18,13 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
   expect(html).toContain(`href="https://www.thriftly.xyz${prefix+path}"`);
   expect(html).not.toContain('MISSING_MESSAGE');
  }
- // Hydrate real city content too: server and browser CLDR date data can differ.
- await page.goto(prefix+'/goodwill/los-angeles-ca');
+ // Follow the real client-side link before checking a fresh server hydration.
+ // A hard navigation away from the home page can abort its pending prefetches.
+ await page.locator(`a[href="${prefix}/goodwill/los-angeles-ca"]`).click();
+ await expect(page).toHaveURL(prefix+'/goodwill/los-angeles-ca');
+ await page.waitForLoadState('networkidle');
+ // Server and browser CLDR date data can differ, so exercise SSR hydration too.
+ await page.reload();
  await page.waitForLoadState('networkidle');
  await expect(page.locator('h1')).toBeVisible();
  const numberingSystem = locale === "ar" ? "arab" : "latn";

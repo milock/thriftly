@@ -140,6 +140,7 @@ export default async function Landing({params}: {params: Promise<{locale: string
                   <Link
                     key={slug}
                     href={`/goodwill/${slug}`}
+                    prefetch={false}
                     className="flex min-h-12 items-center border-b border-border py-3 text-sm font-medium transition-colors hover:text-brand"
                   >
                     {c.city}, {c.state}
