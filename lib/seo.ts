@@ -11,11 +11,14 @@ export function languageAlternates(path:string): Record<string,string> {
 export function pageMetadata(title:string, description:string, path:string, index=true, locale='en'): Metadata {
   const url=localizedPath(path,locale);
   const socialTitle=title.includes('Thriftly')?title:`${title} | Thriftly`;
+  const cityImage=/^\/goodwill\/[^/]+$/.test(path);
+  const socialImage={url:`${SITE_URL}/${locale}${cityImage?path:''}/opengraph-image/0`,width:1200,height:630,alt:cityImage?title:'Thriftly'};
   return {
-    title, description,
+    // Own the suffix here so already-branded titles cannot inherit it twice.
+    title: {absolute: socialTitle}, description,
     alternates:{canonical:url,...(index?{languages:languageAlternates(path)}:{})},
     robots:{index,follow:true,googleBot:{index,follow:true}},
-    openGraph:{title:socialTitle,description,url,type:'website',siteName:'Thriftly',locale:ogLocales[locale]??locale},
-    twitter:{card:'summary_large_image',title:socialTitle,description},
+    openGraph:{title:socialTitle,description,url,type:'website',siteName:'Thriftly',locale:ogLocales[locale]??locale,images:[socialImage]},
+    twitter:{card:'summary_large_image',title:socialTitle,description,images:[socialImage]},
   };
 }

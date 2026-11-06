@@ -3,17 +3,17 @@
 import { useTranslations, useLocale } from "next-intl";
 
 import { useEffect, useRef } from "react";
-import { Crown, Navigation, Globe, Phone, ChevronDown, Star } from "lucide-react";
+import { Navigation, Globe, Phone, ChevronDown } from "lucide-react";
 import type { ScoredStore } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ScoreRing } from "@/components/score-ring";
 import { ScoreBreakdown } from "@/components/score-breakdown";
+import { ListingDetails } from "@/components/listing-details";
 import { StoreHours } from "@/components/store-hours";
-import { scoreTier, scoreColor } from "@/lib/score-color";
+import { scoreTier } from "@/lib/score-color";
 import {
   formatDistance,
   directionsUrl,
-  mapsPlaceUrl,
   safeWebsiteUrl,
   prettyDomain,
   telUrl,
@@ -36,7 +36,6 @@ export function StoreCard({ store, rank, selected, highest = false, onSelect }: 
   const locale = useLocale();
   const scored = store.score.catchment.tractCount > 0;
   const tier = scoreTier(store.score.total);
-  const color = scoreColor(store.score.total);
   const week = parseHours(store.openingHours);
   const open = isOpenNow(week, new Date(), store.timezone);
   const today = todayHours(week, new Date(), store.timezone, locale, { closed: t("closed"), allDay: t("allDay") });
@@ -46,7 +45,7 @@ export function StoreCard({ store, rank, selected, highest = false, onSelect }: 
   // Lead with the neighborhood ("North Park") when we have it; fall back to the
   // city, then the street. Show existing addresses immediately; optional
   // neighborhood enrichment must not block usable store information.
-  const title = store.neighborhood || store.locality || store.street || "Goodwill";
+  const title = store.neighborhood || store.locality || store.street || store.name;
   const sub =
     [store.street, store.locality, store.region].filter(Boolean).join(", ") || store.address;
 
@@ -70,24 +69,19 @@ export function StoreCard({ store, rank, selected, highest = false, onSelect }: 
           : "border-border hover:border-foreground/30",
       )}
     >
-      {best && (
-        <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: color }} aria-hidden />
-      )}
-
       <div className="relative grid grid-cols-[minmax(0,1fr)_3.5rem] gap-x-3 gap-y-2 p-4">
         <button type="button" data-store-toggle aria-label={title} aria-expanded={expanded} onClick={toggle} className="absolute inset-0 z-10 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-ring" />
         <div className="min-w-0 self-center">
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
             <span className="tabular font-medium">#{rank}</span>
             {best ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-foreground px-2 py-0.5 text-[11px] font-semibold text-background">
-                <Crown className="size-3" />
+              <span className="font-medium text-brand">
                 {t("bestFind")}
               </span>
             ) : <span>{scored ? t(tier.label) : t("notScored")}</span>}
           </div>
           <h3 className="mt-1 break-words text-[17px] font-semibold leading-snug">
-            <bdi>{title}</bdi>
+            <bdi>{store.name}</bdi>{title !== store.name && <span className="block text-sm font-normal text-muted-foreground">{title}</span>}
           </h3>
         </div>
         <div className="self-start">
@@ -135,10 +129,6 @@ export function StoreCard({ store, rank, selected, highest = false, onSelect }: 
               <Navigation className="size-3.5" />
               {t("directions")}
             </a>
-            <a href={mapsPlaceUrl(store)} target="_blank" rel="noopener noreferrer" className={ACTION}>
-              <Star className="size-3.5" />
-              {t("reviews")}
-            </a>
             {safeWebsiteUrl(store.website) && (
               <a href={safeWebsiteUrl(store.website)!} target="_blank" rel="noopener noreferrer" className={ACTION}>
                 <Globe className="size-3.5" />
@@ -153,9 +143,10 @@ export function StoreCard({ store, rank, selected, highest = false, onSelect }: 
             )}
             {week && <StoreHours week={week} timezone={store.timezone} />}
           </div>
-          <ScoreBreakdown score={store.score} />
         </div>
       )}
+      <div className="px-4 pb-3"><ListingDetails store={store} showType={false} /></div>
+      {expanded && <div className="border-t px-4 py-3.5"><ScoreBreakdown score={store.score} /></div>}
     </div>
   );
 }

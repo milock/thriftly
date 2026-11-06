@@ -1,3 +1,5 @@
+import type { VisitScore } from "@/lib/visit-score";
+
 export interface LatLng {
   lat: number;
   lon: number;
@@ -6,6 +8,19 @@ export interface LatLng {
 export interface Store {
   id: string; // e.g. "node/123456"
   name: string;
+  brandId?: string;
+  brand?: string;
+  operator?: string;
+  /** Local independent operators may have multiple shops within their region. */
+  operatorType?: 'independent' | 'chain';
+  /** Deliberate evidence review, separate from a source import or refresh. */
+  verification?: {
+    method: 'official-website-review';
+    checkedAt: string;
+    sourceUrls: string[];
+  };
+  sourcingModel?: 'donation' | 'buy-sell-trade' | 'mixed' | 'unknown';
+  merchandiseScope?: 'general' | 'fashion' | 'home-improvement' | 'books' | 'unknown';
   location: LatLng;
   address?: string;
   street?: string; // "7631 Girard Avenue"
@@ -69,6 +84,8 @@ export interface FactorScore {
 }
 
 export interface GoodsScore {
+  visit?: VisitScore;
+  baselineTotal?: number;
   total: number; // 0..100
   factors: Record<FactorKey, FactorScore>;
   catchment: { tractCount: number; population: number };

@@ -5,6 +5,8 @@ import { Link } from "@/i18n/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowRight } from "lucide-react";
 import { getState, citiesInState, STATES } from "@/lib/cities";
+import { cityCentroid } from "@/lib/city-data";
+import { locateBundledStores } from "@/lib/locate";
 import { CityHeader, CityFooter } from "@/components/city/chrome";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { JsonLd } from "@/components/json-ld";
@@ -40,7 +42,10 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
   const s = getState(state);
   if (!s) notFound();
 
-  const cities = citiesInState(s.code);
+  const cities = citiesInState(s.code).filter(city => {
+    const center = cityCentroid(city.slug);
+    return center && locateBundledStores(center, city.radiusMiles, ["goodwill"]).length > 0;
+  });
 
   const base = SITE_URL + (locale === "en" ? "" : `/${locale}`);
   const jsonLd = {

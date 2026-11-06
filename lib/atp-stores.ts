@@ -2,6 +2,7 @@ import tzLookup from 'tz-lookup';
 import type {Store} from '@/lib/types';
 import {deduplicateStores} from '@/lib/store-classification';
 import {STATES} from '@/lib/cities';
+import {goodwillCoordinateReviewReason} from '@/lib/store-coordinate-integrity';
 
 interface Feature {properties:Record<string,string|undefined>;geometry?:{type:string;coordinates:number[]}}
 export interface AtpSnapshot {sourceUrl:string; sourceUpdatedAt:string; fetchedAt:string; sha256:string; runId:string; attempts?:unknown[];data:{features:Feature[]}}
@@ -34,7 +35,9 @@ export function parseAtpStores(snapshot:AtpSnapshot, previous:Store[]=[]):{store
     sourceAliases:old?[...new Set([`goodwill/${sourceId}`,...(old.sourceAliases??[])])]:undefined,
     sourceTags:Object.fromEntries(Object.entries(p).filter((entry):entry is [string,string]=>typeof entry[1]==='string')),
     provenance:{source:'alltheplaces-goodwill',sourceId,sourceUrl:snapshot.sourceUrl,sourceUpdatedAt:snapshot.sourceUpdatedAt,fetchedAt:snapshot.fetchedAt,classificationBasis:`operator-services:${categories.join(',')||'missing'}`}};
-  if(retail||outlet)stores.push(store);else review.push(store);
+  const coordinateReview=goodwillCoordinateReviewReason(store);
+  if(coordinateReview)store.sourceTags={...store.sourceTags,coordinateReviewReason:coordinateReview};
+  if((retail||outlet)&&!coordinateReview)stores.push(store);else review.push(store);
  }
  return {stores:deduplicateStores(stores),review,matched};
 }

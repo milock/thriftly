@@ -9,6 +9,7 @@ import { getCity, citiesInState, STATES, CITIES, type City } from "@/lib/cities"
 import { cityCentroid } from "@/lib/city-data";
 import { locateBundledStores, datasetGeneratedAt } from "@/lib/locate";
 import type { ScoredStore } from "@/lib/types";
+import { BrandNavigation } from "@/components/city/brand-navigation";
 import { CityStores } from "@/components/city/city-stores";
 import { AddToOsm } from "@/components/add-to-osm";
 import { CityHeader, CityFooter } from "@/components/city/chrome";
@@ -39,7 +40,7 @@ interface CityResult {
 const getCityResult = cache(async (c: City): Promise<CityResult> => {
   const coords = cityCentroid(c.slug);
   if (!coords) return { stores: [], lat: null, lon: null };
-  const stores = locateBundledStores(coords, c.radiusMiles);
+  const stores = locateBundledStores(coords, c.radiusMiles, ["goodwill"]);
   return { stores, lat: coords.lat, lon: coords.lon };
 });
 
@@ -49,14 +50,14 @@ function stateSlugFor(code: string): string | undefined {
 
 function searchHref(c: City, lat: number | null, lon: number | null): string {
   const label = encodeURIComponent(`${c.city}, ${c.state}`);
-  if (lat == null || lon == null) return `/search?label=${label}`;
-  return `/search?lat=${lat}&lon=${lon}&radius=${c.radiusMiles}&label=${label}`;
+  if (lat == null || lon == null) return `/search?label=${label}&brands=goodwill`;
+  return `/search?lat=${lat}&lon=${lon}&radius=${c.radiusMiles}&label=${label}&brands=goodwill`;
 }
 
 function buildFaqs(c: City, stores: ScoredStore[], t: Awaited<ReturnType<typeof getTranslations>>) {
   const top = stores.find(store => store.score.catchment.tractCount > 0 && Object.values(store.score.factors).some(factor => factor.value != null));
   return [
-    {q: t("faqBestQ", {city: c.city}), a: top ? t("faqBestA", {place: top.neighborhood ?? top.locality ?? c.city, score: Math.round(top.score.total)}) : t("faqNoScore")},
+    {q: t("faqBestQ", {city: c.city}), a: top ? t("faqBestA", {place: [top.street, top.locality ?? c.city].filter(Boolean).join(", "), score: Math.round(top.score.total)}) : t("faqNoScore")},
     {q: t("faqScoreQ", {city: c.city}), a: t("faqScoreA")},
     {q: t("faqCountQ", {city: c.city}), a: t("faqCountA", {city: c.city, count: stores.length, radius: c.radiusMiles})},
   ];
@@ -95,6 +96,7 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
 
   const related = citiesInState(c.state)
     .filter((x) => x.slug !== c.slug)
+    .filter((x) => { const center = cityCentroid(x.slug); return center && locateBundledStores(center, x.radiusMiles, ["goodwill"]).length > 0; })
     .slice(0, 8);
 
   const base = SITE_URL + (locale === "en" ? "" : `/${locale}`);
@@ -124,6 +126,7 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
                 position: i + 1,
                 item: {
                   "@type": "Store",
+                  identifier: s.id,
                   name: s.locality ? `${s.name}, ${s.locality}` : s.name,
                   address: {
                     "@type": "PostalAddress",
@@ -208,6 +211,8 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
             </Link>
           </div>
 
+          <BrandNavigation city={c} active="goodwill" />
+
           {count > 0 && (
             <section className="mt-6">
               <h2 className="text-xl font-semibold tracking-tight">
@@ -218,13 +223,14 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
               </p>
               <div className="mt-3">
                 <CityStores
+                  brandIds={["goodwill"]}
                   initial={stores}
                   cityName={c.city}
                   lat={lat}
                   lon={lon}
                   radiusMiles={c.radiusMiles}
-                  generatedAt={datasetGeneratedAt()}
-                  initialDateLabel={datasetGeneratedAt() ? new Intl.DateTimeFormat(locale, {dateStyle: "medium", timeZone: "UTC"}).format(new Date(datasetGeneratedAt()!)) : undefined}
+                  generatedAt={datasetGeneratedAt(["goodwill"])}
+                  initialDateLabel={datasetGeneratedAt(["goodwill"]) ? new Intl.DateTimeFormat(locale, {dateStyle: "medium", timeZone: "UTC"}).format(new Date(datasetGeneratedAt(["goodwill"])!)) : undefined}
                 />
               </div>
               {lat != null && lon != null && (
@@ -236,8 +242,8 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
           )}
 
           <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
-            {t("dataset")}: <time dateTime={datasetGeneratedAt() ?? undefined}>
-              {datasetGeneratedAt() ? new Intl.DateTimeFormat(locale, {dateStyle: "long", timeZone: "UTC"}).format(new Date(datasetGeneratedAt()!)) : t("dateUnavailable")}
+            {t("dataset")}: <time dateTime={datasetGeneratedAt(["goodwill"]) ?? undefined}>
+              {datasetGeneratedAt(["goodwill"]) ? new Intl.DateTimeFormat(locale, {dateStyle: "long", timeZone: "UTC"}).format(new Date(datasetGeneratedAt(["goodwill"])!)) : t("dateUnavailable")}
             </time>. {t("independent")}
           </p>
           {c.slug === "los-angeles-ca" && <aside className="mt-10 rounded-xl border border-border p-5">

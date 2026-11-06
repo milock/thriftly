@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Thriftly",
     short_name: "Thriftly",
     description:
-      "Mapped Goodwill locations and neighborhood Census scores.",
+      "Find thrift and resale shops, compare visit details, and plan your stops.",
     start_url: "/",
     display: "standalone",
     background_color: "#fafafa",

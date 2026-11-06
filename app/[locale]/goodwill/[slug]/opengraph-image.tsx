@@ -1,10 +1,13 @@
 import { ImageResponse } from "next/og";
 import { getCity } from "@/lib/cities";
-import {getTranslations} from "next-intl/server";
+import {createTranslator} from "next-intl";
+import {isLocale} from "@/i18n/routing";
 
 export async function generateImageMetadata({params}: {params: Promise<{locale: string; slug: string}>}) {
   const {locale, slug} = await params;
-  const t = await getTranslations({locale:locale ?? 'en', namespace: 'pages'});
+  const language = isLocale(locale) ? locale : 'en';
+  const messages = (await import(`@/messages/pages/${language}.json`)).default;
+  const t = createTranslator({locale: language, messages});
   const c = getCity(slug);
   return [{id: '0', alt: t('stateTitle', {place: c ? `${c.city}, ${c.state}` : t('yourCity')}), size, contentType}];
 }
@@ -54,7 +57,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-          <div style={{ fontSize: 36, color: "#34d399", fontWeight: 600 }}>Thriftly + Goodwill</div>
+          <div style={{ fontSize: 36, color: "#34d399", fontWeight: 600 }}>Goodwill</div>
           <div style={{ fontSize: 76, fontWeight: 700, lineHeight: 1.05, letterSpacing: -2, maxWidth: 950 }}>
             {place}
           </div>

@@ -1,0 +1,5970 @@
+{
+  "generatedAt": "2026-11-06T03:17:52.374Z",
+  "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+  "sources": [
+    {
+      "brandId": "goodwill",
+      "source": "alltheplaces-goodwill",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "publicCount": 3285,
+      "coverage": "validated Goodwill dataset with documented location corrections and quarantines"
+    },
+    {
+      "brandId": "savers",
+      "source": "alltheplaces",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-24-13-32-37/output/savers_ca_us.geojson",
+      "sourceUpdatedAt": "2026-10-29T05:46:36.679966Z",
+      "fetchedAt": "2026-11-06T00:40:22.748Z",
+      "runId": "2026-10-24-13-32-37",
+      "sha256": "a0ab06d3a4567bfc952a91717d59442ddcb0bd71eb82f18b278ea172ab98dbf4",
+      "license": "CC0-1.0",
+      "rawCount": 693,
+      "publicCount": 204,
+      "rejectedCount": 489,
+      "coverage": "published-chain-extract; nationwide completeness unverified"
+    },
+    {
+      "brandId": "buffalo-exchange",
+      "source": "alltheplaces",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-24-13-32-37/output/buffalo_exchange_us.geojson",
+      "sourceUpdatedAt": "2026-10-25T04:38:05.557273Z",
+      "fetchedAt": "2026-11-06T00:40:22.880Z",
+      "runId": "2026-10-24-13-32-37",
+      "sha256": "1ed0a19b8d1dac89b966f4ccc85a30e876a64b8b3541d0fa359bc68c805f8ad2",
+      "license": "CC0-1.0",
+      "rawCount": 42,
+      "publicCount": 41,
+      "rejectedCount": 1,
+      "coverage": "published-chain-extract; nationwide completeness unverified"
+    },
+    {
+      "brandId": "salvation-army",
+      "source": "official-salvation-army-locator",
+      "sourceUrl": "https://satruck.org/ThriftStore/",
+      "sourceUpdatedAt": "2026-11-06T00:36:09.058Z",
+      "fetchedAt": "2026-11-06T00:36:09.058Z",
+      "publicCount": 363,
+      "rejectedCount": 980,
+      "queryCount": 296,
+      "coverage": "partial-geographic-queries; nearest10 perZIP; not national completeness"
+    },
+    {
+      "brandId": "out-of-the-closet",
+      "source": "official-out-of-the-closet-locator",
+      "sourceUrl": "https://outofthecloset.org/locations/",
+      "sourceUpdatedAt": "2026-11-06T00:40:33.212Z",
+      "fetchedAt": "2026-11-06T00:40:33.212Z",
+      "publicCount": 26,
+      "rejectedCount": 0,
+      "coverage": "official current locator; national completeness not independently established"
+    },
+    {
+      "brandId": "independent",
+      "source": "official-independent-website",
+      "publicCount": 4,
+      "rejectedCount": 0,
+      "coverage": "curated San Diego pilot; independent local operators; individual website-review dates are preserved, not refreshed automatically"
+    }
+  ],
+  "exclusions": [
+    {
+      "brandId": "savers",
+      "records": [
+        {
+          "sourceId": "2014",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2014",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2140",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2140",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2090",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2090",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2005",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2005",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2102",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2102",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1031",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2163",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2163",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2113",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2113",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2103",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2103",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2130",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2130",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2135",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2135",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2007",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2007",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2098",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2098",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2176",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2195",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2195",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2168",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2010",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2010",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1115",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2043",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2043",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1021",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1011",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1201",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1251",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1214",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1173",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1113",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1110",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2124",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2124",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1019",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2125",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2125",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2149",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2149",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1100",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2051",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2051",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2004",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2004",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2183",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2183",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2097",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2097",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1014",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1015",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1049",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2068",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2068",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2132",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2132",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2165",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2165",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2162",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2162",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2009",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2009",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2174",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2174",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2185",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2019",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2019",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2159",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2159",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2049",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2049",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2028",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2028",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2079",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2079",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1137",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1033",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2142",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2142",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2008",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2008",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2085",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2085",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2186",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2186",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2006",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2006",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2138",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2138",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2164",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2164",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2108",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2108",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2133",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2133",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2083",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2083",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1122",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2123",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2123",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2020",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2020",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1197",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1044",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1103",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1240",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1038",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2096",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2096",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1169",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1236",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1068",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1183",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1245",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1208",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1204",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2017",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2017",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1036",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1007",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1235",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1191",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2129",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2129",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1168",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1087",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1047",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1282",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1074",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1263",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1120",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1295",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2101",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2101",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1271",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1264",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1212",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1275",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1279",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1297",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1093",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1243",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1222",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1203",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1187",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1253",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1234",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1216",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1244",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1057",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1195",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1276",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2112",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2112",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2053",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2053",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2192",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2192",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2016",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2016",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2029",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2029",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2013",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2013",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1096",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1107",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1039",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1132",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1178",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1121",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1229",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1133",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1249",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1040",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1090",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1277",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1051",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1077",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1025",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1069",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1174",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC5105",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1202",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1029",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC5107",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1142",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1149",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1237",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1175",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1141",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1042",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1136",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1123",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1070",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1067",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2087",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2087",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1288",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1267",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1223",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1180",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1177",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1145",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1140",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1294",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1287",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1291",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1176",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1159",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1210",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1300",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1185",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1250",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1273",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1192",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC8010",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1265",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1269",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC8007",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1296",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1199",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1186",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC8008",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1198",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2042",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2042",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1200",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2032",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2032",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2109",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2109",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2088",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2088",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2064",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2064",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2122",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2122",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2118",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2118",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2091",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2091",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2076",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2076",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2156",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2156",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2189",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2189",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2086",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2086",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2146",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2146",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2026",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2026",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2134",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2134",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2181",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2181",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2052",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2052",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1221",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2127",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2127",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2035",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2035",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2074",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2074",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1226",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2031",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2031",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2169",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2169",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2126",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2126",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC8015",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2063",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2063",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2136",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2136",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2080",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2080",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2188",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2188",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2141",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2141",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2117",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2117",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2041",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2041",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2171",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2171",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2128",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2128",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2110",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2110",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2144",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2144",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2056",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2056",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2061",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2061",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2095",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2095",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2045",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2045",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2179",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2179",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2066",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2066",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2027",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2027",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2154",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2154",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2173",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2173",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2094",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2094",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2148",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2148",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2050",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2050",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2182",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2025",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2025",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2177",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2177",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2073",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2073",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2170",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2167",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2137",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2137",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2180",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2180",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2078",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2078",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2047",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2047",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2040",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2040",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2034",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2034",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2143",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2143",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2100",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2100",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2072",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2072",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2121",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2121",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2044",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2044",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2153",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2153",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2089",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2089",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2077",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2077",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2106",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2106",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1217",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1171",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1302",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2093",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2093",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1172",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2120",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2120",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2037",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2037",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2147",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2147",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2081",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2081",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2048",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2048",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2039",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2039",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2119",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2119",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1303",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC2197",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2197",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1256",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1258",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2105",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2105",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1261",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1270",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1293",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1281",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1274",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1247",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1286",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC5108",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC5109",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1272",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1181",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC5110",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC5120",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1600",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1285",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC5116",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1602",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1609",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1601",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1196",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC5119",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1604",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC5118",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1280",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1613",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1298",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1266",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1248",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1607",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1608",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1611",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1239",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1612",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1614",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1238",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1189",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1148",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1283",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1099",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1268",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1156",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1153",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1209",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1147",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1254",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1242",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1182",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1162",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1154",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1161",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1151",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1215",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1219",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1157",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1224",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1138",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1065",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1211",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1139",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1207",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1150",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1165",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1104",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1060",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1188",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1071",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1078",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1143",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2104",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2104",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2060",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2060",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2084",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2084",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2145",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2145",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2157",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2157",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2075",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2075",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2161",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2161",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2046",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2046",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2054",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2054",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1046",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2150",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2150",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC1086",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2131",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2131",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2055",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2055",
+          "reason": "outside-us-coverage"
+        }
+      ]
+    },
+    {
+      "brandId": "buffalo-exchange",
+      "records": [
+        {
+          "sourceId": "loc_95xz5nry",
+          "reason": "not-public-retail"
+        }
+      ]
+    },
+    {
+      "brandId": "salvation-army",
+      "records": [
+        {
+          "sourceId": "0c32f1ac-306b-4b4e-9327-a20ac9e788b7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a00a6007-1242-4a90-9ee3-9f740dffa147",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "47390428-5dc0-4ff6-9f35-ef89f91c69b6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "042bc21e-134a-4062-9b14-e3d03ef9cb3a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1ad2680f-795d-4d79-bb4c-86fce0f5adb2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "20ec0d4d-f32f-4763-9a45-876ce7695a50",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "38b9ee1a-8aad-4701-b139-a9a9871680be",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ad91c3dd-47a3-4222-8484-634931e8f49d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "405888aa-1dfd-47d4-af4d-5211f5e9a30c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "84a7e95c-c680-42eb-8e2d-d28c0d2b99e3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "af0f0de3-22a8-426f-89d1-66d51c0d622a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "29a1538e-7e93-4d61-b6ff-575f004518e1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9b65d660-419a-43da-ba06-2d27724e83f4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6d2ebeac-423b-47fc-ab48-698fd9746a09",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c0170c46-1dcd-47ed-926f-0d7145acc650",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2e303694-ceed-4a10-98fb-646eaa646c1f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ae6b44bb-b89d-442e-a58d-5b89e5e5760f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "297de5be-3803-4edc-b620-c52a9140253c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5da1ac0a-a3e4-4c5e-a22c-7d4cc3ff565c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0cf4bfad-319c-45c5-922d-ace19813ae41",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e9bb492f-ad58-44f0-a390-15eed247038c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "205128ca-0fc7-4a0b-bcdf-6f9a01c8aab6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "825e69f3-d4a0-4fca-acc8-fac41eefee26",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "de1fac8a-ec9e-4c19-8934-26d8764e4f8f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "26abb2f4-ade0-482c-b00e-d93c406dd8e3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1e599e50-d228-463f-875d-d099fb4c1a06",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c93b652e-f23c-4858-b027-8b1d5749bf57",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d827fef4-8b7e-47be-bdc0-8c6fc0de2538",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "92281474-3ada-4808-9265-7821385567ba",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c43915a4-e516-4be5-a5ba-add362c11964",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4f3b7954-c62f-4d92-b139-0a9433884a12",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "82adbd43-383c-44e9-a0c6-ac96ba561ca2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ef72fe8e-544d-4159-8dd1-f2c11492485d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b1db4a88-2670-4fcf-bd2a-a9b1720826bb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1c932be8-ee6b-4d0f-a7e6-6e560f99b242",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d6f0c882-5352-4e2a-b331-2e1eb91f80b2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d2b3f0b4-4738-4b32-982f-f4b7885fb038",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "78c1f3d7-f049-47b3-803d-77383758178d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "662762c3-c9e7-4811-80e0-fb6c94fcf9a9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9ce4870f-e0ef-4a74-b56a-b4a157306401",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "24c80e1a-d8a1-47d3-991a-faf216ebeabe",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cba94fb1-7108-4426-9bcb-43faa26ae584",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c3df38b1-ecab-4950-937c-ffaff5dff3bb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3d6ab55d-2099-409e-9add-d2c319bd9ab5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "63d3d6d5-fa7c-4f61-bd1d-c816e14135cb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a71b16cd-d1ad-46ca-b17b-be33204f7e1c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5a859957-db0b-4937-b381-6930d8e23c66",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bf12729b-ab52-45e8-b6fa-2c8f41475d45",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5927c1cc-5657-4200-a7e5-1648f017f82e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7fd7a388-129a-4dd2-8bfe-21dbf7f1f3c1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "15d3b787-446c-4d4c-ba1a-a6630325933a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3acc563c-1bb8-4051-8adc-fbaafefaff05",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c4b5adfb-47b2-4720-b4ad-9c8f6c24fbf3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9e2fcbee-6a66-4ba4-bfa4-4596fd78fa54",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4bd95f5d-2964-4914-a5f9-433165683a3b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a931d388-0d3e-4adc-9fd2-03da21028b6b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8ca5e04a-c16f-4332-ad6e-c91f3dfe4b8e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9b601d64-5067-4328-a0ce-60ac8da6268d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "63793cfc-431c-45e8-b753-44cc90fa6c8a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "275a045c-6ce9-470c-9ebf-1110218e3d4c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b22ec865-a15b-4c58-b72e-06fd15957b41",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "41319605-978b-40d2-9a65-1e754a293cb8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "954e027d-b7fc-4951-ab88-f79f49a18395",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6f23cc0d-e5f3-4a6f-a61d-d6fd59f3c753",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "16549512-c4cd-480e-83e6-52679ea11af7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c6c517fd-8d1e-46fb-804a-19b74693708e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5771ea05-de74-43af-aab7-b3e80b77d101",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cf77c071-71af-4e62-9996-c8aa959e3fa4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "88aa40cc-1ca3-42ce-bac8-bc6ba6eb29b8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a1e68c62-c2d4-4379-843c-f43468d0a989",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ad2308b9-762d-4700-b804-04954736d2e2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cd9ec720-3d1a-48ac-9bc3-8b37e8d557c2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b6bc3850-dbed-4f07-8dbe-d1180d5cd1a9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f152b570-5cfa-4a56-906e-98755e54a1ef",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ed989192-a93d-4459-9f57-7751627aae44",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "42e8eef5-a8d9-412a-8f60-3ad88c7f1f51",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c2e77791-deb9-4d49-b50e-25b621034a84",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ad12e7ba-e5b2-4c60-8ec4-727ba1e4ca5a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "11c8aef2-15bc-4433-8452-9a936c21f0b5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f4f2e56f-979e-40bb-affb-49428b45b952",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "eba2d05c-f97c-4bfe-befa-d7fdcf2b2402",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d6c2bdb5-aa7a-4eae-aae4-3abd74de8315",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "eaf4b72e-8486-4a05-8f97-361871250ea3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "45527877-2fbd-48db-8a15-2bbe81d194b4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "80d5deaa-3e1b-4fa3-9a2d-8efea773a1c1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0e1ce4f6-beee-40d0-9048-bc5efaf244fb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b2ec82ab-be69-4754-869a-31f3a76062b9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "432e9bc4-eaf6-4981-9034-f82b85b3427d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0f62c673-6c0c-4ca1-87c8-ba1cb5d28eb8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1341441d-20fa-4a10-b9a0-a0b861838d22",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fee4dbcb-6c63-402e-b896-ce8ae637bc94",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "09ea6bc9-a384-411e-8544-0f9acffff7c1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "876f8e4e-b242-48da-a847-189442a8a7f1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cbb272f0-726d-4bc5-8d9c-a8b65be8afe0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e951a915-b522-4489-a5b4-fe6e9f30e892",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "76d51078-e34c-4af8-a554-11fdf3f29bb4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f902ee22-e31e-4a6f-b8fd-af490b30c451",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "084a7d43-8e02-4623-8760-1ae691feb3db",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "71e87272-8070-4a65-b1d8-66cc47154d70",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fe32b91b-258d-4783-afcf-99bbcc4cce23",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "131e887c-9464-4f8d-921a-f217a69039a0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a9bdb5f1-fcd9-4694-931b-88daa6e83712",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "104537ac-d09a-4f3f-9adc-317d858c844e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "62ede919-20b9-45e2-8644-2f4d36e067ef",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3b2bb9c3-cda3-4f9b-8cc9-364e959212c7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "554ab353-9699-48d6-9ea7-b2597df5171a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4b8d0659-ec12-414a-bee7-ab0c9c61b9a5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6218f822-a272-4038-a75c-735c80c0636d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a712e3e0-1546-46b3-abbc-5eaae540df08",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1e3deb47-ffe7-456f-8ad8-6499eefb24b3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9fea9898-0c5d-4447-92e2-c2adf22b78b6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3e8e8c5e-aced-4ac2-b6f7-1419a4922a57",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e151c072-d1bb-4b29-838f-eed87acfd636",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "923b3ad2-e072-4e4e-8a8e-504179d37576",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d9eff9d1-12e1-45b1-8c4e-e04477524e04",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4c3ae3cc-e5a7-4591-bcef-9002aae91ded",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bb1d1d10-ea3c-437d-96cb-d273a35b0fda",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f004f732-d945-4b1f-9b63-517cc8a64f28",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e50bcc8b-6d11-40c1-b272-75cc43994449",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "93413ab3-4c54-4cc1-bf13-4479ec86c9ea",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fa90373e-b995-4b25-83f4-e9fa372844fe",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "03038672-ec4b-4f49-bef3-ebe947a4ad6d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "59136ea4-144f-470e-87e3-0b4f83d38edd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4431925c-97ec-4412-9be6-1e7003601659",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ece7951c-b3e3-4dd4-99f8-302d20938ae5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "410d9daf-7728-41ed-a79b-a31996f86a82",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1117af56-1501-4a87-9851-866450f89a46",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9f19d3a9-4fb2-4f71-a40a-0a05682b0143",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "19e9e272-f1a5-4721-a240-b1a3ff68b800",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "48000ea1-6ca6-43e7-b3d2-663869f3d036",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "531c4632-a44b-4205-87a9-bbf2ce89c47d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3a213c2f-cfab-4c37-b1bf-c63ddbb5623d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5a2d25ea-2b36-495a-8fcc-5b3008029ff3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "97caca21-b599-48ee-af26-cf013b5756da",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "98c00c19-27d6-4a9a-a4fe-b4813b233e5e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "10cc30f2-a329-419d-93b4-89a57b528835",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "11077b9c-4eec-4517-af69-6f85711f6f34",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5cb3b6db-6610-41b6-be25-70d987fab581",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "93003d22-2622-4599-a19c-1d87c8a79232",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "87720e02-2409-4110-84d2-92debab0cd02",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "44b0ebe9-b2da-411f-854e-7173d1552099",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a363dce7-71eb-40c1-a19a-3019d6d499bd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e3b4f8c8-bb86-45ae-9068-e54d9501126a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "479da05e-20f2-4d1e-8159-62a53ad948b3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0cf0391c-840d-4b7d-849e-afe82f7fa082",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a31492ed-578f-4092-bb0c-14a8a4381017",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "30575031-93b9-476c-8962-787c125fc766",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b9fa28d1-7a42-4a09-903f-60490f5db8e1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "66db35e3-3bc3-4834-a988-8cbeffbfac69",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9206c12c-b83e-46e9-a6e5-9dbf6fdc1110",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "827ee454-a719-4a77-92fd-481c87835b4e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bcab7f3a-f4db-45ed-aa41-7bab7e36b097",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ed28ef6f-9eca-46e3-b112-9fba1afc89b5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4bbf50b4-7104-4c95-aaac-e8b88d7f2902",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4876aa3d-1997-44cb-9969-5ff885e7b8f2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "324ed595-b59f-4114-a816-9e54f506d475",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0f99c063-9a55-4642-814e-2d5a86da26a8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "090cf1cd-8988-4d4c-8ba4-83c89db9c767",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "83c32ce5-8e99-4b7a-824f-ed8cad90539a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ad6f2fe7-41a5-46c6-b8f5-50600003a494",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0738dacf-2c9e-48e5-9b63-92c2369deaf4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6c727960-b709-485a-b769-2ffeb9caebff",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6724dd1f-8fd9-4b9d-9229-94b6f98421d9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0063ba4f-b3ef-4730-9c2a-d0ed84b18694",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3c303a17-764a-4925-80d9-6e17a8608e90",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2f00d034-1003-4a10-bb23-d92ea4fec970",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "045c88f6-6ab1-4101-9309-b4a08b85b342",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1181549d-8531-46ff-89e9-f57a81c5f361",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "11aa8f40-0cfc-4302-aa13-834b449f573b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "44218e9b-7ae5-4a05-bf18-c1784fac5c62",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "55198610-8ec0-4cff-8bf2-d1350f1c3b76",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e3e21509-6d49-4111-b5c8-82948ae5c6a6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4fc15777-4ce4-410b-b900-f1d2dcfddff9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0e992503-0583-4b86-ab1d-79ee60d9d814",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "70bb4c89-11b4-449a-9888-f18ada31548d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e50a4e31-5a69-42e0-b0fb-d9ec567b9eda",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "943e1600-39b9-4cbe-8115-1d5d55fcba00",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a789e7a3-d317-43af-ba8f-5d986e8a3df2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "47f78027-a41d-410d-a537-186e743bdaf8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "af57f8cf-6517-4707-ade7-bc0f68fb3419",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b0b6414a-b987-48eb-b560-d1fffd9754d7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cab0be42-0617-4adb-9d52-3f58b9c63e38",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b95c247c-0088-46d2-b50d-e41dabcc88d2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3edd773a-659e-4a5d-aac1-33374b0a2be3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "496562fe-810a-45bc-931d-3db0164dbc98",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "321a2680-a4f4-4378-a44f-7c6a1775cc74",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d1f8b7a8-b604-4aa1-b009-b8e0f0caf952",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9424f176-1a2d-46a3-b77e-d4275fd508f2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "611104dc-7c1c-4148-be44-6c5f40e74a75",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fdcd6b6d-c57a-4b6d-a416-e5c8d9ed74d1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "48b3d027-fbb3-4fdd-9187-8e300e36ebfd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f6029828-9af4-4a4c-88c5-6cce4f8bdb0f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e66eb221-6c8f-46f5-bf47-d175afeb248e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4ab1eec2-bf81-4b65-ba3d-b59b7116fa80",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "15a9e422-c460-44c8-8f4a-2adcd43973be",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6e72bc34-152c-479e-8ecb-58554a0bf9de",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "89c42bd6-0f32-4158-b103-d18a8ae73051",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ea8efa6b-f80f-42e2-83e8-80059fb4e2ed",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e09115cd-45fd-4d2a-9413-9f86a0577ae6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4e834b68-fdb3-4ed9-9e8b-edc6b3531d71",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0aaa3bff-21dd-43ce-a827-5202242b7f5d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1347762b-87ee-4e1f-bdc1-e247a897eb17",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fc8397a9-2032-4a3c-bfc3-d4423606fd5b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7232b3bd-e670-4cb8-a547-8e2639785a42",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "48c893c9-ac58-4da7-ac1d-cb49afdd2658",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ac7f80f3-7148-46e6-a9ba-ce1a316ee705",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "07ba01a2-f49f-4c82-adfc-263ebf9f3e1d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c53b0e6b-481c-4d7c-aa5d-f85b60411dc7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a715af30-0cab-4883-99a4-683a5692a172",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "424fc659-e417-4b09-80cd-588bb637cfd7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "83a72771-f017-4c9a-9574-a4b1f4681b43",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7535bff8-acdd-49d9-a515-a07a6eddd991",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6e5b3fce-b1e8-40e2-afd7-5245769372bf",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d9ff047a-7527-45d6-9082-c61d3a6c5aab",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5958343d-8234-454d-affd-90b368441f53",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bd95d169-3325-4cea-a264-4a62469ea74d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7984b35d-83b3-4dab-b964-c63dc33eda32",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f6df980c-e9aa-4e36-838e-4f87b29ea9a7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bddf0382-43b9-4a48-8bf7-0abfad19c6e5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f6032de0-1e18-413c-9b4c-33011fbe105f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d85c8af0-cf70-48d6-ab99-4970873391ac",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "89ff6a56-cd2f-4123-85b2-6be6ffba236d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f5f5b33b-1111-4af1-9169-d4feb8c11c65",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c76c3094-6b5c-4ef2-99dd-6b00fd0deb98",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "44f11d39-e654-4871-a0f7-bbc7292425c7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cb2a47b8-4b46-47f4-ba89-2ad60f239201",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2f01c192-7bc4-417f-9cb1-583999fbb7f6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ca573604-b739-4163-b205-c962118db581",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "78b2882a-3cc6-4698-b81d-1fc88a21fa29",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f140be03-8db8-4164-a8a5-99740ffe30a7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "72798fe3-f6e8-447c-a0d9-bc56fdd726bf",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c0bc3ed7-b11e-400c-8dcd-41d28b8674ea",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "56920df0-a501-46ff-ad27-3eacc1852edd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3440f593-b995-4cb7-a17c-c7500919fe5c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "58171745-e0c5-4982-824b-ee3288a77198",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "240de982-b827-4927-a1a0-57929d15c5a7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d7615376-7cfc-46fd-93cf-267bdca3ae89",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9aa44124-239c-4139-a480-96a34853a63c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "64827f7f-429c-4bcb-8607-c36d839c86e8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f7f7d216-f97e-4699-bfec-d878bf4febeb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4f24e375-5df6-462c-a8e3-a96b6e28ad67",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fb01f178-c192-4dce-9104-1f2964fecac0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4264e7d4-0eb1-48ae-b7e7-d6b9feea44c0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9e3375d5-33e1-42b9-9bf8-efe196b618ba",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "83d6cedb-757b-4058-8471-b6910f9406fb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "89d8bf31-eec3-4bbe-9949-f6f457cb2aed",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f9e9d5c2-1676-4a10-b5c7-1953e0d260c7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6e0ef6d8-4c2a-446e-8258-d0df963d6274",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "144cbd16-de20-4973-8f4c-9764c0fe0597",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9cf2557f-ecb5-4a06-8bc0-4ee2684e9263",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "470769e1-5780-47fc-839c-61a288246b0b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d9077027-dbd3-4809-9928-5cbbca7e72bc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5f2867ec-7546-47b2-9b07-0a3628f1e61f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "217ef56c-d338-4af6-8227-75325877f1b3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4c1923ef-55f2-4939-9251-de0ae5a0ad94",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "beef56da-689f-47ab-b478-21bdf5921eea",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "413a1cbb-62aa-4293-8ea6-0a7641a674eb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f5b1dd79-39a3-4aa9-846c-1d8b90a599d5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1af02f95-3d6a-4148-82f5-58271e626e4a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4dd95612-1ba3-4ec2-ba40-e62d0ef7a861",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e8ebce19-224c-4498-9eb3-eb6d1be13ae2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5d3f4451-ca58-4f0c-b412-28f566e9f666",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2390673e-e9b6-4193-8c85-ff1aad89fe5a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "790d6879-ea0d-43b5-bace-2ab2331f33a1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "44084d5c-eae7-4d6e-bdd7-f3790ede56ac",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "795d00d3-a16c-40c9-9354-7d405c110111",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "972949e6-f7b9-4071-ba5e-6e9fa7092bed",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a9b9450b-63df-4084-8062-e899b383e678",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "49a2aa42-b6f4-4427-a277-d0adaf08d9ab",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a8d17de1-124a-4854-ad49-3a689d489670",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0e5140fb-a4dc-4e07-9a8f-c7eb206c13a6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d4a379e1-18ff-4c82-ba3c-20dfc75ae1ce",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0cc78107-d3ba-4bc3-ae88-3a6645a16839",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4559a817-fdcb-4239-b3e5-cab736eb95f3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9ba35663-baf4-4516-acde-b12fbe4a9d2c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "894edacf-9fa3-4adb-b4b7-eeac0ffeb7ea",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f94729a7-14bd-4943-a259-cd6d409adcef",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "00f68e03-d0c7-4682-8c79-0054a7734ee2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "65be78c3-01ae-43a7-88ed-1ecb5c6e51f7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "973a8863-284d-4539-a767-d1bcc1da45c6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9704c769-c682-46f8-9219-e6e8a338141d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1ea9fee5-9e46-4a34-a395-ba51be04c305",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c2d36d86-6b8e-4082-988b-9cad9450e5e4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f48ac9df-91ac-403b-9d81-8caa16c09cce",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2dada7bb-3756-4bfe-8bd8-df3917ca98cd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "22479d77-2d25-4a71-9040-92b9bcc46076",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "14668963-223b-4608-affb-f19849d776bf",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "42652b9c-12b5-4a91-9477-4eb0e3bda878",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b6a81cab-05d3-46d6-85aa-fb456d4946f5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f6b51864-4dca-485a-85c7-b484fbf8b5e5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "96c4d025-0ea7-46c3-ba87-0b2019d2a82a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f3ca7cd8-50ec-424f-9fa5-c67f2bde9457",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9c51f975-fe30-4539-a547-f67e862ed42c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "99422083-2ac8-4181-b8a6-5ea6f53d2157",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cb319c86-e596-4d2e-b884-7c975bb8561b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f7dce577-c1aa-421d-b164-4a91cc6034f1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5774924b-acf1-4179-8343-6b8fff35437b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "122b3d02-bee1-40ef-9a04-533fdce49efe",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bbb6792a-bac1-4950-95d7-6211c2055e70",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a9190f06-e5f5-4cf1-9a7a-474421f3adea",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e20b1528-9444-4c97-b469-384252724fd3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "74d9834d-dabf-49a8-aa5e-f86edf572eea",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "699079f7-f69e-4772-96c7-56ff30850a5f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d5b65412-4a27-4246-b75b-1c12a4b140fa",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "175a0900-576e-406c-9163-d8122bafbad3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "80125b07-239e-4409-be0f-333ad30ae601",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "06a6510f-a164-4bc2-a74b-05fdd66656f9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "591f3400-9a74-45a2-8e11-2878f5984541",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5d736281-d136-4b4c-a76c-821de43afde7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a5848085-c288-4b6a-827a-95cb985513eb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "da1353ba-fa61-4eb1-9702-d421c33dafac",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2f3d8d87-819b-4a3a-8486-d035154400c3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fa1ea63f-dec6-49bc-94b2-f76c8dc955bc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d5b22767-9b06-4414-8068-09442cd2005a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8f5a40fe-e59a-42a0-b226-8f030f087ed6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "27e6c9d3-58fd-4fb5-aec9-84de6d8f31ae",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "38575956-d981-4aba-9650-6cb79d04000e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3ddeed80-cc98-417a-b09d-19f912db4c5c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0e6e729c-7b1c-4248-bfec-6ae4359fd1a2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4d04cbd7-6420-43d8-81c3-3e4fbc67b704",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "39f0e667-c285-4978-8230-69c1ce374918",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3c83135b-b2a7-4d40-93c8-74c1f99e7f1e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4add17b5-89af-4bb8-8925-fd1e7cf5af21",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fe024a81-5e12-4727-957c-1d1486b4315a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "be096b7e-2254-48a1-a970-c8be3531ab23",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1786773d-aa40-49e5-b335-129a697aac11",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7119055f-2c89-45dc-ba2a-969b07e5b6dc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1778ed4f-774b-4300-b73c-66ca9372d673",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2d38a07b-12db-42c1-8d45-f49186513cde",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4e64f2c5-0c38-418b-b550-88564509fab7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "04e2dbc9-67af-4169-adc2-3120a1fec71b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7cb191e5-31d2-4bf4-98c2-818d42c2bd24",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "850d5c1e-19f8-47d0-b82f-b1e1334c3422",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0997303d-43da-49a9-9af0-28338b077ed3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8fba0a04-272a-4d5d-ac8e-a6d767e18eec",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "73453c73-eb36-4e25-965f-c4c468b6599b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bda525fd-200c-4f01-be21-eb2f15a0d4af",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "50ca1482-c9d8-4688-8c00-ed38e3daa6bf",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0f55747f-b2b9-4f80-aece-6f04c4b222d1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8339a145-98bc-4986-a7d1-ad347b495223",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a02331dd-0e8a-4cd0-b09a-6c122634a640",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7061cfff-012c-4fa5-9244-b3e2b269ff8a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ca30e7f8-9245-418d-bd9c-0556dbfa44bb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e39ca85f-5deb-4151-968f-f4acef6969e6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "87d42597-fdb9-4cd0-8740-84b7bd8ad51d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b88cbc7b-73be-482a-9975-7d13dfc42ad1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fa1bfaaa-3dbb-4593-a354-e15b94ae3169",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bee60e20-89a5-4c90-87eb-9329377f2b43",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7aa0cb8a-b64a-4f13-8b36-ae46dd7926a9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ada8904b-9e80-43d8-872a-fb9538a577a5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "01c6201d-1731-4bbf-be24-0d2a97c6a525",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a55826b5-6d61-4214-8efd-32407dcc10f8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "61e22340-4436-420d-a3f9-467fc837be5d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "380e4297-1bbd-4780-9da3-ecf46b263703",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e082eb1b-c46e-44c8-b060-c2ad06cba2e3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7a06d3d3-9398-4422-befc-5e56989f4dfa",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a7e742f6-548f-4ed8-a98e-df638fd34ace",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1a6e5ffe-ecc2-4ddb-8f7d-3f1ad1a3872c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f07c0fb4-adf7-478d-b80e-18c25e690b92",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "564b4329-e7ba-4b38-9432-56a7072c6bbe",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1ab33961-1ed2-4084-94eb-a4a77fbcc2ba",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7a9a43ba-9c3a-4c2a-ac31-4e6958e0fe89",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e078f7f7-311d-4f6a-a647-95f1f88bdbe5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fea66b59-c4df-4ab4-bfa9-14a1bd7e86bc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8fdb9709-66fe-4059-8022-8d726b90d2d6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cc47b756-6da8-44ad-b791-20ce793894ba",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e7c85a10-ed46-4146-ba05-3429390e5a92",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b6538ea5-6bea-4e3d-ad9d-e16a6fa8e1ec",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "268274d9-3461-4595-bfae-b7026106c350",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "06135e91-99b1-46fe-b74e-9447424a9c80",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d9af5739-67b7-45d8-b1d1-259c25639b89",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d00b519e-d4be-49d9-954e-5eed6c24fab0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9c00324f-0b4a-43d8-9aaf-936502bc4a9b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "04476e08-d09c-4f7c-9e34-f3982674948a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fbda19bc-e4af-4642-a7d7-a56ed0c60ee3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "951d2f0c-fce2-4a27-a6bd-d3a9560b4bca",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "aab15b62-feb3-4a11-993c-43a1f1728f29",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f166bb36-1eeb-4a3a-829d-e008e3b58849",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "aa656e88-9003-4350-83cb-22d2645068c1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8408c034-9afd-4d66-b64f-4d7fefbb6de8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "24c05753-2325-4394-a9e5-40f48af4651c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6efc363f-5e7e-4192-9cdc-244f89f506dd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1e8955e8-afae-46fb-92f1-ea5fca41eaa7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "736bd9b8-d558-4e6b-a03f-d2712da1772f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "eb7f14c5-3348-4e89-a8bb-250694bf199a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a7d44e76-5858-45f5-9b85-d44a0da42fd5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3ce9d79e-3e8d-4b5e-b94c-9770bf89d744",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1b2ec2b5-99a0-43e3-af21-a642d026128a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ca8e37d0-409c-4c3b-a283-fd88c1cf7c68",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "97ba01b3-620e-45d6-b2c9-f103fc1ecf75",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e064718c-1a09-4d63-b238-4ced26449c61",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1d098431-aa18-452e-989a-9b61a3504766",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ce98db2a-fa98-4cd8-9e49-c5756fb18212",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1a823f6c-3477-4275-aaef-a64ab41654e3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a1559f06-6676-42e4-8153-411b239057fe",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "db8ea1a4-92c8-417b-8554-ae5758d01fd7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "30776ac1-bab9-45af-860e-7c7975f55767",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bffa46ee-8bd2-447f-b452-7b3541a0ff8d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9ad33f33-e46b-4834-8b81-0a312a3487dd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b95db468-f59a-4384-b784-ee19f054ff73",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2c18ff6a-758f-49e8-9ab9-28531d577a63",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "09ab3dd8-add6-4001-a760-2a38f069e4e6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ae07b52f-c13c-4e47-9224-4fd2cb9321f6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "88d512e4-f689-4d90-839b-668797c2b670",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8338182a-5e93-4974-89bd-d8e73eb44f0d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2cc42623-7059-4afe-9c5e-246dea6532c3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9d196cf2-d157-4706-9afe-c75c9c055cc1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4eb9bfd0-0ee4-477b-ab81-3eb6e88db61f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6e239cb7-4c61-4689-a732-ceb49cccce35",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e89183ed-3f1a-4831-97b8-7e9e42c901b8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e5d53367-1d0e-493f-8b90-112e47c84502",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d82e7ed8-125f-4fde-b478-be903ae4b655",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b471dfd2-c0a4-4eaf-97e3-cffa577f5441",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5a0abbd9-6fe6-47ce-a090-fa61133504a1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "164adaf3-ff6d-45ea-b3b8-e3486ce2b01c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "20d13f6c-e640-4720-88c4-ba9ec5ff3a87",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "421e6699-5147-457f-9999-76533ac6ce65",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c689bcae-8c68-491b-9b0c-0398a29b9592",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bdb14294-b32c-487d-a532-22977a2988d2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "aeb4bae4-96eb-4c14-a79c-5a984c25a3bf",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "11d6d146-d9dd-4ba5-b4cf-25fc85ce3704",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "211b2a73-b32e-4969-bcce-66d5f4e25253",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "34f37020-f51a-4a16-97ec-40491968223c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "49920538-a3cc-44a9-81ed-ae37c22582fc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e7174ca4-3b66-4713-82e1-d80fb263f460",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2cb87600-083b-4467-b89a-5cf5a25b5c19",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3d87961b-3f90-4a66-b367-ff107fc6c786",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b6dbce4f-3eac-4205-b741-84670f88a50e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "235e7901-e668-4d78-aa3c-71e83355be1e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "46283e73-638d-4831-a037-ff5f8b659b46",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c115bfbf-90b0-48cf-9b23-eeb255807f4b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "81df0978-a12c-426c-8652-ed02151eef24",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d1051600-9af4-42e7-8347-368014ed8566",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "19ac7eaa-9643-451d-b300-5fcb96ddda17",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ab544f10-479e-4e4d-92d8-e04def649cd8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e759a88e-00b4-40fa-bde8-88beec5f351f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8687b911-cfd2-40b4-96de-fd6502f791bd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2857f32d-3041-46bc-80e5-711b6ee13821",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4097a72d-d646-443a-9d55-7351c54b2205",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "651e0bfe-45bb-4204-b69d-569ed0a27381",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2522a543-b612-4306-86d8-d2903ce21965",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e63818a9-cd91-427c-8afe-65e6b9634bde",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "07b228f1-38a3-40de-83dc-d896c378b032",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d2d41e4b-6efe-4135-a300-1adbc20c435c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d4f87dfa-35f7-468a-862f-f288854ece91",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "46de2848-1ed0-4391-8c5f-1797762dd9e0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fb4985e2-43c6-4e8b-a935-24429fa6d13d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4a835cc1-74e3-4548-b977-d39f5d837bd9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "250affcb-6c50-4768-9537-96358f7c4a3a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d361907b-7613-44c7-a759-a9cc61bfed59",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "df004946-bb65-4b0a-8b20-e3c55207acb0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e0b4247a-c9b8-4446-b036-dcae0305ca88",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8669eb6d-79cf-4a7a-881f-8dfed33aee08",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "99db2d23-c286-4064-9655-62d933080b6b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7b35047d-60a0-4710-bffa-a3d6f81f7086",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9f121acd-40d9-4c21-9a3e-b2cfe4ccdc67",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8c93099e-a2f4-41ca-b95c-e27cb87482ad",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "587e2e9a-0354-4d2f-98f4-3dc9d6a8d360",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0f769469-7f1a-4a8e-8ae7-3204ebb05e7f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "910e6dd7-4e4a-4282-ba77-c2f037d41ef0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e630b937-1a77-4f7b-84f0-9cb9141c7b3f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9778e194-3bca-4689-894d-dcf1e808535d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9057a06d-9fcd-4ba1-ba8d-7e7d4cadd211",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b147659f-b4f4-4182-8d38-9b5499fd2a44",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c27b379e-a90f-4df6-9f46-a5c9cfbea81b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e84b5142-0681-4d7f-b4a7-569b1c9dc89f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0434ad69-40e6-4a66-bf6d-2289411248c8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7c1f3f72-24f8-4daa-8afe-87e792c2c711",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ad1af90a-d7ed-4286-8733-dd877d7cd795",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0c35f374-e71c-4c73-9959-d4c01fd08599",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "75e1b25d-d9a4-42f5-b4c0-ab80178a834b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fd33fe6a-431b-45be-9cf4-b8bb6ae9b03a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5961b59d-4ede-4d5b-ad16-684f187ca084",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2f5cfa0f-5097-41ad-8a0b-0fc802f0b564",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2b22971e-972d-4800-bfa3-0fea73da253f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "145c4bd6-8928-4230-91ba-baa3381f3722",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b12c5ef0-f9cb-42dc-9318-093c215a960d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2bd47f27-2256-4b93-b4a5-d87e46378403",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "74c8dc74-169c-4b02-b1c4-4e648cdf766e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ffea0759-ff0a-403f-9ab3-168d5c9cbc30",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "888fa37a-4139-4440-bd11-8291260f12a8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "70238fad-4996-4a28-b3f8-5301e45f6d1b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "26a820ac-6cc8-4097-ab09-78fd58de882a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "61d25c40-85c0-49da-a49c-6ae89436acc6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fe176585-1546-441f-8af8-d2fa727c6b2e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b2243d6a-07e9-4870-8da8-9ccbe2ae05a0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5bea465b-9041-4d52-bd40-1513fc9f861f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7ea15da0-448d-42a4-9aeb-733528424987",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a207922e-f14c-42bf-8b8e-be1b1f382726",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "858d0a4e-1e4f-4faf-9fff-d5fca02ee221",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1f291841-aade-4291-a702-e152f34733d3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "348fbdc5-16fb-417b-a371-6505a1a50edb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a6bfa7e2-d33c-40f0-be03-6f187f24c1fb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "240d9278-96dc-42e2-bba2-5765386c3e1f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ce926c57-4d75-4bab-92da-a2a696ffb687",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2f5e261a-82cc-4ba3-a8c6-b8cd22c24abf",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "99cae21c-6458-4305-8f94-6b5539db5f8a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "310af77c-b7c2-40b2-9469-bda317f60988",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ce7fa911-3890-4a75-a6a7-25c0ac74534b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fa8cb088-8fad-45b2-a7a0-caeed1b7e5cb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "dc26b93d-6564-4d2a-9714-b42b0e5281eb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "10b36ef0-c646-4a8b-9eed-6bb131c3c23f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "019f4417-7799-4278-a571-0141c1092b56",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1f525dd9-67c0-42ec-b281-59e800eecc90",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8df9145f-1eb8-4708-9ca2-93103b770c4a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c1813f3a-e24a-4d2b-bf36-f7be7276ff62",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1c4fe67e-d3da-434d-893a-bb22b4322323",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "88116007-e2db-48b8-bd1d-caf9b857c744",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3ca27239-db95-464f-b49a-94577cc4d1e9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f10097df-cc9b-4a8d-b794-e9abdd6d22e9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "16c63c60-82df-4b91-860f-e0464212b46c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "03e069de-aeb1-4ddd-a4a7-0251546cf0ce",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "79bc4393-c1c2-4da4-8a27-2b0fc264ae52",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e5bcceef-8c0c-49ac-8159-45b25b0b7506",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "724ec22b-8748-47bc-93c8-712e50fd1dab",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ccb7953a-eed5-472d-b805-d14305783fb4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "01f9947b-b850-4079-a0b5-de4b270a2b09",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "87482e17-8ba4-4601-aa37-188ec875a621",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c7f5e2a2-8198-4fb5-9df4-db537e4c13b3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ceebf73a-406b-401d-b5ac-b967cad2270c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "381cb61e-e4bb-4b6b-bf2e-470b77f67dd7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "59c05e95-05d7-40ce-aa19-65abffd2039b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "432379e9-3acb-4256-8e49-01d28cc2b15a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5b3790cf-b3a5-41d0-a32c-0affa2506e75",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3a940a5c-a17f-4f92-afb3-c4e04c551826",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fc65ceec-2c30-4e4e-b235-1a7b7794cb21",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ab7f776e-20b7-4f55-b794-e21d3e2949fb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5e27b7ba-bbe3-4d65-a495-045a9f05a43d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "42209fe7-aaa2-4d55-9adb-dd0eb6962d39",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "916c562b-f4f7-4a58-8c64-e86b31e8eb62",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8b271244-f1c2-42ad-b8a8-50e3253a7edb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a651702e-f96c-4435-8e8e-8d064652da5b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "34bff3d5-29bf-4312-bb0b-9615cde2e310",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "28414b5e-2413-4cf7-9653-50dc4a010300",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2dac3210-a256-4055-88d3-17722a8ecde0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e08b077e-e5e2-4841-8b41-25be4bb554fc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "45601d26-792c-4ce8-8350-aa186886b169",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d4e31404-af2d-4f13-9fd6-ebd25b41e55d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "412154d0-be1c-4b04-9f49-913d0fab1ce3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "10ecade8-07b7-4856-be89-c67fd76e4861",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "faf0696a-a548-48cf-abed-4aae2beda0c3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2081a44f-384f-44d4-9cba-2dbad9843349",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "adc1fa2c-8865-466b-aa91-e72a2fb68657",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "baa51f16-6dca-4352-a4b3-4c72d151135e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a1e398d5-e35d-49c6-bd8a-ab4425199c1b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6e91b97d-bbc6-415e-ae9c-e0fc7b0dfa43",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1129e58f-66ee-4e94-96de-5ced0cc0c655",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e45b42f7-a947-4b5d-8307-6fca024a1a96",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1aa95d4a-4c72-40fc-84a1-8da3bc313666",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "45badc84-61bd-4416-b018-891c0fbbaa21",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a1843331-958c-4f82-b160-294e14dea2a1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1ac15a69-310e-412f-9600-7243710f75ea",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "57079326-5697-4363-8648-bb27939ef367",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b29cccf6-2c38-4f6c-95a8-de0cc42c3535",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3b7acf22-2fee-46ef-839e-82bbd09a6386",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "22a06d7c-24e8-46bb-95d7-c2af4eb7d138",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7d25cafe-62e8-41a7-8bd6-f4d2b3220e58",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4475c4df-2095-4371-a8e7-5f54f5bb2324",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "958e379f-20ff-42ea-9f8b-a67e3d1a5810",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "349a71cf-5ac6-4118-93dd-cc6e6d91a65d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2f6a0235-eee7-4e66-b3ae-725e99416613",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "76153859-c4b6-49ac-9477-229bb0e5fb75",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "39693a7a-892b-4fc9-884a-6386ad01b5ee",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "db44c247-a00f-445c-8e30-1413906a5049",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4683dd66-e672-48f4-bc42-97eee9f066b3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0f811c29-1da9-4c5f-941f-a602fe8ea6fe",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "344dd395-d9b3-4c53-938b-d293634134c9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a3631001-b184-4962-b517-ea8bedb20d3e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c8407186-bb52-4325-acea-d8fd57f1c9fa",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d2b24d18-25ea-490d-8c0d-462cf3f239c2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cff4eff9-fbd1-483f-a194-6b0d63e3363c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "78617674-8ae8-4d88-8b04-f9c976c098f0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "36680c38-3875-47fd-b0ad-a37c6584a150",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cb845fbd-af63-42a2-9a80-8af1da6ec5f9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f80424c0-1e9c-44f8-b05f-7699e46348c2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e2c0db9b-1876-4297-a6d6-0091da88a6b1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e1abe091-98d3-4d0a-ac95-19519567e6fb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "780cf980-3075-47f0-ab66-302188df754f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7e310fc0-19d9-4bd5-a117-7cbb387df13b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7dfd4e47-b819-4e21-8de7-80dde543b660",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b97d2191-1c92-45b1-9e61-198ffbf94834",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3090be4b-7e84-4278-bf83-1ca42f6467f5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "95b0e67b-25ce-40b3-9f40-6591b8f50f8f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "06c46713-50aa-4e70-82a0-7f6155500986",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ab8e6861-a119-4006-af23-ee14c68fe260",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8ff4acf0-269b-49ee-9591-b2afe6ee3038",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1747ffa8-b97a-4d2c-8330-072bc6c1a9c6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fde69b8c-a1fa-46be-a69b-08e3e8b5a400",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "324f2858-f150-4b55-b527-806cfc848603",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d3cdf4db-e410-42a9-9e0a-968a229fb96b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1247501c-5a98-4c6e-b0d6-de5ded7852b3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7abcd04f-b9a1-4677-9b40-0d6c89f4b614",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1e6ec0a0-3224-4ae2-a2d9-20d5bd71868a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8aac3f2e-d2ce-406e-884c-d3c2d08a18e8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "08598118-6ba7-4df3-8c70-cd802c779ffc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0ddf993e-08bc-422c-9387-98a0388a720f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ff4f59f7-fbe8-4689-b29e-130726edafb3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f9607a79-617f-4837-8e22-33a19afc79ce",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7d81b3ce-e14e-4594-86f5-821c28a0fc85",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e5ce9e24-9746-4910-aeb7-9ae11cf33a08",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "60614f00-49ed-43a6-aa31-7d3d7d75e29c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3dd10c37-4784-447d-bedd-d5cde47b07d0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "409521fe-c05e-4e44-8acf-bd052a3fe819",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f2f8c4e3-a593-4d87-af04-4e7e9f4d748a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c714978b-55d4-4f68-b57b-fa04c47a9df3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "55df6824-1334-4ce3-a9ea-992d94336663",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2dd8f92b-903d-40fa-8cb7-3a644457d9e8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f478fa78-94e7-4275-8697-ee0100c1ce9f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "55284efd-4e1f-4d76-bc2d-1c4dda6a1983",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cb91649f-fd5d-495b-b27e-e8314b33c4bb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f036b4c4-7473-4720-9ba5-0779f89021bb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c08b3f28-6a6a-40a9-bbea-dfde849d69ad",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "80177ac6-a6c0-4fd5-9003-cb5419f7a3d1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "230da5d3-33e5-48a8-8360-eee922e9413f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bedcb0b5-6035-494f-9345-0db8b4e51f73",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c8067d64-1021-4970-83b4-a053b181f358",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "17487abe-635e-428e-87bc-d2c9e975a4f3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b5bda1ce-5cba-4eac-8c86-831fef76b8f5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fd850703-e1e7-40ff-ac58-88532d013528",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "55339ba7-57e6-4416-9a3f-6188c75c8d52",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a5888ad2-46cc-4ee8-894d-7e3fc2939890",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f2d13ad4-9e00-4720-9452-a95ad35e80e2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fc74df50-f46b-4352-9a87-b826c3e2e0ba",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "be62ed89-5d76-413f-9127-2c2b6ae2794b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b7baa44a-62d6-4bd3-aa0b-6b1c40b90b16",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e24407aa-5e98-4428-b3dd-194f5f6b38fe",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e89acf9e-b4a7-4758-9aa9-17ca8d31ed7e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f0e97f32-0175-43f7-8aad-d22cb2585fa8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8c737ab0-9720-4df2-8cf1-ea5898668247",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d48ddc6d-9fea-4d22-a138-09566297d5ec",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7407db23-fb63-4612-b709-9309b7e0f201",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8a4ac9a4-7409-49bf-adb3-df67874eee00",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "02239a1b-46b7-4e4c-8407-0153f93d3608",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "178ff76b-0594-4cb4-9f02-09e4bc69d5ab",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cdaec6f6-6399-4fd0-bae4-397a688c1c84",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "920481f9-e0b2-4d72-b840-c3f0925d1cf5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "76e0a4ca-3ffc-4e37-95fd-f7b6001abb5d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1e9c8765-40b0-4700-a5e9-91a587bb6cf1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1b26c695-f431-4696-b6b2-05ea5b6dd0c2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "38da7a43-f967-44ef-8293-5952d619d256",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8b7abaef-df48-4de0-b97f-d76fddee352d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c5d3415b-8fea-446c-92b5-7531ef9c908d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "41635d2a-667e-4420-8b72-4d7c4083642e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "593fe84d-a062-443d-b87d-aa5dc9b8647e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "08d74115-2b6d-4fa0-95cd-a2aa4fa832e2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "762f56b6-69bb-4de2-8b88-e97cb6187f0a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7cbd6a9f-480e-4b79-a553-452f531d6ba4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "76f8e3d1-2dc8-4615-9c99-0f609f6b31ad",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "248ea99e-ae92-4fae-9532-cfe940fd053e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "86a9fb41-eaf2-436f-b1e3-8ec19b6e8ff7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5e8e2912-2f40-4e10-89f0-525ff7bd4a9a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "675f915a-a62a-48d5-aee0-d6592ad23b08",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7a9a5325-9ba0-4c4e-8a0c-0799d977d609",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1eb99d21-971c-4c44-aeef-db7fed225a86",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5a3c0bf1-f045-4a7b-b537-e78b1b154400",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cf64daa1-91b8-47f0-a7db-3e04b1a36886",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a6468aa0-20ba-4b6f-9094-59f313aa5c56",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "182fe7bf-e8f0-4631-8fd3-6118a6d1e2e9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fbcb8954-9421-4101-834c-ed2904d76466",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "98a6f76a-f00d-4fe1-b1ff-1ab0ca269a5c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0814f401-e198-4adb-bafb-db72356b69b7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8c40bbe3-f616-4cd4-a0e2-1ac52a007e8d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a549da96-eb17-462b-9f35-1074943693dd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e1d79a78-25ff-4094-84da-1666082f360b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a67b03a5-fb4c-4b2a-acba-73ecf469140a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0541c1a6-d890-4760-878b-1b7d0ebf5a29",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "dd7e9e73-4b4d-462a-8194-ffaf499c3477",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bd7eb3bf-6456-43f3-bd97-51e88f6f38bf",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "da307942-9117-4ae9-8f0d-7d663541b0cd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a76a909b-f39f-479b-83f3-10b361d15f0c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "578037c5-c0f2-4c1e-8b70-c246351b07bd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5781b7bb-5a03-453e-961e-47e0afaf8078",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0844a504-48e5-4b74-84b3-7c6a82c605f2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "334d12f0-48e5-4275-b6aa-1084c2dd12a5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f1fdbca9-27db-40a0-9a8f-89dbc45e4eaa",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d646f051-0ffd-4964-8df0-4e6ccbff3a4a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9df61386-6bc6-463c-8729-dfb13797d6f1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "eb5a8841-8d64-4e12-a2af-1a6eb898449f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "12b504d4-b99f-4a42-bae5-aa163d9aa8ea",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "65ae8b47-0b19-4f2f-a6fd-adc8555db202",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b13b358a-c453-469f-989a-006147b92ca5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "209a963b-ede2-4132-b3ad-870f7bb6f758",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bcfa30c1-e47d-4e75-9f27-2e0e2b000beb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "580f0745-9d0c-405d-9b39-3ba0357d1cf1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "56f75a76-0cab-48da-9edd-fbd71e805882",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f7a81832-e43e-42a6-9a85-96da2112d676",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1157443e-da8b-4f95-a487-e1da0fbc55bf",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cf1ef90a-797e-4e6e-9f5b-297b8cac776e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c84e118e-0ef8-4293-951e-dfab3636f81d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "184a02ae-0b4b-4b1f-8b1d-ac999bb5051b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "992612b8-2030-4dc0-96a2-05a53b169c02",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "444e1596-28a2-46a0-bb2e-99c9cf4cc6b2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "84159a00-6902-4253-b62c-f6e95a158632",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c3e2ed0a-4d56-4a58-93af-0b0626095369",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ce63c809-6305-4153-90c3-dfef49ebb616",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "821e1b97-c281-420a-b2cc-1f813a45ae75",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "88b29e1b-1d1f-4d72-bb58-a122bc14a55e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7b2dc14a-5672-4088-b59d-c95be460929d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7cfe0f58-6723-4b53-835d-0ec68ef126b3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0c9bdecb-fc58-4c47-aae7-18c1c600ce09",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "92851bd5-a183-4beb-afa5-d026731e29c4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5f89c8cb-0e85-4f71-9eb7-f59d9f6a9064",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "de278654-7b52-4392-8753-45b7ceb30666",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "dfdd324f-fc8a-4634-9d62-bf0a114c17b5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7e8a89ef-8b49-4c9e-b819-41c8f6638155",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "159fa89c-f7ea-41c0-a37e-2688e5c3c4d8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "54edc205-ce37-4073-8561-51dee8f4bcdd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b951515b-2676-4614-b5cf-ea9fa1806055",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e4e6ed43-ee44-4bb1-a05c-c147ecb1155c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "289f06ee-09af-4ff2-8e71-0bf71672d0fd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3477f718-c6a4-4f90-9d71-3175afe26412",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e86075b2-a0d9-405c-b179-aca04e8f676e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "190ce646-8a8c-4ef7-9a6c-2a743447a510",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "df19242e-9c53-43cf-a93d-3f6a8e5ddc3b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0e97e8b8-62f0-403e-9458-9240e8346bcb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c562f94d-bd44-4efe-86d9-540202a6ccf0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2f33ec24-3543-48d7-bbe6-00fee367435a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7628183d-da47-4115-b6ab-f9b48e988882",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "dfcc804b-91b6-4333-82df-999791cec031",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bfe0fafa-e4f9-471b-b32a-1a41e86612b2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c3838af6-426d-4708-a051-1ed2b536bdd1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "570e4039-0042-4015-8120-787a3f2f45a3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2c0d796b-2b5b-41aa-99ca-c5471905abc5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3f634651-7127-4ef4-8f65-be3114305ba7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "25dc3e26-65d3-4a2d-b23a-8a3c4962e049",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4dad2416-4fcf-4e46-ae1e-a96b12f11fd4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f97c1614-623b-4f18-85a1-0dc197ba8426",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c9fd5578-9e86-4752-adb3-ee1b475de269",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "26d7726f-82cc-4a46-bb7f-af6693cedc0d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f174508f-4430-4b66-a5fb-66648127a707",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4d6856c2-4024-433d-8144-edddd08cb73f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "884e7d1a-ef10-4f13-bc37-3e14238e8963",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c7b65ec5-00ca-4f7f-9c57-844c4aed6388",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9e0ff0a6-8479-456a-92c0-04aa39fce002",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c03faa63-6f1f-44f3-9044-e4184ab1ba02",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b75790a8-6397-4c06-a50d-c31639831e6c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7704016e-5e4a-4426-88e0-3e5941d90a10",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7e637e92-6570-47be-897b-17dfcc16189e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9fed743a-e48e-464c-892e-183e1ab7528b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ea83a755-08f6-44cd-b0d3-bf214da32f6b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e9a86e23-c1cd-48aa-8355-844e91beef25",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e613f6b3-febc-4258-8a74-3cd58e23435a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f4e93076-6a2b-4131-a2be-199a6ea71154",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d125807c-e9b0-4ad5-9597-db945406798c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6cb05075-c7fb-423e-95ef-596e2d2cfcea",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8645578b-b554-40ed-b7d0-c9b5475310b9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2be8e6b0-9dcd-4e63-be9c-5c3bfa7951b1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3216018a-25f3-49f4-a6e6-08bb1bfa093c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "19a1dfb0-12d2-45fd-a422-0a2df6c8ae7f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b35342df-941d-4a3a-b4a8-2c489ef754c6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8ff6c5aa-62e6-49d0-b219-8775c3938a54",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6e1e2671-839e-486b-9a31-ff6a9120f27a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "619a3beb-769f-4c3e-833c-dbe17326512c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "53c2c123-83ed-4e5e-9efb-c5761985a450",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7dda36c3-bcb7-4572-b69f-a2a0588360e5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4e3d7450-e4b7-4cf6-b01c-c84402f0341f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9d83e78c-c619-43d3-acd8-21a36601e94c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a1ffd514-bfcf-4cf4-900a-63bda1597e1d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cf6f3836-f17f-4ebb-903a-87c06cbb6ce6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "915ac539-b995-4fb9-bef9-d079bdb85899",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9a18376b-0dd7-4a3b-a397-400eec2a7c67",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d0df17b1-3880-4b4e-b3f5-c608b3c03be4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "58bff885-7707-4562-9743-d8be5561f3dc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "565319a6-7ec5-4da1-b2c8-d7efb97c649f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "88b307a4-abd8-4511-9acc-3dd297735886",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b8bd5fd1-c96b-40a6-9b61-dcef0b53c308",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "959408e6-fc01-4523-95e3-088737586a9c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "65f4aa6f-ef2e-4650-b60a-7b6af1423b21",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fab8c09b-90ea-4b65-be93-55dab128f853",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9a8c83cf-da13-4323-8a7f-a85d857559b0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3d9c03b7-190e-490e-b344-047458fb7ed6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b5358ed5-79da-4ce6-8c01-1effb4cf91f8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7f748d9b-b705-470c-9b7e-2f66c1c2787e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "da7d74f2-f93e-4bdd-8835-a006ba22a5d1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d72cc596-c27a-4efc-844f-af6547bae0c7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3a18e664-83a4-4b7c-ab0e-38e325ba2a53",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d6cc3c6a-0a6b-41ba-8c07-7af7d0e348c0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "18ffb97c-5ed6-40ce-9a18-bc6ca1ac3ba9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "938a2eab-f23f-4c83-b2c0-cb06470de378",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4fc996c8-b07c-4da1-bfa1-c54bba517799",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "74ded5bd-edbb-4e15-ac94-dfdceeb8eb9e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d8003137-73ae-44fb-b907-6383f0bce1ac",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8c462f4e-da69-4c0b-9176-f2d344f53386",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "dae7f672-7bed-49c9-80c9-1892b5cdac32",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5026b571-b408-4fb7-816f-610b9a10295f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b94a518c-5eef-4648-afa0-0ff40387e893",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "140ace93-adf3-4d9e-8c62-56713709d4aa",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2f728a5e-6ff0-4168-ad51-4590defb7ddb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b79dad05-995a-4cb2-90cf-c7ec40df3f3f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b6aa671d-10f1-4bb3-ae52-7b715a2b6140",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2a250223-986c-4766-8c7b-e3db69745eda",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7b703584-c678-4348-9c4b-07c4d0e51f34",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4be9a8c5-7966-4b75-9ce9-901ad1c1ed00",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f34d0e04-7511-4e0d-ab64-51abd331ff05",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "15f4ad11-55b9-4ca6-8d00-953d44122ad3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cce888d3-2cb4-4e29-9fa4-a1f5e4acb690",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9f9ce044-ac0b-4682-92e9-fe0d97022481",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "97f62086-1a72-4436-9488-475de08dc7e6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "05f45ba1-2968-474d-b72c-b31b7c1f7a61",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7389ca24-0219-4931-870c-48966091cc72",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "58f1cd01-60e8-4a68-ac27-08f6455c45a3",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4f670dab-0f46-41b0-bde8-0da90df67731",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1ac9508e-5961-421f-918c-8de417745642",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bdd8a914-1460-44b9-a327-fbfd0ce2ce9b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6869cb2e-4624-49cb-b179-1c3e4bd8c1bd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bc9c4de3-b951-42d8-90a0-3d77f66f6e52",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6411d807-ffa8-4dda-8123-07bbab81b96f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b842ac87-a123-4e8c-8805-4b906371a1a2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "59e7d6d7-33bd-490f-bdcb-34e505cc7f97",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f990422f-0acf-4587-94bf-50b4225fa14e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "24536f82-5ab4-4f1a-b9d1-4b1ef824c0db",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b848236a-4e2d-4278-9d8b-12eed9d2980c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e0c6658d-ab10-476f-b582-6e1d2c5c661d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4c2465c3-530a-49e2-aa7e-3fa9731e0c17",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "024d16b8-b8f1-48f8-9697-00592168d4fb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6c024287-5e77-4e63-a2ce-6beb77e9510d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "381dcb9a-ede2-4202-8cd1-60d04caaec36",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4c221706-c1ee-49ea-b60a-85152041f026",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "28c5b5b3-a4bd-427b-b2c4-82a082db45be",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d22af20e-e46a-4a67-bab2-410320e47b49",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "14503f6d-ab56-48b0-a594-78d5a9c5cfdc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "40bf5c13-2000-44d9-86e5-a15ac2c9fdac",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7a96070c-2854-48ac-b464-86b74d917794",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a0d0da78-58ee-4973-817c-2ccd470ff152",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e8eee622-9f8e-4f73-b37c-541d698bea59",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6f7f2676-f4d7-48d0-8e85-9705e1eab717",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2fdcb68d-6af8-4f67-b58f-11c4b1fc6ba9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "21225cfe-e1dc-44b5-9df3-b0b74006b6c0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8201c6df-5bbf-40d0-b216-240fd2f3c44b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "33035ddc-af76-4a90-964d-b0d210c5110a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "062efb52-750b-430a-babe-b43bb1842e8b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "19977288-0c44-452e-b90e-f3cd609f8143",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "52717de8-d400-4c35-a361-1fa952bb56da",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d128f660-a107-4402-b369-25bc8e1f1503",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b9296066-a146-4756-a677-28f10c36814f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5e9252bd-0ce6-4886-b80d-04810fb3f6bb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6702d766-9b82-4501-b8d2-773987cc13bb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d5e24e0a-b5e4-4b1c-a80a-90f7c5cb8455",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3e19eb48-7e8f-4070-886b-8daf339903a0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "db1684fb-ff13-437c-ab99-1a56efcc1c97",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3159f4e0-d865-4226-85ec-1d0ec6ff5e6b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ecb117cd-2041-44a0-b81a-1ab5e662be77",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2ce3bd83-409d-4d0d-8eea-41a4406a53ae",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "381da4a1-4f2d-447c-abca-46ec4948535a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "250e03c7-f816-4b88-a494-464d05995b7d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "af736917-dee8-4c53-a06d-08d52f9b09df",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "810cd599-073e-4046-ac20-25571fd011be",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b37482b3-435d-445f-aef4-8ba7f6484f4a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "75824308-12fe-406f-9f89-80c38e048bcc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "dfe6cc05-fd90-436e-bdd1-b0245f9b4f8e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d6ceacb5-58ff-45e7-a971-88545353505c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f60d3b55-2693-4218-b23b-00550af7e8b7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "756e0173-4398-4f80-9e4f-e8c9dec8bb78",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0ad0e19e-307e-4f22-9847-fdcb66191349",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4e7ff62b-fc0f-4694-b1f7-75e1565fb76d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3199f164-4653-4a67-9b49-c1cc51b62c35",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c76c014f-f24c-4d81-9ca8-8808f8753585",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "54194d11-6c43-4e10-8d85-755cd4248ed8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5a40f71a-c387-498e-a31a-adf29ded7a22",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8af7cf50-180c-4bdf-8dc3-76bed6943e52",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5966535d-514f-4c5a-8d69-ec4d4f7092e8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "01826a4f-4453-45cc-a696-1b793cace5c7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b398210b-2c0f-4086-b753-5e91aef157f8",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bb1a2eee-05b3-436c-85dd-542521080303",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d1d0cc30-972b-4751-b63a-cec01fae6e60",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "789d0f77-e0e7-41cc-9cff-09aac885f464",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "30a0c9fb-d691-47cf-a666-87acb520d574",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a14b6cd2-5949-4ed5-9cf8-7763d7958009",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2dabff7c-a49c-45f5-af0f-903b54c9cb47",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d485b8be-10df-46cb-8539-24f3e3690908",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "82e42d2d-6668-4c82-9fe6-3aac30fe7f70",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "020ef7ad-3964-4312-a10d-fd94b2ba4b59",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d40d5a05-42ac-4a42-8236-4475877d1803",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ccc68cff-8328-45ae-b15a-85a9a390323f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "63548394-bb42-4959-8c2e-4aafc30a9040",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "388ef8d0-965e-4788-8910-09f2de294b5c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3fbfa06f-829c-43c3-843f-0fda3625478b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "325c5ded-c7a2-41c9-815e-1b4e400b95fe",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "cd2e9fd2-8948-4b39-8c30-4c2aaec16fd4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f6968d6b-9229-4c0f-88c3-97a6962b8311",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "86546c43-71ee-49c0-bbbd-02b3b298d83c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "93042d43-93c1-4472-b9c4-be70c2abd1ff",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f006ed06-2719-44bb-96f3-bcefbcbc7ba5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7c95a665-16b1-4b90-b731-6df95b9988d7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "68e4a49a-0193-459b-855e-0ecb86ef3962",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "af97f8c8-dc28-4476-840a-ef31327be8e5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fd552857-53b6-4ead-ab0e-159fc26118af",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8067e51a-e2d0-4ea6-ac9e-363b1be2abd9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e5ccf281-4360-4c6f-b08d-eb7b35015282",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "56e7caab-f7a8-4850-ac66-0ccb4a31c309",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7fb294e1-23f1-4e49-a69e-fc15406a605e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8b3bdd63-71da-496e-b83f-eab2e5923d86",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3364ab91-8c1f-49b5-9051-927b7a062dba",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e46ef344-8eef-43e6-8664-273b654970d1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "10a26e35-35a9-4783-99d6-dbb19bd5d75f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "67fafd64-6b3b-45cc-b75a-32c7eafd840a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5649d49c-0753-460a-b16d-6c599e2408f1",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e341c8e6-b8d8-4e3c-8929-9a2778aa43aa",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4576d752-57fa-4a50-9044-4f0af14219ff",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "982f321f-31cf-46b2-9c4b-40fe5e962dc5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e7aa3b44-37b2-4b1e-990f-75cb1a10407b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b218f1b1-81cd-4721-9bc1-56b533f73d8a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "51bc74fa-b454-4df0-9261-588b2548aed2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3b195cbd-07ba-4199-a78d-9823667813b7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5a85b305-8040-4700-9269-216c3796bbb5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "75f62558-80a0-4870-8494-621e658a3a0d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "21ef2253-43c1-4f64-b3a0-3c4ea112be9e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7315e5fa-2ed3-4abf-9524-df474cdea881",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "24aca81c-bdac-4df1-8edb-87516bda1980",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9ccea3f0-701a-4af1-a7d0-ca10d4de9ae6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "a71202f7-267a-47fa-8782-9f19712f498d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "f2417b81-545f-4d49-8ed4-3641fdeaf26d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "adc68d03-4289-4f27-9049-b705bcd13c88",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "46126dfe-7796-4dee-bfc5-3f3eae934092",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "67352075-b1b8-4439-a707-04aea6f1454c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "646b47cf-e303-46f0-a49b-fc68176f09bb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1f3ceaac-f38e-4377-ae6b-292871db273b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "50930fd8-bc14-4b75-a00e-d8b88b60c295",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "40ec5671-dbd4-47ab-ae48-cbbbde1fab32",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8792b394-96ba-4b97-b2fb-34357194e822",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7a31c3d8-aa97-403c-9a30-855d263712d4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "0c8eb5a6-59de-41ca-99fd-3937c3458b82",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e1fa9635-e319-493f-8cb6-2e5a66a0a202",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2796ded2-3b7d-456a-825a-1383f57aee8f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "78ba9b16-5a44-4d36-a791-394d5dd8ae05",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c5f6479a-4696-4002-9958-4273050780ae",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "92d2a7f3-d778-4e85-984e-288065fdce77",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ac479dbf-68c2-4ff6-9640-3e9cefb528a5",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9b825756-a288-4c54-9d79-4ab3a00f4d00",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "64248070-f79f-45a2-8e41-5cd158da7422",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ca346390-9906-4a62-b0bd-3c080c864a9c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "05672769-66ce-49b0-a368-2ee3595aa15c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8b9ce872-e382-42ad-a3f3-3dc3a4649be2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d29a540b-0f51-457d-ba8f-aa2d7a9fe870",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "62ac0172-2b7d-4029-807f-1d786655bd1b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "aa777074-bdc7-4077-b83e-4675bb54e634",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e9cfcdf8-5fc5-484f-ab2a-2ed22fe2b84d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d437535c-30dd-463b-a484-8a0d5635eb7a",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "58628f0f-3a13-4b30-ad5e-f531a80ab2a6",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c59784b2-d20a-4bab-b55e-be3b15c6be25",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "c761e632-6a9d-4490-821f-a39a2e363717",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ceffed82-1e45-4080-a9ad-072c1e2c2168",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "5ef26663-acea-4b78-a982-a4e645458851",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9cda7846-cab1-4c5e-b4dc-3bd5eb2e2e1b",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b8a6bb1c-1234-41a4-a34c-919f9061d8cd",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1d6002c0-327f-4b1b-8b18-f4d53b80d289",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3b3fd8d6-0ce7-46a7-8d51-c3660e27d295",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "7778cdbc-3a53-437f-a634-8bcc8888bca4",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "8bb95972-85cb-4730-8ae0-1c91ca16a883",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b631b7be-b49d-4c74-bb97-6dc6c38c09d9",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "3d45bda9-900f-456f-a744-87d5a0c1b940",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "d19dbe42-19f5-4a38-9568-d63eed4c1b33",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "58790aea-5565-4323-b3f9-5de4fc91ca84",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1d673010-22b5-4981-9139-ca071ac34092",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "b27b7f61-aa7a-436b-801f-f0127052927f",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "e89c9055-6355-42b5-9709-7a87a2bf58ab",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "553059a9-7c5e-433c-97d6-c754bd15c91e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "1957bfaf-9d82-49a6-9556-9463fd4c4aae",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ca6f8b07-963d-4557-8f1c-00c69159310c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "6d6fc11b-54e0-4ca2-a77d-d2718e6019bc",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "18920e60-77e7-4798-9f78-5a651cc507f7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "91cca7f6-65a3-4bb1-9d47-37bcec5d7d75",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bd1d7f2f-7a94-4025-a14f-caada1931394",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "dcb59d13-c033-4a38-93a9-f45b042db690",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "457ded4d-16bd-4904-98b4-2afc93456cf2",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "dc7cf2c9-862d-4b2e-868b-dbc8abca23fb",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "4d67a838-cc5d-47bf-b98c-bd49273e3595",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "39d7d6a0-6730-4b86-a8fa-4d320c56f236",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ada4d733-6aa0-47af-a578-1307232d0ad0",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "df98e641-c88c-475a-8a88-694764c61057",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fd3ee4a7-7d08-443f-99d9-4630c5e55b8e",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "bdb1bf09-8039-40d9-b6dc-55110270b245",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "ee371b38-6dab-4dd5-9844-7b06f058444d",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "9dd8a7a1-b475-4cad-9204-d008d7d6088c",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "2c819332-e7f4-42fd-b7fa-5d817ba383b7",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "fe81d771-551b-445c-9446-72036ac9410f",
+          "reason": "duplicate-address-and-coordinate"
+        },
+        {
+          "sourceId": "56a4f617-84bd-4451-9ac7-c2fbaa2c1895",
+          "reason": "conflicting-coordinates-for-same-address"
+        },
+        {
+          "sourceId": "d9db9e3a-a482-4ff2-85a1-e4a677469af4",
+          "reason": "conflicting-coordinates-for-same-address"
+        },
+        {
+          "sourceId": "ad7727f7-4423-4ba7-b397-44958ebcbfe2",
+          "reason": "duplicate-address-and-coordinate"
+        },
+        {
+          "sourceId": "18bb1c09-4e5f-4d85-8276-67657413975e",
+          "reason": "duplicate-address-and-coordinate"
+        }
+      ]
+    },
+    {
+      "brandId": "out-of-the-closet",
+      "records": []
+    }
+  ]
+}

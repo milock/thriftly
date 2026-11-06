@@ -19,7 +19,7 @@ test('320px navigation stays on one row in English, Vietnamese and Arabic', asyn
     const header = await page.locator('header').boundingBox();
     expect(header!.height).toBeLessThan(70);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
-    const language = page.locator('header select');
+    const language = page.locator('header [data-language-picker]');
     await expect(language).toBeEnabled();
     const box = await language.boundingBox();
     expect(box!.width).toBeGreaterThanOrEqual(44);
@@ -33,7 +33,7 @@ test('phone filters have a reachable completion action and return focus', async 
   await expect(page.locator('[data-store-card]').first()).toBeVisible();
   const filters = page.getByRole('button', {name: /^Filters/});
   await filters.click();
-  const slider = page.getByRole('slider', {name: 'Minimum Goods Score'});
+  const slider = page.getByRole('slider', {name: 'Minimum Visit score'});
   await slider.focus(); await page.keyboard.press('ArrowRight');
   await expect(page).toHaveURL(/minScore=1/);
   const done = page.getByRole('button', {name: 'Show 3 stores', exact: true});

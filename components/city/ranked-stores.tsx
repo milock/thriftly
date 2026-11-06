@@ -1,6 +1,7 @@
+import { ListingDetails } from "@/components/listing-details";
 import { useTranslations, useLocale } from "next-intl";
 import { safeWebsiteUrl, formatDistance } from "@/lib/format";
-import { Crown, Navigation, ExternalLink } from "lucide-react";
+import { Navigation, ExternalLink } from "lucide-react";
 import type { ScoredStore } from "@/lib/types";
 import { scoreColor, scoreInk, scoreTier } from "@/lib/score-color";
 
@@ -28,14 +29,9 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
         return (
           <li
             key={s.id}
+            data-store-id={s.id}
             className="relative py-6"
           >
-            {i === 0 && scored && (
-              <div
-                className="absolute inset-x-0 top-0 h-[3px]"
-                style={{ background: scoreColor(s.score.total) }}
-              />
-            )}
             <div className="grid grid-cols-[minmax(0,1fr)_3rem] gap-x-4 gap-y-2">
               <div
                 className="tabular col-start-2 row-start-1 flex size-12 items-center justify-center rounded-full text-[17px] font-bold"
@@ -51,8 +47,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                     {scored ? t(tier.label) : t("notScored")}
                   </span>}
                   {i === 0 && scored && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-foreground px-2 py-0.5 text-[10px] font-semibold text-background">
-                      <Crown className="size-2.5" />
+                    <span className="text-xs font-medium text-brand">
                       {t("bestFind")}
                     </span>
                   )}
@@ -67,7 +62,6 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
               <div className="col-span-2">
                 {addr && <p className="break-words text-sm leading-relaxed text-muted-foreground"><bdi dir="ltr">{addr}</bdi></p>}
                 <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                  {s.facilityType && <>{t(s.facilityType)} · </>}
                   {t("downtown", { distance: formatDistance(s.distanceMiles, locale), city: cityName })}
                 </p>
                 <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
@@ -92,6 +86,7 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                     </a>
                   )}
                 </div>
+                <div className="mt-3"><ListingDetails store={s} /></div>
               </div>
             </div>
           </li>

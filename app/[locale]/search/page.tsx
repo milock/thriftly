@@ -6,10 +6,12 @@ import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import { SlidersHorizontal, List as ListIcon, Map as MapIcon, ChevronDown, ArrowRight } from "lucide-react";
 import type { LatLng } from "@/lib/types";
+import { parseStoreFilterIds } from "@/lib/brands";
+import { MapBoundary } from "@/components/map/map-boundary";
 import { useStores } from "@/lib/use-stores";
 import { formatDistance } from "@/lib/format";
 import { parseHours } from "@/lib/hours";
-import { applyFilters, DEFAULT_FILTERS, type Filters } from "@/lib/filters";
+import { applyFilters, parseDepartments, DEFAULT_FILTERS, type Filters } from "@/lib/filters";
 import { LocationSearch } from "@/components/location-search";
 import { reverseLabel } from "@/lib/geocode-client";
 import { FilterPanel } from "@/components/filter-panel";
@@ -71,7 +73,8 @@ export default function AppPage() {
   }, []);
   const { stores, loading, error, nearest, search } = useStores();
   const isDesktop = useIsDesktop();
-  const canonicalSelectedId = resolveSelectedStoreId(stores, selectedId);
+  const visible = useMemo(() => applyFilters(stores, filters), [stores, filters]);
+  const canonicalSelectedId = resolveSelectedStoreId(visible, selectedId);
 
   // On first load: honor a deep link (?lat&lon[&radius][&label]) coming from a
   // city landing page; otherwise center on the visitor's actual location
@@ -82,6 +85,9 @@ export default function AppPage() {
     const timer = setTimeout(() => {
     setInitialized(true);
     const p = new URLSearchParams(initialQuery);
+    const minScore = Number(p.get("minScore") ?? 0);
+    const sort = p.get("sort");
+    setFilters(f => ({...f, brandIds: parseStoreFilterIds(p.get("brands")), departments: parseDepartments(p.get("departments")), minScore: Number.isFinite(minScore) ? Math.max(0, Math.min(100, minScore)) : 0, openNowOnly: p.get("open") === "1", sort: sort === "distance" || sort === "best-nearby" ? sort : "score"}));
     const qlat = parseFloat(p.get("lat") ?? "");
     const qlon = parseFloat(p.get("lon") ?? "");
     if (
@@ -94,9 +100,6 @@ export default function AppPage() {
       if (Number.isFinite(qradius)) {
         setFilters((f) => ({ ...f, radiusMiles: Math.min(100, Math.max(0.5, qradius)) }));
       }
-      const minScore = Number(p.get("minScore") ?? 0);
-      const sort = p.get("sort");
-      setFilters(f => ({...f, minScore: Number.isFinite(minScore) ? Math.max(0, Math.min(100, minScore)) : 0, openNowOnly: p.get("open") === "1", sort: sort === "distance" || sort === "best-nearby" ? sort : "score"}));
       if (label) setAreaLabel(label);
       if (sel) setSelectedId(sel);
       setCenter({ lat: qlat, lon: qlon });
@@ -116,8 +119,8 @@ export default function AppPage() {
   }, []);
 
   useEffect(() => {
-    if (initialized) search(center, filters.radiusMiles);
-  }, [initialized, center, filters.radiusMiles, search]);
+    if (initialized) search(center, filters.radiusMiles, filters.brandIds);
+  }, [initialized, center, filters.radiusMiles, filters.brandIds, search]);
 
   // Mirror the current view into the URL (shallow replace, no reload) so the
   // page is shareable: opening the link restores the same location, radius, and
@@ -128,6 +131,8 @@ export default function AppPage() {
     p.set("lat", center.lat.toFixed(5));
     p.set("lon", center.lon.toFixed(5));
     p.set("radius", String(filters.radiusMiles));
+    if (filters.departments.length) p.set("departments", filters.departments.join(","));
+    if (filters.brandIds.length) p.set("brands", filters.brandIds.join(","));
     if (filters.minScore) p.set("minScore", String(filters.minScore));
     if (filters.openNowOnly) p.set("open", "1");
     if (filters.sort !== "score") p.set("sort", filters.sort);
@@ -148,15 +153,13 @@ export default function AppPage() {
     };
   }, [initialized, center]);
 
-  const visible = useMemo(() => applyFilters(stores, filters), [stores, filters]);
-
   const relocate = (c: LatLng) => {
     setLocationUnavailable(false);
     setCenter(c);
     setSelectedId(null);
   };
 
-  const filterCount = Number(filters.minScore > 0) + Number(filters.openNowOnly) + Number(filters.sort !== "score") + Number(filters.radiusMiles !== DEFAULT_FILTERS.radiusMiles);
+  const filterCount = Number(filters.departments.length > 0) + Number(filters.brandIds.length > 0) + Number(filters.minScore > 0) + Number(filters.openNowOnly) + Number(filters.sort !== "score") + Number(filters.radiusMiles !== DEFAULT_FILTERS.radiusMiles);
   const hoursAvailable = stores.some(s => s.timezone && parseHours(s.openingHours));
   const resetFilters = () => setFilters({...DEFAULT_FILTERS, radiusMiles: filters.radiusMiles});
   const resultLine = loading ? t("searchNearby") : areaLabel ? t("resultsNear", { count: visible.length, place: areaLabel }) : t("results", { count: visible.length });
@@ -181,7 +184,7 @@ export default function AppPage() {
         onExpand={expandToNearest}
         filteredOut={stores.length > 0}
         onReset={resetFilters}
-        onRetry={() => search(center, filters.radiusMiles)}
+        onRetry={() => search(center, filters.radiusMiles, filters.brandIds)}
       />
       {!loading && (
         <div className="px-1 pt-4">
@@ -191,14 +194,14 @@ export default function AppPage() {
     </>
   );
   const map = (
-    <StoreMap
+    <MapBoundary><StoreMap
       center={center}
       radiusMiles={filters.radiusMiles}
       stores={visible}
       selectedId={canonicalSelectedId}
       onSelect={setSelectedId}
       onSearchArea={relocate}
-    />
+    /></MapBoundary>
   );
 
   return (
@@ -260,7 +263,7 @@ export default function AppPage() {
                 )}
               >
                 <div className="overflow-hidden">
-                  <div className="px-5 pb-4 pt-1">
+                  <div className="max-h-[42dvh] overflow-y-auto overscroll-contain px-5 pb-4 pt-1">
                     <FilterPanel filters={filters} onChange={setFilters} hoursAvailable={hoursAvailable} />
                     {filterCount > 0 && <button type="button" className="mt-3 min-h-11 text-sm font-medium underline underline-offset-4" onClick={() => setFilters(DEFAULT_FILTERS)}>{t("resetFilters")}</button>}
                   </div>

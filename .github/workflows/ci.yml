@@ -21,4 +21,5 @@ jobs:
       - run: npm test
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:e2e
+      - run: npm run audit:seo -- --strict
       - run: npm run typecheck

@@ -55,7 +55,7 @@ async function enrichStores(list: ScoredStore[]): Promise<ScoredStore[]> {
 /**
  * Renders the ranked list immediately (server-provided), fills in neighborhoods
  * client-side, and shows when the data was last refreshed plus a Refresh button
- * that runs an on-demand live OpenStreetMap lookup for the city.
+ * that reloads the published dataset for the city.
  */
 export function CityStores({
   initial,
@@ -65,6 +65,7 @@ export function CityStores({
   radiusMiles,
   generatedAt,
   initialDateLabel,
+  brandIds = [],
 }: {
   initial: ScoredStore[];
   cityName: string;
@@ -73,6 +74,7 @@ export function CityStores({
   radiusMiles?: number;
   generatedAt?: string | null;
   initialDateLabel?: string;
+  brandIds?: readonly string[];
 }) {
   const t = useTranslations("ui");
   const locale = useLocale();
@@ -106,12 +108,12 @@ export function CityStores({
     setRefreshing(true);
     setRefreshError(false);
     try {
-      const res = await fetch(`/api/stores?lat=${lat}&lon=${lon}&radius=${radiusMiles}&live=1`);
+      const res = await fetch(`/api/stores?lat=${lat}&lon=${lon}&radius=${radiusMiles}${brandIds.length ? `&brands=${encodeURIComponent(brandIds.join(","))}` : ""}`);
       if (!res.ok) throw new Error("Refresh unavailable");
       if (res.ok) {
         const data = (await res.json()) as { stores?: ScoredStore[]; generatedAt?: string | null };
         const fresh = data.stores ?? [];
-        if (fresh.length) setStores(await enrichStores(fresh));
+        setStores(await enrichStores(fresh));
         setUpdatedAt(data.generatedAt ?? generatedAt ?? null);
       }
     } catch {
@@ -120,12 +122,12 @@ export function CityStores({
     } finally {
       setRefreshing(false);
     }
-  }, [canRefresh, refreshing, lat, lon, radiusMiles, generatedAt]);
+  }, [canRefresh, refreshing, lat, lon, radiusMiles, generatedAt, brandIds]);
 
   return (
     <div>
       <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs text-muted-foreground">
-        <span>{t("updated", { time: label ?? initialDateLabel ?? updatedAt?.slice(0, 10) ?? t("recent") })}</span>
+        {updatedAt && <span>{t("sourceUpdated", { time: label ?? initialDateLabel ?? updatedAt.slice(0, 10) })}</span>}
         {canRefresh && (
           <button
             type="button"

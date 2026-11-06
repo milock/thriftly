@@ -6,15 +6,16 @@ const isDev = process.env.NODE_ENV !== "production";
 const ContentSecurityPolicy = [
   "default-src 'self'",
   // 'unsafe-eval' is needed only by the dev HMR runtime; production stays strict.
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' https://maps.googleapis.com https://maps.gstatic.com${isDev ? " 'unsafe-eval'" : ""}`,
   "script-src-attr 'none'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://tile.openstreetmap.org",
-  "font-src 'self' data:",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "img-src 'self' data: blob: https://tile.openstreetmap.org https://maps.gstatic.com https://maps.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
   // Geocoding runs in the browser (the user's own IP) against the OSM geocoders —
   // the server's datacenter IP gets rate-limited/blocked, so client-side is the
   // only path that works everywhere. These two origins must be reachable.
-  "connect-src 'self' https://photon.komoot.io https://nominatim.openstreetmap.org",
+  // Places UI Kit also fetches its selected fields from the Places RPC endpoint.
+  "connect-src 'self' https://photon.komoot.io https://nominatim.openstreetmap.org https://maps.googleapis.com https://maps.gstatic.com https://placewidgets.googleapis.com https://places.googleapis.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -42,12 +43,13 @@ const nextConfig: NextConfig = {
   // Bundle the tract-centroid data into the functions that score stores at
   // runtime: the client API route and the server-rendered city landing pages.
   outputFileTracingIncludes: {
+    "/*": ["./data/stores-us.json", "./data/store-access.json", "./data/shopper-reviews.json"],
     // Both serve from the bundled national dataset; the live fallback (rare)
     // reads the tract centroids. City pages also read bundled city centroids.
-    "/api/enrich": ["./data/goodwill-us.json"],
-    "/api/stores": ["./data/goodwill-us.json", "./data/tract-centroids/**/*"],
+    "/api/enrich": ["./data/stores-us.json"],
+    "/api/stores": ["./data/stores-us.json", "./data/tract-centroids/**/*"],
     "/[locale]/goodwill/[slug]": [
-      "./data/goodwill-us.json",
+      "./data/stores-us.json",
       "./data/city-centroids.json",
       "./data/tract-centroids/**/*",
     ],

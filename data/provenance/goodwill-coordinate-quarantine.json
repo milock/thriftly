@@ -1,0 +1,638 @@
+{
+  "checkedAt": "2026-11-06T01:55:29.413Z",
+  "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+  "count": 57,
+  "records": [
+    {
+      "id": "goodwill/616ae538-b0e6-41ba-9974-acedaba261ea",
+      "address": "7517 Crestwood Blvd, BIRMINGHAM, AL, 35213",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "616ae538-b0e6-41ba-9974-acedaba261ea",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/dcedd675-0645-4aa8-a757-a4e3dc294414",
+      "address": "410 Southwind Plaza, Mt Vernon, IN, 47620",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "dcedd675-0645-4aa8-a757-a4e3dc294414",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/60144477-6351-4a20-8517-892906bd511a",
+      "address": "1566 Moffett St, Salinas, CA, 93905",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "60144477-6351-4a20-8517-892906bd511a",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/ec5153d2-bbd5-4a21-b679-ca1880980859",
+      "address": "11111 Indianola Drive, Rockville, MD, 20855",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "ec5153d2-bbd5-4a21-b679-ca1880980859",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/c8d64d41-feb1-4754-ab2d-fece2822eafc",
+      "address": "#342 390 Baseline Road, Sherwood Park, CO, T8H 1X1",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "canadian-postal-code-in-us-feed",
+      "sourceId": "c8d64d41-feb1-4754-ab2d-fece2822eafc",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/35efcbc2-9d0e-4b4a-9152-e4da4425a41b",
+      "address": "620 Kirk Road, Little Rock, AR, 72223",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "35efcbc2-9d0e-4b4a-9152-e4da4425a41b",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/0c4deb46-cbf3-49ea-b553-f00d0d8febdd",
+      "address": "2901 SE 14th St, Bentonville, AR, 72712",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "0c4deb46-cbf3-49ea-b553-f00d0d8febdd",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/ec017378-7527-4e5d-8b1b-e7a092f2e3a4",
+      "address": "4309 Buffalo Rd, Erie, PA, 16510",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "ec017378-7527-4e5d-8b1b-e7a092f2e3a4",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/9306e8f4-87dd-42cd-82d8-7f67b2427b7d",
+      "address": "1120 Sunset Dr, Norwalk, IA, 50211",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "9306e8f4-87dd-42cd-82d8-7f67b2427b7d",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/11348820-1e7b-43e6-9fdb-6c5ab621c572",
+      "address": "14407 NE 23rd St, Choctaw, OK, 73020",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "11348820-1e7b-43e6-9fdb-6c5ab621c572",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/0e287faa-7c11-496d-95e8-869107e21bd5",
+      "address": "4125 W Owen K Garriott Suite B22, Enid, OK, 73703",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "0e287faa-7c11-496d-95e8-869107e21bd5",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/c2a82063-5377-4bc5-9b73-077a5b86c810",
+      "address": "4813 Dixie Hwy, Louisville, KY, 40216",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "c2a82063-5377-4bc5-9b73-077a5b86c810",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/bff22953-3164-4621-91fc-51eec7b79e98",
+      "address": "2017 KY-53, LaGrange, KY, 40031",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "bff22953-3164-4621-91fc-51eec7b79e98",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/fcb3daef-8d06-4955-8608-744610f77814",
+      "address": "10230 Westport Road, Louisville, KY, 40241",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "fcb3daef-8d06-4955-8608-744610f77814",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/a9042e00-892b-4de2-a94a-7eab4958b66c",
+      "address": "6204 Willismore Drive, Louisville, KY, 40272",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "a9042e00-892b-4de2-a94a-7eab4958b66c",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/0d859e60-ad0e-429c-ab88-dbc0edd0b22d",
+      "address": "2285 Versailles Road, Lexington, KY, 40504",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "0d859e60-ad0e-429c-ab88-dbc0edd0b22d",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/b093d9b5-f9f4-452c-938b-c31f1a689a0b",
+      "address": "2910 US Highway 31W, White House, TN, 37188",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "b093d9b5-f9f4-452c-938b-c31f1a689a0b",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/266a5ff0-e185-4138-9b26-04bfb0a2c2e8",
+      "address": "3101 Menaul Blvd NE, Albuquerque, NM, 87107",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "266a5ff0-e185-4138-9b26-04bfb0a2c2e8",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/c0a47024-9465-426f-b137-227b86fe98db",
+      "address": "270 98th Street, Albuquerque, NM, 87121",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "c0a47024-9465-426f-b137-227b86fe98db",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/038df412-a5bc-4d11-a304-a025a22148da",
+      "address": "2279 South Airport Rd, Traverse City, MI, 49684",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "038df412-a5bc-4d11-a304-a025a22148da",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/8459e318-f7cf-4ef5-b0fa-d091c1fc0e8d",
+      "address": "120 W 2nd St, Wellston, OH, 45692",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "8459e318-f7cf-4ef5-b0fa-d091c1fc0e8d",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/c4ecbf8c-8456-4fe3-aaf1-b4cbeeae98e6",
+      "address": "4222 S. Staples, Suite D, Corpus Christi, TX, 78411",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "c4ecbf8c-8456-4fe3-aaf1-b4cbeeae98e6",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/303163b7-f985-407d-ad8d-73c68cf5c524",
+      "address": "105 Northshore Blvd., Slidell, LA, 70460",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "303163b7-f985-407d-ad8d-73c68cf5c524",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/154cc664-39f4-4980-b127-864df80135a3",
+      "address": "3400 Tulane Avenue, New Orleans, LA, 70119",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "154cc664-39f4-4980-b127-864df80135a3",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/996ffa3d-c608-43d3-b466-c9886e8bfb7c",
+      "address": "419 S. Airline Hwy., Gonzales, LA, 70737",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "996ffa3d-c608-43d3-b466-c9886e8bfb7c",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/a060a493-e6f3-4dcc-9a9b-e54466254f57",
+      "address": "121 S 65th Avenue, Ridgefield, WA, 98642",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "a060a493-e6f3-4dcc-9a9b-e54466254f57",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/07905240-edf9-4086-ad73-cda5894b47a0",
+      "address": "4255 McKinley Parkway, Hamburg, NY, 14075",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "07905240-edf9-4086-ad73-cda5894b47a0",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/de99efd6-9bb2-4ace-8cc7-24a03c041d54",
+      "address": "456 W. Camp St., East Peoria, IL, 61611",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "de99efd6-9bb2-4ace-8cc7-24a03c041d54",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/d3e679ca-6bd6-419d-9e50-a5146137ce00",
+      "address": "2817 E. 3rd St., Bloomington, IN, 47408",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "d3e679ca-6bd6-419d-9e50-a5146137ce00",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/eb881cd1-67fe-451f-a54a-bc97dc41ebe7",
+      "address": "11615 Fox Rd., Lawrence, IN, 46216",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "eb881cd1-67fe-451f-a54a-bc97dc41ebe7",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/ba18fd5f-303c-47b6-b7f6-e316c2cf9eae",
+      "address": "388 S. Indiana St, Mooresville, IN, 46158",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "ba18fd5f-303c-47b6-b7f6-e316c2cf9eae",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/1d0bbd05-f05b-4ba0-8b72-e855f94376a3",
+      "address": "124 W. Votaw St., Portland, IN, 47371",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "1d0bbd05-f05b-4ba0-8b72-e855f94376a3",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/79d737a9-1218-4c32-9b10-f633a7edbbdc",
+      "address": "5900 W. 96th St., Zionsville, IN, 46077",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "79d737a9-1218-4c32-9b10-f633a7edbbdc",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/29c743a8-4df6-498a-a737-265725c67a5b",
+      "address": "7459 Somerset Crossing Drive, Gainesville, VA, 20155",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "29c743a8-4df6-498a-a737-265725c67a5b",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/a8f9e2a8-57ba-416b-af02-2fbf5c6568fa",
+      "address": "1403 New York Avenue, NE, Washington, DC, 20002",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "a8f9e2a8-57ba-416b-af02-2fbf5c6568fa",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/44d1e41f-1c03-47f5-bed3-ae8514104a30",
+      "address": "Lakeview Shopping Center, Parkersburg, WV, 256101",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "44d1e41f-1c03-47f5-bed3-ae8514104a30",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/bfc1fe59-314e-4508-bbbc-e8d4feace70b",
+      "address": "Patrick St Plaza Shopping Center, Charleston, WV, 25387",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "bfc1fe59-314e-4508-bbbc-e8d4feace70b",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/6ecc092b-0b70-4147-bc44-012664707138",
+      "address": "2700, Boul Laurier Local 2330, Québec, CO, G1V 2L8",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "canadian-postal-code-in-us-feed",
+      "sourceId": "6ecc092b-0b70-4147-bc44-012664707138",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/b9ffda4e-a023-49ab-ba75-2b8d3728388c",
+      "address": "3235 Avenue de Granby, Montréal, CO, H1N 2Z7",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "canadian-postal-code-in-us-feed",
+      "sourceId": "b9ffda4e-a023-49ab-ba75-2b8d3728388c",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/df4a66de-6a16-44f2-8b1d-42b5e9813477",
+      "address": "10 600, boulevard Maurice-Duplessis, Montréal, CO, H1C 2A2",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "canadian-postal-code-in-us-feed",
+      "sourceId": "df4a66de-6a16-44f2-8b1d-42b5e9813477",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/8bef8b99-c4c8-4f23-9f07-9445c12cf885",
+      "address": "1455 Avenue Victoria, Saint-Lambert, CO, J4R1R5",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "canadian-postal-code-in-us-feed",
+      "sourceId": "8bef8b99-c4c8-4f23-9f07-9445c12cf885",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/9170f483-b34b-4c9e-9440-c51bf10edd2e",
+      "address": "245 Rue Soumande, Québec, CO, G1M 3H6",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "canadian-postal-code-in-us-feed",
+      "sourceId": "9170f483-b34b-4c9e-9440-c51bf10edd2e",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/edc0fdfd-ade8-4e43-ba30-e302077c833b",
+      "address": "6950 Boulevard Henri-Bourassa, Québec, CO, G1H 3C8",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "canadian-postal-code-in-us-feed",
+      "sourceId": "edc0fdfd-ade8-4e43-ba30-e302077c833b",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/5ffe8c56-a7d2-4064-9644-05692128d4e1",
+      "address": "20901 Hawthorne Blvd, Torrance, CA, 90503",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "5ffe8c56-a7d2-4064-9644-05692128d4e1",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/7973a9b7-37a1-44c5-a24a-6571ab4e79b3",
+      "address": "646 W Esther St, Long Beach, CA, 90806",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "7973a9b7-37a1-44c5-a24a-6571ab4e79b3",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/c998ac2c-2b07-47cd-8630-e365413c7cc2",
+      "address": "860 Marketplace Drive, Waconia, MN, 55387",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "c998ac2c-2b07-47cd-8630-e365413c7cc2",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/61f0a5df-26ed-4dc0-a79f-56704d65f893",
+      "address": "4901 W. Stan Schlueter Loop, Killeen, TX, 76549",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "61f0a5df-26ed-4dc0-a79f-56704d65f893",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/9a34fe00-bd26-4296-b03e-9b555001f2f5",
+      "address": "736 Warrenton Rd, Fredericksburg (S. Stafford), VA, 22408",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "9a34fe00-bd26-4296-b03e-9b555001f2f5",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/a13a3a50-80d8-4827-aef6-ab26b337f355",
+      "address": "8516 Jamison Lane, Fredericksburg, VA, 22407",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "a13a3a50-80d8-4827-aef6-ab26b337f355",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/6821c2e0-e34f-4281-a68e-018c4359e045",
+      "address": "1804 Lake Shore Dr. E, Ashland, MN, 54806",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "6821c2e0-e34f-4281-a68e-018c4359e045",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/fdf697bc-a72b-47f7-8c12-960303888349",
+      "address": "4716 Lindgren Rd, Hermantown, MN, 55811",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "fdf697bc-a72b-47f7-8c12-960303888349",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/4a0dcf40-a1b9-45fd-a312-dd56f36e3e74",
+      "address": "4609 Grand Ave, Duluth, MN, 55807",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "4a0dcf40-a1b9-45fd-a312-dd56f36e3e74",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/96150fdb-9d96-48f2-88b6-f6af023982ab",
+      "address": "1788 Paul Bunyan Dr, Bemidji, MN, 56601",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "96150fdb-9d96-48f2-88b6-f6af023982ab",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/8851ff49-1ef4-4c4f-9fd1-41e9ec28a2ab",
+      "address": "1151 E. MAIN ST., LANCASTER, OH, 43130",
+      "location": {
+        "lat": 38.7946,
+        "lon": -106.5348
+      },
+      "reason": "shared-source-placeholder-coordinate",
+      "sourceId": "8851ff49-1ef4-4c4f-9fd1-41e9ec28a2ab",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson"
+    },
+    {
+      "id": "goodwill/c683e06f-458a-e111-8dde-005056934050",
+      "address": "12400 Hwy 71 WBee Caves, Austin, TX, 78736",
+      "location": {
+        "lat": 34.06885,
+        "lon": -85.78331
+      },
+      "reason": "retail-status-conflict-at-source-address",
+      "evidence": "The source pin is in Alabama. Goodwill Central Texas titles the Texas location Bee Caves Donation Center but lists Donation Center and Shop as services. The operator lists Bee Cave ZIP 78738, while the source lists Austin ZIP 78736.",
+      "sourceId": "c683e06f-458a-e111-8dde-005056934050",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "operatorSourceUrl": "https://www.goodwillcentraltexas.org/retail-stores/"
+    },
+    {
+      "id": "goodwill/a8796fc5-f38a-e211-87d7-0050568924e6",
+      "address": "298 Lauzon Rd., Windsor, MI, N8S 3L6",
+      "location": {
+        "lat": 42.33794,
+        "lon": -82.94662
+      },
+      "reason": "canadian-postal-code-in-us-feed",
+      "sourceId": "a8796fc5-f38a-e211-87d7-0050568924e6",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "operatorSourceUrl": "https://www.goodwillindustries.ca/find-a-goodwill/"
+    },
+    {
+      "id": "goodwill/3d1a97de-7700-e811-b706-005056890337",
+      "address": "11145 Tecumseh Rd E, Windsor, MI, N8R 1B1",
+      "location": {
+        "lat": 42.31295,
+        "lon": -82.90472
+      },
+      "reason": "canadian-postal-code-in-us-feed",
+      "sourceId": "3d1a97de-7700-e811-b706-005056890337",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "operatorSourceUrl": "https://www.goodwillindustries.ca/find-a-goodwill/"
+    }
+  ]
+}

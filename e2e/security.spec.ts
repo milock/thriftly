@@ -6,6 +6,9 @@ test('production server sends security headers', async ({request}) => {
   expect(res.headers()['content-security-policy']).toContain("frame-ancestors 'none'");
   expect(res.headers()['content-security-policy']).not.toContain('unsafe-eval');
   expect(res.headers()['content-security-policy']).toContain("script-src-attr 'none'");
+  const connect = res.headers()['content-security-policy'].split(';').find(value => value.trim().startsWith('connect-src '));
+  expect(connect).toContain('https://places.googleapis.com');
+  expect(connect).not.toMatch(/https:\/\/\*|(?:^|\s)\*(?:\s|$)/);
 });
 test('real API rejects invalid and oversized requests', async ({request}) => {
   expect((await request.get('/api/stores?lat=32evil&lon=-117')).status()).toBe(400);
@@ -18,7 +21,9 @@ test('real search API returns scored bundled data', async ({request}) => {
   const body = await res.json();
   expect(body.stores.length).toBeGreaterThan(0);
   expect(body.stores[0].score.total).toBeGreaterThan(0);
-  expect(body.generatedAt).toBeTruthy();
+  expect(body.generatedAt).toBeNull(); // Mixed sources do not all publish an update date.
+  const chain = await request.get('/api/stores?lat=32.7157&lon=-117.1611&radius=25&brands=goodwill');
+  expect((await chain.json()).generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
 });
 test('accepts its own HTTPS origin and rejects a foreign origin', async ({request, baseURL}) => {
   const url = new URL(baseURL!).origin;

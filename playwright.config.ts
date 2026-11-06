@@ -29,7 +29,7 @@ export default defineConfig({
   ],
   webServer: {
     // Use an isolated port and always launch this checkout’s production build.
-    command: "npm run build && node scripts/test-server.mjs",
+    command: "npm run build -- --webpack && node scripts/test-server.mjs",
     url: "https://127.0.0.1:3107",
     reuseExistingServer: false,
     ignoreHTTPSErrors: true,

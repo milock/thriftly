@@ -68,11 +68,11 @@ export function useStores() {
   }, []);
 
   const search = useCallback(
-    async (center: LatLng, radiusMiles: number) => {
+    async (center: LatLng, radiusMiles: number, brandIds: readonly string[] = []) => {
       const id = ++reqId.current;
       setState((s) => ({ ...s, loading: true, error: null }));
       try {
-        const res = await fetch(`/api/stores?lat=${center.lat}&lon=${center.lon}&radius=${radiusMiles}`);
+        const res = await fetch(`/api/stores?lat=${center.lat}&lon=${center.lon}&radius=${radiusMiles}&brands=${encodeURIComponent(brandIds.join(","))}`);
         if (!res.ok) throw new Error(`Request failed (${res.status})`);
         const data = (await res.json()) as { stores: ScoredStore[]; nearest?: NearestHint | null };
         if (reqId.current !== id) return; // superseded

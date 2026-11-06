@@ -1,0 +1,21 @@
+{
+  "privacyTitle": "Patakaran sa privacy",
+  "privacyDescription": "Paano ginagamit ng Thriftly ang datos ng lokasyon, ulat, at serbisyo.",
+  "termsTitle": "Mga tuntunin sa paggamit",
+  "termsDescription": "Paggamit ng mga listing, iskor, ulat, at feature ng Google Maps sa Thriftly.",
+  "updated": "Na-update noong Nobyembre 5, 2026",
+  "privacy0": "Ginagamit sa paghahanap ng lokasyon ang lugar na inilagay mo o lokasyong pinahintulutan mong ibahagi ng browser mo. Maaaring ipadala ang mga geocoding request sa Photon o OpenStreetMap Nominatim. Hindi kailangan ng account para maghanap. Kasama sa mga ibinahaging search URL ang mga napiling coordinate.",
+  "privacy1": "Kapag ipinapakita ang rating sa Google o binuksan mo ang mga detalye ng review nito, matatanggap ng Google ang datos na kailangan para ipakita ang impormasyon ng lugar, kabilang ang IP address mo at ang hiniling na lugar. Pinangangasiwaan ng Google ang datos na ito ayon sa patakaran nito sa privacy. Hindi iniimbak sa database ng listing ng Thriftly ang mga rating sa Google.",
+  "privacy2": "Pribadong iniimbak ang mga ulat ng problema at obserbasyon ng mamimili, kasama ang oras ng pagpapadala. Huwag magsama ng mga pangalan, detalye sa pakikipag-ugnayan, sensitibong personal na impormasyon, o impormasyon tungkol sa ibang tao. Sinusuri ang mga ulat bago gumawa ng anumang pampublikong update. Maaaring ilathala ang mga aprubadong obserbasyon kasama ang petsa ng pagbisita at uri ng source; hindi awtomatikong inilalathala ang pribadong teksto ng ulat.",
+  "privacy3": "Tumutulong ang nagbabagong keyed hash na limitahan ang pang-aabuso sa pag-uulat. Hindi inilalagay ng Thriftly ang mga hilaw na IP address sa mga ulat. Maaaring magproseso ang hosting at mga third-party provider ng mga request log alinsunod sa sarili nilang mga patakaran. Nananatili sa pribadong review system ang mga ulat at desisyon para sa moderation at audit; walang kasalukuyang garantisadong panahon ng awtomatikong pagbura.",
+  "privacy4": "Ang Vercel ang nagho-host sa Thriftly at nagbibigay ng web analytics. Tinatandaan ng browser storage ang mga kagustuhan sa interface gaya ng tema at wika. Basahin ang mga naka-link na patakaran ng provider para sa kanilang mga kasanayan sa datos.",
+  "terms0": "Independiyenteng gabay ang Thriftly sa mga pampublikong thrift at resale shop. Maaaring kulang o luma ang mga listing, oras, seksiyon, at detalye ng pagbisita. Kumpirmahin sa tindahan ang mahahalagang detalye bago bumiyahe. Hindi ibig sabihin ng nakalistang seksiyon na may stock ngayon.",
+  "terms1": "Mga malinaw na pagtatantiya para sa pagpaplano ang mga iskor. Pinagsasama ng mga ito ang palatandaan ng Senso ng kapitbahayan, makasaysayang datos ng kakayahang lakarin kapag mayroon, at mga aprubadong first-hand na review sa Thriftly. Hindi hinuhulaan ng mga ito ang stock, presyo, kalidad ng donasyon, o magiging resulta ng isang pagbisita. Hiwalay na ipinapakita ang mga rating sa Google.",
+  "terms2": "Magsumite lamang ng impormasyong sa tingin mo ay tama at may karapatan kang ibahagi. Dapat ilarawan ng review ng mamimili ang sarili mong pagbisita. Mapupunta ang mga isinumite sa pribadong pila para sa pagsusuri; hindi nito direktang binabago ang mga pampublikong listing. Maaaring tanggihan ng Thriftly ang mga doble, walang suporta, mapang-abuso, o walang kaugnayang isinumite.",
+  "terms3": "May mga feature at content ang Thriftly mula sa Google Maps. Saklaw ng Mga Karagdagang Tuntunin ng Serbisyo para sa End User ng Google Maps at ng Patakaran sa Privacy ng Google na naka-link sa ibaba ang paggamit sa mga feature na iyon. Nananatili sa content mula sa ibang source ang orihinal na pagkilala at mga naaangkop na tuntunin.",
+  "googleTerms": "Mga tuntunin ng Google Maps",
+  "googlePrivacy": "Patakaran sa privacy ng Google",
+  "vercelPrivacy": "Patakaran sa privacy ng Vercel",
+  "project": "Proyekto at source code ng Thriftly",
+  "home": "Home"
+}
