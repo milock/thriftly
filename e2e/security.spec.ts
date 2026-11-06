@@ -18,7 +18,9 @@ test('real search API returns scored bundled data', async ({request}) => {
   const body = await res.json();
   expect(body.stores.length).toBeGreaterThan(0);
   expect(body.stores[0].score.total).toBeGreaterThan(0);
-  expect(body.generatedAt).toBeTruthy();
+  expect(body.generatedAt).toBeNull(); // Mixed sources do not all publish an update date.
+  const chain = await request.get('/api/stores?lat=32.7157&lon=-117.1611&radius=25&brands=goodwill');
+  expect((await chain.json()).generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
 });
 test('accepts its own HTTPS origin and rejects a foreign origin', async ({request, baseURL}) => {
   const url = new URL(baseURL!).origin;

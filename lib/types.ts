@@ -11,6 +11,14 @@ export interface Store {
   brandId?: string;
   brand?: string;
   operator?: string;
+  /** Local independent operators may have multiple shops within their region. */
+  operatorType?: 'independent' | 'chain';
+  /** Deliberate evidence review, separate from a source import or refresh. */
+  verification?: {
+    method: 'official-website-review';
+    checkedAt: string;
+    sourceUrls: string[];
+  };
   sourcingModel?: 'donation' | 'buy-sell-trade' | 'mixed' | 'unknown';
   merchandiseScope?: 'general' | 'fashion' | 'home-improvement' | 'books' | 'unknown';
   location: LatLng;

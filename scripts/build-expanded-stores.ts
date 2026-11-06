@@ -8,6 +8,7 @@ import {computeGoodsScore} from '../lib/scoring';
 import {CATCHMENT_RADIUS_MILES} from '../lib/reference-ranges';
 import type {ScoredStore,TractCentroid,TractDemographics} from '../lib/types';
 import {assertSourceSnapshot} from '../lib/refresh-quality';
+import {parseIndependentStores} from '../lib/independent-stores';
 import {applyStoreCoordinateCorrection,goodwillCoordinateReviewReason,type StoreCoordinateCorrection} from '../lib/store-coordinate-integrity';
 try{for(const line of readFileSync('.env.local','utf8').split('\n')){const m=line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);if(m&&!process.env[m[1]])process.env[m[1]]=m[2].replace(/^["']|["']$/g,'');}}catch{}
 const read=(p:string)=>JSON.parse(readFileSync(p,'utf8'));
@@ -35,6 +36,9 @@ async function main(){
  const closet=read(join(cache,'out-of-the-closet-snapshot.json'));assertSourceSnapshot(closet.sourceUpdatedAt);
  const closetParsed=parseOutOfCloset(closet);added.push(...closetParsed.stores);exclusions.push({brandId:'out-of-the-closet',records:closetParsed.rejected});
  sources.push({brandId:'out-of-the-closet',source:'official-out-of-the-closet-locator',sourceUrl:closet.sourceUrl,sourceUpdatedAt:closet.sourceUpdatedAt,fetchedAt:closet.fetchedAt,publicCount:closetParsed.stores.length,rejectedCount:closetParsed.rejected.length,coverage:'official current locator; national completeness not independently established'});
+ const independent=parseIndependentStores(read('data/independent-san-diego.json'));
+ added.push(...independent);
+ sources.push({brandId:'independent',source:'official-independent-website',sourceUpdatedAt:undefined,fetchedAt:undefined,publicCount:independent.length,rejectedCount:0,coverage:'curated San Diego pilot; independent local operators; individual website-review dates are preserved, not refreshed automatically'});
  for(let i=0;i<added.length;i++)added[i]=applyStoreCoordinateCorrection(added[i],corrections.get(added[i].id));
  if(!added.length||new Set([...base,...added].map(s=>s.id)).size!==base.length+added.length)throw new Error('Empty or duplicate store IDs');
  const previous:ScoredStore[]=existsSync('data/stores-us.json')?read('data/stores-us.json').stores:[];
@@ -57,7 +61,7 @@ async function main(){
  const rescoredGoodwill=new Map(scored.slice(0,correctedBaseIds.size).map(store=>[store.id,store]));
  const stores=[...base.map(store=>rescoredGoodwill.get(store.id)??store),...scored.slice(correctedBaseIds.size)];
  for(const brandId of ['savers','buffalo-exchange','salvation-army','out-of-the-closet']){const count=added.filter(s=>s.brandId===brandId).length;const old=previous.filter(s=>(s as ExpandedStore).brandId===brandId).length;if(count<Math.max(1,old*.9))throw new Error(`Coverage regression for ${brandId}`);}
- const generatedAt=new Date().toISOString();const sourceUpdatedAt=[goodwill.sourceUpdatedAt??goodwill.generatedAt,...sources.map(s=>s.sourceUpdatedAt)].sort()[0];
+ const generatedAt=new Date().toISOString();const sourceUpdatedAt=[goodwill.sourceUpdatedAt??goodwill.generatedAt,...sources.map(s=>s.sourceUpdatedAt).filter((date):date is string=>!!date)].sort()[0];
  const payload={generatedAt,sourceUpdatedAt,source:'multi-source-thrift-registry',count:stores.length,sources:[{brandId:'goodwill',source:goodwill.source,sourceUpdatedAt:goodwill.sourceUpdatedAt,publicCount:base.length,coverage:'validated Goodwill dataset with documented location corrections and quarantines'},...sources],stores};
  mkdirSync('data/provenance',{recursive:true});writeFileSync('data/provenance/expanded-store-sources.json',JSON.stringify({generatedAt,sourceUpdatedAt,sources:payload.sources,exclusions},null,2)+'\n');
  writeFileSync('data/stores-us.json.tmp',JSON.stringify(payload));renameSync('data/stores-us.json.tmp','data/stores-us.json');

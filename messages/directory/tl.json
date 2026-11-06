@@ -59,5 +59,10 @@
   "searchCenter": "Gitna ng lugar ng paghahanap",
   "terms": "Mga tuntunin sa paggamit",
   "privacy": "Patakaran sa privacy",
-  "singleBrandCoverage": "Sa kasalukuyan, mga tindahan lang ng {brand} ang nakalista sa aming mga source sa loob ng radius na ito. Maaaring may iba pang thrift shop sa malapit."
+  "singleBrandCoverage": "Sa kasalukuyan, mga tindahan lang ng {brand} ang nakalista sa aming mga source sa loob ng radius na ito. Maaaring may iba pang thrift shop sa malapit.",
+  "independentStores": "Mga independiyenteng tindahan",
+  "independentCityTitle": "Mga independiyenteng thrift shop sa {place}",
+  "independentCityDescription": "Tingnan ang {count} thrift shop na pinamamahalaan nang hiwalay sa loob ng {radius} milya mula sa {place}.",
+  "independentCityIntro": "{count, plural, one {# thrift shop na pinamamahalaan nang hiwalay} other {# thrift shop na pinamamahalaan nang hiwalay}} sa loob ng {radius} milya mula sa {city}.",
+  "independentPilotScope": "Maliit na pilot sa San Diego ito ng mga lokal na operator, kabilang ang mga nonprofit. Hindi ito kumpletong direktoryo ng mga independiyenteng tindahan."
 }

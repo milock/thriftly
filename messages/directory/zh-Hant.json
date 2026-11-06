@@ -59,5 +59,10 @@
   "searchCenter": "搜尋中心",
   "terms": "使用條款",
   "privacy": "隱私權政策",
-  "singleBrandCoverage": "我們目前的資料來源在此搜尋半徑內只列出 {brand}。附近可能還有其他二手商店。"
+  "singleBrandCoverage": "我們目前的資料來源在此搜尋半徑內只列出 {brand}。附近可能還有其他二手商店。",
+  "independentStores": "獨立商店",
+  "independentCityTitle": "{place} 的獨立二手商店",
+  "independentCityDescription": "瀏覽 {place} 周圍 {radius} 英里內的 {count} 家獨立營運二手商店。",
+  "independentCityIntro": "{count, plural, other {# 家獨立營運二手商店}}，位於 {city} 周圍 {radius} 英里內。",
+  "independentPilotScope": "這是聖地牙哥的小規模試點，涵蓋本地營運者，包括非營利組織。這並非獨立商店的完整名錄。"
 }

@@ -59,5 +59,10 @@
   "searchCenter": "Tâm tìm kiếm",
   "terms": "Điều khoản sử dụng",
   "privacy": "Chính sách quyền riêng tư",
-  "singleBrandCoverage": "Các nguồn hiện tại của chúng tôi chỉ liệt kê cửa hàng {brand} trong bán kính này. Có thể còn cửa hàng đồ cũ khác ở gần đây."
+  "singleBrandCoverage": "Các nguồn hiện tại của chúng tôi chỉ liệt kê cửa hàng {brand} trong bán kính này. Có thể còn cửa hàng đồ cũ khác ở gần đây.",
+  "independentStores": "Cửa hàng độc lập",
+  "independentCityTitle": "Cửa hàng đồ cũ độc lập tại {place}",
+  "independentCityDescription": "Khám phá {count} cửa hàng đồ cũ hoạt động độc lập trong bán kính {radius} dặm quanh {place}.",
+  "independentCityIntro": "{count, plural, other {# cửa hàng đồ cũ hoạt động độc lập}} trong bán kính {radius} dặm quanh {city}.",
+  "independentPilotScope": "Đây là thử nghiệm quy mô nhỏ tại San Diego với các đơn vị vận hành địa phương, bao gồm cả tổ chức phi lợi nhuận. Đây không phải danh bạ đầy đủ các cửa hàng độc lập."
 }

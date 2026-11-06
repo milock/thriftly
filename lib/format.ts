@@ -1,12 +1,22 @@
 import type { LatLng } from "@/lib/types";
 
 /** Stable across server and browser CLDR versions, with explicit UTC date order. */
-export function formatSourceDate(value: string | undefined, locale = "en"): string | null {
+export function formatSourceDate(value: string | undefined, locale = "en", timeZone = "UTC"): string | null {
   if (!value || !Number.isFinite(Date.parse(value))) return null;
   const date = new Date(value);
-  const year = String(date.getUTCFullYear());
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(date.getUTCDate()).padStart(2, "0");
+  let year = String(date.getUTCFullYear());
+  let month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  let day = String(date.getUTCDate()).padStart(2, "0");
+  // A date-only source is already a calendar date. Timestamped reviews use the
+  // store's zone, so an evening San Diego check does not appear to be tomorrow.
+  if (value.includes("T") && timeZone !== "UTC") {
+    try {
+      const fields = new Intl.DateTimeFormat("en-US", {timeZone, calendar:"gregory", numberingSystem:"latn",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(date);
+      year = fields.find(p=>p.type==="year")!.value;
+      month = fields.find(p=>p.type==="month")!.value;
+      day = fields.find(p=>p.type==="day")!.value;
+    } catch { return null; }
+  }
   const parts = locale.startsWith("zh") ? [year, month, day]
     : locale === "en" || locale === "tl" ? [month, day, year] : [day, month, year];
   const result = parts.join("/");

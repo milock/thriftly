@@ -9,7 +9,9 @@ test('language menu supports keyboard choice and restores focus when dismissed',
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/goodwill/new-york-ny');
   const picker = page.getByRole('combobox', {name: 'Language', exact: true});
+  await expect(picker).toBeEnabled();
   await picker.focus();
+  await expect(picker).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('option')).toHaveCount(7);
   await expect(page.getByRole('option', {name: 'English', exact: true})).toHaveAttribute('aria-selected', 'true');
@@ -17,6 +19,7 @@ test('language menu supports keyboard choice and restores focus when dismissed',
   await expect(page.getByRole('listbox')).not.toBeVisible();
   await expect(picker).toBeFocused();
   await page.keyboard.press('Enter');
+  await expect(page.getByRole('option', {name: 'English', exact: true})).toBeFocused();
   await page.keyboard.type('Esp');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL('/es/goodwill/new-york-ny');
@@ -49,6 +52,7 @@ test('language menu fits narrow and wide layouts in both directions and themes',
 test('the final language remains reachable in a short landscape menu', async ({page}) => {
   await page.setViewportSize({width: 740, height: 320});
   await page.goto('/goodwill/new-york-ny');
+  await expect(page.locator('[data-language-picker]')).toBeEnabled();
   await page.locator('[data-language-picker]').focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('option', {name: 'English', exact: true})).toBeFocused();

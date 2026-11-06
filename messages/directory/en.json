@@ -59,5 +59,10 @@
   "searchCenter": "Search center",
   "terms": "Terms of use",
   "privacy": "Privacy policy",
-  "singleBrandCoverage": "Our current sources list only {brand} within this radius. Other thrift shops may be nearby."
+  "singleBrandCoverage": "Our current sources list only {brand} within this radius. Other thrift shops may be nearby.",
+  "independentStores": "Independent stores",
+  "independentCityTitle": "Independent thrift stores in {place}",
+  "independentCityDescription": "Explore {count} independently operated thrift stores within {radius} miles of {place}.",
+  "independentCityIntro": "{count, plural, one {# independently operated thrift store} other {# independently operated thrift stores}} within {radius} miles of {city}.",
+  "independentPilotScope": "A small San Diego pilot of local operators, including nonprofits. This is not a complete directory of independent shops."
 }

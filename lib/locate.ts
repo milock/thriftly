@@ -51,6 +51,8 @@ export function allBundledStores(): readonly ScoredStore[] { return nationalData
 
 /** When the bundled dataset was last refreshed (ISO string), for "updated" UI. */
 export function datasetGeneratedAt(brandIds: readonly string[] = []): string | null {
+  // Independent records currently carry review dates, not publisher update dates.
+  if (brandIds.includes('independent') || (!brandIds.length && nationalDataset().some(store => store.operatorType === 'independent' && !store.provenance?.sourceUpdatedAt))) return null;
   if (brandIds.length) {
     const dates = nationalDataset().filter(s => matchesBrands(s, brandIds))
       .map(s => s.provenance?.sourceUpdatedAt).filter((date): date is string => !!date && Number.isFinite(Date.parse(date)));

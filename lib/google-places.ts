@@ -44,6 +44,12 @@ function normalizeStreet(text: string): string {
 }
 
 function brandMatches(store: Store, name: string): boolean {
+  if (store.operatorType === "independent") {
+    // Only the curated shop identity; all street/state/distance checks still apply.
+    return [store.name, store.brand].filter((value): value is string => !!value)
+      .map(normalize).some(label => label.split(" ").length >= 2 &&
+        (name === label || name.startsWith(`${label} `)));
+  }
   const brand = store.brandId ?? "goodwill";
   if (brand === "savers") {
     const label = normalize(store.brand ?? store.name);

@@ -65,7 +65,7 @@ export function FilterPanel({ filters, onChange, className, hoursAvailable = tru
         </div>
         <p className="text-xs text-muted-foreground">{d("chooseBrands")}</p>
         <div className="grid grid-cols-1 min-[400px]:grid-cols-2">
-          {BRANDS.map(brand => <label key={brand.id} className="flex min-h-11 cursor-pointer items-center gap-2 text-sm">
+          {[...BRANDS.map(brand => ({id: brand.id, name: brand.name})), {id: "independent" as const, name: d("independentStores")}].map(brand => <label key={brand.id} className="flex min-h-11 cursor-pointer items-center gap-2 text-sm">
             <input type="checkbox" className="size-4 accent-[var(--brand)]" checked={filters.brandIds.includes(brand.id)} onChange={e => set({brandIds: e.target.checked ? [...filters.brandIds, brand.id] : filters.brandIds.filter(id => id !== brand.id)})} />{brand.name}
           </label>)}
         </div>

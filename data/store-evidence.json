@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-11-06T00:47:15.204173Z",
-  "coverage": "Curated source-checked facts for five stores; absence of evidence means unknown. No in-person visits or live inventory verification.",
+  "checkedAt": "2026-11-06T03:14:50Z",
+  "coverage": "Curated source-checked facts for nine stores; absence of evidence means unknown. No in-person visits or live inventory verification.",
   "records": [
     {
       "id": "savers/1191-clothing",
@@ -338,6 +338,215 @@
       "verificationMethod": "official-page",
       "inventoryClaim": false,
       "caveat": "Operator describes this merchandise category; individual items and current stock are not verified."
+    },
+    {
+      "id": "independent/humble-heart-ocean-beach-clothing",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/humble-heart-ocean-beach"
+      },
+      "category": "department",
+      "field": "clothing",
+      "value": true,
+      "source": {
+        "name": "Humble Heart official website",
+        "url": "https://www.theheartob.com/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
+    },
+    {
+      "id": "independent/home-start-clothing",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/home-start"
+      },
+      "category": "department",
+      "field": "clothing",
+      "value": true,
+      "source": {
+        "name": "Home Start official website",
+        "url": "https://home-start.org/home-start-thrift-boutique-store/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
+    },
+    {
+      "id": "independent/home-start-furniture",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/home-start"
+      },
+      "category": "department",
+      "field": "furniture",
+      "value": true,
+      "source": {
+        "name": "Home Start official website",
+        "url": "https://home-start.org/home-start-thrift-boutique-store/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
+    },
+    {
+      "id": "independent/home-start-housewares",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/home-start"
+      },
+      "category": "department",
+      "field": "housewares",
+      "value": true,
+      "source": {
+        "name": "Home Start official website",
+        "url": "https://home-start.org/home-start-thrift-boutique-store/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
+    },
+    {
+      "id": "independent/home-start-electronics",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/home-start"
+      },
+      "category": "department",
+      "field": "electronics",
+      "value": true,
+      "source": {
+        "name": "Home Start official website",
+        "url": "https://home-start.org/home-start-thrift-boutique-store/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
+    },
+    {
+      "id": "independent/safari-seconds-furniture",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/safari-seconds"
+      },
+      "category": "department",
+      "field": "furniture",
+      "value": true,
+      "source": {
+        "name": "Safari Seconds official website",
+        "url": "https://www.alliance-for-africa.org/safari-seconds-thrift-store",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
+    },
+    {
+      "id": "independent/safari-seconds-clothing",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/safari-seconds"
+      },
+      "category": "department",
+      "field": "clothing",
+      "value": true,
+      "source": {
+        "name": "Safari Seconds official website",
+        "url": "https://www.alliance-for-africa.org/safari-seconds-thrift-store",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
+    },
+    {
+      "id": "independent/safari-seconds-housewares",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/safari-seconds"
+      },
+      "category": "department",
+      "field": "housewares",
+      "value": true,
+      "source": {
+        "name": "Safari Seconds official website",
+        "url": "https://www.alliance-for-africa.org/safari-seconds-thrift-store",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
+    },
+    {
+      "id": "independent/father-joes-hillcrest-clothing",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/father-joes-hillcrest"
+      },
+      "category": "department",
+      "field": "clothing",
+      "value": true,
+      "source": {
+        "name": "Father Joe's Villages official website",
+        "url": "https://my.neighbor.org/take-action/retail-shop/thrift-store-locations/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
+    },
+    {
+      "id": "independent/father-joes-hillcrest-furniture",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/father-joes-hillcrest"
+      },
+      "category": "department",
+      "field": "furniture",
+      "value": true,
+      "source": {
+        "name": "Father Joe's Villages official website",
+        "url": "https://my.neighbor.org/take-action/retail-shop/thrift-store-locations/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
+    },
+    {
+      "id": "independent/father-joes-hillcrest-housewares",
+      "appliesTo": {
+        "type": "store",
+        "id": "independent/father-joes-hillcrest"
+      },
+      "category": "department",
+      "field": "housewares",
+      "value": true,
+      "source": {
+        "name": "Father Joe's Villages official website",
+        "url": "https://my.neighbor.org/take-action/retail-shop/thrift-store-locations/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T03:14:50Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false
     }
   ]
 }

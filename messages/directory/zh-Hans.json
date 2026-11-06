@@ -59,5 +59,10 @@
   "searchCenter": "搜索中心",
   "terms": "使用条款",
   "privacy": "隐私政策",
-  "singleBrandCoverage": "我们目前的资料来源在此搜索半径内只列出 {brand}。附近可能还有其他二手商店。"
+  "singleBrandCoverage": "我们目前的资料来源在此搜索半径内只列出 {brand}。附近可能还有其他二手商店。",
+  "independentStores": "独立商店",
+  "independentCityTitle": "{place} 的独立二手商店",
+  "independentCityDescription": "浏览 {place} 周围 {radius} 英里内的 {count} 家独立运营的二手商店。",
+  "independentCityIntro": "{count, plural, other {# 家独立运营的二手商店}}，位于 {city} 周围 {radius} 英里内。",
+  "independentPilotScope": "这是圣迭戈的小规模试点，涵盖本地经营者，包括非营利组织。这并非独立商店的完整名录。"
 }

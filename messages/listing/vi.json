@@ -33,5 +33,9 @@
   "scoreMethod": "Khả năng đi bộ đóng góp 5% khi có dữ liệu. Đánh giá của người mua đã được duyệt đóng góp tối đa 30%, tăng theo số lượng đánh giá. Phần trọng số còn lại dựa trên tín hiệu khu dân cư.",
   "accessVintage": "Dữ liệu EPA: bản phát hành năm 2021",
   "partialCensus": "Một số yếu tố điều tra dân số không có sẵn.",
-  "retrieved": "Thời điểm truy xuất nguồn"
+  "retrieved": "Thời điểm truy xuất nguồn",
+  "independent": "Cửa hàng độc lập",
+  "verifiedOnline": "Đã xác minh trực tuyến: {date}",
+  "verificationMethod": "Chúng tôi đã kiểm tra website của đơn vị vận hành để xác nhận đây là cửa hàng bán lẻ, địa chỉ và đơn vị vận hành tại địa phương. Không có chuyến ghé thăm trực tiếp.",
+  "operatorWebsite": "Website của đơn vị vận hành"
 }

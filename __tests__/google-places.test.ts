@@ -73,6 +73,18 @@ describe("Google listing identity", () => {
     expect(fieldMask).not.toMatch(/reviews|rating|\*/i);
     expect(JSON.parse(String(options?.body))).toMatchObject({ textQuery: `Goodwill ${store.address}`, pageSize: 5 });
   });
+
+  it("matches a reviewed independent identity without falling back to Goodwill", () => {
+    const independent: Store = {...store, brandId: undefined, name: 'Humble Heart Thrift + Music', brand: 'Humble Heart', operatorType: 'independent'};
+    const candidate = {...match, displayName: {text: 'Humble Heart Thrift Store'}};
+    expect(selectGooglePlaceId(independent, [candidate])).toBe(match.id);
+    expect(selectGooglePlaceId(independent, [match])).toBeNull();
+    expect(selectGooglePlaceId(independent, [{...candidate, displayName:{text:'Humble Heartbreak Thrift Store'}}])).toBeNull();
+    expect(selectGooglePlaceId(independent, [{...candidate, displayName:{text:'Humble Heart Donation Center'}}])).toBeNull();
+    expect(selectGooglePlaceId(independent, [{...candidate, location:{latitude:35,longitude:-118.260}}])).toBeNull();
+    expect(selectGooglePlaceId(independent, [{...candidate, businessStatus:'CLOSED_PERMANENTLY'}])).toBeNull();
+    expect(selectGooglePlaceId(independent, [candidate,{...candidate,id:'ChIJDuplicate'}])).toBeNull();
+  });
 });
 
 describe("place match route", () => {

@@ -2,7 +2,7 @@ import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import {getTranslations, setRequestLocale} from 'next-intl/server';
 import {Link} from '@/i18n/navigation';
-import {BRANDS, getBrand} from '@/lib/brands';
+import {BRANDS, getBrand, matchesBrands} from '@/lib/brands';
 import {CITIES, getCity} from '@/lib/cities';
 import {cityCentroid} from '@/lib/city-data';
 import {datasetGeneratedAt, locateBundledStores} from '@/lib/locate';
@@ -45,7 +45,7 @@ export default async function DirectoryCity({params}: {params: Promise<{locale: 
   const place = `${city.city}, ${city.state}`; const title = brand ? t('cityBrandTitle', {brand: brand.name, place}) : t('cityAllTitle', {place});
   const hubTitle = brand ? t('brandTitle', {brand: brand.name}) : t('allTitle');
   const date = datasetGeneratedAt(brand ? [brand.id] : []);
-  const representedBrands = BRANDS.filter(b => stores.some(store => (store.brandId ?? 'goodwill') === b.id));
+  const representedBrands = BRANDS.filter(b => stores.some(store => matchesBrands(store, [b.id])));
   const url = (path: string) => SITE_URL + localizedPath(path, locale);
   const jsonLd = {'@context': 'https://schema.org', '@graph': [
     {'@type': 'BreadcrumbList', itemListElement: [
@@ -60,7 +60,7 @@ export default async function DirectoryCity({params}: {params: Promise<{locale: 
     <nav aria-label={p('breadcrumb')} className="text-sm text-muted-foreground"><Link href="/">{p('home')}</Link> / <Link href={`/${id}`}>{hubTitle}</Link> / {place}</nav>
     <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
     <p className="mt-3 text-muted-foreground">{!stores.length ? t('cityEmpty', {city: city.city}) : brand ? t('cityBrandIntro', {count: stores.length, brand: brand.name, radius: city.radiusMiles, city: city.city}) : t('cityAllIntro', {count: stores.length, radius: city.radiusMiles, city: city.city})}</p>
-    <p className="mt-2 text-sm text-muted-foreground">{!brand && representedBrands.length === 1 ? t('singleBrandCoverage', {brand: representedBrands[0].name}) : t('coverageNote')}</p>
+    <p className="mt-2 text-sm text-muted-foreground">{!brand && representedBrands.length === 1 && !stores.some(store => store.operatorType === 'independent') ? t('singleBrandCoverage', {brand: representedBrands[0].name}) : t('coverageNote')}</p>
     <Link href={mapHref} className="mt-5 inline-flex min-h-11 items-center rounded-md bg-brand px-5 font-medium text-brand-foreground">{t('openMap')}</Link>
     <BrandNavigation city={city} active={id}/>
     {stores.length > 0 && <section className="mt-8"><h2 className="text-xl font-semibold">{t('cityResults', {city: city.city})}</h2><p className="mt-2 text-sm text-muted-foreground">{t('neighborhoodNote')}</p><div className="mt-4"><CityStores initial={stores} cityName={city.city} lat={center?.lat} lon={center?.lon} radiusMiles={city.radiusMiles} brandIds={brand ? [brand.id] : []} generatedAt={date} initialDateLabel={date ? new Intl.DateTimeFormat(locale, {dateStyle: 'medium', timeZone: 'UTC'}).format(new Date(date)) : undefined}/></div></section>}

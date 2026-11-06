@@ -33,5 +33,9 @@
   "scoreMethod": "Kapag may datos, 5% ang ambag ng kakayahang lakarin ang lugar. Hanggang 30% naman ang ambag ng mga aprubadong review ng mamimili; tumataas ito batay sa dami ng review. Ang natitirang bahagi ay mula sa palatandaan ng komunidad.",
   "accessVintage": "Datos ng EPA: release noong 2021",
   "partialCensus": "May ilang salik mula sa Senso na hindi available.",
-  "retrieved": "Petsa ng pagkuha sa source"
+  "retrieved": "Petsa ng pagkuha sa source",
+  "independent": "Independiyenteng tindahan",
+  "verifiedOnline": "Na-verify online: {date}",
+  "verificationMethod": "Sinuri namin ang website ng operator para alamin kung retail shop ito, pati ang address at lokal na operator. Hindi kami bumisita nang personal.",
+  "operatorWebsite": "Website ng operator"
 }

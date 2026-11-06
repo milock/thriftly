@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T00:40:58.486Z",
+  "generatedAt": "2026-11-06T03:17:52.374Z",
   "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
   "sources": [
     {
@@ -57,6 +57,13 @@
       "publicCount": 26,
       "rejectedCount": 0,
       "coverage": "official current locator; national completeness not independently established"
+    },
+    {
+      "brandId": "independent",
+      "source": "official-independent-website",
+      "publicCount": 4,
+      "rejectedCount": 0,
+      "coverage": "curated San Diego pilot; independent local operators; individual website-review dates are preserved, not refreshed automatically"
     }
   ],
   "exclusions": [

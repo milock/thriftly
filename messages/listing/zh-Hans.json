@@ -33,5 +33,9 @@
   "scoreMethod": "有数据时，步行便利度占 5%。已批准的买家评价最高占 30%，权重随评价数量增加。其余权重依据社区指标。",
   "accessVintage": "EPA 数据：2021 年发布版",
   "partialCensus": "部分人口普查指标暂不可用。",
-  "retrieved": "来源获取时间"
+  "retrieved": "来源获取时间",
+  "independent": "独立商店",
+  "verifiedOnline": "线上核实：{date}",
+  "verificationMethod": "我们查阅了运营方网站，核对其是否为零售店、地址和当地运营方。未进行实地到访。",
+  "operatorWebsite": "运营方网站"
 }

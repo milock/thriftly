@@ -59,5 +59,10 @@
   "searchCenter": "Centro de la búsqueda",
   "terms": "Términos de uso",
   "privacy": "Política de privacidad",
-  "singleBrandCoverage": "Nuestras fuentes actuales solo incluyen tiendas de {brand} dentro de este radio. Puede haber otras tiendas de segunda mano cerca."
+  "singleBrandCoverage": "Nuestras fuentes actuales solo incluyen tiendas de {brand} dentro de este radio. Puede haber otras tiendas de segunda mano cerca.",
+  "independentStores": "Tiendas independientes",
+  "independentCityTitle": "Tiendas de segunda mano independientes en {place}",
+  "independentCityDescription": "Explora {count} tiendas de segunda mano gestionadas de forma independiente en un radio de {radius} millas de {place}.",
+  "independentCityIntro": "{count, plural, one {# tienda de segunda mano gestionada de forma independiente} other {# tiendas de segunda mano gestionadas de forma independiente}} en un radio de {radius} millas de {city}.",
+  "independentPilotScope": "Un pequeño piloto en San Diego con operadores locales, incluidas organizaciones sin fines de lucro. No es un directorio completo de tiendas independientes."
 }

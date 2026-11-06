@@ -33,5 +33,9 @@
   "scoreMethod": "La facilidad para caminar aporta un 5% cuando hay datos. Las reseñas de compradores aprobadas aportan hasta un 30%; su peso aumenta con el número de reseñas. El resto se basa en el indicador del vecindario.",
   "accessVintage": "Datos de la EPA: versión de 2021",
   "partialCensus": "Algunos factores del censo no están disponibles.",
-  "retrieved": "Fuente obtenida"
+  "retrieved": "Fuente obtenida",
+  "independent": "Tienda independiente",
+  "verifiedOnline": "Verificada en línea: {date}",
+  "verificationMethod": "Consultamos el sitio web del operador para comprobar que se trata de una tienda minorista, así como la dirección y el operador local. No hicimos una visita presencial.",
+  "operatorWebsite": "Sitio web del operador"
 }

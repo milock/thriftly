@@ -1,7 +1,7 @@
 import type { ScoredStore } from "@/lib/types";
 import { DEPARTMENTS, documentedDepartments, type Department } from "@/lib/store-evidence";
 import { parseHours, isOpenNow } from "@/lib/hours";
-import { matchesBrands, type BrandId } from "@/lib/brands";
+import { matchesBrands, type StoreFilterId } from "@/lib/brands";
 
 export type SortKey = "score" | "distance" | "best-nearby";
 
@@ -10,7 +10,7 @@ export interface Filters {
   minScore: number;
   openNowOnly: boolean;
   sort: SortKey;
-  brandIds: BrandId[];
+  brandIds: StoreFilterId[];
   departments: Department[];
 }
 

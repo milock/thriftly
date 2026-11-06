@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import { SlidersHorizontal, List as ListIcon, Map as MapIcon, ChevronDown, ArrowRight } from "lucide-react";
 import type { LatLng } from "@/lib/types";
-import { parseBrandIds } from "@/lib/brands";
+import { parseStoreFilterIds } from "@/lib/brands";
 import { MapBoundary } from "@/components/map/map-boundary";
 import { useStores } from "@/lib/use-stores";
 import { formatDistance } from "@/lib/format";
@@ -87,7 +87,7 @@ export default function AppPage() {
     const p = new URLSearchParams(initialQuery);
     const minScore = Number(p.get("minScore") ?? 0);
     const sort = p.get("sort");
-    setFilters(f => ({...f, brandIds: parseBrandIds(p.get("brands")), departments: parseDepartments(p.get("departments")), minScore: Number.isFinite(minScore) ? Math.max(0, Math.min(100, minScore)) : 0, openNowOnly: p.get("open") === "1", sort: sort === "distance" || sort === "best-nearby" ? sort : "score"}));
+    setFilters(f => ({...f, brandIds: parseStoreFilterIds(p.get("brands")), departments: parseDepartments(p.get("departments")), minScore: Number.isFinite(minScore) ? Math.max(0, Math.min(100, minScore)) : 0, openNowOnly: p.get("open") === "1", sort: sort === "distance" || sort === "best-nearby" ? sort : "score"}));
     const qlat = parseFloat(p.get("lat") ?? "");
     const qlon = parseFloat(p.get("lon") ?? "");
     if (

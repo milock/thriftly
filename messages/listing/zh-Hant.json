@@ -33,5 +33,9 @@
   "scoreMethod": "有資料時，步行便利度佔 5%。已核准的買家評價最高佔 30%，權重會隨評價數量增加。其餘權重依據社區指標。",
   "accessVintage": "EPA 資料：2021 年發布版",
   "partialCensus": "部分人口普查指標目前無法取得。",
-  "retrieved": "來源取得時間"
+  "retrieved": "來源取得時間",
+  "independent": "獨立商店",
+  "verifiedOnline": "線上查證：{date}",
+  "verificationMethod": "我們查閱了營運方網站，核對其是否為零售店、地址和當地營運方。未進行實地到訪。",
+  "operatorWebsite": "營運方網站"
 }

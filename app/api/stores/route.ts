@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { locateStores, locateStoresFresh, nearestStore, datasetGeneratedAt } from "@/lib/locate";
-import { getBrand, parseBrandIds } from "@/lib/brands";
+import { isStoreFilterId, parseStoreFilterIds } from "@/lib/brands";
 
 export const maxDuration = 60;
 
@@ -13,10 +13,10 @@ export async function GET(request: Request) {
   // source refreshes run in the scheduled pipeline, never on public requests.
   const live = searchParams.get("live") === "1";
   const rawBrands = searchParams.get("brands");
-  if (rawBrands && (rawBrands.length > 240 || rawBrands.split(',').some(id => !getBrand(id)))) {
+  if (rawBrands && (rawBrands.length > 240 || rawBrands.split(',').some(id => !isStoreFilterId(id)))) {
     return NextResponse.json({error: 'unknown store brand'}, {status: 400});
   }
-  const brandIds = parseBrandIds(rawBrands);
+  const brandIds = parseStoreFilterIds(rawBrands);
   if (!searchParams.get("lat")?.trim() || !searchParams.get("lon")?.trim() || !Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) {
     return NextResponse.json({ error: "valid lat and lon are required" }, { status: 400 });
   }

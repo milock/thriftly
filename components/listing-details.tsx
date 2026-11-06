@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import type { Store } from "@/lib/types";
 import { evidenceForStore } from "@/lib/store-evidence";
+import { hasOnlineVerification } from "@/lib/independent-stores";
 import { formatSourceDate, safeWebsiteUrl } from "@/lib/format";
 import { StoreGoogleDetails } from "@/components/store-google-details";
 import { ReportListing } from "@/components/report-listing";
@@ -26,13 +27,18 @@ export function ListingDetails({store, showType = true}: {store: Store; showType
   const evidence = evidenceForStore(store);
   const source = store.provenance;
   const sourceUrl = safeWebsiteUrl(source?.sourceUrl);
-  const date = (value?: string) => formatSourceDate(value, locale) ?? t("unknown");
+  const date = (value?: string) => formatSourceDate(value, locale, store.timezone) ?? t("unknown");
   return <div className="space-y-2 border-t border-border pt-3 text-xs leading-relaxed text-muted-foreground">
     <div className="flex flex-wrap gap-x-3 gap-y-1">
       {showType && store.facilityType && <span>{u(store.facilityType)}</span>}
-      <span>{t("source")}: {sourceUrl ? <a className="underline underline-offset-2" href={sourceUrl} target="_blank" rel="noopener noreferrer">{sourceNames[source!.source] ?? source!.source}</a> : source?.source ?? t("unknown")}</span>
+      {store.operatorType === "independent" && <span>{t("independent")}</span>}
+      <span>{t("source")}: {sourceUrl ? <a className="underline underline-offset-2" href={sourceUrl} target="_blank" rel="noopener noreferrer">{source?.source === "official-independent-website" ? t("operatorWebsite") : sourceNames[source!.source] ?? source!.source}</a> : source?.source ?? t("unknown")}</span>
     </div>
     <p>{t("retrieved")}: <time dateTime={source?.fetchedAt}>{date(source?.fetchedAt)}</time></p>
+    {hasOnlineVerification(store) && <div className="space-y-1">
+      <p className="font-medium text-foreground">{t("verifiedOnline", {date: date(store.verification!.checkedAt)})}</p>
+      <p>{t("verificationMethod")}</p>
+    </div>}
     <StoreGoogleDetails store={store} />
     <div className="flex flex-wrap items-start gap-x-4">
     <details className="min-w-0 [&[open]]:basis-full">

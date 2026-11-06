@@ -33,5 +33,9 @@
   "scoreMethod": "Walkability contributes 5% when available. Approved shopper reviews contribute up to 30%, increasing with review count. Remaining weight uses the neighborhood signal.",
   "accessVintage": "EPA data: 2021 release",
   "partialCensus": "Some Census factors are unavailable.",
-  "retrieved": "Source retrieved"
+  "retrieved": "Source retrieved",
+  "independent": "Independent store",
+  "verifiedOnline": "Verified online: {date}",
+  "verificationMethod": "We checked the operator’s website for a retail shop, address and local operator. No in-person visit.",
+  "operatorWebsite": "Operator website"
 }
