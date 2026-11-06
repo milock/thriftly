@@ -49,7 +49,7 @@ test('independent search retains departments and directions when the map fails',
  const card=page.locator('[data-store-card]').first();
  await expect(card.locator('[data-store-address]')).not.toBeEmpty();
  await card.locator('[data-store-toggle]').click();
- await expect(card.getByRole('link',{name:'Directions',exact:true})).toHaveAttribute('href',/^https:\/\/www.google.com\/maps\/dir\//);
+ await expect(card.getByRole('link',{name:'Directions',exact:true})).toHaveAttribute('href',/^https:\/\/www\.google\.com\/maps\/dir\//);
 });
 test('city navigation exposes the pilot and other cities do not create empty directories',async({page})=>{
  await page.goto('/thrift-stores/san-diego-ca');

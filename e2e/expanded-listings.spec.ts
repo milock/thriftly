@@ -35,7 +35,7 @@ test('map tile failure preserves addresses and directions in the list', async({p
  const card=page.locator('[data-store-card]').first();
  await expect(card.locator('[data-store-address]')).not.toBeEmpty();
  await card.locator('[data-store-toggle]').click();
- await expect(card.getByRole('link',{name:'Directions',exact:true})).toHaveAttribute('href',/^https:\/\/www.google.com\/maps\/dir\//);
+ await expect(card.getByRole('link',{name:'Directions',exact:true})).toHaveAttribute('href',/^https:\/\/www\.google\.com\/maps\/dir\//);
 });
 
 test('problem reports enter pending review without changing the listing',async({page})=>{

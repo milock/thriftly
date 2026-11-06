@@ -19,7 +19,9 @@ export function inspectHtml(html){
  const scripts=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)];
  const jsonld=scripts.filter(m=>attrs(`<script ${m[1]}>`).type==='application/ld+json').map(m=>{try{return {value:JSON.parse(m[2])};}catch{return {error:'invalid JSON-LD'};}});
  // Next embeds a second representation of the page in script payloads; exclude it.
- const clean=html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi,'').replace(/<!--[\s\S]*?-->/g,'');
+ // Use separators so removal cannot join partial markup into a new tag.
+ // This is audit text extraction, never an HTML sanitizer or renderable output.
+ const clean=html.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi,' ').replace(/<!--[\s\S]*?-->/g,' ');
  const tags=[...clean.matchAll(/<(?:html|meta|link|a|[a-z][\w:-]*)\b[^>]*>/gi)].map(m=>({tag:m[0].match(/^<([^\s/>]+)/)[1].toLowerCase(),a:attrs(m[0])}));
  const by=(tag,predicate=()=>true)=>tags.filter(x=>x.tag===tag&&predicate(x.a)).map(x=>x.a);
  return {html:by('html')[0]??{}, title:text(clean.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1]??''), description:by('meta',a=>a.name?.toLowerCase()==='description')[0]?.content??'', robots:by('meta',a=>a.name?.toLowerCase()==='robots')[0]?.content??'', googlebot:by('meta',a=>a.name?.toLowerCase()==='googlebot')[0]?.content??'', ogImage:by('meta',a=>a.property?.toLowerCase()==='og:image').map(a=>a.content), twitterImage:by('meta',a=>a.name?.toLowerCase()==='twitter:image').map(a=>a.content), canonical:by('link',a=>a.rel?.toLowerCase()==='canonical').map(a=>a.href), alternates:by('link',a=>a.rel?.toLowerCase()==='alternate'&&a.hreflang), h1:[...clean.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map(m=>text(m[1])), ids:new Set(tags.map(x=>x.a.id).filter(Boolean)), hrefs:by('a',a=>!!a.href).map(a=>a.href), jsonld};
