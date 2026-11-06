@@ -5,10 +5,9 @@ import { useTranslations, useLocale } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import type { ScoredStore } from "@/lib/types";
+import { InfoDisclosure } from "@/components/info-disclosure";
 import { RankedStores } from "./ranked-stores";
 import { cn } from "@/lib/utils";
-
-type Enrichment = Pick<ScoredStore, "neighborhood" | "street" | "locality" | "region">;
 
 function relativeTime(iso: string | null, locale: string, fallback: string): string {
   if (!iso || Number.isNaN(new Date(iso).getTime())) return fallback;
@@ -20,43 +19,6 @@ function relativeTime(iso: string | null, locale: string, fallback: string): str
   return formatter.format(Math.round(seconds / 86400), "day");
 }
 
-// Reverse-geocode store coords into neighborhood + street addresses. Soft-fails
-// to whatever OSM already had so the list still renders.
-async function enrichStores(list: ScoredStore[]): Promise<ScoredStore[]> {
-  try {
-    const points = list.slice(0, 60).map((s) => ({ lat: s.location.lat, lon: s.location.lon }));
-    const res = await fetch("/api/enrich", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ points }),
-    });
-    const enriched: Record<string, Enrichment> = res.ok ? (await res.json()).enriched : {};
-    return list.map((st) => {
-      const e = enriched[`${st.location.lat},${st.location.lon}`];
-      if (!e) return { ...st, enriched: true };
-      const street = st.street ?? e.street;
-      const locality = st.locality ?? e.locality;
-      const region = st.region ?? e.region;
-      return {
-        ...st,
-        enriched: true,
-        neighborhood: st.neighborhood ?? e.neighborhood,
-        street,
-        locality,
-        region,
-        address: [street, locality, region].filter(Boolean).join(", ") || st.address,
-      };
-    });
-  } catch {
-    return list.map((st) => ({ ...st, enriched: true }));
-  }
-}
-
-/**
- * Renders the ranked list immediately (server-provided), fills in neighborhoods
- * client-side, and shows when the data was last refreshed plus a Refresh button
- * that reloads the published dataset for the city.
- */
 export function CityStores({
   initial,
   cityName,
@@ -82,6 +44,7 @@ export function CityStores({
   const [updatedAt, setUpdatedAt] = useState<string | null>(generatedAt ?? null);
   const [refreshError, setRefreshError] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   // Compute the relative label only after mount + on a timer, so the server and
   // client agree on first paint (no hydration mismatch) and "just now" ages.
   const [label, setLabel] = useState<string | null>(null);
@@ -90,16 +53,6 @@ export function CityStores({
     const id = setInterval(() => setLabel(relativeTime(updatedAt, locale, t("recent"))), 60_000);
     return () => { clearTimeout(first); clearInterval(id); };
   }, [updatedAt, locale, t]);
-
-  useEffect(() => {
-    let active = true;
-    enrichStores(initial).then((next) => {
-      if (active) setStores(next);
-    });
-    return () => {
-      active = false;
-    };
-  }, [initial]);
 
   const canRefresh =
     typeof lat === "number" && typeof lon === "number" && typeof radiusMiles === "number";
@@ -112,8 +65,9 @@ export function CityStores({
       if (!res.ok) throw new Error("Refresh unavailable");
       if (res.ok) {
         const data = (await res.json()) as { stores?: ScoredStore[]; generatedAt?: string | null };
-        const fresh = data.stores ?? [];
-        setStores(await enrichStores(fresh));
+        if (!Array.isArray(data.stores) || (stores.length > 0 && data.stores.length === 0)) throw new Error("No usable refresh results");
+        setStores(data.stores);
+        setRefreshKey(value => value + 1);
         setUpdatedAt(data.generatedAt ?? generatedAt ?? null);
       }
     } catch {
@@ -122,12 +76,12 @@ export function CityStores({
     } finally {
       setRefreshing(false);
     }
-  }, [canRefresh, refreshing, lat, lon, radiusMiles, generatedAt, brandIds]);
+  }, [canRefresh, refreshing, lat, lon, radiusMiles, generatedAt, brandIds, stores.length]);
 
   return (
     <div>
       <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs text-muted-foreground">
-        {updatedAt && <span>{t("sourceUpdated", { time: label ?? initialDateLabel ?? updatedAt.slice(0, 10) })}</span>}
+        {updatedAt && <InfoDisclosure label={t("sourceInfo")}><p>{t("sourceUpdated", { time: label ?? initialDateLabel ?? updatedAt.slice(0, 10) })}</p></InfoDisclosure>}
         {canRefresh && (
           <button
             type="button"
@@ -141,7 +95,7 @@ export function CityStores({
         )}
       </div>
       {refreshError && <p role="alert" className="mb-4 text-sm text-muted-foreground">{t("refreshFailed")}</p>}
-      <RankedStores stores={stores} cityName={cityName} />
+      <RankedStores stores={stores} cityName={cityName} center={typeof lat === 'number' && typeof lon === 'number' ? {lat, lon} : undefined} radiusMiles={radiusMiles} refreshKey={refreshKey} />
     </div>
   );
 }

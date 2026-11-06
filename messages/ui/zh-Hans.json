@@ -39,7 +39,7 @@
   "within": "搜索 {miles, number} mi 范围",
   "scoring": "评分",
   "howScoring": "评分方式",
-  "methodIntro": "到访评分综合附近的人口普查指标、可用时的步行便利度数据，以及已批准的 Thriftly 买家评价。Google 评分单独显示。该评分不预测库存、价格或价值。",
+  "methodIntro": "到访评分综合附近的人口普查指标、可用时的步行便利度数据，以及可用的 Google 评分。该评分不预测库存、价格或价值。",
   "methodSource": "数据来源：美国人口普查 ACS、AllThePlaces（CC0）、OpenStreetMap 补充记录及官方门店查找页面。各品牌的覆盖范围不同。请向门店运营方确认详情。",
   "medianHomeValue": "房屋价值中位数",
   "medianHouseholdIncome": "家庭收入中位数",
@@ -53,7 +53,7 @@
   "github": "在 GitHub 查看源码",
   "launch": "查找附近门店",
   "howScoreStores": "门店评分方法",
-  "footer": "到访评分综合社区人口普查指标、可用时的步行便利度数据，以及已批准的 Thriftly 买家评价。Google 评分单独显示。门店列表使用 AllThePlaces（CC0）、OpenStreetMap 补充记录及官方门店查找页面的数据，覆盖范围可能不完整。请向运营方确认门店信息。Thriftly 与所列门店没有关联。",
+  "footer": "到访评分综合社区人口普查指标、可用时的步行便利度数据，以及可用的 Google 评分。门店列表使用 AllThePlaces（CC0）、OpenStreetMap 补充记录及官方门店查找页面的数据，覆盖范围可能不完整。请向运营方确认门店信息。Thriftly 与所列门店没有关联。",
   "source": "开源",
   "updated": "更新于{time}",
   "recent": "最近",
@@ -97,5 +97,6 @@
   "skipMain": "跳到主要内容",
   "refreshFailed": "刷新失败。仍显示之前的结果。",
   "showResults": "查看 {count} 家门店",
-  "sourceUpdated": "最早的来源更新时间：{time}"
+  "sourceUpdated": "最早的来源更新时间：{time}",
+  "sourceInfo": "来源更新时间"
 }

@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+import { mockStoreDetails } from "./fixtures";
+import { mockGoogleMaps } from "./google-maps-fixture";
 
 test.describe("landing page", () => {
   test("shows the hero and scoring explainer", async ({ page }) => {
@@ -11,6 +13,8 @@ test.describe("landing page", () => {
   });
 
   test("primary CTA launches the app", async ({ page }) => {
+    await mockGoogleMaps(page);
+    await mockStoreDetails(page, { unavailable: true });
     await page.goto("/");
     await page.locator("section").filter({has: page.getByRole("heading", {name: /find thrift and resale stores near you/i})}).getByRole("link", {name: /find stores near me/i}).click();
     // /search mirrors its state into the URL (shareable), so allow query params.

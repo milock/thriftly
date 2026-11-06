@@ -1,4 +1,7 @@
 import { test, expect } from "@playwright/test";
+import {mockStoreDetails} from "./fixtures";
+
+test.beforeEach(async ({page}) => { await mockStoreDetails(page, {unavailable: true}); });
 
 // The /goodwill hub and state pages are static (no upstream API calls), so these are hermetic.
 test.describe("local SEO hierarchy", () => {

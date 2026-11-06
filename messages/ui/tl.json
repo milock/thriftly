@@ -39,7 +39,7 @@
   "within": "Maghanap sa loob ng {miles, number} mi",
   "scoring": "Pagmamarka",
   "howScoring": "Paano ang pagmamarka",
-  "methodIntro": "Pinagsasama ng iskor ng pagbisita ang mga sukatan ng kalapit na Senso, datos ng kakayahang lakarin kapag mayroon, at mga aprubadong review ng mamimili sa Thriftly. Hiwalay ang mga rating sa Google. Hindi nito hinuhulaan ang stock, presyo, o halaga.",
+  "methodIntro": "Pinagsasama ng iskor ng pagbisita ang mga sukatan ng kalapit na Senso, datos ng kakayahang lakarin kapag mayroon, at mga rating sa Google kapag mayroon. Hindi nito hinuhulaan ang stock, presyo, o halaga.",
   "methodSource": "Mga source: U.S. Census ACS, AllThePlaces (CC0), karagdagang tala mula sa OpenStreetMap, at mga opisyal na store locator. Nag-iiba ang saklaw ayon sa brand. Kumpirmahin ang mga detalye sa operator.",
   "medianHomeValue": "Median na halaga ng bahay",
   "medianHouseholdIncome": "Median na kita ng sambahayan",
@@ -53,7 +53,7 @@
   "github": "Tingnan ang code sa GitHub",
   "launch": "Hanapin ang malapit na tindahan",
   "howScoreStores": "Paano namin minamarkahan ang tindahan",
-  "footer": "Pinagsasama ng mga iskor ng pagbisita ang mga sukatan ng Senso ng kapitbahayan, datos ng kakayahang lakarin kapag mayroon, at mga aprubadong review ng mamimili sa Thriftly. Hiwalay ang mga rating sa Google. Gumagamit ang mga listing ng AllThePlaces (CC0), karagdagang tala mula sa OpenStreetMap, at opisyal na store locator; maaaring hindi kumpleto ang saklaw. Kumpirmahin ang detalye sa operator. Hindi kaanib ang Thriftly ng mga nakalistang tindahan.",
+  "footer": "Pinagsasama ng mga iskor ng pagbisita ang mga sukatan ng Senso ng kapitbahayan, datos ng kakayahang lakarin kapag mayroon, at mga rating sa Google kapag mayroon. Gumagamit ang mga listing ng AllThePlaces (CC0), karagdagang tala mula sa OpenStreetMap, at opisyal na store locator; maaaring hindi kumpleto ang saklaw. Kumpirmahin ang detalye sa operator. Hindi kaanib ang Thriftly ng mga nakalistang tindahan.",
   "source": "Open source",
   "updated": "Na-update {time}",
   "recent": "kamakailan",
@@ -97,5 +97,6 @@
   "skipMain": "Lumaktaw sa pangunahing nilalaman",
   "refreshFailed": "Hindi nagtagumpay ang pag-refresh. Nakikita pa rin ang mga naunang resulta.",
   "showResults": "Tingnan ang {count} tindahan",
-  "sourceUpdated": "Pinakamatandang update ng source: {time}"
+  "sourceUpdated": "Pinakamatandang update ng source: {time}",
+  "sourceInfo": "Pag-update ng source"
 }

@@ -21,5 +21,28 @@ jobs:
       - run: npm test
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:e2e
-      - run: npm run audit:seo -- --strict
+      - name: Audit static and live dynamic SEO
+        shell: bash
+        run: |
+          seo_server_log="$RUNNER_TEMP/thriftly-seo-server.log"
+          node node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3108 >"$seo_server_log" 2>&1 &
+          seo_server_pid=$!
+          trap 'kill "$seo_server_pid" 2>/dev/null || true; wait "$seo_server_pid" 2>/dev/null || true' EXIT
+          seo_server_ready=0
+          for seo_attempt in {1..60}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:3108/search; then
+              seo_server_ready=1
+              break
+            fi
+            if ! kill -0 "$seo_server_pid" 2>/dev/null; then
+              cat "$seo_server_log"
+              exit 1
+            fi
+            sleep 1
+          done
+          if [ "$seo_server_ready" != 1 ]; then
+            cat "$seo_server_log"
+            exit 1
+          fi
+          SEO_AUDIT_ORIGIN=http://127.0.0.1:3108 npm run audit:seo -- --strict
       - run: npm run typecheck

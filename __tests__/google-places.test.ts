@@ -4,6 +4,7 @@ import type { Store } from "@/lib/types";
 const store = {
   id: "goodwill/unit-test",
   name: "Goodwill",
+  googlePlaceId: "ChIJSavedIdentity",
   brandId: "goodwill",
   street: "1400 S Main St Ste 5",
   address: "1400 S Main St Ste 5, Los Angeles, CA 90015",
@@ -36,6 +37,8 @@ afterEach(() => vi.unstubAllEnvs());
 describe("Google listing identity", () => {
   it("requires brand, street number, route, region and proximity to agree", () => {
     expect(selectGooglePlaceId(store, [match])).toBe(match.id);
+    expect(selectGooglePlaceId({...store, location: {lat: NaN, lon: 0}}, [match])).toBeNull();
+    for (const street of ['1400 S Main St Suite #5', '1400 S Main St./Unit 5B', '1400 S Main St #5']) expect(selectGooglePlaceId({...store, street}, [match])).toBe(match.id);
     expect(selectGooglePlaceId(store, [{ ...match, displayName: { text: "Salvation Army Family Store" } }])).toBeNull();
     expect(selectGooglePlaceId(store, [{ ...match, location: { ...match.location, latitude: 34.045 } }])).toBeNull();
     for (const [type, value] of [["street_number", "1408"], ["route", "North Main Street"], ["administrative_area_level_1", "NY"], ["country", "CA"]]) {
@@ -47,6 +50,7 @@ describe("Google listing identity", () => {
 
   it("rejects closed, donation-only, outlet and ambiguous listings for a retail store", () => {
     expect(selectGooglePlaceId(store, [{ ...match, businessStatus: "CLOSED_PERMANENTLY" }])).toBeNull();
+    expect(selectGooglePlaceId(store, [{ ...match, businessStatus: "CLOSED_TEMPORARILY" }])).toBe(match.id);
     for (const name of ["Goodwill Donation Center", "Goodwill Outlet and Donation Center", "Goodwill Career Center"]) {
       expect(selectGooglePlaceId(store, [{ ...match, displayName: { text: name } }])).toBeNull();
     }
@@ -59,6 +63,17 @@ describe("Google listing identity", () => {
     const savers = { ...store, brandId: "savers", brand: "Value Village", name: "Value Village" };
     expect(selectGooglePlaceId(savers, [{ ...match, displayName: { text: "Value Village" } }])).toBe(match.id);
     expect(selectGooglePlaceId(savers, [match])).toBeNull();
+  });
+
+  it("normalizes verified name variants without weakening street or distance checks", () => {
+    const secondAve = {...store, brandId: 'savers', brand: '2nd Ave. Thrift', name: '2nd Ave. Thrift'};
+    expect(selectGooglePlaceId(secondAve, [{...match, displayName: {text: '2nd Ave'}}])).toBe(match.id);
+    expect(selectGooglePlaceId({...store, street: '1400 S Main Bl'}, [{...match, addressComponents: match.addressComponents.map(c => c.types.includes('route') ? {...c, longText: 'South Main Boulevard'} : c)}])).toBe(match.id);
+    const independent = {...store, name: 'Safari Seconds Thrift Store', brand: 'Safari Seconds', operatorType: 'independent' as const, operator: 'Alliance for African Assistance'};
+    expect(selectGooglePlaceId(independent, [{...match, displayName: {text: 'Alliance for African Assistance: Safari Seconds Thrift Store'}}])).toBe(match.id);
+    expect(selectGooglePlaceId(independent, [{...match, displayName: {text: 'Unrelated: Safari Seconds Thrift Store'}}])).toBeNull();
+    expect(selectGooglePlaceId({...store, id: 'way/664763708'}, [{...match, displayName: {text: 'Déjà Blue Boutique'}}])).toBe(match.id);
+    expect(selectGooglePlaceId(store, [{...match, displayName: {text: 'Déjà Blue Boutique'}}])).toBeNull();
   });
 
   it("requests one bounded set of identity fields and never fetches ratings", async () => {
@@ -96,19 +111,19 @@ describe("place match route", () => {
     expect((await POST(request("storeId=goodwill%2Funit-test", "https://elsewhere.test"))).status).toBe(403);
     expect((await POST(request("storeId=not-in-directory"))).status).toBe(404);
     expect((await POST(request("storeId=goodwill%2Funit-test&query=anything"))).status).toBe(400);
-    const unconfigured = await POST(request("storeId=goodwill%2Funit-test"));
-    expect(unconfigured.status).toBe(503);
-    expect(unconfigured.headers.get("cache-control")).toBe("private, no-store");
-    expect(await unconfigured.json()).toEqual({ placeId: null });
+    const saved = await POST(request("storeId=goodwill%2Funit-test"));
+    expect(saved.status).toBe(200);
+    expect(saved.headers.get("cache-control")).toBe("private, no-store");
+    expect(await saved.json()).toEqual({ placeId: 'ChIJSavedIdentity' });
   });
 
-  it("fails closed when private match storage is unconfigured", async () => {
+  it("uses the saved ID without credentials, storage, or upstream requests", async () => {
     vi.stubEnv("GOOGLE_PLACES_API_KEY", "test-key");
     vi.stubEnv("BLOB_READ_WRITE_TOKEN", "");
     vi.stubEnv("REPORTS_RATE_LIMIT_SECRET", "s".repeat(48));
     const fetcher = vi.spyOn(globalThis, "fetch");
     try {
-      expect((await POST(request("storeId=goodwill%2Funit-test"))).status).toBe(503);
+      expect((await POST(request("storeId=goodwill%2Funit-test"))).status).toBe(200);
       expect(fetcher).not.toHaveBeenCalled();
     } finally {
       fetcher.mockRestore();

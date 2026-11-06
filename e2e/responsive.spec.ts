@@ -1,14 +1,13 @@
 import {test, expect} from '@playwright/test';
-import {storesResponse, photonReverseResponse} from './fixtures';
+import {gotoClientSearch, mockStoreDetails, storesResponse, photonReverseResponse} from './fixtures';
+import {mockGoogleMaps} from './google-maps-fixture';
 
 test.beforeEach(async ({page}) => {
   await page.route('**/api/stores**', r => r.fulfill({json: storesResponse}));
   await page.route('**/api/enrich**', r => r.fulfill({json: {enriched: {}}}));
   await page.route(/photon\.komoot\.io\/reverse/, r => r.fulfill({json: photonReverseResponse}));
-  await page.route('https://tile.openstreetmap.org/**', r => r.fulfill({
-    contentType: 'image/png',
-    body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/l9sAAAAASUVORK5CYII=','base64'),
-  }));
+  await mockGoogleMaps(page);
+  await mockStoreDetails(page, {unavailable: true});
 });
 
 test('320px navigation stays on one row in English, Vietnamese and Arabic', async ({page}) => {
@@ -29,7 +28,7 @@ test('320px navigation stays on one row in English, Vietnamese and Arabic', asyn
 
 test('phone filters have a reachable completion action and return focus', async ({page}) => {
   await page.setViewportSize({width: 320, height: 640});
-  await page.goto('/search?lat=32.84&lon=-117.27');
+  await gotoClientSearch(page, '/search?lat=32.84&lon=-117.27');
   await expect(page.locator('[data-store-card]').first()).toBeVisible();
   const filters = page.getByRole('button', {name: /^Filters/});
   await filters.click();
@@ -51,9 +50,9 @@ test('phone filters have a reachable completion action and return focus', async 
 
 test('landscape gives the map most of the screen and keeps view controls visible', async ({page}) => {
   await page.setViewportSize({width: 667, height: 375});
-  await page.goto('/search?lat=32.84&lon=-117.27');
+  await gotoClientSearch(page, '/search?lat=32.84&lon=-117.27');
   await page.getByRole('tab', {name: 'Map', exact: true}).click();
-  const map = page.locator('.leaflet-container');
+  const map = page.locator('[data-google-map][data-state=ready]');
   await expect(map).toBeVisible();
   expect((await map.boundingBox())!.height).toBeGreaterThan(200);
   const toolbar = await page.locator('[data-mobile-toolbar]').boundingBox();
@@ -63,16 +62,15 @@ test('landscape gives the map most of the screen and keeps view controls visible
 
 test('map search control cannot intercept the scoring popover', async ({page}) => {
   await page.setViewportSize({width: 390, height: 844});
-  await page.goto('/search?lat=32.84&lon=-117.27');
+  await gotoClientSearch(page, '/search?lat=32.84&lon=-117.27');
   await expect(page.locator('[data-store-card]').first()).toBeVisible();
   await page.getByRole('tab', {name: 'Map', exact: true}).click();
-  const map = page.locator('.leaflet-container');
+  const map = page.locator('[data-google-map][data-state=ready]');
   await expect(map).toBeVisible();
-  // Keyboard panning exercises Leaflet's normal move handler without relying
-  // on device-specific synthetic drag support.
+  // The fixture moves the SDK camera from a browser keyboard event.
   const searchArea = page.getByRole('button', {name: 'Search this area'});
   await expect.poll(async () => {
-    await map.focus(); await page.keyboard.press('ArrowRight');
+    await map.locator('[data-fixture-map-interaction]').press('ArrowRight');
     return searchArea.isVisible();
   }, {intervals: [500, 500, 1000]}).toBe(true);
   await page.getByRole('button', {name: 'How scoring works', exact: true}).click();
@@ -90,7 +88,7 @@ test('map search control cannot intercept the scoring popover', async ({page}) =
 
 test('narrow cards give addresses the full content width', async ({page}) => {
   await page.setViewportSize({width: 320, height: 740});
-  await page.goto('/ar/search?lat=32.84&lon=-117.27');
+  await gotoClientSearch(page, '/ar/search?lat=32.84&lon=-117.27');
   const card = page.locator('[data-store-card]').first();
   await expect(card).toBeVisible();
   const address = card.locator('[data-store-address]');

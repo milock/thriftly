@@ -1,4 +1,8 @@
 import {test,expect} from '@playwright/test';
+import {mockStoreDetails} from './fixtures';
+import {mockGoogleMaps} from './google-maps-fixture';
+
+test.beforeEach(async ({page})=>{ await mockStoreDetails(page,{unavailable:true}); });
 const locales=['en','es','zh-Hans','zh-Hant','tl','vi','ar'];
 for(const locale of locales) test(`${locale}: complete localized navigation and metadata`,async({page,request})=>{
  const prefix=locale==='en'?'':`/${locale}`;
@@ -40,6 +44,7 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
  expect(errors).toEqual([]);
 });
 test('language switch retains map coordinates and filters',async({page})=>{
+ await mockGoogleMaps(page);
  await page.route('**/api/enrich**',r=>r.fulfill({json:{enriched:{}}}));
  await page.goto('/search?lat=34.05&lon=-118.24&radius=7&label=Los%20Angeles&brands=goodwill#main-content');
  await page.locator('[data-language-picker]').click();

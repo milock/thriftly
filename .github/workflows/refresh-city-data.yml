@@ -28,6 +28,8 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm test
       - run: npm run lint
+      - name: Record confirmed public coverage
+        run: node --import tsx scripts/check-google-coverage.ts --write-baseline /tmp/thriftly-coverage.json
       - name: Restore recent state checkpoints
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
@@ -54,6 +56,12 @@ jobs:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
       - name: Join published EPA walkability data
         run: node --import tsx scripts/fetch-store-access.ts
+      - name: Resolve new or changed Google identities
+        run: node --import tsx scripts/match-google-places.ts
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+      - name: Preserve coverage on unexpected matching regressions
+        run: node --import tsx scripts/check-google-coverage.ts --baseline /tmp/thriftly-coverage.json
       - run: npm test
       - name: Save checkpoints even when upstream is unavailable
         if: always()
@@ -73,6 +81,7 @@ jobs:
             data/goodwill-us.json
             data/stores-us.json
             data/store-access.json
+            data/google-place-ids.json
             data/provenance/*.json
           retention-days: 7
       - name: Commit refreshed data
@@ -80,7 +89,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/goodwill-us.json data/stores-us.json data/store-access.json data/provenance
+          git add data/goodwill-us.json data/stores-us.json data/store-access.json data/google-place-ids.json data/provenance
           if git diff --cached --quiet; then
             echo "No data changes."
           else

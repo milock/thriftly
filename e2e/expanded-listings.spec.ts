@@ -1,5 +1,6 @@
 import {expect, test} from '@playwright/test';
-import {storesResponse, photonReverseResponse} from './fixtures';
+import {gotoClientSearch, mockStoreDetails, storesResponse, photonReverseResponse} from './fixtures';
+import {googleMapsBootstrap, mockGoogleMaps} from './google-maps-fixture';
 import type {ScoredStore} from '../lib/types';
 
 test.beforeEach(async({page})=>{
@@ -11,8 +12,8 @@ test.beforeEach(async({page})=>{
  await page.route('**/api/enrich**',r=>r.fulfill({json:{enriched:{}}}));
  await page.route(/photon\.komoot\.io\/reverse/,r=>r.fulfill({json:photonReverseResponse}));
  await page.route(/photon\.komoot\.io\/api/,r=>r.fulfill({json:{features:[]}}));
- await page.route('https://tile.openstreetmap.org/**',r=>r.abort('failed'));
- await page.route('**/api/place-match**',r=>r.fulfill({json:{placeId:null}}));
+ await mockGoogleMaps(page);
+ await mockStoreDetails(page, {unavailable: true});
 });
 
 test('brand-only deep link survives location resolution and supports multiple brands', async({page,isMobile})=>{
@@ -27,21 +28,31 @@ test('brand-only deep link survives location resolution and supports multiple br
  await expect(page).toHaveURL(/brands=/);
 });
 
-test('map tile failure preserves addresses and directions in the list', async({page,isMobile})=>{
- await page.goto('/search?lat=32.84&lon=-117.27');
+test('map SDK failure preserves list details and retries without a page reload', async({page,isMobile})=>{
+ const blockSdk = (route: import('@playwright/test').Route) => route.abort('failed');
+ await page.route(googleMapsBootstrap, blockSdk);
+ await mockStoreDetails(page);
+ await gotoClientSearch(page, '/search?lat=32.84&lon=-117.27');
  if(isMobile) await page.getByRole('tab',{name:'Map',exact:true}).click();
- await expect(page.getByText('The map is temporarily unavailable. Store listings and directions are still available.')).toBeVisible();
+ const map = page.locator('[data-google-map]');
+ await expect(map).toHaveAttribute('data-state','unavailable');
+ await expect(map.getByRole('status')).toContainText('Store listings and directions are still available');
+ const retry = map.getByRole('button',{name:'Try again',exact:true});
+ await expect(retry).toBeVisible();
+ await page.unroute(googleMapsBootstrap, blockSdk);
+ await retry.click();
+ await expect(map).toHaveAttribute('data-state','ready');
  if(isMobile) await page.getByRole('tab',{name:'List',exact:true}).click();
- const card=page.locator('[data-store-card]').first();
+ const card = page.locator('[data-store-card]').first();
  await expect(card.locator('[data-store-address]')).not.toBeEmpty();
- await card.locator('[data-store-toggle]').click();
  await expect(card.getByRole('link',{name:'Directions',exact:true})).toHaveAttribute('href',/^https:\/\/www\.google\.com\/maps\/dir\//);
+ await expect(card.locator('[data-google-rating][data-state=loaded]')).toBeVisible();
 });
 
 test('problem reports enter pending review without changing the listing',async({page})=>{
  let submission: Record<string,unknown>|undefined;
  await page.route('**/api/reports',async r=>{submission=r.request().postDataJSON();await r.fulfill({status:201,json:{id:'qa-report-id',status:'pending'}})});
- await page.goto('/search?lat=32.84&lon=-117.27');
+ await gotoClientSearch(page, '/search?lat=32.84&lon=-117.27');
  const card=page.locator('[data-store-card]').first();
  const address=await card.locator('[data-store-address]').textContent();
  await card.getByRole('button',{name:/report a problem/i}).click();
@@ -60,6 +71,7 @@ test('city pages separate all stores and Goodwill while retaining a visible sour
  await expect(brands.getByRole('link',{name:/All stores/})).toHaveAttribute('aria-current','page');
  await brands.getByRole('link',{name:/^Goodwill/}).click();
  await expect(page).toHaveURL(/\/goodwill\/san-diego-ca/);
+ await page.getByRole('button',{name:'Listing source and verification',exact:true}).first().click();
  await expect(page.getByText(/Listing source/).first()).toBeVisible();
  await expect(page.getByText(/Source retrieved/).first()).toBeVisible();
  await expect(page.getByRole('heading',{level:3}).filter({hasText:'Buffalo Exchange'})).toHaveCount(0);

@@ -1,13 +1,17 @@
 import {test,expect} from '@playwright/test';
+import {mockStoreDetails} from './fixtures';
 
-test('city metadata, visible source date and methodology are aligned',async({page})=>{
+test.beforeEach(async ({page}) => { await mockStoreDetails(page, {unavailable: true}); });
+
+test('city metadata, disclosed source date and methodology are aligned',async({page})=>{
   await page.route('**/api/enrich**',r=>r.fulfill({json:{enriched:{}}}));
   await page.goto('/goodwill/los-angeles-ca');
   await expect(page).toHaveTitle('Goodwill stores in Los Angeles, CA: map & scores | Thriftly');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href','https://www.thriftly.xyz/goodwill/los-angeles-ca');
   await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content',/Los Angeles/);
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content','https://www.thriftly.xyz/goodwill/los-angeles-ca');
-  await expect(page.getByText('Store dataset:',{exact:false}).first()).toBeVisible();
+  await page.getByRole('button', {name: 'Coverage and sources', exact: true}).last().click();
+  await expect(page.getByText(/^Source data through /)).toBeVisible();
   await expect(page.getByRole('link',{name:'How the Visit score works'})).toHaveAttribute('href','/how-we-score');
 });
 test('new outlet guide has sourced addresses and links back to the city',async({page})=>{

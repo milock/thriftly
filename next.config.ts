@@ -9,13 +9,13 @@ const ContentSecurityPolicy = [
   `script-src 'self' 'unsafe-inline' https://maps.googleapis.com https://maps.gstatic.com${isDev ? " 'unsafe-eval'" : ""}`,
   "script-src-attr 'none'",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "img-src 'self' data: blob: https://tile.openstreetmap.org https://maps.gstatic.com https://maps.googleapis.com",
+  "img-src 'self' data: blob: https://maps.gstatic.com https://maps.googleapis.com https://maps.google.com https://khms0.googleapis.com https://khms1.googleapis.com https://mt0.googleapis.com https://mt1.googleapis.com https://streetviewpixels-pa.googleapis.com",
   "font-src 'self' data: https://fonts.gstatic.com",
   // Geocoding runs in the browser (the user's own IP) against the OSM geocoders —
   // the server's datacenter IP gets rate-limited/blocked, so client-side is the
   // only path that works everywhere. These two origins must be reachable.
-  // Places UI Kit also fetches its selected fields from the Places RPC endpoint.
-  "connect-src 'self' https://photon.komoot.io https://nominatim.openstreetmap.org https://maps.googleapis.com https://maps.gstatic.com https://placewidgets.googleapis.com https://places.googleapis.com",
+  // Ratings are server-fetched; only the Google Maps renderer connects directly.
+  "connect-src 'self' https://photon.komoot.io https://nominatim.openstreetmap.org https://maps.googleapis.com https://maps.gstatic.com https://maps.google.com https://khms0.googleapis.com https://khms1.googleapis.com https://mt0.googleapis.com https://mt1.googleapis.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -40,18 +40,16 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   experimental: {globalNotFound: true},
-  // Bundle the tract-centroid data into the functions that score stores at
-  // runtime: the client API route and the server-rendered city landing pages.
+  // Bundle independent scores plus durable Google identity confirmations.
   outputFileTracingIncludes: {
-    "/*": ["./data/stores-us.json", "./data/store-access.json", "./data/shopper-reviews.json"],
-    // Both serve from the bundled national dataset; the live fallback (rare)
-    // reads the tract centroids. City pages also read bundled city centroids.
-    "/api/enrich": ["./data/stores-us.json"],
-    "/api/stores": ["./data/stores-us.json", "./data/tract-centroids/**/*"],
+    "/*": ["./data/stores-us.json", "./data/store-access.json", "./data/google-place-ids.json"],
+    // Public results require the same confirmed registry on every route.
+    "/api/enrich": ["./data/stores-us.json", "./data/google-place-ids.json"],
+    "/api/stores": ["./data/stores-us.json", "./data/google-place-ids.json"],
     "/[locale]/goodwill/[slug]": [
       "./data/stores-us.json",
       "./data/city-centroids.json",
-      "./data/tract-centroids/**/*",
+      "./data/google-place-ids.json",
     ],
   },
   async headers() {

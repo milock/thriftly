@@ -1,17 +1,11 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ScoredStore, TractDemographics, LatLng, NearestHint } from "@/lib/types";
-import { fetchGoodwillStores } from "@/lib/overpass";
-import { fetchCountyDemographics } from "@/lib/census";
-import { getStateForPoint } from "@/lib/geocode";
-import { loadStateCentroids } from "@/lib/gazetteer";
-import { tractsWithinRadius, aggregateCatchment } from "@/lib/catchment";
-import { computeGoodsScore } from "@/lib/scoring";
+import type { ScoredStore, LatLng, NearestHint } from "@/lib/types";
 import { haversineMiles } from "@/lib/distance";
-import { CATCHMENT_RADIUS_MILES } from "@/lib/reference-ranges";
 import { computeVisitScore } from "@/lib/visit-score";
-import { publishedShopperReviews } from "@/lib/shopper-reviews";
+import { hasNeighborhoodBaseline } from "@/lib/scoring";
 import { matchesBrands } from "@/lib/brands";
+import { confirmedPlaceIds, parseGooglePlaceRegistry } from "@/lib/google-place-registry";
 
 // The bundled, pre-scored national store dataset (built by the weekly job from
 // classified source snapshots). Read once and memoized. This is the primary data source:
@@ -34,7 +28,7 @@ function dataset(): Dataset {
     const stores = (parsed.stores ?? []).map(store => {
       const record = walkability.get(store.id);
       const validLocation = record?.location.lat === store.location.lat && record?.location.lon === store.location.lon;
-      const visit = computeVisitScore({neighborhood: store.score.catchment.tractCount > 0 ? store.score.total : null, shopperReviews: publishedShopperReviews(store.id), walkability: validLocation ? record!.score : null});
+      const visit = computeVisitScore({neighborhood: hasNeighborhoodBaseline(store.score) ? store.score.total : null, googleRatings: null, walkability: validLocation ? record!.score : null});
       return {...store, score: {...store.score, baselineTotal: store.score.total, total: visit.total ?? store.score.total, visit}};
     });
     datasetCache = { generatedAt: parsed.generatedAt, sourceUpdatedAt: parsed.sourceUpdatedAt, stores };
@@ -43,9 +37,21 @@ function dataset(): Dataset {
   }
   return datasetCache;
 }
+let publishedCache: ScoredStore[] | null = null;
 function nationalDataset(): ScoredStore[] {
-  return dataset().stores;
+  if (publishedCache) return publishedCache;
+  let registry = parseGooglePlaceRegistry(null);
+  try { registry = parseGooglePlaceRegistry(JSON.parse(readFileSync(join(process.cwd(), 'data', 'google-place-ids.json'), 'utf8'))); } catch { /* No confirmed identities means no public stores. */ }
+  const ids = confirmedPlaceIds(dataset().stores, registry);
+  publishedCache = dataset().stores.flatMap(store => {
+    const googlePlaceId = ids.get(store.id);
+    return googlePlaceId ? [{...store, googlePlaceId}] : [];
+  });
+  return publishedCache;
 }
+
+/** Matching jobs only. Never use this unconfirmed catalog in a public route or page. */
+export function allCandidateStores(): readonly ScoredStore[] { return dataset().stores; }
 
 export function allBundledStores(): readonly ScoredStore[] { return nationalDataset(); }
 
@@ -81,35 +87,13 @@ export function locateBundledStores(center: LatLng, radiusMiles: number, brandId
     .sort((a,b) => b.score.total-a.score.total);
 }
 
-/**
- * Find scored stores around a point, sorted best-first. Filters the
- * bundled national dataset first (instant, network-free, throttle-proof); for
- * any area the dataset doesn't cover yet, falls back to a live lookup.
- *
- * Shared by the `/api/stores` route (client search) and the city landing pages.
- */
+/** Only durable, fingerprint-matched identities may enter any public search. */
 export async function locateStores(
   center: LatLng,
   radiusMiles: number,
   brandIds: readonly string[] = [],
 ): Promise<ScoredStore[]> {
-  const data = nationalDataset();
-  const hits = locateBundledStores(center, radiusMiles, brandIds);
-  if (hits.length > 0) return hits;
-  // Nothing in range. If the national dataset loaded fine, this is a genuinely
-  // sparse area (rural county, remote region) — return instantly and let the
-  // caller surface the nearest store. We do NOT hit live Overpass per request:
-  // the dataset is the published source, so a live call would just add a
-  // multi-second hang without finding anything the dataset doesn't already have.
-  // Only fall back to live if the dataset itself failed to load (empty file).
-  if (data.length === 0) {
-    try {
-      return (await liveLocate(center, radiusMiles)).filter(s => matchesBrands(s, brandIds));
-    } catch {
-      return [];
-    }
-  }
-  return [];
+  return locateBundledStores(center, radiusMiles, brandIds);
 }
 
 /**
@@ -136,55 +120,6 @@ export function nearestStore(center: LatLng, brandIds: readonly string[] = []): 
     distanceMiles: bestMiles,
     location: best.location,
   };
-}
-
-/**
- * Live lookup (Overpass + Census) for areas the bundled dataset doesn't cover.
- * Rare once the dataset is complete; kept resilient (multi-mirror, time-boxed).
- */
-async function liveLocate(center: LatLng, radiusMiles: number): Promise<ScoredStore[]> {
-  const stores = await fetchGoodwillStores(center, radiusMiles);
-  if (stores.length === 0) return [];
-
-  const stateFips = await getStateForPoint(center);
-  const centroids = stateFips ? loadStateCentroids(stateFips) : [];
-
-  const perStoreTracts = stores.map((s) =>
-    tractsWithinRadius(s.location, centroids, CATCHMENT_RADIUS_MILES),
-  );
-
-  const neededCounties = new Set<string>();
-  for (const tracts of perStoreTracts) {
-    for (const t of tracts) neededCounties.add(t.centroid.geoid.slice(0, 5)); // SSCCC
-  }
-
-  const demoByGeoid = new Map<string, TractDemographics>();
-  const counties = [...neededCounties];
-  // Bound upstream fan-out; any failed county keeps the last complete dataset.
-  for (let offset = 0; offset < counties.length; offset += 4) {
-    await Promise.all(counties.slice(offset, offset + 4).map(async (sscc) => {
-      const list = await fetchCountyDemographics(sscc.slice(0, 2), sscc.slice(2, 5));
-      for (const d of list) demoByGeoid.set(d.geoid, d);
-    }));
-  }
-
-  const scored: ScoredStore[] = stores.map((store, i) => {
-    const weighted = perStoreTracts[i]
-      .map((t) => {
-        const demo = demoByGeoid.get(t.centroid.geoid);
-        return demo ? { demo, distanceMiles: t.distanceMiles } : null;
-      })
-      .filter((x): x is { demo: TractDemographics; distanceMiles: number } => x !== null);
-    const catchment = aggregateCatchment(weighted);
-    return {
-      ...store,
-      distanceMiles: haversineMiles(center, store.location),
-      score: computeGoodsScore(catchment),
-    };
-  });
-
-  scored.sort((a, b) => b.score.total - a.score.total);
-  return scored;
 }
 
 /** Restrict enrichment to the finite set of published store coordinates. */
