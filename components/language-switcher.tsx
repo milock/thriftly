@@ -3,40 +3,63 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Languages } from "lucide-react";
 import { usePathname } from "@/i18n/navigation";
-import { localizedPath } from "@/i18n/routing";
+import { isLocale, locales, localeNames, localizedPath } from "@/i18n/routing";
 import { useSyncExternalStore } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DirectionProvider } from "@base-ui/react/direction-provider";
 
 const subscribe = () => () => {};
 
-const languages = [
-  ["en", "English"], ["es", "Español"], ["zh-Hans", "简体中文"],
-  ["zh-Hant", "繁體中文"], ["tl", "Filipino"], ["vi", "Tiếng Việt"], ["ar", "العربية"],
-] as const;
+const languages = locales.map(value => ({value, label: localeNames[value]}));
 
 export function LanguageSwitcher() {
   const t = useTranslations("ui");
   const locale = useLocale();
   const pathname = usePathname();
-  // Native selects can receive input before React attaches event handlers.
+  // Keep the first server/client render identical and wait for navigation handlers.
   const hydrated = useSyncExternalStore(subscribe, () => true, () => false);
   return (
-    <label title={t("language")} className="relative inline-flex size-11 shrink-0 items-center justify-center gap-1 rounded-md focus-within:ring-2 focus-within:ring-ring sm:w-auto sm:max-w-40 sm:border sm:border-border sm:px-2">
-      <Languages className="size-4 shrink-0" aria-hidden />
-      <span className="sr-only">{t("language")}</span>
-      <select
-        value={locale}
-        disabled={!hydrated}
-        aria-label={t("language")}
-        className="absolute inset-0 size-full cursor-pointer opacity-0 sm:static sm:h-full sm:w-auto sm:min-w-0 sm:max-w-32 sm:bg-background sm:text-base sm:text-foreground sm:opacity-100 sm:outline-none"
-        onChange={(event) => {
+    <DirectionProvider direction={locale === "ar" ? "rtl" : "ltr"}>
+    <Select
+      value={locale}
+      items={languages}
+      disabled={!hydrated}
+      modal={false}
+      onValueChange={(value) => {
+          if (!value || !isLocale(value) || value === locale) return;
           // A document navigation keeps pending map history updates from canceling
           // the locale transition and applies the new document direction atomically.
           // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- Locale changes replace the document language/direction and must survive map history updates.
-          window.location.assign(`${localizedPath(pathname, event.target.value)}${window.location.search}${window.location.hash}`);
-        }}
+          window.location.assign(`${localizedPath(pathname, value)}${window.location.search}${window.location.hash}`);
+      }}
+    >
+      <SelectTrigger
+        data-language-picker
+        title={t("language")}
+        aria-label={t("language")}
+        className="size-11 shrink-0 justify-center gap-2 rounded-md border-transparent px-0 text-sm hover:bg-muted data-[size=default]:h-11 sm:w-auto sm:max-w-44 sm:border-border sm:px-3 [&>svg:last-child]:hidden sm:[&>svg:last-child]:block"
       >
-        {languages.map(([code, label]) => <option key={code} value={code} lang={code}>{label}</option>)}
-      </select>
-    </label>
+        <Languages className="size-4 text-muted-foreground" aria-hidden />
+        <span className="hidden min-w-0 sm:block"><SelectValue /></span>
+      </SelectTrigger>
+      <SelectContent
+        align="end"
+        sideOffset={8}
+        alignItemWithTrigger={false}
+        aria-label={t("language")}
+        className="w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl p-1.5 shadow-lg ring-0 data-open:animate-none data-closed:animate-none"
+        listClassName="max-h-[calc(var(--available-height)-0.75rem)] scroll-py-6 overflow-y-auto overscroll-contain"
+      >
+        {languages.map(({value, label}) => <SelectItem
+          key={value}
+          value={value}
+          label={label}
+          className="min-h-11 cursor-pointer rounded-md ps-3 pe-9 text-sm data-highlighted:bg-accent data-selected:font-medium"
+        >
+          <bdi lang={value} dir={value === "ar" ? "rtl" : "ltr"}>{label}</bdi>
+        </SelectItem>)}
+      </SelectContent>
+    </Select>
+    </DirectionProvider>
   );
 }

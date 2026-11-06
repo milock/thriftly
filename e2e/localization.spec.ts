@@ -41,9 +41,11 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
 });
 test('language switch retains map coordinates and filters',async({page})=>{
  await page.route('**/api/enrich**',r=>r.fulfill({json:{enriched:{}}}));
- await page.goto('/search?lat=34.05&lon=-118.24&radius=7&label=Los%20Angeles');
- await page.locator('select').filter({has:page.locator('option[value="ar"]')}).selectOption('ar');
+ await page.goto('/search?lat=34.05&lon=-118.24&radius=7&label=Los%20Angeles&brands=goodwill#main-content');
+ await page.locator('[data-language-picker]').click();
+ await page.getByRole('option',{name:'العربية',exact:true}).click();
  await expect(page).toHaveURL(/\/ar\/search\?/);
  const url=new URL(page.url());expect(Number(url.searchParams.get('lat'))).toBe(34.05);expect(Number(url.searchParams.get('lon'))).toBe(-118.24);expect(url.searchParams.get('radius')).toBe('7');
+ expect(url.searchParams.get('brands')).toBe('goodwill');expect(url.hash).toBe('#main-content');
  await expect(page.locator('html')).toHaveAttribute('dir','rtl');
 });

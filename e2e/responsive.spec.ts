@@ -19,7 +19,7 @@ test('320px navigation stays on one row in English, Vietnamese and Arabic', asyn
     const header = await page.locator('header').boundingBox();
     expect(header!.height).toBeLessThan(70);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
-    const language = page.locator('header select');
+    const language = page.locator('header [data-language-picker]');
     await expect(language).toBeEnabled();
     const box = await language.boundingBox();
     expect(box!.width).toBeGreaterThanOrEqual(44);
