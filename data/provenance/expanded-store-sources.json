@@ -6,8 +6,8 @@
       "brandId": "goodwill",
       "source": "alltheplaces-goodwill",
       "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
-      "publicCount": 3342,
-      "coverage": "preserved existing validated Goodwill dataset"
+      "publicCount": 3285,
+      "coverage": "validated Goodwill dataset with documented location corrections and quarantines"
     },
     {
       "brandId": "savers",

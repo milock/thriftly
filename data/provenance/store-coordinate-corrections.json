@@ -30,5 +30,127 @@
     "verifiedAt": "2026-11-06T00:39:23.774Z",
     "reason": "Official locator coordinates disagree with exact Census street-address match",
     "originalAddress": "316 W. Animas, Farmington, NM, 87401"
+  },
+  {
+    "id": "goodwill/4cc8d8b9-1520-e911-80e0-00505689ac90",
+    "original": {
+      "lat": 40.7419,
+      "lon": -73.98931
+    },
+    "corrected": {
+      "lat": 39.941173047519,
+      "lon": -74.975206634816
+    },
+    "matchedAddress": "2834 STATE RTE 73, MAPLE SHADE, NJ, 08052",
+    "sourceUrl": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=2834+Route+73+North%2C+Maple+Shade%2C+NJ+08052&benchmark=Public_AR_Current&format=json",
+    "operatorSourceUrl": "https://goodwillnj.org/goodwill-home-medical-equipment/",
+    "verifiedAt": "2026-11-06T01:55:25.034958+00:00",
+    "reason": "Official operator street address and exact Census street-address match disagree with ATP coordinates",
+    "originalAddress": "2834 Route 73 North, Maple Shade, NJ, 08052"
+  },
+  {
+    "id": "goodwill/f0f4a1b7-458a-e111-8dde-005056934050",
+    "original": {
+      "lat": 26.36011,
+      "lon": -98.7825
+    },
+    "corrected": {
+      "lat": 39.566174364834,
+      "lon": -104.990245874526
+    },
+    "matchedAddress": "161 W COUNTY LINE RD, LITTLETON, CO, 80129",
+    "sourceUrl": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=161+W+County+Line+Rd%2C+Littleton%2C+CO+80129&benchmark=Public_AR_Current&format=json",
+    "operatorSourceUrl": "https://goodwillcolorado.org/shop/locations/",
+    "verifiedAt": "2026-11-06T01:52:47.019165+00:00",
+    "reason": "Official operator street address and exact Census street-address match disagree with ATP coordinates",
+    "originalAddress": "161 W County Line Rd, Littleton, CO, 80129-1909"
+  },
+  {
+    "id": "goodwill/083ed138-3c07-e611-8cdc-005056890337",
+    "original": {
+      "lat": 57.47556,
+      "lon": -132.35972
+    },
+    "corrected": {
+      "lat": 30.104775147678,
+      "lon": -97.329375963918
+    },
+    "matchedAddress": "107 CHILDERS DR, BASTROP, TX, 78602",
+    "sourceUrl": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=107+Childers+Dr%2C+Bastrop%2C+TX+78602&benchmark=Public_AR_Current&format=json",
+    "operatorSourceUrl": "https://www.goodwillcentraltexas.org/retail-stores/",
+    "verifiedAt": "2026-11-06T01:52:46.985411+00:00",
+    "reason": "Official operator street address and exact Census street-address match disagree with ATP coordinates",
+    "originalAddress": "107 Childers Dr., Suite B, Bastrop, TX, 78602"
+  },
+  {
+    "id": "goodwill/80f4a1b7-458a-e111-8dde-005056934050",
+    "original": {
+      "lat": 36.01823,
+      "lon": -87.2385
+    },
+    "corrected": {
+      "lat": 38.242302778577,
+      "lon": -85.507837791139
+    },
+    "matchedAddress": "100 HUNTINGTON RIDGE DR, LOUISVILLE, KY, 40223",
+    "sourceUrl": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=100+Huntington+Ridge+Rd%2C+Louisville%2C+KY+40223&benchmark=Public_AR_Current&format=json",
+    "operatorSourceUrl": "https://goodwillky.org/wp-content/uploads/2023/01/GoodwillKY_locations_1222.pdf",
+    "verifiedAt": "2026-11-06T01:52:47.012182+00:00",
+    "reason": "The operator and Census agree on the house number and road name in Louisville. The ATP pin is in Tennessee.",
+    "addressDiscrepancy": "The operator PDF gives 100 Huntington Ridge Rd, ZIP 40243. Census returns 100 Huntington Ridge Dr, ZIP 40223, the ATP ZIP. The address range establishes the local area without confirming the mailing ZIP or entrance.",
+    "originalAddress": "100 Huntington Ridge Rd, Louisville, KY, 40223"
+  },
+  {
+    "id": "goodwill/1a38dab4-c3ca-e511-bed2-005056890337",
+    "original": {
+      "lat": 42.88083,
+      "lon": -73.20269
+    },
+    "corrected": {
+      "lat": 43.624515432806,
+      "lon": -72.975152015108
+    },
+    "matchedAddress": "230 N MAIN ST, RUTLAND, VT, 05701",
+    "sourceUrl": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=230+North+Main+Street%2C+Rutland%2C+VT+05701&benchmark=Public_AR_Current&format=json",
+    "operatorSourceUrl": "https://goodwill-berkshires.org/store-location/rutland-store/",
+    "verifiedAt": "2026-11-06T01:52:47.349058+00:00",
+    "reason": "Official operator street address and exact Census street-address match disagree with ATP coordinates",
+    "originalAddress": "230 North Main Street, Rutland, VT, 05701"
+  },
+  {
+    "id": "goodwill/8a080f26-0544-ec11-80f7-00505689ac90",
+    "original": {
+      "lat": 32.00989,
+      "lon": -102.14911
+    },
+    "corrected": {
+      "lat": 35.161496415507,
+      "lon": -101.899640227827
+    },
+    "matchedAddress": "5807 SW 45TH AVE, AMARILLO, TX, 79109",
+    "sourceUrl": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=5807+SW+45th+Avenue%2C+Amarillo%2C+TX+79109&benchmark=Public_AR_Current&format=json",
+    "operatorSourceUrl": "https://goodwillnwtexas.org/shop/",
+    "verifiedAt": "2026-11-06T01:52:47.401726+00:00",
+    "reason": "Official operator street address and exact Census street-address match disagree with ATP coordinates",
+    "originalAddress": "5807 SW 45th Street, Amarillo, TX, 79707",
+    "correctedStreet": "5807 SW 45th Avenue, Suite 205",
+    "correctedAddress": "5807 SW 45th Avenue, Suite 205, Amarillo, TX, 79109"
+  },
+  {
+    "id": "goodwill/45de83db-458a-e111-8dde-005056934050",
+    "original": {
+      "lat": 36.2803,
+      "lon": -83.76624
+    },
+    "corrected": {
+      "lat": 36.076670727059,
+      "lon": -83.927469501684
+    },
+    "matchedAddress": "7026 MAYNARDVILLE PIKE, KNOXVILLE, TN, 37918",
+    "sourceUrl": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=7026+Maynardville+Highway%2C+Knoxville%2C+TN+37918&benchmark=Public_AR_Current&format=json",
+    "operatorSourceUrl": "https://www.gwiktn.org/locations",
+    "verifiedAt": "2026-11-06T01:52:47.721242+00:00",
+    "reason": "Official operator street address and exact Census street-address match disagree with ATP coordinates",
+    "originalAddress": "7026 Maynardville Hwy., Knoxville, TN, 37918"
   }
 ]

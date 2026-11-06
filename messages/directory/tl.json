@@ -58,5 +58,6 @@
   "searchArea": "Maghanap sa lugar na ito",
   "searchCenter": "Gitna ng lugar ng paghahanap",
   "terms": "Mga tuntunin sa paggamit",
-  "privacy": "Patakaran sa privacy"
+  "privacy": "Patakaran sa privacy",
+  "singleBrandCoverage": "Sa kasalukuyan, mga tindahan lang ng {brand} ang nakalista sa aming mga source sa loob ng radius na ito. Maaaring may iba pang thrift shop sa malapit."
 }

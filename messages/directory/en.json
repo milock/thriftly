@@ -58,5 +58,6 @@
   "searchArea": "Search this area",
   "searchCenter": "Search center",
   "terms": "Terms of use",
-  "privacy": "Privacy policy"
+  "privacy": "Privacy policy",
+  "singleBrandCoverage": "Our current sources list only {brand} within this radius. Other thrift shops may be nearby."
 }

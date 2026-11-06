@@ -58,5 +58,6 @@
   "searchArea": "Buscar en esta zona",
   "searchCenter": "Centro de la búsqueda",
   "terms": "Términos de uso",
-  "privacy": "Política de privacidad"
+  "privacy": "Política de privacidad",
+  "singleBrandCoverage": "Nuestras fuentes actuales solo incluyen tiendas de {brand} dentro de este radio. Puede haber otras tiendas de segunda mano cerca."
 }

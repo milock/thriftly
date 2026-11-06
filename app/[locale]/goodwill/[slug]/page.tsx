@@ -57,7 +57,7 @@ function searchHref(c: City, lat: number | null, lon: number | null): string {
 function buildFaqs(c: City, stores: ScoredStore[], t: Awaited<ReturnType<typeof getTranslations>>) {
   const top = stores.find(store => store.score.catchment.tractCount > 0 && Object.values(store.score.factors).some(factor => factor.value != null));
   return [
-    {q: t("faqBestQ", {city: c.city}), a: top ? t("faqBestA", {place: top.neighborhood ?? top.locality ?? c.city, score: Math.round(top.score.total)}) : t("faqNoScore")},
+    {q: t("faqBestQ", {city: c.city}), a: top ? t("faqBestA", {place: [top.street, top.locality ?? c.city].filter(Boolean).join(", "), score: Math.round(top.score.total)}) : t("faqNoScore")},
     {q: t("faqScoreQ", {city: c.city}), a: t("faqScoreA")},
     {q: t("faqCountQ", {city: c.city}), a: t("faqCountA", {city: c.city, count: stores.length, radius: c.radiusMiles})},
   ];
@@ -96,6 +96,7 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
 
   const related = citiesInState(c.state)
     .filter((x) => x.slug !== c.slug)
+    .filter((x) => { const center = cityCentroid(x.slug); return center && locateBundledStores(center, x.radiusMiles, ["goodwill"]).length > 0; })
     .slice(0, 8);
 
   const base = SITE_URL + (locale === "en" ? "" : `/${locale}`);
@@ -125,6 +126,7 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
                 position: i + 1,
                 item: {
                   "@type": "Store",
+                  identifier: s.id,
                   name: s.locality ? `${s.name}, ${s.locality}` : s.name,
                   address: {
                     "@type": "PostalAddress",

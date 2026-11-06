@@ -1,0 +1,11 @@
+import {describe,expect,it} from 'vitest';
+import {applyStoreCoordinateCorrection,type StoreCoordinateCorrection} from '@/lib/store-coordinate-integrity';
+import type {Store} from '@/lib/types';
+const source: Store = {id:'shop/1', name:'Shop', location:{lat:32.7,lon:-117.1}, address:'Original address', sourceTags:{upstream:'original'}};
+const correction: StoreCoordinateCorrection = {id:'shop/1',original:{lat:32.7,lon:-117.1},corrected:{lat:32.8,lon:-117.2},originalAddress:'Original address',correctedAddress:'Reviewed address',correctedStreet:'Reviewed street',sourceUrl:'https://example.org/source',verifiedAt:'2026-11-06T00:00:00Z'};
+describe('guarded store coordinate corrections',()=>{
+ it('passes an uncorrected record unchanged when no correction is supplied',()=>{expect(applyStoreCoordinateCorrection(source)).toBe(source);});
+ it('applies only a matching source record with provenance',()=>{const result=applyStoreCoordinateCorrection(source,correction);expect(result.location).toEqual(correction.corrected);expect(result.address).toBe('Reviewed address');expect(result.street).toBe('Reviewed street');expect(result.timezone).toBe('America/Los_Angeles');expect(result.sourceTags).toMatchObject({upstream:'original',originalLatitude:'32.7',originalLongitude:'-117.1',originalAddress:'Original address',coordinateSource:correction.sourceUrl,coordinateVerifiedAt:correction.verifiedAt});expect(source.location).toEqual(correction.original);});
+ it('passes recognized corrected coordinates and either accepted address without rewriting provenance',()=>{for(const address of [correction.originalAddress,correction.correctedAddress]){const corrected={...source,address,location:correction.corrected,sourceTags:{coordinateSource:'retained',existing:'yes'}};expect(applyStoreCoordinateCorrection(corrected,correction)).toBe(corrected);expect(corrected.sourceTags).toEqual({coordinateSource:'retained',existing:'yes'});}});
+ it('fails closed when source coordinates, address, or id drift',()=>{for(const record of [{...source,location:{lat:32.71,lon:-117.1}},{...source,address:'Changed address'},{...source,location:correction.corrected,address:'Changed address'},{...source,id:'shop/other'}])expect(()=>applyStoreCoordinateCorrection(record,correction)).toThrow(/review the source and correction before publishing/i);});
+});

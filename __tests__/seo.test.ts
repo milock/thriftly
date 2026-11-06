@@ -21,9 +21,23 @@ it('excludes empty city pages and invented modification dates from the sitemap',
 it('keeps city-specific identity in canonical, Open Graph and Twitter',()=>{
   const m=pageMetadata('City title','City description','/goodwill/example');
   expect(m.alternates?.canonical).toBe('/goodwill/example');
+  expect(m.title).toEqual({absolute: 'City title | Thriftly'});
   expect(m.openGraph?.title).toBe('City title | Thriftly');
   expect(m.twitter?.title).toBe('City title | Thriftly');
   expect(m.twitter?.description).toBe('City description');
+});
+it('does not apply the layout suffix twice to an already branded title',()=>{
+  const m=pageMetadata('Find thrift stores | Thriftly','Search nearby shops','/search');
+  expect(m.title).toEqual({absolute:'Find thrift stores | Thriftly'});
+  expect(m.openGraph?.title).toBe('Find thrift stores | Thriftly');
+});
+it('keeps city-specific share art and supplies a branded fallback for new directory pages',()=>{
+  expect(pageMetadata('Goodwill NYC','Description','/goodwill/new-york-ny',true,'es').openGraph?.images).toEqual([
+    expect.objectContaining({url:SITE_URL+'/es/goodwill/new-york-ny/opengraph-image/0',alt:'Goodwill NYC'})
+  ]);
+  expect(pageMetadata('Savers','Description','/savers',true,'es').openGraph?.images).toEqual([
+    expect.objectContaining({url:SITE_URL+'/es/opengraph-image/0',alt:'Thriftly'})
+  ]);
 });
 it('noindexes uncovered cities but keeps covered cities indexable',async()=>{
   const empty=vi.spyOn(locate,'locateBundledStores').mockReturnValue([]);

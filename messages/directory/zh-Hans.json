@@ -58,5 +58,6 @@
   "searchArea": "搜索此区域",
   "searchCenter": "搜索中心",
   "terms": "使用条款",
-  "privacy": "隐私政策"
+  "privacy": "隐私政策",
+  "singleBrandCoverage": "我们目前的资料来源在此搜索半径内只列出 {brand}。附近可能还有其他二手商店。"
 }

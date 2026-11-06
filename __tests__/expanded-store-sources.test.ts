@@ -1,6 +1,10 @@
 import {describe,it,expect} from 'vitest';
 import {parseChainAtp,parseSalvation,parseOutOfCloset,isAcceptedChainSnapshot} from '@/lib/expanded-store-sources';
 import type {AtpSnapshot} from '@/lib/atp-stores';
+import {applyStoreCoordinateCorrection,goodwillCoordinateReviewReason,type StoreCoordinateCorrection} from '@/lib/store-coordinate-integrity';
+import {accessForStore,type StoreAccessRecord} from '@/lib/store-access';
+import {haversineMiles} from '@/lib/distance';
+import type {ScoredStore} from '@/lib/types';
 const snapshot=(properties:Record<string,string>):AtpSnapshot=>({sourceUrl:'https://example.org/source',sourceUpdatedAt:'2026-10-29T00:00:00Z',fetchedAt:'2026-11-05T00:00:00Z',sha256:'hash',runId:'run',data:{features:[{geometry:{type:'Point',coordinates:[-117.1,32.7]},properties:{ref:'123','addr:country':'US','addr:state':'CA','addr:street_address':'123 Main St',...properties}}]}});
 describe('multi-brand source classification',()=>{
  it('keeps retail Savers and excludes standalone donation pins',()=>{
@@ -42,14 +46,46 @@ describe('multi-brand source classification',()=>{
 });
 
 describe('published combined registry',()=>{
- it('preserves Goodwill inputs and publishes uniquely identified shopping destinations',async()=>{
+ it('preserves Goodwill inputs except for sourced corrections and quarantines',async()=>{
   const {readFileSync}=await import('node:fs');
   const combined=JSON.parse(readFileSync('data/stores-us.json','utf8'));
-  const original=JSON.parse(readFileSync('data/goodwill-us.json','utf8'));
+  const original=JSON.parse(readFileSync('data/goodwill-us.json','utf8')) as {stores:ScoredStore[];sourceUpdatedAt:string};
+  const corrections=JSON.parse(readFileSync('data/provenance/store-coordinate-corrections.json','utf8')) as StoreCoordinateCorrection[];
+  const quarantined=JSON.parse(readFileSync('data/provenance/goodwill-coordinate-quarantine.json','utf8')).records as {id:string;reason:string;location:ScoredStore['location']}[];
   expect(new Set(combined.stores.map((s:{id:string})=>s.id)).size).toBe(combined.stores.length);
-  for(const old of original.stores){const current={...combined.stores.find((s:{id:string})=>s.id===old.id)};for(const key of ['brandId','brand','sourcingModel','merchandiseScope'])delete current[key];expect(current).toEqual(old);}
+  const published=new Map<string,ScoredStore>(combined.stores.map((s:ScoredStore)=>[s.id,s]));
+  for(const old of original.stores){
+   const issue=goodwillCoordinateReviewReason(old);
+   if(issue){
+    expect(published.has(old.id)).toBe(false);
+    expect(quarantined.find(row=>row.id===old.id)).toMatchObject({reason:issue,location:old.location});
+    continue;
+   }
+   const current=published.get(old.id)!;
+   const fixed=applyStoreCoordinateCorrection(old,corrections.find(c=>c.id===old.id));
+   expect(current).toEqual({...fixed,brandId:'goodwill',brand:'Goodwill',sourcingModel:'donation',merchandiseScope:'general',score:fixed===old?old.score:current.score});
+   if(fixed!==old&&old.score.catchment.tractCount>0) expect(current.score).not.toEqual(old.score);
+  }
+  expect(combined.sources.find((s:{brandId:string})=>s.brandId==='goodwill').sourceUpdatedAt).toBe(original.sourceUpdatedAt);
   for(const store of combined.stores){expect(['retail','outlet']).toContain(store.facilityType);expect(store.street).toBeTruthy();expect(store.timezone).toMatch(/\//);expect(store.brandId).toBeTruthy();}
   expect(combined.sources.find((s:{brandId:string})=>s.brandId==='salvation-army').coverage).toContain('partial');
   expect(combined.stores.some((s:{name:string})=>/Pittsburgh salvation army warehouse|idlewild|814 Lanes|Donation Drop Box/i.test(s.name))).toBe(false);
+ });
+
+ it('removes the Maple Shade pin and its stale accessibility score from the NYC area',async()=>{
+  const {readFileSync}=await import('node:fs');
+  const id='goodwill/4cc8d8b9-1520-e911-80e0-00505689ac90';
+  const combined=JSON.parse(readFileSync('data/stores-us.json','utf8')) as {stores:ScoredStore[]};
+  const city=JSON.parse(readFileSync('data/city-centroids.json','utf8'))['new-york-ny'];
+  const access=JSON.parse(readFileSync('data/store-access.json','utf8')).records as StoreAccessRecord[];
+  const store=combined.stores.find(s=>s.id===id)!;
+  expect(store.location).toEqual({lat:39.941173047519,lon:-74.975206634816});
+  expect(haversineMiles(city,store.location)).toBeGreaterThan(70);
+  expect(store.score.catchment.tractCount).toBeGreaterThan(0);
+  expect(store.score.total).not.toBe(82.2);
+  const currentAccess=accessForStore(store,access)!;
+  expect(currentAccess.location).toEqual(store.location);
+  expect(currentAccess.blockGroupId).not.toBe('360610056002');
+  if(currentAccess.score===null) expect(currentAccess.reason).toBeTruthy();
  });
 });

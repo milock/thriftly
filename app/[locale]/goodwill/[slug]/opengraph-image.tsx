@@ -57,7 +57,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-          <div style={{ fontSize: 36, color: "#34d399", fontWeight: 600 }}>Thriftly + Goodwill</div>
+          <div style={{ fontSize: 36, color: "#34d399", fontWeight: 600 }}>Goodwill</div>
           <div style={{ fontSize: 76, fontWeight: 700, lineHeight: 1.05, letterSpacing: -2, maxWidth: 950 }}>
             {place}
           </div>

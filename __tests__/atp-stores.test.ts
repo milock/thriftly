@@ -24,6 +24,30 @@ describe('ATP service categories',()=>{
   const data=snapshot('Retail Store');data.data.features[0].properties['addr:country']='CA';
   expect(parseAtpStores(data).stores).toHaveLength(0);
  });
+ it('retains suspect upstream rows in review without publishing their pins',()=>{
+  const data=snapshot('Retail Store');
+  const feature=data.data.features[0];
+  feature.geometry!.coordinates=[-106.5348,38.7946];
+  let result=parseAtpStores(data);
+  expect(result.stores).toHaveLength(0);
+  expect(result.review[0]).toMatchObject({location:{lat:38.7946,lon:-106.5348},sourceTags:{coordinateReviewReason:'shared-source-placeholder-coordinate'}});
+
+  feature.geometry!.coordinates=[-82.94662,42.33794];
+  feature.properties['addr:state']='MI';
+  feature.properties['addr:postcode']='N8S 3L6';
+  result=parseAtpStores(data);
+  expect(result.stores).toHaveLength(0);
+  expect(result.review[0].sourceTags?.coordinateReviewReason).toBe('canadian-postal-code-in-us-feed');
+
+  const beeCaves=snapshot('Retail Store');
+  Object.assign(beeCaves.data.features[0].properties,{
+   ref:'c683e06f-458a-e111-8dde-005056934050',
+   'addr:state':'TX','addr:city':'Austin','addr:postcode':'78736','addr:street_address':'12400 Hwy 71 WBee Caves',
+  });
+  result=parseAtpStores(beeCaves);
+  expect(result.stores).toHaveLength(0);
+  expect(result.review[0].sourceTags?.coordinateReviewReason).toBe('retail-status-conflict-at-source-address');
+ });
 });
 describe('source freshness',()=>{
  it('requires a deliberate bounded override for a verified older release',()=>{

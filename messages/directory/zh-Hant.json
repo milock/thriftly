@@ -58,5 +58,6 @@
   "searchArea": "搜尋此區域",
   "searchCenter": "搜尋中心",
   "terms": "使用條款",
-  "privacy": "隱私權政策"
+  "privacy": "隱私權政策",
+  "singleBrandCoverage": "我們目前的資料來源在此搜尋半徑內只列出 {brand}。附近可能還有其他二手商店。"
 }
