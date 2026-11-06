@@ -146,7 +146,14 @@ test('unknown hours cannot silently hide the entire result set', async ({page}) 
 test('map markers announce a destination and score without adding an empty center control', async ({page}) => {
   await page.goto('/search?lat=32.84&lon=-117.27');
   const mapTab = page.getByRole('tab', {name: /^map$/i});
-  if (await mapTab.isVisible()) await mapTab.click();
+  // The initial HTML uses the mobile layout until the viewport effect runs.
+  // Assert the expected layout rather than clicking that transient desktop tab.
+  if ((page.viewportSize()?.width ?? 0) < 1024) {
+    await expect(mapTab).toBeVisible();
+    await mapTab.click();
+  } else {
+    await expect(mapTab).toHaveCount(0);
+  }
   const marker = page.locator('.gw-pin').first();
   await expect(marker).toBeVisible();
   await expect(marker).toHaveAccessibleName(/Goodwill.*Visit score.*89/i);
