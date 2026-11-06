@@ -163,7 +163,7 @@ async function oneSample(browser, profile, sampleNumber) {
     }
 
     if (includeSwitchCounts && profile.mobile && listPaintMs !== null && listPaintMs >= 0) {
-      await page.waitForFunction(() => document.querySelectorAll('[data-google-rating]').length > 0 && !document.querySelector('[data-google-rating][data-state="queued"], [data-google-rating][data-state="loading"]'), {timeout:10000});
+      await page.waitForFunction(() => document.querySelectorAll('[data-google-rating]').length > 0 && !document.querySelector('[data-google-rating][data-state="queued"], [data-google-rating][data-state="loading"]'), undefined, {timeout:10000});
       loadedBeforeSwitch = new Set(await page.locator('[data-google-rating][data-state="loaded"]').evaluateAll(rows => rows.map(row => row.closest('[data-store-id]')?.getAttribute('data-store-id')).filter(Boolean)));
       switchStartRequests = storeDetailsRequests;
       for (const label of ['Map', 'List', 'Map', 'List']) {

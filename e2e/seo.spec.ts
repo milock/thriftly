@@ -10,8 +10,10 @@ test('city metadata, disclosed source date and methodology are aligned',async({p
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href','https://www.thriftly.xyz/goodwill/los-angeles-ca');
   await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content',/Los Angeles/);
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content','https://www.thriftly.xyz/goodwill/los-angeles-ca');
-  await page.getByRole('button', {name: 'Coverage and sources', exact: true}).last().click();
-  await expect(page.getByText(/^Source data through /)).toBeVisible();
+  await page.getByRole('button', {name: 'Store dataset', exact: true}).click();
+  const date = page.getByRole('dialog', {name: 'Store dataset', exact: true}).locator('time');
+  await expect(date).toBeVisible();
+  await expect(date).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}T/);
   await expect(page.getByRole('link',{name:'How the Visit score works'})).toHaveAttribute('href','/how-we-score');
 });
 test('new outlet guide has sourced addresses and links back to the city',async({page})=>{

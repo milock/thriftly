@@ -25,7 +25,7 @@
   "visitScore": "Điểm đánh giá chuyến ghé thăm",
   "neighborhoodScore": "Tín hiệu khu dân cư",
   "contribution": "{weight}% điểm số",
-  "scoreNote": "Đây là ước tính để tham khảo khi lập kế hoạch, không dự đoán hàng hóa hay giá trị. Đánh giá trên Google được hiển thị riêng.",
+  "scoreNote": "Đây là ước tính để tham khảo khi lập kế hoạch, không dự đoán hàng hóa hay giá trị.",
   "scoreMethod": "Khả năng đi bộ đóng góp 5% khi có dữ liệu. Đánh giá Google đóng góp tối đa 50%, theo n/(n+50), với n là số lượt đánh giá. Phần còn lại dựa trên dữ liệu điều tra dân số khu vực.",
   "accessVintage": "Dữ liệu EPA: bản phát hành năm 2021",
   "partialCensus": "Một số yếu tố điều tra dân số không có sẵn.",

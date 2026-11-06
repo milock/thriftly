@@ -25,7 +25,7 @@
   "visitScore": "Iskor ng pagbisita",
   "neighborhoodScore": "Palatandaan ng komunidad",
   "contribution": "{weight}% ng iskor",
-  "scoreNote": "Pagtatantiya ito para makapagplano, hindi hula sa stock o halaga. Hiwalay na ipinapakita ang mga rating sa Google.",
+  "scoreNote": "Pagtatantiya ito para makapagplano, hindi hula sa stock o halaga.",
   "scoreMethod": "Kapag may datos, 5% ang ambag ng kakayahang lakarin ang lugar. Hanggang 50% ang ambag ng mga rating sa Google, ayon sa n/(n+50), kung saan ang n ay bilang ng mga rating. Ang natitira ay mula sa datos ng Senso sa kapitbahayan.",
   "accessVintage": "Datos ng EPA: release noong 2021",
   "partialCensus": "May ilang salik mula sa Senso na hindi available.",

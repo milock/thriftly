@@ -162,7 +162,7 @@ test("map markers open a keyboard-accessible store and score breakdown", async (
     .toHaveAttribute("href", /^https:\/\/www\.google\.com\/maps\/dir\//);
   const details = popup.getByRole("button", { name: /show score details/i });
   await details.click();
-  const breakdown = page.getByRole("dialog", { name: "Visit score", exact: true });
+  const breakdown = page.getByRole("dialog", { name: "Visit score", exact: true }).and(page.locator("[data-open]"));
   await breakdown.locator("summary").filter({ hasText: "Neighborhood signal" }).click();
   await expect(page.getByText("Median household income", { exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
@@ -203,9 +203,10 @@ test("the rated store uses the same score in the card, map and breakdown", async
   const cardScore = card.getByRole("button", { name: /visit score 94 out of 100.*show score details/i });
   await expect(cardScore).toBeVisible();
   await cardScore.click();
-  const breakdown = page.getByRole("dialog", { name: "Visit score", exact: true });
+  const breakdown = page.getByRole("dialog", { name: "Visit score", exact: true }).and(page.locator("[data-open]"));
   await expect(breakdown.locator("[data-score-total]")).toHaveAttribute("data-score-total", "94");
   await page.keyboard.press("Escape");
+  await expect(breakdown).toHaveCount(0);
 
   if (isMobile) await page.getByRole("tab", { name: "Map", exact: true }).click();
   const map = page.locator("[data-google-map][data-state=ready]");
