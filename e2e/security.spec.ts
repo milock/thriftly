@@ -6,6 +6,9 @@ test('production server sends security headers', async ({request}) => {
   expect(res.headers()['content-security-policy']).toContain("frame-ancestors 'none'");
   expect(res.headers()['content-security-policy']).not.toContain('unsafe-eval');
   expect(res.headers()['content-security-policy']).toContain("script-src-attr 'none'");
+  const connect = res.headers()['content-security-policy'].split(';').find(value => value.trim().startsWith('connect-src '));
+  expect(connect).toContain('https://places.googleapis.com');
+  expect(connect).not.toMatch(/https:\/\/\*|(?:^|\s)\*(?:\s|$)/);
 });
 test('real API rejects invalid and oversized requests', async ({request}) => {
   expect((await request.get('/api/stores?lat=32evil&lon=-117')).status()).toBe(400);

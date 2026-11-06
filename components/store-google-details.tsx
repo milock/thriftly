@@ -168,12 +168,11 @@ function GoogleDetails({ store }: { store: Listing }) {
         widget.addEventListener("gmp-error", onError, { once: true });
         const request = document.createElement("gmp-place-details-place-request");
         request.setAttribute("place", matchId);
-        const content = document.createElement("gmp-place-content-config");
-        content.append(
+        widget.append(
+          request,
           document.createElement("gmp-place-rating"),
           document.createElement("gmp-place-attribution"),
         );
-        widget.append(request, content);
         element?.append(widget);
       } catch {
         if (!ticket.signal.aborted) onError();

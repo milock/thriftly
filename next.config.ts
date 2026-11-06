@@ -14,7 +14,8 @@ const ContentSecurityPolicy = [
   // Geocoding runs in the browser (the user's own IP) against the OSM geocoders —
   // the server's datacenter IP gets rate-limited/blocked, so client-side is the
   // only path that works everywhere. These two origins must be reachable.
-  "connect-src 'self' https://photon.komoot.io https://nominatim.openstreetmap.org https://maps.googleapis.com https://maps.gstatic.com https://placewidgets.googleapis.com",
+  // Places UI Kit also fetches its selected fields from the Places RPC endpoint.
+  "connect-src 'self' https://photon.komoot.io https://nominatim.openstreetmap.org https://maps.googleapis.com https://maps.gstatic.com https://placewidgets.googleapis.com https://places.googleapis.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
