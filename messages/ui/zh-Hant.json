@@ -96,5 +96,6 @@
   "locationFallback": "無法取得位置。目前顯示聖地牙哥；請搜尋您的城市或郵遞區號。",
   "skipMain": "跳至主要內容",
   "refreshFailed": "重新整理失敗。仍顯示先前的結果。",
-  "showResults": "查看 {count} 家門市"
+  "showResults": "查看 {count} 家門市",
+  "sourceUpdated": "最早的來源更新時間：{time}"
 }

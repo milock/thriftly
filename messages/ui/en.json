@@ -96,5 +96,6 @@
   "locationFallback": "Location unavailable. Showing San Diego; search for your city or ZIP code.",
   "skipMain": "Skip to main content",
   "refreshFailed": "Refresh failed. The previous results are still shown.",
-  "showResults": "Show {count, plural, one {# store} other {# stores}}"
+  "showResults": "Show {count, plural, one {# store} other {# stores}}",
+  "sourceUpdated": "Oldest source update: {time}"
 }

@@ -32,7 +32,7 @@ export function ListingDetails({store, showType = true}: {store: Store; showType
       {showType && store.facilityType && <span>{u(store.facilityType)}</span>}
       <span>{t("source")}: {sourceUrl ? <a className="underline underline-offset-2" href={sourceUrl} target="_blank" rel="noopener noreferrer">{sourceNames[source!.source] ?? source!.source}</a> : source?.source ?? t("unknown")}</span>
     </div>
-    <p>{t("checked")}: <time dateTime={source?.fetchedAt}>{date(source?.fetchedAt)}</time></p>
+    <p>{t("retrieved")}: <time dateTime={source?.fetchedAt}>{date(source?.fetchedAt)}</time></p>
     <StoreGoogleDetails store={store} />
     <div className="flex flex-wrap items-start gap-x-4">
     <details className="min-w-0 [&[open]]:basis-full">

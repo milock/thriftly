@@ -96,5 +96,6 @@
   "locationFallback": "Ubicación no disponible. Mostramos San Diego; busca tu ciudad o código postal.",
   "skipMain": "Saltar al contenido principal",
   "refreshFailed": "No se pudo actualizar. Se siguen mostrando los resultados anteriores.",
-  "showResults": "Ver {count, plural, one {# tienda} other {# tiendas}}"
+  "showResults": "Ver {count, plural, one {# tienda} other {# tiendas}}",
+  "sourceUpdated": "Actualización más antigua de la fuente: {time}"
 }

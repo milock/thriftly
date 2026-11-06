@@ -32,5 +32,6 @@
   "scoreMissingReviews": "目前沒有已核准的 Thriftly 買家評價",
   "scoreMethod": "有資料時，步行便利度佔 5%。已核准的買家評價最高佔 30%，權重會隨評價數量增加。其餘權重依據社區指標。",
   "accessVintage": "EPA 資料：2021 年發布版",
-  "partialCensus": "部分人口普查指標目前無法取得。"
+  "partialCensus": "部分人口普查指標目前無法取得。",
+  "retrieved": "來源取得時間"
 }

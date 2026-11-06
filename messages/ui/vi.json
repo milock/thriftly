@@ -96,5 +96,6 @@
   "locationFallback": "Không lấy được vị trí. Đang hiển thị San Diego; hãy tìm thành phố hoặc mã ZIP của bạn.",
   "skipMain": "Chuyển đến nội dung chính",
   "refreshFailed": "Không thể làm mới. Kết quả trước đó vẫn được hiển thị.",
-  "showResults": "Xem {count} cửa hàng"
+  "showResults": "Xem {count} cửa hàng",
+  "sourceUpdated": "Lần cập nhật nguồn cũ nhất: {time}"
 }

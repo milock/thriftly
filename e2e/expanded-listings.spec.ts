@@ -61,6 +61,6 @@ test('city pages separate all stores and Goodwill while retaining a visible sour
  await brands.getByRole('link',{name:/^Goodwill/}).click();
  await expect(page).toHaveURL(/\/goodwill\/san-diego-ca/);
  await expect(page.getByText(/Listing source/).first()).toBeVisible();
- await expect(page.getByText(/Source checked/).first()).toBeVisible();
+ await expect(page.getByText(/Source retrieved/).first()).toBeVisible();
  await expect(page.getByRole('heading',{level:3}).filter({hasText:'Buffalo Exchange'})).toHaveCount(0);
 });

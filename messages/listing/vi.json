@@ -32,5 +32,6 @@
   "scoreMissingReviews": "Chưa có đánh giá nào của người mua trên Thriftly được duyệt",
   "scoreMethod": "Khả năng đi bộ đóng góp 5% khi có dữ liệu. Đánh giá của người mua đã được duyệt đóng góp tối đa 30%, tăng theo số lượng đánh giá. Phần trọng số còn lại dựa trên tín hiệu khu dân cư.",
   "accessVintage": "Dữ liệu EPA: bản phát hành năm 2021",
-  "partialCensus": "Một số yếu tố điều tra dân số không có sẵn."
+  "partialCensus": "Một số yếu tố điều tra dân số không có sẵn.",
+  "retrieved": "Thời điểm truy xuất nguồn"
 }

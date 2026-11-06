@@ -127,7 +127,7 @@ export function CityStores({
   return (
     <div>
       <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs text-muted-foreground">
-        <span>{t("updated", { time: label ?? initialDateLabel ?? updatedAt?.slice(0, 10) ?? t("recent") })}</span>
+        <span>{t("sourceUpdated", { time: label ?? initialDateLabel ?? updatedAt?.slice(0, 10) ?? t("recent") })}</span>
         {canRefresh && (
           <button
             type="button"

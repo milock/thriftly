@@ -96,5 +96,6 @@
   "locationFallback": "الموقع غير متاح. نعرض سان دييغو؛ ابحث عن مدينتك أو الرمز البريدي.",
   "skipMain": "انتقل إلى المحتوى الرئيسي",
   "refreshFailed": "تعذّر التحديث. لا تزال النتائج السابقة معروضة.",
-  "showResults": "عرض المتاجر ({count, number})"
+  "showResults": "عرض المتاجر ({count, number})",
+  "sourceUpdated": "أقدم تحديث للمصدر: {time}"
 }

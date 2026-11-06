@@ -32,5 +32,6 @@
   "scoreMissingReviews": "No approved Thriftly shopper ratings yet",
   "scoreMethod": "Walkability contributes 5% when available. Approved shopper reviews contribute up to 30%, increasing with review count. Remaining weight uses the neighborhood signal.",
   "accessVintage": "EPA data: 2021 release",
-  "partialCensus": "Some Census factors are unavailable."
+  "partialCensus": "Some Census factors are unavailable.",
+  "retrieved": "Source retrieved"
 }

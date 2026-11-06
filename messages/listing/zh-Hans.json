@@ -32,5 +32,6 @@
   "scoreMissingReviews": "暂无已批准的 Thriftly 买家评价",
   "scoreMethod": "有数据时，步行便利度占 5%。已批准的买家评价最高占 30%，权重随评价数量增加。其余权重依据社区指标。",
   "accessVintage": "EPA 数据：2021 年发布版",
-  "partialCensus": "部分人口普查指标暂不可用。"
+  "partialCensus": "部分人口普查指标暂不可用。",
+  "retrieved": "来源获取时间"
 }

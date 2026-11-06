@@ -96,5 +96,6 @@
   "locationFallback": "Hindi makuha ang lokasyon. San Diego ang ipinapakita; hanapin ang iyong lungsod o ZIP code.",
   "skipMain": "Lumaktaw sa pangunahing nilalaman",
   "refreshFailed": "Hindi nagtagumpay ang pag-refresh. Nakikita pa rin ang mga naunang resulta.",
-  "showResults": "Tingnan ang {count} tindahan"
+  "showResults": "Tingnan ang {count} tindahan",
+  "sourceUpdated": "Pinakamatandang update ng source: {time}"
 }

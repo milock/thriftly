@@ -32,5 +32,6 @@
   "scoreMissingReviews": "Aún no hay reseñas de compradores de Thriftly aprobadas",
   "scoreMethod": "La facilidad para caminar aporta un 5% cuando hay datos. Las reseñas de compradores aprobadas aportan hasta un 30%; su peso aumenta con el número de reseñas. El resto se basa en el indicador del vecindario.",
   "accessVintage": "Datos de la EPA: versión de 2021",
-  "partialCensus": "Algunos factores del censo no están disponibles."
+  "partialCensus": "Algunos factores del censo no están disponibles.",
+  "retrieved": "Fuente obtenida"
 }
