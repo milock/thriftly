@@ -31,6 +31,12 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
  const runtimeNumbers = await page.evaluate(({locale, numberingSystem}) => ({explicit: new Intl.NumberFormat(locale,{numberingSystem}).format(12.3), default: new Intl.NumberFormat(locale).format(12.3)}), {locale,numberingSystem});
  if(locale === "ar") console.log("Arabic runtime defaults", {server:new Intl.NumberFormat(locale).format(12.3),browser:runtimeNumbers.default});
  expect(runtimeNumbers.explicit).toBe(new Intl.NumberFormat(locale,{numberingSystem}).format(12.3));
+ // Brand navigation must work on demand after a fresh server hydration.
+ await page.locator(`nav a[href="${prefix}/buffalo-exchange/los-angeles-ca"]`).click();
+ await expect(page).toHaveURL(prefix+'/buffalo-exchange/los-angeles-ca');
+ await expect(page.locator('h1')).toContainText('Buffalo Exchange');
+ await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href',`https://www.thriftly.xyz${prefix}/buffalo-exchange/los-angeles-ca`);
+ await page.waitForLoadState('networkidle');
  expect(errors).toEqual([]);
 });
 test('language switch retains map coordinates and filters',async({page})=>{
