@@ -96,3 +96,55 @@ test('narrow cards give addresses the full content width', async ({page}) => {
   await card.locator('[data-store-toggle]').click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
 });
+
+const scoreLayouts = [
+  { locale: 'English', prefix: '', direction: 'ltr', colorScheme: 'light', map: 'Map',
+    score: /Show score details/i, neighborhood: 'Neighborhood signal', method: 'How scoring works' },
+  { locale: 'Arabic dark mode', prefix: '/ar', direction: 'rtl', colorScheme: 'dark', map: 'خريطة',
+    score: /عرض التفاصيل/, neighborhood: 'مؤشر الحي', method: 'كيف يعمل التقييم' },
+] as const;
+
+for (const layout of scoreLayouts) {
+  test(`phone map score stays within the viewport and scrolls to methodology in ${layout.locale}`, async ({page}) => {
+    const width = 390;
+    const height = 844;
+    await page.setViewportSize({width, height});
+    await page.emulateMedia({colorScheme: layout.colorScheme});
+    await mockStoreDetails(page);
+    await gotoClientSearch(page, `${layout.prefix}/search?lat=32.84&lon=-117.27&radius=8`);
+    await expect(page.locator('html')).toHaveAttribute('dir', layout.direction);
+    if (layout.colorScheme === 'dark') await expect(page.locator('html')).toHaveClass(/\bdark\b/);
+    await expect(page.locator('[data-store-card]', {hasText: 'Girard Avenue'})
+      .locator('[data-google-rating]')).toHaveAttribute('data-state', 'loaded');
+
+    await page.getByRole('tab', {name: layout.map, exact: true}).click();
+    const map = page.locator('[data-google-map][data-state=ready]');
+    await map.getByRole('button', {name: /Goodwill.*Girard Avenue/i}).click();
+    await map.getByRole('dialog').getByRole('button', {name: layout.score}).click();
+    const breakdown = page.locator('[data-slot="popover-content"][data-open]').filter({
+      has: page.locator('[data-score-total]'),
+    });
+    await expect(breakdown).toBeVisible();
+
+    const fits = async () => {
+      const box = await breakdown.boundingBox();
+      return !!box && box.x >= -1 && box.y >= -1
+        && box.x + box.width <= width + 1 && box.y + box.height <= height + 1;
+    };
+    await expect.poll(fits).toBe(true);
+    await breakdown.locator('summary', {hasText: layout.neighborhood}).click();
+    await expect.poll(() => breakdown.evaluate(node => node.scrollHeight > node.clientHeight)).toBe(true);
+    await expect.poll(fits).toBe(true);
+
+    const method = breakdown.locator('details').filter({
+      has: page.locator('summary', {hasText: layout.method}),
+    });
+    const summary = method.locator('summary');
+    await summary.scrollIntoViewIfNeeded();
+    await expect(summary).toBeInViewport();
+    await summary.click();
+    await expect(method).toHaveAttribute('open', '');
+    await expect.poll(() => breakdown.evaluate(node => node.scrollTop)).toBeGreaterThan(0);
+    await expect.poll(fits).toBe(true);
+  });
+}
