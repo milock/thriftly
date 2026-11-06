@@ -1,3 +1,5 @@
+import type { VisitScore } from "@/lib/visit-score";
+
 export interface LatLng {
   lat: number;
   lon: number;
@@ -6,6 +8,11 @@ export interface LatLng {
 export interface Store {
   id: string; // e.g. "node/123456"
   name: string;
+  brandId?: string;
+  brand?: string;
+  operator?: string;
+  sourcingModel?: 'donation' | 'buy-sell-trade' | 'mixed' | 'unknown';
+  merchandiseScope?: 'general' | 'fashion' | 'home-improvement' | 'books' | 'unknown';
   location: LatLng;
   address?: string;
   street?: string; // "7631 Girard Avenue"
@@ -69,6 +76,8 @@ export interface FactorScore {
 }
 
 export interface GoodsScore {
+  visit?: VisitScore;
+  baselineTotal?: number;
   total: number; // 0..100
   factors: Record<FactorKey, FactorScore>;
   catchment: { tractCount: number; population: number };

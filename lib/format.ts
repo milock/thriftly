@@ -1,5 +1,18 @@
 import type { LatLng } from "@/lib/types";
 
+/** Stable across server and browser CLDR versions, with explicit UTC date order. */
+export function formatSourceDate(value: string | undefined, locale = "en"): string | null {
+  if (!value || !Number.isFinite(Date.parse(value))) return null;
+  const date = new Date(value);
+  const year = String(date.getUTCFullYear());
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const parts = locale.startsWith("zh") ? [year, month, day]
+    : locale === "en" || locale === "tl" ? [month, day, year] : [day, month, year];
+  const result = parts.join("/");
+  return locale === "ar" ? result.replace(/\d/g, digit => "٠١٢٣٤٥٦٧٨٩"[Number(digit)]) : result;
+}
+
 export function formatCurrency(value: number | null, opts?: { perMonth?: boolean; locale?: string }): string {
   if (value == null) return "—";
   return new Intl.NumberFormat(opts?.locale ?? "en", { numberingSystem: opts?.locale === "ar" ? "arab" : "latn", style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value) + (opts?.perMonth ? "/mo" : "");
@@ -27,8 +40,8 @@ export function directionsUrl(store: { location: LatLng; address?: string }): st
 }
 
 /** Open the place on Google Maps (name + address when available). */
-export function mapsPlaceUrl(store: { location: LatLng; address?: string }): string {
-  const query = store.address ? `Goodwill ${store.address}` : `${store.location.lat},${store.location.lon}`;
+export function mapsPlaceUrl(store: { location: LatLng; address?: string; name?: string }): string {
+  const query = store.address ? `${store.name ?? ""} ${store.address}`.trim() : `${store.location.lat},${store.location.lon}`;
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 

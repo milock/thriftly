@@ -31,10 +31,13 @@ test.describe("local SEO hierarchy", () => {
 
   test("the landing page links into the hierarchy", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("link", { name: /all 50 states/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /browse cities/i })).toHaveAttribute("href", "/thrift-stores");
+    for (const brand of ["goodwill", "salvation-army", "savers", "buffalo-exchange"]) {
+      await expect(page.locator(`a[href="/${brand}"]`)).toBeVisible();
+    }
     await expect(page.getByRole("link", { name: /san diego, ca/i }).first()).toHaveAttribute(
       "href",
-      "/goodwill/san-diego-ca",
+      "/thrift-stores/san-diego-ca",
     );
   });
 });

@@ -1,9 +1,12 @@
 import { ImageResponse } from "next/og";
-import {getTranslations} from "next-intl/server";
+import {createTranslator} from "next-intl";
+import {isLocale} from "@/i18n/routing";
 
 export async function generateImageMetadata({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
-  const t = await getTranslations({locale:locale ?? 'en', namespace: 'pages'});
+  const language = isLocale(locale) ? locale : 'en';
+  const messages = (await import(`@/messages/pages/${language}.json`)).default;
+  const t = createTranslator({locale: language, messages});
   return [{id: '0', alt: t('hero'), size, contentType}];
 }
 export const size = { width: 1200, height: 630 };
@@ -49,7 +52,7 @@ export default function OpengraphImage() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
           <div style={{ fontSize: 78, fontWeight: 700, lineHeight: 1.05, letterSpacing: -2, maxWidth: 900 }}>
-            Thriftly + Goodwill
+            Thriftly
           </div>
           <div style={{ fontSize: 34, color: "#a1a1aa", maxWidth: 880, lineHeight: 1.3 }}>
             thriftly.xyz
@@ -71,10 +74,10 @@ export default function OpengraphImage() {
               fontWeight: 700,
             }}
           >
-            89
+            T
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 30, fontWeight: 600 }}>Goodwill</div>
+            <div style={{ fontSize: 30, fontWeight: 600 }}>Thrift &amp; resale</div>
             <div style={{ fontSize: 26, color: "#71717a" }}>Thriftly</div>
           </div>
         </div>

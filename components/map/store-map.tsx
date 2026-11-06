@@ -123,6 +123,9 @@ export default function StoreMap({
 }: Props) {
   const t = useTranslations("ui");
   const locale = useLocale();
+  const d = useTranslations("directory");
+  const [tileErrors, setTileErrors] = useState(0);
+  const [tileLoaded, setTileLoaded] = useState(false);
   const selected = stores.find((s) => s.id === selectedId) ?? null;
   const { resolvedTheme } = useTheme();
   const dark = resolvedTheme === "dark";
@@ -152,6 +155,7 @@ export default function StoreMap({
           attribution={`&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> ${t("contributors")}`}
           className="thriftly-basemap"
           maxZoom={19}
+          eventHandlers={{tileerror: () => setTileErrors(n => n + 1), tileload: () => setTileLoaded(true)}}
         />
         <Circle
           center={[center.lat, center.lon]}
@@ -165,7 +169,7 @@ export default function StoreMap({
             dashArray: "5 6",
           }}
         />
-        <Marker position={[center.lat, center.lon]} icon={centerIcon} />
+        <Marker position={[center.lat, center.lon]} icon={centerIcon} interactive={false} keyboard={false} />
         <ViewController
           center={center}
           radiusMiles={radiusMiles}
@@ -175,15 +179,33 @@ export default function StoreMap({
         <MoveWatcher programmaticRef={programmaticRef} onMoved={handleMoved} />
         {stores.map((s) => {
           const open = isOpenNow(parseHours(s.openingHours), new Date(), s.timezone);
+          const markerLabel = [
+            s.name,
+            s.street,
+            s.neighborhood || s.locality,
+            s.region,
+            s.score.catchment.tractCount > 0
+              ? t("scoreAria", { score: Math.round(s.score.total) })
+              : t("notScored"),
+          ].filter(Boolean).join(", ");
+          // DivIcon markers are divs, so Leaflet's image alt option does not
+          // name them. Set an inert DOM attribute on mount and data updates.
+          const labelMarker = (marker: L.Marker | null) => {
+            marker?.getElement()?.setAttribute("aria-label", markerLabel);
+          };
           return (
             <Marker
-              title={s.name}
-              alt={s.name}
+              ref={labelMarker}
+              title={markerLabel}
+              alt={markerLabel}
               key={s.id}
               position={[s.location.lat, s.location.lon]}
               icon={pinIcon(s.score.total, s.id === selectedId, locale, s.score.catchment.tractCount > 0)}
               zIndexOffset={s.id === selectedId ? 1000 : 0}
-              eventHandlers={{ click: () => onSelect(s.id) }}
+              eventHandlers={{
+                add: (event) => labelMarker(event.target as L.Marker),
+                click: () => onSelect(s.id),
+              }}
             >
               <Popup closeButton={false}>
                 <div dir={locale === "ar" ? "rtl" : "ltr"} className="relative max-h-[min(28rem,calc(100dvh-11rem))] w-64 max-w-[calc(100vw-3rem)] overflow-y-auto overscroll-contain p-4 pt-12">
@@ -192,7 +214,7 @@ export default function StoreMap({
                     {s.score.catchment.tractCount > 0 ? <ScoreRing score={s.score.total} size={46} strokeWidth={4} /> : <span className="text-xs text-muted-foreground">{t("notScored")}</span>}
                     <div className="min-w-0 flex-1">
                       <p className="break-words text-base font-semibold leading-tight text-foreground">
-                        {s.locality || s.street || "Goodwill"}
+                        {s.name}
                       </p>
                       {s.street && s.locality && (
                         <p className="break-words text-sm leading-relaxed text-muted-foreground"><bdi dir="ltr">{s.street}</bdi></p>
@@ -239,6 +261,7 @@ export default function StoreMap({
         })}
       </MapContainer>
 
+      {tileErrors >= 3 && !tileLoaded && <p role="status" className="absolute inset-x-3 bottom-7 z-[500] rounded-md border bg-card p-3 text-sm text-foreground shadow-sm">{d("mapUnavailable")}</p>}
       {movedCenter && (
         <button
           type="button"

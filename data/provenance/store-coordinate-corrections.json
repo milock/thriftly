@@ -1,0 +1,34 @@
+[
+  {
+    "id": "salvation-army/f135c783-e4eb-4017-9e5b-f3c98714100e",
+    "original": {
+      "lat": 35.57116,
+      "lon": -114.0964
+    },
+    "corrected": {
+      "lat": 35.189795887715,
+      "lon": -114.054308860237
+    },
+    "matchedAddress": "309 BEALE ST, KINGMAN, AZ, 86401",
+    "sourceUrl": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=309+E.+Beal+St.%2C+Kingman%2C+AZ&benchmark=Public_AR_Current&format=json",
+    "verifiedAt": "2026-11-06T00:39:23.485Z",
+    "reason": "Official locator coordinates disagree with exact Census street-address match",
+    "originalAddress": "309 E. Beal St., Kingman, AZ, 86402"
+  },
+  {
+    "id": "salvation-army/93524495-1c9d-46bd-b149-f38db9e691e8",
+    "original": {
+      "lat": 36.37595,
+      "lon": -108.1462
+    },
+    "corrected": {
+      "lat": 36.727225273393,
+      "lon": -108.20823865434
+    },
+    "matchedAddress": "316 W ANIMAS ST, FARMINGTON, NM, 87401",
+    "sourceUrl": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=316+W.+Animas%2C+Farmington%2C+NM&benchmark=Public_AR_Current&format=json",
+    "verifiedAt": "2026-11-06T00:39:23.774Z",
+    "reason": "Official locator coordinates disagree with exact Census street-address match",
+    "originalAddress": "316 W. Animas, Farmington, NM, 87401"
+  }
+]

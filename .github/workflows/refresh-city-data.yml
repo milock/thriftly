@@ -1,7 +1,7 @@
-name: Refresh Goodwill data
+name: Refresh thrift store data
 
-# Weekly: published AllThePlaces Goodwill snapshots, classified retail/outlet locations,
-# then Census scoring. Public Overpass is not required for the scheduled build.
+# Weekly: classified thrift/resale sources plus Census scoring.
+# Published ATP extracts and official retail locators; no runtime Overpass dependency.
 # Invalid source partitions or coverage regressions preserve the published file.
 
 on:
@@ -31,9 +31,12 @@ jobs:
       - name: Restore recent state checkpoints
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
-          path: .cache/atp
-          key: atp-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: atp-
+          path: |
+            .cache/atp
+            .cache/expanded
+            .cache/store-access
+          key: thrift-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: thrift-
       - name: Fetch latest successful published Goodwill source
         id: source
         run: node --import tsx scripts/fetch-atp-goodwill.ts
@@ -43,12 +46,24 @@ jobs:
         env:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
           STORE_SOURCE: atp
+      - name: Fetch other thrift and resale sources
+        run: node --import tsx scripts/fetch-expanded-stores.ts
+      - name: Build combined store registry
+        run: node --import tsx scripts/build-expanded-stores.ts
+        env:
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+      - name: Join published EPA walkability data
+        run: node --import tsx scripts/fetch-store-access.ts
+      - run: npm test
       - name: Save checkpoints even when upstream is unavailable
         if: always()
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
-          path: .cache/atp
-          key: atp-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .cache/atp
+            .cache/expanded
+            .cache/store-access
+          key: thrift-${{ github.run_id }}-${{ github.run_attempt }}
       - run: npm run build
       - name: Save validated dataset
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -56,6 +71,8 @@ jobs:
           name: goodwill-dataset
           path: |
             data/goodwill-us.json
+            data/stores-us.json
+            data/store-access.json
             data/provenance/*.json
           retention-days: 7
       - name: Commit refreshed data
@@ -63,11 +80,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/goodwill-us.json data/provenance
+          git add data/goodwill-us.json data/stores-us.json data/store-access.json data/provenance
           if git diff --cached --quiet; then
             echo "No data changes."
           else
-            git commit -m "chore: weekly Goodwill data refresh"
+            git commit -m "chore: weekly thrift store data refresh"
             # main may have moved while the (long) build ran, so rebase our data
             # commit on top of the latest main before pushing. Retry a few times
             # in case more commits land during the rebase.

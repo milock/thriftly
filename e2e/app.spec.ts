@@ -21,10 +21,10 @@ test.beforeEach(async ({ page }) => {
 
 test("ranks stores and crowns the best find", async ({ page }) => {
   await page.goto("/search");
-  await expect(page.getByRole("img", { name: /goods score 89/i })).toBeVisible();
+  await expect(page.getByRole("img", { name: /visit score 89/i })).toBeVisible();
   await expect(page.getByText(/highest score/i)).toBeVisible();
-  await expect(page.getByRole("heading", { name: "La Jolla" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Pacific Beach" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /La Jolla/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Pacific Beach/ })).toBeVisible();
 });
 
 test("a card exposes actions when expanded", async ({ page }) => {
@@ -32,6 +32,7 @@ test("a card exposes actions when expanded", async ({ page }) => {
   const best = page.locator('[data-store-card]', { hasText: "La Jolla" }).first();
   await best.locator("[data-store-toggle]").click();
   await expect(best.getByRole("link", { name: /directions/i })).toBeVisible();
+  await best.getByRole("button", { name: "Google reviews", exact: true }).click();
   await expect(best.getByRole("link", { name: /reviews/i })).toBeVisible();
 });
 
@@ -67,8 +68,8 @@ test("filters are reachable", async ({ page }) => {
 test("the sort control shows its label at rest, not the raw value", async ({ page }) => {
   await page.goto("/search");
   await page.getByRole("button", { name: /^filters$/i }).click();
-  // The trigger must read "Goods Score" (the label), never the "score" slug.
-  await expect(page.getByRole("combobox", { name: "Sort by" })).toContainText("Goods Score");
+  // The trigger must read "Visit score" (the label), never the "score" slug.
+  await expect(page.getByRole("combobox", { name: "Sort by" })).toContainText("Visit score");
 });
 
 test("the map renders", async ({ page, isMobile }) => {
@@ -97,7 +98,7 @@ test('restores a shared search location and radius', async ({page}) => {
 test('shows store addresses while neighborhood enrichment is unavailable', async ({page}) => {
   await page.route('**/api/enrich**', () => new Promise(() => {}));
   await page.goto('/search');
-  await expect(page.getByRole('heading', {name:'La Jolla'})).toBeVisible();
+  await expect(page.getByRole('heading', {name:/La Jolla/})).toBeVisible();
   await expect(page.getByText('7631 Girard Avenue, La Jolla, CA', {exact:true}).first()).toBeVisible();
 });
 
@@ -118,7 +119,7 @@ test('shared filters survive hydration and can be cleared from an empty result',
   await page.goto('/search?lat=32.84&lon=-117.27&minScore=100&sort=distance');
   await expect(page.getByText('No stores match these filters')).toBeVisible();
   await page.getByRole('button',{name:'Reset filters', exact:true}).first().click();
-  await expect(page.getByRole('heading',{name:'La Jolla'})).toBeVisible();
+  await expect(page.getByRole('heading',{name:/La Jolla/})).toBeVisible();
   await expect(page).not.toHaveURL(/minScore=100/);
 });
 test('highest-score badge follows the score when sorting by distance', async ({page}) => {
@@ -139,4 +140,17 @@ test('unknown hours cannot silently hide the entire result set', async ({page}) 
   await page.getByRole('button',{name:/^filters$/i}).click();
   await expect(page.getByRole('switch')).toBeDisabled();
   await expect(page.getByText(/hours are unavailable/i)).toBeVisible();
+});
+
+
+test('map markers announce a destination and score without adding an empty center control', async ({page}) => {
+  await page.goto('/search?lat=32.84&lon=-117.27');
+  const mapTab = page.getByRole('tab', {name: /^map$/i});
+  if (await mapTab.isVisible()) await mapTab.click();
+  const marker = page.locator('.gw-pin').first();
+  await expect(marker).toBeVisible();
+  await expect(marker).toHaveAccessibleName(/Goodwill.*Visit score.*89/i);
+  await expect(marker).toHaveAccessibleName(/Girard|Herschel/i);
+  await expect(page.locator('.gw-center')).not.toHaveAttribute('role', 'button');
+  await expect(page.locator('.gw-center')).not.toHaveAttribute('tabindex', '0');
 });

@@ -1,0 +1,343 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-06T00:47:15.204173Z",
+  "coverage": "Curated source-checked facts for five stores; absence of evidence means unknown. No in-person visits or live inventory verification.",
+  "records": [
+    {
+      "id": "savers/1191-clothing",
+      "appliesTo": {
+        "type": "store",
+        "id": "savers/1191"
+      },
+      "category": "department",
+      "field": "clothing",
+      "value": true,
+      "source": {
+        "name": "Savers South San Jose official store page",
+        "url": "https://stores.savers.com/ca/sanjose/savers-thrift-store-1191.html",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Operator describes this merchandise category; individual items and current stock are not verified."
+    },
+    {
+      "id": "savers/1191-books",
+      "appliesTo": {
+        "type": "store",
+        "id": "savers/1191"
+      },
+      "category": "department",
+      "field": "books",
+      "value": true,
+      "source": {
+        "name": "Savers South San Jose official store page",
+        "url": "https://stores.savers.com/ca/sanjose/savers-thrift-store-1191.html",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Operator describes this merchandise category; individual items and current stock are not verified."
+    },
+    {
+      "id": "savers/1191-housewares",
+      "appliesTo": {
+        "type": "store",
+        "id": "savers/1191"
+      },
+      "category": "department",
+      "field": "housewares",
+      "value": true,
+      "source": {
+        "name": "Savers South San Jose official store page",
+        "url": "https://stores.savers.com/ca/sanjose/savers-thrift-store-1191.html",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Operator describes this merchandise category; individual items and current stock are not verified."
+    },
+    {
+      "id": "savers/1191-electronics",
+      "appliesTo": {
+        "type": "store",
+        "id": "savers/1191"
+      },
+      "category": "department",
+      "field": "electronics",
+      "value": true,
+      "source": {
+        "name": "Savers South San Jose official store page",
+        "url": "https://stores.savers.com/ca/sanjose/savers-thrift-store-1191.html",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Operator describes this merchandise category; individual items and current stock are not verified."
+    },
+    {
+      "id": "savers/1191-parking",
+      "appliesTo": {
+        "type": "store",
+        "id": "savers/1191"
+      },
+      "category": "practical",
+      "field": "parking",
+      "value": "Parking is listed as available.",
+      "source": {
+        "name": "Savers South San Jose official store page",
+        "url": "https://stores.savers.com/ca/sanjose/savers-thrift-store-1191.html",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "caveat": "Space availability, fees and accessible parking spaces are not verified."
+    },
+    {
+      "id": "savers/1191-accessibility",
+      "appliesTo": {
+        "type": "store",
+        "id": "savers/1191"
+      },
+      "category": "practical",
+      "field": "accessibility",
+      "value": "The operator states that service animals are allowed.",
+      "source": {
+        "name": "Savers South San Jose official store page",
+        "url": "https://stores.savers.com/ca/sanjose/savers-thrift-store-1191.html",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "caveat": "This does not verify step-free entry, wheelchair access, accessible parking or accessible restrooms."
+    },
+    {
+      "id": "buffalo-exchange/loc_wy8eyxwx-parking",
+      "appliesTo": {
+        "type": "store",
+        "id": "buffalo-exchange/loc_wy8eyxwx"
+      },
+      "category": "practical",
+      "field": "parking",
+      "value": "Metered street spaces and paid lots are listed near 6th Avenue and Robinson Avenue.",
+      "source": {
+        "name": "Buffalo Exchange Hillcrest official store page",
+        "url": "https://buffaloexchange.com/location/hillcrest-san-diego/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "caveat": "Current rates and space availability are not verified."
+    },
+    {
+      "id": "buffalo-exchange/loc_8yrxypn6-parking",
+      "appliesTo": {
+        "type": "store",
+        "id": "buffalo-exchange/loc_8yrxypn6"
+      },
+      "category": "practical",
+      "field": "parking",
+      "value": "The store lists street parking on Hawthorne Boulevard.",
+      "source": {
+        "name": "Buffalo Exchange Hawthorne official store page",
+        "url": "https://buffaloexchange.com/location/hawthorne-portland/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "caveat": "Current restrictions, fees and space availability are not verified."
+    },
+    {
+      "id": "buffalo-exchange/loc_8yrxypn6-transit",
+      "appliesTo": {
+        "type": "store",
+        "id": "buffalo-exchange/loc_8yrxypn6"
+      },
+      "category": "practical",
+      "field": "transit",
+      "value": "The store identifies nearby TriMet bus routes 14 and 75.",
+      "source": {
+        "name": "Buffalo Exchange Hawthorne official store page",
+        "url": "https://buffaloexchange.com/location/hawthorne-portland/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "caveat": "No live schedule, walking route or accessible boarding verification; check TriMet before traveling."
+    },
+    {
+      "id": "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-furniture",
+      "appliesTo": {
+        "type": "store",
+        "id": "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6"
+      },
+      "category": "department",
+      "field": "furniture",
+      "value": true,
+      "source": {
+        "name": "Goodwill Southern California Fletcher Square official facility page",
+        "url": "https://www.goodwillsocal.org/cec/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Undated operator facility description; no current item availability or on-site verification."
+    },
+    {
+      "id": "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-clothing",
+      "appliesTo": {
+        "type": "store",
+        "id": "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6"
+      },
+      "category": "department",
+      "field": "clothing",
+      "value": true,
+      "source": {
+        "name": "Goodwill Southern California Fletcher Square official facility page",
+        "url": "https://www.goodwillsocal.org/cec/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Undated operator facility description; no current item availability or on-site verification."
+    },
+    {
+      "id": "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-housewares",
+      "appliesTo": {
+        "type": "store",
+        "id": "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6"
+      },
+      "category": "department",
+      "field": "housewares",
+      "value": true,
+      "source": {
+        "name": "Goodwill Southern California Fletcher Square official facility page",
+        "url": "https://www.goodwillsocal.org/cec/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Undated operator facility description; no current item availability or on-site verification."
+    },
+    {
+      "id": "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-books",
+      "appliesTo": {
+        "type": "store",
+        "id": "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6"
+      },
+      "category": "department",
+      "field": "books",
+      "value": true,
+      "source": {
+        "name": "Goodwill Southern California Fletcher Square official facility page",
+        "url": "https://www.goodwillsocal.org/cec/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Undated operator facility description; no current item availability or on-site verification."
+    },
+    {
+      "id": "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-size",
+      "appliesTo": {
+        "type": "store",
+        "id": "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6"
+      },
+      "category": "practical",
+      "field": "size",
+      "value": 15000,
+      "source": {
+        "name": "Goodwill Southern California Fletcher Square official facility page",
+        "url": "https://www.goodwillsocal.org/cec/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "unit": "sq_ft",
+      "comparison": "greater_than",
+      "caveat": "Undated opening-era page describes retail floor area, not the 135,000-square-foot multi-service complex. Current measured floor area is not verified."
+    },
+    {
+      "id": "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-furniture",
+      "appliesTo": {
+        "type": "store",
+        "id": "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90"
+      },
+      "category": "department",
+      "field": "furniture",
+      "value": true,
+      "source": {
+        "name": "Goodwill San Diego Escondido Outlet official description",
+        "url": "https://sdgoodwill.org/shop/outlet-facilities/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Operator describes this merchandise category; individual items and current stock are not verified."
+    },
+    {
+      "id": "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-clothing",
+      "appliesTo": {
+        "type": "store",
+        "id": "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90"
+      },
+      "category": "department",
+      "field": "clothing",
+      "value": true,
+      "source": {
+        "name": "Goodwill San Diego Escondido Outlet official description",
+        "url": "https://sdgoodwill.org/shop/outlet-facilities/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Operator describes this merchandise category; individual items and current stock are not verified."
+    },
+    {
+      "id": "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-housewares",
+      "appliesTo": {
+        "type": "store",
+        "id": "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90"
+      },
+      "category": "department",
+      "field": "housewares",
+      "value": true,
+      "source": {
+        "name": "Goodwill San Diego Escondido Outlet official description",
+        "url": "https://sdgoodwill.org/shop/outlet-facilities/",
+        "kind": "official"
+      },
+      "observedAt": "2026-11-06T00:47:15.204173Z",
+      "observationType": "source_checked",
+      "verificationMethod": "official-page",
+      "inventoryClaim": false,
+      "caveat": "Operator describes this merchandise category; individual items and current stock are not verified."
+    }
+  ]
+}

@@ -11,7 +11,7 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
  expect((await page.locator('link[rel="canonical"]').getAttribute('href'))?.replace(/\/$/,'')).toBe(`https://www.thriftly.xyz${prefix}`);
  expect(await page.locator('link[rel="alternate"][hreflang]').count()).toBe(8);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1)).toBe(true);
- for(const path of ['/goodwill','/goodwill/los-angeles-ca','/how-we-score','/goodwill/los-angeles-ca/outlets']){
+ for(const path of ['/goodwill','/goodwill/los-angeles-ca','/thrift-stores','/thrift-stores/los-angeles-ca','/savers','/savers/los-angeles-ca','/how-we-score','/goodwill/los-angeles-ca/outlets']){
   const response=await request.get(prefix+path); expect(response.status()).toBe(200);
   const html=await response.text();
   expect(html).toContain(`lang="${locale}"`);
@@ -20,8 +20,8 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
  }
  // Follow the real client-side link before checking a fresh server hydration.
  // A hard navigation away from the home page can abort its pending prefetches.
- await page.locator(`a[href="${prefix}/goodwill/los-angeles-ca"]`).click();
- await expect(page).toHaveURL(prefix+'/goodwill/los-angeles-ca');
+ await page.locator(`a[href="${prefix}/thrift-stores/los-angeles-ca"]`).click();
+ await expect(page).toHaveURL(prefix+'/thrift-stores/los-angeles-ca');
  await page.waitForLoadState('networkidle');
  // Server and browser CLDR date data can differ, so exercise SSR hydration too.
  await page.reload();

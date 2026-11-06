@@ -35,10 +35,11 @@ export function CityHeader() {
 /** Shared footer for the static, SEO-facing pages. */
 export function CityFooter() {
   const t = useTranslations("ui");
+  const d = useTranslations("directory");
   return (
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-5xl flex-col gap-3 px-5 py-8 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-2"><Wordmark /><Link href="/how-we-score">{t("howScoreStores")}</Link></div>
+        <div className="flex flex-col gap-2"><Wordmark /><Link href="/how-we-score">{t("howScoreStores")}</Link><Link href="/thrift-stores">{d("allStores")}</Link><div className="flex gap-4"><Link href="/privacy">{d("privacy")}</Link><Link href="/terms">{d("terms")}</Link></div></div>
         <p className="max-w-md leading-relaxed">
           {t("footer")}{" "}
           <a
