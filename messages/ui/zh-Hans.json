@@ -60,7 +60,7 @@
   "refresh": "刷新",
   "refreshing": "正在刷新…",
   "scoreAria": "到访评分 {score, number}，满分 100",
-  "downtown": "距 {city} 市中心 {distance}",
+  "downtown": "距 {city} 搜索中心 {distance}",
   "searchArea": "搜索此区域",
   "close": "关闭",
   "Prime": "最高",

@@ -60,7 +60,7 @@
   "refresh": "تحديث",
   "refreshing": "جارٍ التحديث…",
   "scoreAria": "تقييم الزيارة: ‏{score, number} من 100",
-  "downtown": "على بُعد {distance} من وسط {city}",
+  "downtown": "على بُعد {distance} من مركز البحث في {city}",
   "searchArea": "البحث في هذه المنطقة",
   "close": "إغلاق",
   "Prime": "الأعلى",

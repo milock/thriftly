@@ -60,7 +60,7 @@
   "refresh": "Refresh",
   "refreshing": "Refreshing…",
   "scoreAria": "Visit score {score, number} out of 100",
-  "downtown": "{distance} from downtown {city}",
+  "downtown": "{distance} from the {city} search center",
   "searchArea": "Search this area",
   "close": "Close",
   "Prime": "Highest",

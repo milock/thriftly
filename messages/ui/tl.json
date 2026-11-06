@@ -60,7 +60,7 @@
   "refresh": "I-refresh",
   "refreshing": "Nagre-refresh…",
   "scoreAria": "Iskor ng pagbisita: {score, number} sa 100",
-  "downtown": "{distance} mula sa sentro ng {city}",
+  "downtown": "{distance} mula sa sentro ng paghahanap para sa {city}",
   "searchArea": "Hanapin sa lugar na ito",
   "close": "Isara",
   "Prime": "Pinakamataas",

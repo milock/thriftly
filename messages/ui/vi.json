@@ -60,7 +60,7 @@
   "refresh": "Làm mới",
   "refreshing": "Đang làm mới…",
   "scoreAria": "Điểm chuyến ghé thăm {score, number} trên 100",
-  "downtown": "Cách trung tâm {city} {distance}",
+  "downtown": "{distance} từ tâm tìm kiếm của {city}",
   "searchArea": "Tìm trong khu vực này",
   "close": "Đóng",
   "Prime": "Cao nhất",
