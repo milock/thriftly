@@ -1,11 +1,19 @@
 import {it,expect,vi,afterEach} from 'vitest';
 import * as locate from '@/lib/locate';
+import * as outlets from '@/lib/outlets';
+import {generateMetadata as outletMetadata} from '@/app/[locale]/goodwill/los-angeles-ca/outlets/page';
 afterEach(()=>vi.restoreAllMocks());
 import sitemap from '@/app/sitemap';
 import {pageMetadata,SITE_URL} from '@/lib/seo';
 import {generateMetadata} from '@/app/[locale]/goodwill/[slug]/page';
 vi.mock('@/i18n/navigation',()=>({Link:()=>null,useRouter:()=>({}),usePathname:()=>'/'}));
 vi.mock('next-intl/server',()=>({setRequestLocale:()=>{},getTranslations:async()=>((key:string)=>key)}));
+
+it('omits an uncovered outlet guide from every sitemap locale and noindexes it',async()=>{
+  vi.spyOn(outlets,'losAngelesOutlets').mockReturnValue([]);
+  expect(sitemap().some(entry=>entry.url.endsWith('/goodwill/los-angeles-ca/outlets'))).toBe(false);
+  expect((await outletMetadata({params:Promise.resolve({locale:'en'})})).robots).toMatchObject({index:false,follow:true});
+});
 
 it('excludes empty city pages and invented modification dates from the sitemap',()=>{
   const entries=sitemap(); const urls=entries.map(x=>x.url);
