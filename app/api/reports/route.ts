@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   try {
     requireSameOrigin(request);
     const now = new Date();
-    const input = validateReport(await readReportJson(request), new Set(allBundledStores().map(store => store.id)), now);
+    const input = validateReport(await readReportJson(request), new Set(allBundledStores().map(store => store.id)));
     const id = await createReportQueue().submit(input, reporterKey(request, now), now);
     return reportResponse({ id, status: 'pending' }, 201);
   } catch (error) { return reportErrorResponse(error); }

@@ -1,6 +1,10 @@
 import {test,expect} from '@playwright/test';
+import {mockStoreDetails} from './fixtures';
+import {mockGoogleMaps} from './google-maps-fixture';
+
+test.beforeEach(async ({page})=>{ await mockStoreDetails(page,{unavailable:true}); });
 const locales=['en','es','zh-Hans','zh-Hant','tl','vi','ar'];
-for(const locale of locales) test(`${locale}: complete localized navigation and metadata`,async({page,request})=>{
+for(const locale of locales) test(`${locale}: complete localized navigation and metadata`,async({page,request,context})=>{
  const prefix=locale==='en'?'':`/${locale}`;
  await page.route('**/api/enrich**',r=>r.fulfill({json:{enriched:{}}}));
  const errors:string[]=[]; page.on('pageerror',e=>errors.push(e.message));
@@ -22,24 +26,33 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
  // A hard navigation away from the home page can abort its pending prefetches.
  await page.locator(`a[href="${prefix}/thrift-stores/los-angeles-ca"]`).click();
  await expect(page).toHaveURL(prefix+'/thrift-stores/los-angeles-ca');
+ await expect(page.locator('h1')).toContainText('Los Angeles');
  await page.waitForLoadState('networkidle');
- // Server and browser CLDR date data can differ, so exercise SSR hydration too.
- await page.reload();
- await page.waitForLoadState('networkidle');
- await expect(page.locator('h1')).toBeVisible();
+ expect(errors).toEqual([]);
+ // A separate page exercises fresh SSR hydration without assigning an old
+ // document's canceled prefetches to the new document.
+ await page.close();
+ const fresh = await context.newPage();
+ await mockStoreDetails(fresh, {unavailable: true});
+ await fresh.route('**/api/enrich**',r=>r.fulfill({json:{enriched:{}}}));
+ const freshErrors:string[]=[]; fresh.on('pageerror',e=>freshErrors.push(e.message));
+ await fresh.goto(prefix+'/thrift-stores/los-angeles-ca');
+ await fresh.waitForLoadState('networkidle');
+ await expect(fresh.locator('h1')).toBeVisible();
  const numberingSystem = locale === "ar" ? "arab" : "latn";
- const runtimeNumbers = await page.evaluate(({locale, numberingSystem}) => ({explicit: new Intl.NumberFormat(locale,{numberingSystem}).format(12.3), default: new Intl.NumberFormat(locale).format(12.3)}), {locale,numberingSystem});
+ const runtimeNumbers = await fresh.evaluate(({locale, numberingSystem}) => ({explicit: new Intl.NumberFormat(locale,{numberingSystem}).format(12.3), default: new Intl.NumberFormat(locale).format(12.3)}), {locale,numberingSystem});
  if(locale === "ar") console.log("Arabic runtime defaults", {server:new Intl.NumberFormat(locale).format(12.3),browser:runtimeNumbers.default});
  expect(runtimeNumbers.explicit).toBe(new Intl.NumberFormat(locale,{numberingSystem}).format(12.3));
  // Brand navigation must work on demand after a fresh server hydration.
- await page.locator(`nav a[href="${prefix}/buffalo-exchange/los-angeles-ca"]`).click();
- await expect(page).toHaveURL(prefix+'/buffalo-exchange/los-angeles-ca');
- await expect(page.locator('h1')).toContainText('Buffalo Exchange');
- await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href',`https://www.thriftly.xyz${prefix}/buffalo-exchange/los-angeles-ca`);
- await page.waitForLoadState('networkidle');
- expect(errors).toEqual([]);
+ await fresh.locator(`nav a[href="${prefix}/buffalo-exchange/los-angeles-ca"]`).click();
+ await expect(fresh).toHaveURL(prefix+'/buffalo-exchange/los-angeles-ca');
+ await expect(fresh.locator('h1')).toContainText('Buffalo Exchange');
+ await expect(fresh.locator('link[rel="canonical"]')).toHaveAttribute('href',`https://www.thriftly.xyz${prefix}/buffalo-exchange/los-angeles-ca`);
+ await fresh.waitForLoadState('networkidle');
+ expect(freshErrors).toEqual([]);
 });
 test('language switch retains map coordinates and filters',async({page})=>{
+ await mockGoogleMaps(page);
  await page.route('**/api/enrich**',r=>r.fulfill({json:{enriched:{}}}));
  await page.goto('/search?lat=34.05&lon=-118.24&radius=7&label=Los%20Angeles&brands=goodwill#main-content');
  await page.locator('[data-language-picker]').click();

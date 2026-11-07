@@ -1,5 +1,7 @@
 "use client";
 
+import { hasNeighborhoodBaseline } from "@/lib/scoring";
+
 import { useTranslations } from "next-intl";
 
 import { SearchX, TriangleAlert, MapPin } from "lucide-react";
@@ -116,7 +118,7 @@ export function StoreList({
           key={s.id}
 
         >
-          <StoreCard store={s} rank={i + 1} highest={s.score.catchment.tractCount > 0 && s.score.total === Math.max(...stores.filter(x => x.score.catchment.tractCount > 0).map(x => x.score.total))} selected={s.id === selectedId} onSelect={onSelect} />
+          <StoreCard store={s} rank={i + 1} highest={hasNeighborhoodBaseline(s.score) && s.score.total === Math.max(...stores.filter(x => hasNeighborhoodBaseline(x.score)).map(x => x.score.total))} selected={s.id === selectedId} onSelect={onSelect} />
         </li>
       ))}
     </ul>

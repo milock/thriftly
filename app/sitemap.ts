@@ -5,10 +5,12 @@ import {cityCentroid} from '@/lib/city-data';
 import {locateBundledStores} from '@/lib/locate';
 import {SITE_URL} from '@/lib/seo';
 import {locales,localizedPath} from '@/i18n/routing';
+import {losAngelesOutlets} from '@/lib/outlets';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const directories = ['thrift-stores', ...BRANDS.map(brand => brand.id)];
-  const paths = ['/', '/search', '/privacy', '/terms', '/how-we-score', '/goodwill/los-angeles-ca/outlets', ...directories.map(id => `/${id}`), ...STATES.map(state => `/goodwill/state/${state.slug}`)];
+  const paths = ['/', '/search', '/privacy', '/terms', '/how-we-score', ...directories.map(id => `/${id}`), ...STATES.map(state => `/goodwill/state/${state.slug}`)];
+  if (losAngelesOutlets().length) paths.push('/goodwill/los-angeles-ca/outlets');
   for (const city of CITIES) {
     const center = cityCentroid(city.slug);
     if (!center) continue;

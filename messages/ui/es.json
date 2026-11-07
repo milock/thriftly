@@ -39,7 +39,7 @@
   "within": "Buscar en {miles, number} mi",
   "scoring": "Puntuación",
   "howScoring": "Cómo funciona la puntuación",
-  "methodIntro": "La puntuación de visita combina indicadores censales cercanos, datos peatonales cuando están disponibles y reseñas aprobadas de compradores de Thriftly. Las valoraciones de Google se muestran por separado. No predice el inventario, los precios ni el valor.",
+  "methodIntro": "La puntuación de visita combina indicadores censales cercanos, datos peatonales cuando están disponibles y valoraciones de Google cuando están disponibles. No predice el inventario, los precios ni el valor.",
   "methodSource": "Fuentes: ACS del Censo de EE. UU., AllThePlaces (CC0), registros complementarios de OpenStreetMap y localizadores oficiales de tiendas. La cobertura varía según la marca. Confirma los datos con el operador.",
   "medianHomeValue": "Valor mediano de vivienda",
   "medianHouseholdIncome": "Ingreso mediano del hogar",
@@ -53,7 +53,7 @@
   "github": "Ver código en GitHub",
   "launch": "Buscar tiendas cerca de mí",
   "howScoreStores": "Cómo puntuamos las tiendas",
-  "footer": "Las puntuaciones de visita combinan indicadores censales del vecindario, datos peatonales cuando están disponibles y reseñas aprobadas de compradores de Thriftly. Las valoraciones de Google se muestran por separado. Las fichas usan AllThePlaces (CC0), registros complementarios de OpenStreetMap y localizadores oficiales; la cobertura puede ser incompleta. Confirma los datos con el operador. Thriftly es independiente de las tiendas incluidas.",
+  "footer": "Las puntuaciones de visita combinan indicadores censales del vecindario, datos peatonales cuando están disponibles y valoraciones de Google cuando están disponibles. Las fichas usan AllThePlaces (CC0), registros complementarios de OpenStreetMap y localizadores oficiales; la cobertura puede ser incompleta. Confirma los datos con el operador. Thriftly es independiente de las tiendas incluidas.",
   "source": "Código abierto",
   "updated": "Actualizado {time}",
   "recent": "recientemente",
@@ -68,7 +68,7 @@
   "Strong": "Sobre el punto medio",
   "Fair": "Bajo el punto medio",
   "Lean": "Bajo",
-  "band": "Nivel de puntuación del barrio: {band}",
+  "band": "Nivel de puntuación de visita: {band}",
   "medianHomeValueBlurb": "Valor mediano de viviendas ocupadas por sus propietarios en sectores censales cercanos.",
   "medianHouseholdIncomeBlurb": "Ingreso mediano de los hogares en sectores censales cercanos.",
   "pctBachelorsPlusBlurb": "Porcentaje de adultos con licenciatura o superior en sectores cercanos.",
@@ -86,7 +86,7 @@
   "zoomIn": "Acercar",
   "zoomOut": "Alejar",
   "searchMetaTitle": "Encuentra tiendas de segunda mano y reventa | Thriftly",
-  "searchMetaDescription": "Busca tiendas de segunda mano y reventa cercanas. Filtra por marca, compara direcciones y puntuaciones del vecindario, y obtén indicaciones. La cobertura varía según la marca.",
+  "searchMetaDescription": "Busca tiendas de segunda mano y reventa cercanas. Filtra por marca, compara direcciones y puntuaciones de visita, y obtén indicaciones. La cobertura varía según la marca.",
   "notScored": "Sin puntuación",
   "resetFilters": "Restablecer filtros",
   "retry": "Intentar de nuevo",
@@ -97,5 +97,6 @@
   "skipMain": "Saltar al contenido principal",
   "refreshFailed": "No se pudo actualizar. Se siguen mostrando los resultados anteriores.",
   "showResults": "Ver {count, plural, one {# tienda} other {# tiendas}}",
-  "sourceUpdated": "Actualización más antigua de la fuente: {time}"
+  "sourceUpdated": "Actualización más antigua de la fuente: {time}",
+  "sourceInfo": "Actualización de la fuente"
 }

@@ -15,7 +15,7 @@ import { GET, PATCH } from '@/app/api/admin/reports/route';
 
 const known = new Set(['store/known']);
 const now = new Date('2026-11-05T12:30:00Z');
-const valid = (): ReportInput => ({ storeId: 'store/known', reason: 'wrong-location', details: 'The entrance is on the next block.', requestId: randomUUID(), visitedOn: null, rating: null, confirmedVisit: false });
+const valid = (): ReportInput => ({ storeId: 'store/known', reason: 'wrong-location', details: 'The entrance is on the next block.', requestId: randomUUID() });
 const admin = 'a'.repeat(48);
 function publicRequest(body: unknown, headers: Record<string, string> = {}) {
   return new Request('https://thriftly.xyz/api/reports', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://thriftly.xyz', 'x-vercel-forwarded-for': '192.0.2.10', ...headers }, body: JSON.stringify(body) });
@@ -50,35 +50,25 @@ afterEach(() => { vi.unstubAllEnvs(); vi.restoreAllMocks(); });
 
 describe('report validation', () => {
   it('accepts only published store IDs and known reasons', () => {
-    expect(validateReport(valid(), known, now).storeId).toBe('store/known');
-    expect(() => validateReport({ ...valid(), storeId: '../arbitrary' }, known, now)).toThrow('unknown_store');
-    expect(() => validateReport({ ...valid(), reason: 'rewrite-listing' }, known, now)).toThrow('invalid_report');
+    expect(validateReport(valid(), known).storeId).toBe('store/known');
+    expect(() => validateReport({ ...valid(), storeId: '../arbitrary' }, known)).toThrow('unknown_store');
+    expect(() => validateReport({ ...valid(), reason: 'rewrite-listing' }, known)).toThrow('invalid_report');
   });
   it('rejects unknown fields, client status, and invalid request IDs', () => {
     for (const patch of [{ status: 'approved' }, { email: 'person@example.com' }, { requestId: '../../secret' }]) {
-      expect(() => validateReport({ ...valid(), ...patch }, known, now)).toThrow('invalid_report');
+      expect(() => validateReport({ ...valid(), ...patch }, known)).toThrow('invalid_report');
     }
   });
   it('bounds text and rejects control characters', () => {
-    expect(() => validateReport({ ...valid(), details: 'a'.repeat(1501) }, known, now)).toThrow();
-    expect(() => validateReport({ ...valid(), details: '\u0000secret' }, known, now)).toThrow();
-    expect(validateReport({ ...valid(), details: '  line one\nline two  ' }, known, now).details).toBe('line one\nline two');
+    expect(() => validateReport({ ...valid(), details: 'a'.repeat(1501) }, known)).toThrow();
+    expect(() => validateReport({ ...valid(), details: '\u0000secret' }, known)).toThrow();
+    expect(validateReport({ ...valid(), details: '  line one\nline two  ' }, known).details).toBe('line one\nline two');
   });
-  it('requires observations and a real past visit date for departments', () => {
-    const report = { ...valid(), reason: 'departments', visitedOn: '2026-11-01' };
-    expect(validateReport(report, known, now).visitedOn).toBe('2026-11-01');
-    for (const visitedOn of [null, '2026-02-30', '2026-11-06', '1900-01-01', 'tomorrow']) {
-      expect(() => validateReport({ ...report, visitedOn }, known, now)).toThrow();
+  it('accepts factual corrections only and rejects every former visit-report input', () => {
+    for (const patch of [{reason: 'departments'}, {reason: 'shopper-review'}, {visitedOn: null}, {rating: null}, {confirmedVisit: false}]) {
+      expect(() => validateReport({...valid(), ...patch}, known)).toThrow('invalid_report');
     }
-    expect(() => validateReport({ ...report, details: ' ' }, known, now)).toThrow('details_required');
-  });
-  it('accepts shopper ratings only with date and first-hand confirmation', () => {
-    const review = { ...valid(), reason: 'shopper-review', visitedOn: '2026-11-01', rating: 4, confirmedVisit: true };
-    expect(validateReport(review, known, now).rating).toBe(4);
-    for (const rating of [null, 0, 6, 4.5, '4']) expect(() => validateReport({ ...review, rating }, known, now)).toThrow('invalid_rating');
-    expect(() => validateReport({ ...review, confirmedVisit: false }, known, now)).toThrow('invalid_rating');
-    expect(() => validateReport({ ...review, visitedOn: null }, known, now)).toThrow('visit_date_required');
-    expect(() => validateReport({ ...valid(), rating: 5 }, known, now)).toThrow('invalid_rating');
+    expect(() => validateReport({...valid(), reason: 'other', details: ' '}, known)).toThrow('details_required');
   });
   it('requires an explicit bounded moderation note', () => {
     expect(validateReview({ id: randomUUID(), status: 'approved', note: 'Confirmed with the operator.' }).status).toBe('approved');

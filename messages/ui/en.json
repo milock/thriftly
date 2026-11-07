@@ -39,7 +39,7 @@
   "within": "Search within {miles, number} mi",
   "scoring": "Scoring",
   "howScoring": "How scoring works",
-  "methodIntro": "The Visit score combines nearby Census measures, walkability data when available, and approved Thriftly shopper reviews. Google ratings are separate. It does not predict inventory, prices, or value.",
+  "methodIntro": "The Visit score combines nearby Census measures, walkability data when available, and Google ratings when available. It does not predict inventory, prices, or value.",
   "methodSource": "Sources: U.S. Census ACS, AllThePlaces (CC0), supplemental OpenStreetMap records, and official store locators. Coverage varies by brand. Confirm store details with the operator.",
   "medianHomeValue": "Median home value",
   "medianHouseholdIncome": "Median household income",
@@ -53,7 +53,7 @@
   "github": "View source on GitHub",
   "launch": "Find stores near me",
   "howScoreStores": "How we score stores",
-  "footer": "Visit scores combine neighborhood Census measures, walkability data when available, and approved Thriftly shopper reviews. Google ratings are separate. Listings use AllThePlaces (CC0), supplemental OpenStreetMap records, and official store locators; coverage may be incomplete. Confirm store details with the operator. Thriftly is independent of the listed stores.",
+  "footer": "Visit scores combine neighborhood Census measures, walkability data when available, and Google ratings when available. Listings use AllThePlaces (CC0), supplemental OpenStreetMap records, and official store locators; coverage may be incomplete. Confirm store details with the operator. Thriftly is independent of the listed stores.",
   "source": "Open source",
   "updated": "Updated {time}",
   "recent": "recently",
@@ -68,7 +68,7 @@
   "Strong": "Above midpoint",
   "Fair": "Below midpoint",
   "Lean": "Low",
-  "band": "Neighborhood score band: {band}",
+  "band": "Visit score band: {band}",
   "medianHomeValueBlurb": "Median value of owner-occupied homes in nearby census tracts.",
   "medianHouseholdIncomeBlurb": "Median household income in nearby census tracts.",
   "pctBachelorsPlusBlurb": "Share of adults with a bachelor’s degree or higher in nearby census tracts.",
@@ -86,7 +86,7 @@
   "zoomIn": "Zoom in",
   "zoomOut": "Zoom out",
   "searchMetaTitle": "Find thrift and resale stores | Thriftly",
-  "searchMetaDescription": "Search nearby thrift and resale stores. Filter by brand, compare addresses and neighborhood scores, and get directions. Coverage varies by brand.",
+  "searchMetaDescription": "Search nearby thrift and resale stores. Filter by brand, compare addresses and Visit scores, and get directions. Coverage varies by brand.",
   "notScored": "Not scored",
   "resetFilters": "Reset filters",
   "retry": "Try again",
@@ -97,5 +97,6 @@
   "skipMain": "Skip to main content",
   "refreshFailed": "Refresh failed. The previous results are still shown.",
   "showResults": "Show {count, plural, one {# store} other {# stores}}",
-  "sourceUpdated": "Oldest source update: {time}"
+  "sourceUpdated": "Oldest source update: {time}",
+  "sourceInfo": "Source freshness"
 }

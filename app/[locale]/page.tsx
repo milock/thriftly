@@ -6,7 +6,8 @@ import { Wordmark } from "@/components/wordmark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { CoffeeLink } from "@/components/coffee-link";
 import { GithubLink, GithubMark, REPO_URL } from "@/components/github-link";
-import { ScoreRing } from "@/components/score-ring";
+import { HomeStorePreview } from "@/components/home-store-preview";
+import { locateBundledStores } from "@/lib/locate";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { WEIGHTS } from "@/lib/reference-ranges";
@@ -283,50 +284,8 @@ export default async function Landing({params}: {params: Promise<{locale: string
   );
 }
 
-/** Static, on-brand preview of the ranked list for the hero. */
-async function PreviewPanel() {
-  const t = await getTranslations("pages");
-  const sample = [
-    { rank: 1, score: 89, title: "La Jolla", street: "7631 Girard Avenue", dist: 0.3, open: true, best: true },
-    { rank: 2, score: 76, title: "Pacific Beach", street: "Garnet Avenue", dist: 3.1, open: true, best: false },
-    { rank: 3, score: 61, title: "Clairemont", street: "Clairemont Mesa Blvd", dist: 5.4, open: false, best: false },
-  ];
-  return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 sm:px-5">
-        <span className="text-[12px] font-medium text-muted-foreground">{t("example")}</span>
-        <span className="tabular text-[12px] text-muted-foreground">{t("ranked", {count: 3})}</span>
-      </div>
-      <div className="divide-y divide-border">
-        {sample.map((s) => {
-          return (
-            <div
-              key={s.rank}
-              className="relative overflow-hidden px-4 py-3.5 sm:p-5"
-            >
-              <div className="flex items-center gap-3.5">
-                <ScoreRing score={s.score} size={48} />
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="tabular text-[11px] font-medium text-muted-foreground">#{s.rank}</span>
-                    {s.best && (
-                      <span className="text-[11px] font-medium text-brand">
-                        {t("highest")}
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-0.5 text-[15px] font-semibold leading-tight">{s.title}</p>
-                  <p className="truncate text-[12px] text-muted-foreground">{s.street}</p>
-                  <p className="mt-1 text-[12px] text-muted-foreground">
-                    <span className="tabular">{t("away", {distance: s.dist})}</span>
-
-                  </p>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+/** Real confirmed stores demonstrate the same scoring model as search. */
+function PreviewPanel() {
+  const stores = locateBundledStores({lat:32.7157,lon:-117.1611},15).slice(0,3);
+  return <HomeStorePreview stores={stores}/>;
 }

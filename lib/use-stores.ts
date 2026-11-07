@@ -1,91 +1,40 @@
 "use client";
-
-import { useCallback, useRef, useState } from "react";
-import type { LatLng, ScoredStore, NearestHint } from "@/lib/types";
-
-interface State {
-  stores: ScoredStore[];
-  loading: boolean;
-  error: string | null;
-  nearest: NearestHint | null;
-}
-
-type Enrichment = Pick<ScoredStore, "neighborhood" | "street" | "locality" | "region">;
-
-export function useStores() {
-  const [state, setState] = useState<State>({
-    stores: [],
-    loading: false,
-    error: null,
-    nearest: null,
-  });
-  // Tracks the latest search so a slow response from a superseded search can't
-  // overwrite newer results (e.g. fast radius changes or "search this area").
-  const reqId = useRef(0);
-
-  // Fill in neighborhood + street addresses after the list has painted. Runs
-  // off the critical path so existing names and addresses show immediately.
-  const enrich = useCallback(async (stores: ScoredStore[], id: number) => {
-    const apply = (enriched?: Record<string, Enrichment>) =>
-      setState((s) => {
-        if (reqId.current !== id) return s; // a newer search has taken over
-        return {
-          ...s,
-          stores: s.stores.map((st) => {
-            const e = enriched?.[`${st.location.lat},${st.location.lon}`];
-            if (!e) return { ...st, enriched: true };
-            const street = st.street ?? e.street;
-            const locality = st.locality ?? e.locality;
-            const region = st.region ?? e.region;
-            return {
-              ...st,
-              enriched: true,
-              neighborhood: st.neighborhood ?? e.neighborhood,
-              street,
-              locality,
-              region,
-              address: [street, locality, region].filter(Boolean).join(", ") || st.address,
-            };
-          }),
-        };
-      });
-    try {
-      const points = stores.slice(0, 60).map((s) => ({ lat: s.location.lat, lon: s.location.lon }));
-      const res = await fetch("/api/enrich", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ points }),
-      });
-      if (!res.ok) {
-        apply(); // keep the existing names and addresses
-        return;
+import {useCallback, useEffect, useRef, useState} from 'react';
+import type {LatLng, ScoredStore, NearestHint} from '@/lib/types';
+import {storeSearchKey, type InitialSearchQuery} from '@/lib/search-query';
+interface State {stores: ScoredStore[]; loading: boolean; error: string | null; nearest: NearestHint | null}
+interface InitialStores {stores: ScoredStore[]; query: InitialSearchQuery | null; nearest?: NearestHint | null}
+export function useStores(initial?: InitialStores) {
+  const [state, setState] = useState<State>(() => ({stores: initial?.stores ?? [], loading: false, error: null, nearest: initial?.nearest ?? null}));
+  const loadedQuery = useRef(initial?.query ? storeSearchKey(initial.query.center, initial.query.filters.radiusMiles, initial.query.filters.brandIds) : null);
+  const pending = useRef<AbortController | null>(null);
+  const pendingQuery = useRef<string | null>(null);
+  useEffect(() => () => pending.current?.abort(), []);
+  const search = useCallback(async (center: LatLng, radiusMiles: number, brandIds: readonly string[] = [], force = false) => {
+    const key = storeSearchKey(center, radiusMiles, brandIds);
+    if (!force && key === loadedQuery.current) {
+      if (pending.current) {
+        pending.current.abort(); pending.current = null; pendingQuery.current = null;
+        setState(s => ({...s, loading: false}));
       }
-      const { enriched } = (await res.json()) as { enriched: Record<string, Enrichment> };
-      apply(enriched);
+      return;
+    }
+    if (!force && key === pendingQuery.current) return;
+    pending.current?.abort();
+    const controller = new AbortController(); pending.current = controller; pendingQuery.current = key;
+    setState(s => ({...s, loading: true, error: null}));
+    try {
+      const response = await fetch(`/api/stores?lat=${center.lat}&lon=${center.lon}&radius=${radiusMiles}&brands=${encodeURIComponent(brandIds.join(','))}`, {signal: controller.signal});
+      if (!response.ok) throw new Error('Search unavailable');
+      const data = await response.json() as {stores: ScoredStore[]; nearest?: NearestHint | null};
+      if (controller.signal.aborted) return;
+      loadedQuery.current = key;
+      setState({stores: data.stores ?? [], loading: false, error: null, nearest: data.nearest ?? null});
     } catch {
-      apply();
+      if (!controller.signal.aborted) setState(s => ({...s, loading: false, error: 'Search unavailable'}));
+    } finally {
+      if (pending.current === controller) {pending.current = null; pendingQuery.current = null;}
     }
   }, []);
-
-  const search = useCallback(
-    async (center: LatLng, radiusMiles: number, brandIds: readonly string[] = []) => {
-      const id = ++reqId.current;
-      setState((s) => ({ ...s, loading: true, error: null }));
-      try {
-        const res = await fetch(`/api/stores?lat=${center.lat}&lon=${center.lon}&radius=${radiusMiles}&brands=${encodeURIComponent(brandIds.join(","))}`);
-        if (!res.ok) throw new Error(`Request failed (${res.status})`);
-        const data = (await res.json()) as { stores: ScoredStore[]; nearest?: NearestHint | null };
-        if (reqId.current !== id) return; // superseded
-        const stores = data.stores ?? [];
-        setState({ stores, loading: false, error: null, nearest: data.nearest ?? null });
-        if (stores.length) void enrich(stores, id);
-      } catch (e) {
-        if (reqId.current !== id) return;
-        setState({ stores: [], loading: false, error: (e as Error).message, nearest: null });
-      }
-    },
-    [enrich],
-  );
-
-  return { ...state, search };
+  return {...state, search};
 }

@@ -39,7 +39,7 @@
   "within": "Tìm trong {miles, number} mi",
   "scoring": "Cách chấm điểm",
   "howScoring": "Cách tính điểm",
-  "methodIntro": "Điểm chuyến ghé thăm kết hợp các chỉ số điều tra dân số lân cận, dữ liệu khả năng đi bộ khi có, và đánh giá đã duyệt của người mua trên Thriftly. Đánh giá Google được hiển thị riêng. Điểm không dự đoán hàng hóa, giá cả hay giá trị.",
+  "methodIntro": "Điểm chuyến ghé thăm kết hợp các chỉ số điều tra dân số lân cận, dữ liệu khả năng đi bộ khi có, và đánh giá Google khi có. Điểm không dự đoán hàng hóa, giá cả hay giá trị.",
   "methodSource": "Nguồn: ACS của Cục Điều tra dân số Hoa Kỳ, AllThePlaces (CC0), bản ghi bổ sung từ OpenStreetMap và công cụ tìm cửa hàng chính thức. Phạm vi khác nhau tùy thương hiệu. Hãy xác nhận thông tin với đơn vị vận hành.",
   "medianHomeValue": "Trung vị giá trị nhà",
   "medianHouseholdIncome": "Trung vị thu nhập hộ gia đình",
@@ -53,7 +53,7 @@
   "github": "Xem mã nguồn trên GitHub",
   "launch": "Tìm cửa hàng gần tôi",
   "howScoreStores": "Cách chúng tôi chấm điểm cửa hàng",
-  "footer": "Điểm chuyến ghé thăm kết hợp các chỉ số điều tra dân số của khu dân cư, dữ liệu khả năng đi bộ khi có, và đánh giá đã duyệt của người mua trên Thriftly. Đánh giá Google được hiển thị riêng. Danh sách dùng AllThePlaces (CC0), bản ghi bổ sung từ OpenStreetMap và công cụ tìm cửa hàng chính thức; phạm vi có thể chưa đầy đủ. Hãy xác nhận thông tin với đơn vị vận hành. Thriftly không liên kết với các cửa hàng được liệt kê.",
+  "footer": "Điểm chuyến ghé thăm kết hợp các chỉ số điều tra dân số của khu dân cư, dữ liệu khả năng đi bộ khi có, và đánh giá Google khi có. Danh sách dùng AllThePlaces (CC0), bản ghi bổ sung từ OpenStreetMap và công cụ tìm cửa hàng chính thức; phạm vi có thể chưa đầy đủ. Hãy xác nhận thông tin với đơn vị vận hành. Thriftly không liên kết với các cửa hàng được liệt kê.",
   "source": "Mã nguồn mở",
   "updated": "Cập nhật {time}",
   "recent": "gần đây",
@@ -68,7 +68,7 @@
   "Strong": "Trên mức giữa",
   "Fair": "Dưới mức giữa",
   "Lean": "Thấp",
-  "band": "Mức điểm khu dân cư: {band}",
+  "band": "Mức điểm chuyến ghé thăm: {band}",
   "medianHomeValueBlurb": "Trung vị giá trị nhà do chủ sở hữu cư trú trong các khu vực điều tra gần đây.",
   "medianHouseholdIncomeBlurb": "Trung vị thu nhập hộ gia đình trong các khu vực điều tra gần đây.",
   "pctBachelorsPlusBlurb": "Tỷ lệ người trưởng thành có bằng cử nhân trở lên trong các khu vực điều tra gần đây.",
@@ -86,7 +86,7 @@
   "zoomIn": "Phóng to",
   "zoomOut": "Thu nhỏ",
   "searchMetaTitle": "Tìm cửa hàng đồ cũ và đồ bán lại | Thriftly",
-  "searchMetaDescription": "Tìm cửa hàng đồ cũ và đồ bán lại gần bạn. Lọc theo thương hiệu, so sánh địa chỉ và điểm khu dân cư, rồi xem chỉ đường. Phạm vi khác nhau tùy thương hiệu.",
+  "searchMetaDescription": "Tìm cửa hàng đồ cũ và đồ bán lại gần bạn. Lọc theo thương hiệu, so sánh địa chỉ và điểm chuyến ghé thăm, rồi xem chỉ đường. Phạm vi khác nhau tùy thương hiệu.",
   "notScored": "Chưa có điểm",
   "resetFilters": "Đặt lại bộ lọc",
   "retry": "Thử lại",
@@ -97,5 +97,6 @@
   "skipMain": "Chuyển đến nội dung chính",
   "refreshFailed": "Không thể làm mới. Kết quả trước đó vẫn được hiển thị.",
   "showResults": "Xem {count} cửa hàng",
-  "sourceUpdated": "Lần cập nhật nguồn cũ nhất: {time}"
+  "sourceUpdated": "Lần cập nhật nguồn cũ nhất: {time}",
+  "sourceInfo": "Thời điểm cập nhật nguồn"
 }

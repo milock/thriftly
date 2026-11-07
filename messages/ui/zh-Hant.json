@@ -39,7 +39,7 @@
   "within": "搜尋 {miles, number} mi 範圍",
   "scoring": "評分",
   "howScoring": "評分方式",
-  "methodIntro": "到訪評分綜合附近的人口普查指標、有資料時的步行便利度，以及已核准的 Thriftly 買家評價。Google 評分另行顯示。此評分不預測庫存、價格或價值。",
+  "methodIntro": "到訪評分綜合附近的人口普查指標、有資料時的步行便利度，以及可用的 Google 評分。此評分不預測庫存、價格或價值。",
   "methodSource": "資料來源：美國人口普查 ACS、AllThePlaces（CC0）、OpenStreetMap 補充紀錄及官方門市查詢頁面。各品牌的涵蓋範圍不同。請向門市營運方確認詳情。",
   "medianHomeValue": "房屋價值中位數",
   "medianHouseholdIncome": "家庭收入中位數",
@@ -53,7 +53,7 @@
   "github": "在 GitHub 查看原始碼",
   "launch": "查找附近門市",
   "howScoreStores": "門市評分方法",
-  "footer": "到訪評分綜合社區人口普查指標、有資料時的步行便利度，以及已核准的 Thriftly 買家評價。Google 評分另行顯示。門市清單使用 AllThePlaces（CC0）、OpenStreetMap 補充紀錄及官方門市查詢頁面的資料，涵蓋範圍可能不完整。請向營運方確認門市資訊。Thriftly 與列出的門市沒有關聯。",
+  "footer": "到訪評分綜合社區人口普查指標、有資料時的步行便利度，以及可用的 Google 評分。門市清單使用 AllThePlaces（CC0）、OpenStreetMap 補充紀錄及官方門市查詢頁面的資料，涵蓋範圍可能不完整。請向營運方確認門市資訊。Thriftly 與列出的門市沒有關聯。",
   "source": "開放原始碼",
   "updated": "更新於{time}",
   "recent": "最近",
@@ -68,7 +68,7 @@
   "Strong": "中點以上",
   "Fair": "中點以下",
   "Lean": "低",
-  "band": "社區評分等級：{band}",
+  "band": "到訪評分等級：{band}",
   "medianHomeValueBlurb": "附近人口普查區內自住房屋的價值中位數。",
   "medianHouseholdIncomeBlurb": "附近人口普查區的家庭收入中位數。",
   "pctBachelorsPlusBlurb": "附近人口普查區內擁有學士或更高學位的成年人比例。",
@@ -86,7 +86,7 @@
   "zoomIn": "放大",
   "zoomOut": "縮小",
   "searchMetaTitle": "尋找二手商店 | Thriftly",
-  "searchMetaDescription": "搜尋附近的二手商店。依品牌篩選，比較地址和社區評分，並查看路線。各品牌的涵蓋範圍不同。",
+  "searchMetaDescription": "搜尋附近的二手商店。依品牌篩選，比較地址和到訪評分，並查看路線。各品牌的涵蓋範圍不同。",
   "notScored": "尚未評分",
   "resetFilters": "重設篩選條件",
   "retry": "重試",
@@ -97,5 +97,6 @@
   "skipMain": "跳至主要內容",
   "refreshFailed": "重新整理失敗。仍顯示先前的結果。",
   "showResults": "查看 {count} 家門市",
-  "sourceUpdated": "最早的來源更新時間：{time}"
+  "sourceUpdated": "最早的來源更新時間：{time}",
+  "sourceInfo": "來源更新時間"
 }

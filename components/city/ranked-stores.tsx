@@ -1,44 +1,55 @@
+"use client";
+
+import { hasNeighborhoodBaseline } from "@/lib/scoring";
+
+import { ScoreDetails } from "@/components/score-details";
 import { ListingDetails } from "@/components/listing-details";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useTranslations, useLocale } from "next-intl";
 import { safeWebsiteUrl, formatDistance } from "@/lib/format";
-import { Navigation, ExternalLink } from "lucide-react";
-import type { ScoredStore } from "@/lib/types";
+import { Navigation, ExternalLink, Clock } from "lucide-react";
+import type { ScoredStore, LatLng } from "@/lib/types";
+import { useLiveStores, LiveStoresContext } from "@/lib/use-live-stores";
+import {storeOpenNow} from "@/lib/store-status";
 import { scoreColor, scoreInk, scoreTier } from "@/lib/score-color";
 
 function directionsUrl(s: ScoredStore): string {
-  return `https://www.google.com/maps/dir/?api=1&destination=${s.location.lat},${s.location.lon}`;
+  const location = s.google?.location ?? s.location;
+  const params = new URLSearchParams({ api: "1", destination: `${location.lat},${location.lon}` });
+  if (s.google?.placeId) params.set("destination_place_id", s.google.placeId);
+  return `https://www.google.com/maps/dir/?${params}`;
 }
 
-/**
- * Server-rendered, ranked list of scored stores for the city landing pages.
- * Pure HTML (no client JS) so the store names, addresses, and scores are
- * fully crawlable and the page paints instantly. Semantic <ol> conveys rank.
- */
-export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; cityName: string }) {
+/** Renders the published list first, then ranks the available live scores. */
+export function RankedStores({ stores, cityName, center, radiusMiles, refreshKey = 0 }: { stores: ScoredStore[]; cityName: string; center?: LatLng; radiusMiles?: number; refreshKey?: number }) {
   const t = useTranslations("ui");
   const locale = useLocale();
+  const live = useLiveStores(stores, null, center, radiusMiles, refreshKey);
+  const ranked = [...live.stores].sort((a, b) => b.score.total - a.score.total);
   return (
-    <ol className="divide-y divide-border border-y border-border">
-      {stores.map((s, i) => {
-        const website = safeWebsiteUrl(s.website);
-        const scored = s.score.catchment.tractCount > 0;
+    <LiveStoresContext.Provider value={live.context}><ol className="divide-y divide-border border-y border-border">
+      {ranked.map((s, i) => {
+        const website = safeWebsiteUrl(s.google?.website ?? s.website);
+        const scored = hasNeighborhoodBaseline(s.score);
         const total = Math.round(s.score.total);
         const tier = scoreTier(s.score.total);
-        const place = s.neighborhood || s.locality;
-        const addr = [s.street, s.locality, s.region].filter(Boolean).join(", ");
+        const hours = s.google?.currentOpeningHours ?? s.google?.regularOpeningHours;
+        const open = storeOpenNow(s);
+        const addr = s.google?.address || [s.street, s.locality, s.region].filter(Boolean).join(", ") || s.address;
         return (
           <li
             key={s.id}
             data-store-id={s.id}
-            className="relative py-6"
+            className="relative py-4"
           >
-            <div className="grid grid-cols-[minmax(0,1fr)_3rem] gap-x-4 gap-y-2">
-              <div
-                className="tabular col-start-2 row-start-1 flex size-12 items-center justify-center rounded-full text-[17px] font-bold"
+            <div className="grid grid-cols-[minmax(0,1fr)_4rem] gap-x-4 gap-y-2">
+              <div className="col-start-2 row-start-1">
+              {scored ? <ScoreDetails score={s.score}><span
+                className="tabular row-start-1 flex size-12 items-center justify-center rounded-full text-[17px] font-bold"
                 style={scored ? { backgroundColor: scoreColor(s.score.total), color: scoreInk(s.score.total) } : { backgroundColor: "var(--muted)", color: "var(--muted-foreground)" }}
-                aria-label={scored ? t("scoreAria", { score: total }) : t("notScored")}
               >
-                {scored ? new Intl.NumberFormat(locale, {numberingSystem: locale === "ar" ? "arab" : "latn"}).format(total) : "—"}
+                {new Intl.NumberFormat(locale, {numberingSystem: locale === "ar" ? "arab" : "latn"}).format(total)}
+              </span></ScoreDetails> : <span className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground" aria-label={t("notScored")}>—</span>}
               </div>
               <div className="col-start-1 row-start-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
@@ -53,45 +64,24 @@ export function RankedStores({ stores, cityName }: { stores: ScoredStore[]; city
                   )}
                 </div>
                 <h3 className="mt-1 break-words text-[17px] font-semibold leading-snug">
-                  {s.name}
-                  {place && (
-                    <span className="animate-in fade-in duration-500">, {place}</span>
-                  )}
+                  <bdi>{s.google?.name || s.name}</bdi>
                 </h3>
               </div>
               <div className="col-span-2">
                 {addr && <p className="break-words text-sm leading-relaxed text-muted-foreground"><bdi dir="ltr">{addr}</bdi></p>}
                 <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                  {t("downtown", { distance: formatDistance(s.distanceMiles, locale), city: cityName })}
+                  {t("downtown", { distance: formatDistance(s.distanceMiles, locale), city: cityName })}{open !== null && <> · {t(open ? "open" : "closed")}</>}
                 </p>
-                <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
-                  <a
-                    href={directionsUrl(s)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-foreground px-4 py-2 font-medium text-background transition-colors hover:bg-foreground/90"
-                  >
-                    <Navigation className="size-3.5" />
-                    {t("directions")}
-                  </a>
-                  {website && (
-                    <a
-                      href={website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex min-h-11 items-center gap-1.5 font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                    >
-                      <ExternalLink className="size-3.5" />
-                      {t("website")}
-                    </a>
-                  )}
-                </div>
-                <div className="mt-3"><ListingDetails store={s} /></div>
+                <ListingDetails store={s} actions={<>
+                  <a href={directionsUrl(s)} target="_blank" rel="noopener noreferrer" className="me-1 inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md bg-foreground px-4 text-[13px] font-medium text-background hover:bg-foreground/90"><Navigation className="size-3.5" aria-hidden />{t("directions")}</a>
+                  {hours?.weekdayDescriptions.length ? <Popover><PopoverTrigger title={t("hours")} aria-label={t("hours")} className="inline-flex size-11 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"><Clock className="size-4" aria-hidden /></PopoverTrigger><PopoverContent align="start" className="w-64 p-3"><p className="font-medium">{t("weeklyHours")}</p><ul className="space-y-1 text-xs text-muted-foreground">{hours.weekdayDescriptions.map(day => <li key={day}>{day}</li>)}</ul><p className="text-xs text-muted-foreground">Google</p></PopoverContent></Popover> : null}
+                  {website && <a href={website} target="_blank" rel="noopener noreferrer" aria-label={t("website")} title={t("website")} className="inline-flex size-11 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"><ExternalLink className="size-4" aria-hidden /></a>}
+                </>} />
               </div>
             </div>
           </li>
         );
       })}
-    </ol>
+    </ol></LiveStoresContext.Provider>
   );
 }

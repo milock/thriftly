@@ -44,15 +44,15 @@ export function formatPopulation(value: number, locale = "en"): string {
 }
 
 /** Google Maps turn-by-turn directions to the store's exact coordinates. */
-export function directionsUrl(store: { location: LatLng; address?: string }): string {
+export function directionsUrl(store: { location: LatLng; address?: string; googlePlaceId?: string }): string {
   const dest = `${store.location.lat},${store.location.lon}`;
-  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`;
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}${store.googlePlaceId ? `&destination_place_id=${encodeURIComponent(store.googlePlaceId)}` : ''}`;
 }
 
 /** Open the place on Google Maps (name + address when available). */
-export function mapsPlaceUrl(store: { location: LatLng; address?: string; name?: string }): string {
+export function mapsPlaceUrl(store: { location: LatLng; address?: string; name?: string; googlePlaceId?: string }): string {
   const query = store.address ? `${store.name ?? ""} ${store.address}`.trim() : `${store.location.lat},${store.location.lon}`;
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}${store.googlePlaceId ? `&query_place_id=${encodeURIComponent(store.googlePlaceId)}` : ''}`;
 }
 
 export function telUrl(phone: string): string {
