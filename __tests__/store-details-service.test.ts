@@ -4,6 +4,7 @@ vi.mock('@/lib/locate', () => ({allBundledStores: () => [{id: 'known', googlePla
 const payload = {id: 'ChIJconfirmed', displayName: {text: 'Test'}, formattedAddress: '100 Main St', location: {latitude: 32, longitude: -117}, businessStatus: 'OPERATIONAL'};
 const headers = () => new Headers({'x-vercel-forwarded-for': '192.0.2.10'});
 beforeEach(() => {
+  vi.stubEnv('GOOGLE_PLACES_ENABLED', 'true');
   vi.resetModules();
   vi.stubEnv('GOOGLE_PLACES_API_KEY', 'private-server-key');
   vi.stubEnv('REPORTS_RATE_LIMIT_SECRET', 's'.repeat(48));

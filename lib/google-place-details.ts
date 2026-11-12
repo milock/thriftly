@@ -97,6 +97,8 @@ export function detailsIdentity(request: Pick<Request, 'headers'>, now = Date.no
 export function createGoogleDetailsLoader(fetcher: typeof fetch = fetch) {
   const pending = new Map<string, Promise<LiveGoogleDetails>>();
   return (placeId: string, apiKey: string): Promise<LiveGoogleDetails> => {
+    // Billing safeguard: Places is opt-in; Maps and bundled listings are unaffected.
+    if (process.env.GOOGLE_PLACES_ENABLED !== 'true') return Promise.reject(new DetailsError(503, 'details_unavailable'));
     if (!PLACE_ID.test(placeId) || !apiKey) return Promise.reject(new DetailsError(503, 'details_unavailable'));
     const existing = pending.get(placeId);
     if (existing) return existing;

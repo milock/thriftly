@@ -16,6 +16,7 @@ const request = (body: unknown = {storeId: 'known'}, headers: Record<string, str
 });
 
 beforeEach(() => {
+  vi.stubEnv('GOOGLE_PLACES_ENABLED', 'true');
   vi.stubEnv('GOOGLE_PLACES_API_KEY', 'server-secret');
   vi.stubEnv('REPORTS_RATE_LIMIT_SECRET', 's'.repeat(48));
   vi.stubEnv('VERCEL', '1');
@@ -108,5 +109,14 @@ describe('request privacy and abuse bounds', () => {
     expect(JSON.stringify(body)).not.toContain('server-secret');
     vi.stubEnv('GOOGLE_PLACES_API_KEY', '');
     expect((await POST(request())).status).toBe(503);
+  });
+});
+
+describe('Places billing safeguard', () => {
+  it.each(['', 'false', 'TRUE'])('never calls upstream when opt-in is %s', async enabled => {
+    vi.stubEnv('GOOGLE_PLACES_ENABLED', enabled);
+    const fetcher = vi.fn();
+    await expect(createGoogleDetailsLoader(fetcher)('ChIJconfirmed', 'test-key')).rejects.toMatchObject({status: 503});
+    expect(fetcher).not.toHaveBeenCalled();
   });
 });
