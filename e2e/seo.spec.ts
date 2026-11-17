@@ -18,8 +18,8 @@ test('city metadata, disclosed source date and methodology are aligned',async({p
 });
 test('new outlet guide has sourced addresses and links back to the city',async({page})=>{
   const outlets = [
-    {id:'goodwill/49572e5e-32cf-e411-b4ab-0050568924e6',placeId:'ChIJh064HinBwoAR3XKXW8Lopp0',address:'3150 N San Fernando Rd, Los Angeles, CA 90065',location:{lat:34.1156,lon:-118.24848}},
-    {id:'node/12431931814',placeId:'ChIJYz_EsNKQwoAReBTG2PgvGJg',address:'14565 Lanark St, Panorama City, CA 91402',location:{lat:34.21843,lon:-118.45147}},
+    {id:'goodwill/49572e5e-32cf-e411-b4ab-0050568924e6',placeId:'ChIJh064HinBwoAR3XKXW8Lopp0',address:'3150 N San Fernando Rd, Los Angeles, CA',location:{lat:34.1156,lon:-118.24848}},
+    {id:'node/12431931814',placeId:'ChIJYz_EsNKQwoAReBTG2PgvGJg',address:'14565 Lanark Street, Panorama City, CA',location:{lat:34.21843,lon:-118.45147}},
   ];
   await page.goto('/goodwill/los-angeles-ca/outlets');
   await expect(page.getByRole('heading',{level:1})).toHaveText('Goodwill outlets in Los Angeles');

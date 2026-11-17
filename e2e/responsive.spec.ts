@@ -1,6 +1,7 @@
 import {test, expect} from '@playwright/test';
 import {gotoClientSearch, blockStoreDetails, storesResponse, photonReverseResponse} from './fixtures';
 import {mockGoogleMaps} from './google-maps-fixture';
+import {computeVisitScore} from '../lib/visit-score';
 
 test.beforeEach(async ({page}) => {
   await page.route('**/api/stores**', r => r.fulfill({json: storesResponse}));
@@ -106,11 +107,16 @@ const scoreLayouts = [
 
 for (const layout of scoreLayouts) {
   test(`phone map score stays within the viewport and scrolls to methodology in ${layout.locale}`, async ({page}) => {
+    // A compact phone keeps the breakdown taller than the viewport, so the
+    // overflow and scroll-to-methodology paths are still exercised.
     const width = 390;
-    const height = 844;
+    const height = 667;
     await page.setViewportSize({width, height});
     await page.emulateMedia({colorScheme: layout.colorScheme});
-    await blockStoreDetails(page);
+    // Published stores carry a Visit score breakdown, which adds its component table.
+    const scored = structuredClone(storesResponse);
+    for (const store of scored.stores) Object.assign(store.score, {visit: computeVisitScore({neighborhood: store.score.total, googleRatings: null, walkability: 12})});
+    await page.route('**/api/stores**', r => r.fulfill({json: scored}));
     await gotoClientSearch(page, `${layout.prefix}/search?lat=32.84&lon=-117.27&radius=8`);
     await expect(page.locator('html')).toHaveAttribute('dir', layout.direction);
     if (layout.colorScheme === 'dark') await expect(page.locator('html')).toHaveClass(/\bdark\b/);
