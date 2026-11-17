@@ -1,5 +1,5 @@
 import {test, expect} from '@playwright/test';
-import {gotoClientSearch, mockStoreDetails, storesResponse, photonReverseResponse} from './fixtures';
+import {gotoClientSearch, blockStoreDetails, storesResponse, photonReverseResponse} from './fixtures';
 import {mockGoogleMaps} from './google-maps-fixture';
 
 test.beforeEach(async ({page}) => {
@@ -7,7 +7,7 @@ test.beforeEach(async ({page}) => {
   await page.route('**/api/enrich**', r => r.fulfill({json: {enriched: {}}}));
   await page.route(/photon\.komoot\.io\/reverse/, r => r.fulfill({json: photonReverseResponse}));
   await mockGoogleMaps(page);
-  await mockStoreDetails(page, {unavailable: true});
+  await blockStoreDetails(page);
 });
 
 test('320px navigation stays on one row in English, Vietnamese and Arabic', async ({page}) => {
@@ -110,12 +110,12 @@ for (const layout of scoreLayouts) {
     const height = 844;
     await page.setViewportSize({width, height});
     await page.emulateMedia({colorScheme: layout.colorScheme});
-    await mockStoreDetails(page);
+    await blockStoreDetails(page);
     await gotoClientSearch(page, `${layout.prefix}/search?lat=32.84&lon=-117.27&radius=8`);
     await expect(page.locator('html')).toHaveAttribute('dir', layout.direction);
     if (layout.colorScheme === 'dark') await expect(page.locator('html')).toHaveClass(/\bdark\b/);
     await expect(page.locator('[data-store-card]', {hasText: 'Girard Avenue'})
-      .locator('[data-google-rating]')).toHaveAttribute('data-state', 'loaded');
+      .locator('[data-google-reviews]')).toBeVisible();
 
     await page.getByRole('tab', {name: layout.map, exact: true}).click();
     const map = page.locator('[data-google-map][data-state=ready]');

@@ -44,7 +44,6 @@ export function CityStores({
   const [updatedAt, setUpdatedAt] = useState<string | null>(generatedAt ?? null);
   const [refreshError, setRefreshError] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
   // Compute the relative label only after mount + on a timer, so the server and
   // client agree on first paint (no hydration mismatch) and "just now" ages.
   const [label, setLabel] = useState<string | null>(null);
@@ -67,7 +66,6 @@ export function CityStores({
         const data = (await res.json()) as { stores?: ScoredStore[]; generatedAt?: string | null };
         if (!Array.isArray(data.stores) || (stores.length > 0 && data.stores.length === 0)) throw new Error("No usable refresh results");
         setStores(data.stores);
-        setRefreshKey(value => value + 1);
         setUpdatedAt(data.generatedAt ?? generatedAt ?? null);
       }
     } catch {
@@ -95,7 +93,7 @@ export function CityStores({
         )}
       </div>
       {refreshError && <p role="alert" className="mb-4 text-sm text-muted-foreground">{t("refreshFailed")}</p>}
-      <RankedStores stores={stores} cityName={cityName} center={typeof lat === 'number' && typeof lon === 'number' ? {lat, lon} : undefined} radiusMiles={radiusMiles} refreshKey={refreshKey} />
+      <RankedStores stores={stores} cityName={cityName} radiusMiles={radiusMiles} />
     </div>
   );
 }
