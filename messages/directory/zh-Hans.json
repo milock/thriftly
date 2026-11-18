@@ -32,7 +32,7 @@
   "browseBrands": "按门店品牌浏览",
   "sourceDate": "源数据截至 {date}",
   "independent": "Thriftly 独立运营，与此处列出的门店没有关联。",
-  "neighborhoodNote": "到访评分综合社区人口普查指标、可用时的步行便利度数据，以及可用的 Google 评分。该评分不预测库存、价格或价值。",
+  "neighborhoodNote": "到访评分综合社区人口普查指标和可用时的步行便利度数据。该评分不预测库存、价格或价值。",
   "donation": "出售捐赠物品的二手店",
   "buy-sell-trade": "二手服装转售",
   "mixed": "多种货源",

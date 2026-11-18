@@ -26,7 +26,7 @@
   "neighborhoodScore": "Neighborhood signal",
   "contribution": "{weight}% of score",
   "scoreNote": "A planning estimate, not a prediction of inventory or value.",
-  "scoreMethod": "Walkability contributes 5% when available. Google ratings contribute up to 50%, weighted by n/(n+50), where n is the number of ratings. The rest uses neighborhood Census measures.",
+  "scoreMethod": "Walkability contributes 5% when available. The rest uses neighborhood Census measures. Google ratings and reviews do not count toward the score.",
   "accessVintage": "EPA data: 2021 release",
   "partialCensus": "Some Census factors are unavailable.",
   "retrieved": "Source retrieved",
