@@ -6,8 +6,9 @@ const mocks = vi.hoisted(() => ({read: vi.fn()}));
 vi.mock('node:fs', () => ({readFileSync: mocks.read}));
 const first: ScoredStore = {id: 'one', name: 'Goodwill', brandId: 'goodwill', street: '100 Main St', locality: 'San Diego', region: 'CA', facilityType: 'retail', location: {lat: 32.7, lon: -117.1}, distanceMiles: 0, score: computeGoodsScore({medianHomeValue: 500000, medianHouseholdIncome: 70000, medianGrossRent: 1700, pctBachelorsPlus: 50, tractCount: 2, population: 1000})};
 const second = {...first, id: 'two', location: {lat: 32.71, lon: -117.1}};
-function mockFiles(registry: unknown, stores: ScoredStore[] = [first, second]) {
+function mockFiles(registry: unknown, stores: ScoredStore[] = [first, second], corroborations?: unknown) {
   mocks.read.mockImplementation((path: string) => {
+    if (corroborations && path.endsWith('store-corroborations.json')) return JSON.stringify(corroborations);
     if (path.endsWith('stores-us.json')) return JSON.stringify({stores});
     if (path.endsWith('store-access.json')) return '{"records":[]}';
     if (path.endsWith('google-place-ids.json')) {if (registry instanceof Error) throw registry; return JSON.stringify(registry);}
@@ -27,6 +28,15 @@ describe('public registry gates', () => {
     expect(locate.locateBundledStores(second.location, 10).map(store => store.id)).toEqual(['one']);
     expect(locate.nearestStore(second.location)?.location).toEqual(first.location);
     expect(locate.isKnownStorePoint(second.location.lat, second.location.lon)).toBe(false);
+  });
+  it('also publishes an unchanged listing that OpenStreetMap corroborates, without a Google identity', async () => {
+    const corroboration = (store: ScoredStore) => ({storeId: store.id, osmId: 'node/42', identityFingerprint: listingIdentityFingerprint(store), distanceMeters: 12, basis: 'osm-brand-nearby', checkedAt: '2026-11-16'});
+    mockFiles({version: 1, records: [{storeId: 'one', placeId: 'ChIJconfirmed', identityFingerprint: listingIdentityFingerprint(first), checkedAt: '2026-11-06'}]}, [first, second], {version: 1, records: [corroboration(second)]});
+    const locate = await import('@/lib/locate');
+    expect(locate.allBundledStores().map(store => [store.id, store.identityBasis, store.googlePlaceId])).toEqual([['one', 'google', 'ChIJconfirmed'], ['two', 'openstreetmap', undefined]]);
+    vi.resetModules();
+    mockFiles({version: 1, records: []}, [first, {...second, street: '200 Main St'}], {version: 1, records: [corroboration(second)]});
+    expect((await import('@/lib/locate')).allBundledStores()).toEqual([]);
   });
   it('does not call an all-missing Census catchment a usable neighborhood score', async () => {
     const missing = {...first, score: computeGoodsScore({medianHomeValue: null, medianHouseholdIncome: null, medianGrossRent: null, pctBachelorsPlus: null, tractCount: 2, population: 1000})};

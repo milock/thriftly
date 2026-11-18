@@ -1,6 +1,6 @@
 # Thriftly
 
-Thriftly helps shoppers compare physical thrift and resale shops, then get directions. Public coverage is the independent registry in `data/stores-us.json` intersected with confirmed identities in `data/google-place-ids.json`. A listing must represent public retail rather than an office, warehouse, or donation-only stop. Ambiguous matches are held for review. Temporary provider failures preserve confirmed identities.
+Thriftly helps shoppers compare physical thrift and resale shops, then get directions. Public coverage is the independent registry in `data/stores-us.json` intersected with confirmed identities: a Google Place ID confirmed earlier (`data/google-place-ids.json`, carried through small source edits without new Google calls), or an OpenStreetMap shop of the same brand at the same place (`data/store-corroborations.json`, refreshed weekly for free). Either confirmation lapses when the listing's identity changes beyond that. A listing must represent public retail rather than an office, warehouse, or donation-only stop. Ambiguous matches are held for review. Temporary provider failures preserve confirmed identities.
 
 The San Diego independent-store pilot adds a small curated selection of local operators, including nonprofits. Local operators may run more than one regional shop. National brands remain separate filter options. The pilot is not a complete directory of the city.
 
