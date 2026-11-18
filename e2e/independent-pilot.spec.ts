@@ -1,5 +1,5 @@
 import {expect,test} from '@playwright/test';
-import {mockStoreDetails} from './fixtures';
+import {blockStoreDetails} from './fixtures';
 import {googleMapsBootstrap} from './google-maps-fixture';
 
 const path='/independent-thrift-stores/san-diego-ca';
@@ -7,7 +7,7 @@ const search='/search?lat=32.7157&lon=-117.1611&radius=15&label=San+Diego&brands
 test.beforeEach(async({page})=>{
  await page.route(googleMapsBootstrap,route=>route.abort('failed'));
  await page.route('**/api/enrich**',route=>route.fulfill({json:{enriched:{}}}));
- await mockStoreDetails(page,{unavailable:true});
+ await blockStoreDetails(page);
 });
 test('pilot shows source-verified shops with correction and visit links',async({page})=>{
  await page.setViewportSize({width:320,height:740});

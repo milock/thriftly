@@ -1,5 +1,4 @@
 import type { Page } from "@playwright/test";
-import type { LiveGoogleDetails } from "../lib/types";
 
 /** Exercise the browser search path with mocked API responses. Coordinate
  * links on an ordinary navigation are rendered with the real server dataset. */
@@ -68,37 +67,10 @@ export const photonReverseResponse = {
 
 export const firstStore = storesResponse.stores[0];
 
-export function googleDetailsFor(store: typeof firstStore): LiveGoogleDetails {
-  return {
-    placeId: store.googlePlaceId,
-    name: store.name,
-    address: store.address,
-    location: store.location,
-    businessStatus: "OPERATIONAL",
-    currentOpeningHours: { openNow: true, weekdayDescriptions: ["Monday: 10:00 AM – 8:00 PM"] },
-    regularOpeningHours: null,
-    phone: store.phone,
-    website: store.website,
-    rating: 4.6,
-    ratingCount: 120,
-    mapsUrl: `https://www.google.com/maps/search/?api=1&query=Goodwill&query_place_id=${store.googlePlaceId}`,
-    attributions: [],
-  };
-}
-
-export async function mockStoreDetails(page: Page, options: {
-  unavailable?: boolean;
-  onRequest?: (storeId: string) => void;
-  details?: (store: typeof firstStore) => LiveGoogleDetails | null;
-} = {}) {
-  await page.route("**/api/store-details", route => {
-    const { storeId } = route.request().postDataJSON() as { storeId: string };
-    options.onRequest?.(storeId);
-    const store = storesResponse.stores.find(candidate => candidate.id === storeId);
-    const google = !store || options.unavailable ? null
-      : options.details ? options.details(store) : googleDetailsFor(store);
-    return google
-      ? route.fulfill({ json: { storeId, google } })
-      : route.fulfill({ status: 503, json: { error: "details_unavailable" } });
+/** The paid details endpoint was removed. Any request to it is a regression. */
+export async function blockStoreDetails(page: Page, onRequest?: (url: string) => void) {
+  await page.route("**/api/store-details**", route => {
+    onRequest?.(route.request().url());
+    return route.fulfill({ status: 404, json: { error: "not_found" } });
   });
 }

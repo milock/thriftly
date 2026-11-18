@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {gotoClientSearch, mockStoreDetails, storesResponse, photonReverseResponse} from './fixtures';
+import {gotoClientSearch, blockStoreDetails, storesResponse, photonReverseResponse} from './fixtures';
 import {googleMapsBootstrap, mockGoogleMaps} from './google-maps-fixture';
 import type {ScoredStore} from '../lib/types';
 
@@ -13,7 +13,7 @@ test.beforeEach(async({page})=>{
  await page.route(/photon\.komoot\.io\/reverse/,r=>r.fulfill({json:photonReverseResponse}));
  await page.route(/photon\.komoot\.io\/api/,r=>r.fulfill({json:{features:[]}}));
  await mockGoogleMaps(page);
- await mockStoreDetails(page, {unavailable: true});
+ await blockStoreDetails(page);
 });
 
 test('brand-only deep link survives location resolution and supports multiple brands', async({page,isMobile})=>{
@@ -31,7 +31,7 @@ test('brand-only deep link survives location resolution and supports multiple br
 test('map SDK failure preserves list details and retries without a page reload', async({page,isMobile})=>{
  const blockSdk = (route: import('@playwright/test').Route) => route.abort('failed');
  await page.route(googleMapsBootstrap, blockSdk);
- await mockStoreDetails(page);
+ await blockStoreDetails(page);
  await gotoClientSearch(page, '/search?lat=32.84&lon=-117.27');
  if(isMobile) await page.getByRole('tab',{name:'Map',exact:true}).click();
  const map = page.locator('[data-google-map]');
@@ -46,7 +46,7 @@ test('map SDK failure preserves list details and retries without a page reload',
  const card = page.locator('[data-store-card]').first();
  await expect(card.locator('[data-store-address]')).not.toBeEmpty();
  await expect(card.getByRole('link',{name:'Directions',exact:true})).toHaveAttribute('href',/^https:\/\/www\.google\.com\/maps\/dir\//);
- await expect(card.locator('[data-google-rating][data-state=loaded]')).toBeVisible();
+ await expect(card.locator('[data-google-reviews]')).toBeVisible();
 });
 
 test('problem reports enter pending review without changing the listing',async({page})=>{
