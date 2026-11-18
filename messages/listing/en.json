@@ -38,7 +38,6 @@
   "evidenceInfo": "Source for {field}",
   "openScore": "Visit score {score} out of 100. Show score details",
   "googleRatingCount": "{count, number} Google ratings",
-  "partialRating": "Partial score",
   "component": "Component",
   "weight": "Weight",
   "points": "Points",

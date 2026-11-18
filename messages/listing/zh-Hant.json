@@ -38,7 +38,6 @@
   "evidenceInfo": "{field}的來源",
   "openScore": "到訪評分 {score} 分，滿分 100。查看評分詳情",
   "googleRatingCount": "{count, number} 則 Google 評分",
-  "partialRating": "部分評分",
   "component": "組成部分",
   "weight": "權重",
   "points": "分數貢獻",

@@ -38,7 +38,6 @@
   "evidenceInfo": "مصدر {field}",
   "openScore": "تقييم الزيارة {score} من 100. عرض التفاصيل",
   "googleRatingCount": "{count, number} من تقييمات Google",
-  "partialRating": "تقييم جزئي",
   "component": "المكوّن",
   "weight": "الوزن",
   "points": "النقاط",
