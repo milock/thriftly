@@ -10,6 +10,8 @@ export interface Store {
   name: string;
   /** Persisted, conservatively confirmed identity; never matched during rendering. */
   googlePlaceId?: string;
+  /** Why a listing is public: a confirmed Google identity, or OSM corroboration. */
+  identityBasis?: 'google' | 'openstreetmap';
   brandId?: string;
   brand?: string;
   operator?: string;
