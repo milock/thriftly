@@ -32,7 +32,7 @@
   "browseBrands": "Browse by store brand",
   "sourceDate": "Source data through {date}",
   "independent": "Thriftly is independent and is not affiliated with the stores listed here.",
-  "neighborhoodNote": "The Visit score combines neighborhood Census measures, walkability data when available, and Google ratings when available. It does not predict inventory, prices, or value.",
+  "neighborhoodNote": "The Visit score combines neighborhood Census measures with walkability data when available. It does not predict inventory, prices, or value.",
   "donation": "Donation-based thrift",
   "buy-sell-trade": "Clothing resale",
   "mixed": "Mixed sourcing",

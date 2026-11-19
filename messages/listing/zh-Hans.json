@@ -26,7 +26,7 @@
   "neighborhoodScore": "社区指标",
   "contribution": "占评分的 {weight}%",
   "scoreNote": "这是用于规划的估算，不是对库存或价值的预测。",
-  "scoreMethod": "有数据时，步行便利度占 5%。Google 评分最高占 50%，按 n/(n+50) 加权，其中 n 为评分数量。其余部分使用社区人口普查指标。",
+  "scoreMethod": "有数据时，步行便利度占 5%。其余部分使用社区人口普查指标。Google 评分和评价不计入评分。",
   "accessVintage": "EPA 数据：2021 年发布版",
   "partialCensus": "部分人口普查指标暂不可用。",
   "retrieved": "来源获取时间",
