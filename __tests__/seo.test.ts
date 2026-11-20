@@ -53,3 +53,13 @@ it('noindexes uncovered cities but keeps covered cities indexable',async()=>{
   empty.mockRestore();
   expect((await generateMetadata({params:Promise.resolve({slug:'los-angeles-ca',locale:'en'})})).robots).toMatchObject({index:true,follow:true});
 });
+
+it('serves a plain-text sitemap with the same URLs as sitemap.xml',async()=>{
+  const {GET}=await import('@/app/sitemap.txt/route');
+  const response=GET();const text=await response.text();
+  expect(response.headers.get('content-type')).toBe('text/plain; charset=utf-8');
+  const lines=text.trimEnd().split('\n');
+  expect(lines).toEqual(sitemap().map(entry=>entry.url));
+  expect(lines.every(line=>line.startsWith('https://www.thriftly.xyz'))).toBe(true);
+  expect(lines).toContain('https://www.thriftly.xyz/how-we-score');
+},30000);

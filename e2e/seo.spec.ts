@@ -47,5 +47,7 @@ test('sitemap has no deploy-time dates and unknown cities are real 404s',async({
   const r=await request.get('/sitemap.xml');const xml=await r.text();
   expect(r.status()).toBe(200);expect(xml).not.toContain('<lastmod>');
   expect(xml).toContain('https://www.thriftly.xyz/how-we-score');
+  const txt=await request.get('/sitemap.txt');expect(txt.status()).toBe(200);expect(txt.headers()['content-type']).toContain('text/plain');
+  expect((await txt.text()).split('\n')).toContain('https://www.thriftly.xyz/how-we-score');
   expect((await request.get('/goodwill/unknown-city-zz')).status()).toBe(404);
 });
