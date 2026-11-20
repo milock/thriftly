@@ -3,7 +3,7 @@ import * as locate from '@/lib/locate';
 import * as outlets from '@/lib/outlets';
 import {generateMetadata as outletMetadata} from '@/app/[locale]/goodwill/los-angeles-ca/outlets/page';
 afterEach(()=>vi.restoreAllMocks());
-import sitemap from '@/app/sitemap';
+import {sitemapEntries as sitemap} from '@/lib/sitemap';
 import {pageMetadata,SITE_URL} from '@/lib/seo';
 import {generateMetadata} from '@/app/[locale]/goodwill/[slug]/page';
 vi.mock('@/i18n/navigation',()=>({Link:()=>null,useRouter:()=>({}),usePathname:()=>'/'}));
@@ -53,3 +53,20 @@ it('noindexes uncovered cities but keeps covered cities indexable',async()=>{
   empty.mockRestore();
   expect((await generateMetadata({params:Promise.resolve({slug:'los-angeles-ca',locale:'en'})})).robots).toMatchObject({index:true,follow:true});
 });
+
+it('splits the sitemap into one file per language behind a sitemap index',async()=>{
+  const {sitemapEntries,sitemapIndexXml,languageSitemapXml,sitemapFileLocale}=await import('@/lib/sitemap');
+  const {generateStaticParams,GET}=await import('@/app/sitemap/[file]/route');
+  const ids=['en','es','zh-Hans','zh-Hant','tl','vi','ar'];
+  expect(generateStaticParams().map((x:{file:string})=>x.file)).toEqual(ids.map(id=>`${id}.xml`));
+  const index=sitemapIndexXml();expect(index).toContain('<sitemapindex');
+  for(const id of ids)expect(index).toContain(`<loc>https://www.thriftly.xyz/sitemap/${id}.xml</loc>`);
+  const en=languageSitemapXml('en');const es=languageSitemapXml('es');
+  expect(en).toContain('<loc>https://www.thriftly.xyz/how-we-score</loc>');expect(en).not.toContain('https://www.thriftly.xyz/es/');expect(en).not.toContain('<lastmod>');
+  expect(es).toContain('<loc>https://www.thriftly.xyz/es/how-we-score</loc>');
+  expect((en.match(/<loc>/g)??[]).length*ids.length).toBe(sitemapEntries().length);
+  expect(sitemapFileLocale('xx.xml')).toBeNull();expect(sitemapFileLocale('en')).toBeNull();
+  const response=await GET(new Request('https://www.thriftly.xyz/sitemap/vi.xml'),{params:Promise.resolve({file:'vi.xml'})});
+  expect(response.status).toBe(200);expect(response.headers.get('content-type')).toContain('application/xml');expect(await response.text()).toContain('https://www.thriftly.xyz/vi/how-we-score');
+  expect((await GET(new Request('https://www.thriftly.xyz/sitemap/xx.xml'),{params:Promise.resolve({file:'xx.xml'})})).status).toBe(404);
+},30000);

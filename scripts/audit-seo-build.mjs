@@ -58,8 +58,15 @@ export function liveAuditOrigin(value){
 export function recognizedDynamicRoute(buildPath,routes){
  return (routes.dynamicRoutes??[]).find(route=>typeof route.regex==='string'&&new RegExp(route.regex).test(buildPath))??null;
 }
+export async function readSitemaps(app){
+ const index=await readFile(join(app,'sitemap.xml.body'),'utf8');
+ if(!index.includes('<sitemapindex'))return index;
+ const children=[...index.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>new URL(decode(m[1])).pathname);
+ if(!children.length)throw new Error('Sitemap index lists no sitemaps.');
+ return (await Promise.all(children.map(path=>readFile(join(app,`${path.slice(1)}.body`),'utf8')))).join('');
+}
 export async function audit(root=process.cwd(),options={}){
- const app=join(root,'.next/server/app');const sitemap=await readFile(join(app,'sitemap.xml.body'),'utf8');const manifest=JSON.parse(await readFile(join(root,'.next/prerender-manifest.json'),'utf8'));
+ const app=join(root,'.next/server/app');const sitemap=await readSitemaps(app);const manifest=JSON.parse(await readFile(join(root,'.next/prerender-manifest.json'),'utf8'));
  const routes=JSON.parse(await readFile(join(root,'.next/routes-manifest.json'),'utf8'));
  const liveOrigin=liveAuditOrigin(options.origin??process.env.SEO_AUDIT_ORIGIN);const fetcher=options.fetcher??fetch;
  const urls=[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>decode(m[1]));const findings=[];const pages=new Map();const refs=[];let parsed=0,staticParsed=0,liveParsed=0;

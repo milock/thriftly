@@ -43,9 +43,13 @@ test('methodology exposes scoring weights and limits',async({page})=>{
   await expect(page.getByRole('cell',{name:'40%',exact:true})).toBeVisible();
   await expect(page.getByText(/2022 American Community Survey/)).toBeVisible();
 });
-test('sitemap has no deploy-time dates and unknown cities are real 404s',async({request})=>{
-  const r=await request.get('/sitemap.xml');const xml=await r.text();
+test('sitemap index lists one sitemap per language, with no deploy-time dates, and unknown cities are real 404s',async({request})=>{
+  const index=await request.get('/sitemap.xml');const indexXml=await index.text();
+  expect(index.status()).toBe(200);expect(indexXml).toContain('<sitemapindex');
+  for(const locale of ['en','es','zh-Hans','zh-Hant','tl','vi','ar'])expect(indexXml).toContain(`https://www.thriftly.xyz/sitemap/${locale}.xml`);
+  const r=await request.get('/sitemap/en.xml');const xml=await r.text();
   expect(r.status()).toBe(200);expect(xml).not.toContain('<lastmod>');
-  expect(xml).toContain('https://www.thriftly.xyz/how-we-score');
+  expect(xml).toContain('https://www.thriftly.xyz/how-we-score');expect(xml).not.toContain('https://www.thriftly.xyz/es/how-we-score');
+  const es=await (await request.get('/sitemap/es.xml')).text();expect(es).toContain('https://www.thriftly.xyz/es/how-we-score');
   expect((await request.get('/goodwill/unknown-city-zz')).status()).toBe(404);
 });

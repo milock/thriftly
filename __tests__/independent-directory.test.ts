@@ -5,7 +5,7 @@ import {matchesBrands,parseStoreFilterIds} from '@/lib/brands';
 import {applyFilters,DEFAULT_FILTERS} from '@/lib/filters';
 import type {ScoredStore} from '@/lib/types';
 import * as locate from '@/lib/locate';
-import sitemap from '@/app/sitemap';
+import {sitemapEntries as sitemap} from '@/lib/sitemap';
 import {GET} from '@/app/api/stores/route';
 import {BrandNavigation} from '@/components/city/brand-navigation';
 import {CityStores} from '@/components/city/city-stores';

@@ -55,6 +55,16 @@ describe('mixed static and live SEO audit',()=>{
   expect(result.findings).toContainEqual({path:'/not-built',code:'missing_prerender_manifest',detail:'/en/not-built'});
   expect(fetcher).toHaveBeenCalledTimes(7);
  });
+ it('follows a sitemap index into each language sitemap',async()=>{
+  const root=await mixedBuild();const app=join(root,'.next/server/app');
+  await mkdir(join(app,'sitemap'),{recursive:true});
+  await writeFile(join(app,'sitemap/en.xml.body'),`<urlset><url><loc>${origin}/savers</loc></url><url><loc>${origin}/search</loc></url></urlset>`);
+  await writeFile(join(app,'sitemap/es.xml.body'),`<urlset><url><loc>${origin}/es/search</loc></url></urlset>`);
+  await writeFile(join(app,'sitemap.xml.body'),`<sitemapindex><sitemap><loc>${origin}/sitemap/en.xml</loc></sitemap><sitemap><loc>${origin}/sitemap/es.xml</loc></sitemap></sitemapindex>`);
+  const fetcher=vi.fn(async(url:URL)=>new Response(liveExample(url.pathname),{status:200,headers:{'content-type':'text/html'}}));
+  const result=await audit(root,{origin:'http://127.0.0.1:3109',fetcher});
+  expect(result.sitemapUrls).toBe(3);expect(result.findings).toEqual([]);
+ });
  it('records connection failures and accepts only explicit HTTP origins',async()=>{
   const root=await mixedBuild();const result=await audit(root,{origin:'http://127.0.0.1:3108',fetcher:vi.fn().mockRejectedValue(new Error('network failure'))});
   expect(result.counts.live_fetch_failed).toBe(7);expect(result.liveHtmlPagesChecked).toBe(0);
