@@ -21,10 +21,9 @@ jobs:
       - run: npm test
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:e2e
-      # TEMPORARY diagnostic for PR 32: repeat the flaky WebKit tests to catch a failure with logs. Removed before merge.
-      - name: Repeat flaky WebKit tests (diagnostic)
-        continue-on-error: true
-        run: npx playwright test e2e/localization.spec.ts e2e/independent-pilot.spec.ts --project=safari --project=iphone --repeat-each=6 --retries=0
+      # TEMPORARY (PR 32): repeat the previously flaky WebKit tests to show the fix holds. Removed before merge.
+      - name: Repeat previously flaky WebKit tests
+        run: npx playwright test e2e/localization.spec.ts e2e/independent-pilot.spec.ts e2e/seo.spec.ts --project=safari --project=iphone --repeat-each=5 --retries=0
       - name: Audit static and live dynamic SEO
         shell: bash
         run: |

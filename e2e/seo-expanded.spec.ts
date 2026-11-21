@@ -1,4 +1,4 @@
-import {test, expect} from '@playwright/test';
+import {test, expect} from './test';
 import {blockStoreDetails} from './fixtures';
 
 test('directory schema describes the visible store order and directions', async ({page}) => {

@@ -39,6 +39,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Render metadata (canonical, hreflang) in the initial <head> for every
+  // client instead of streaming it in a Suspense boundary. A streamed boundary
+  // hydrates after the page shell, and a client navigation in that gap left the
+  // old page's canonical tag behind in Safari.
+  htmlLimitedBots: /.*/,
   experimental: {globalNotFound: true},
   // Bundle independent scores plus durable Google identity confirmations.
   outputFileTracingIncludes: {
