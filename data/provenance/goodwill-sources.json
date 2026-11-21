@@ -1,0 +1,434 @@
+{
+  "source": "alltheplaces-goodwill",
+  "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+  "runId": "2026-10-10-13-32-41",
+  "license": "CC0-1.0",
+  "attempts": [
+    {
+      "runId": "2026-10-24-13-32-37",
+      "features": 0,
+      "errors": 1
+    },
+    {
+      "runId": "2026-10-17-13-32-31",
+      "features": 0,
+      "errors": 1
+    },
+    {
+      "runId": "2026-10-10-13-32-41",
+      "features": 4645,
+      "errors": 0
+    }
+  ],
+  "partitions": [
+    {
+      "state": "AL",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 71,
+      "publicStores": 41
+    },
+    {
+      "state": "AK",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 5,
+      "publicStores": 3
+    },
+    {
+      "state": "AZ",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 156,
+      "publicStores": 133
+    },
+    {
+      "state": "AR",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 50,
+      "publicStores": 36
+    },
+    {
+      "state": "CA",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 419,
+      "publicStores": 336
+    },
+    {
+      "state": "CO",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 70,
+      "publicStores": 53
+    },
+    {
+      "state": "CT",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 48,
+      "publicStores": 34
+    },
+    {
+      "state": "DE",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 13,
+      "publicStores": 13
+    },
+    {
+      "state": "FL",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 371,
+      "publicStores": 208
+    },
+    {
+      "state": "GA",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 214,
+      "publicStores": 127
+    },
+    {
+      "state": "HI",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 31,
+      "publicStores": 13
+    },
+    {
+      "state": "ID",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 16,
+      "publicStores": 14
+    },
+    {
+      "state": "IL",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 113,
+      "publicStores": 99
+    },
+    {
+      "state": "IN",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 185,
+      "publicStores": 129
+    },
+    {
+      "state": "IA",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 61,
+      "publicStores": 54
+    },
+    {
+      "state": "KS",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 29,
+      "publicStores": 28
+    },
+    {
+      "state": "KY",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 85,
+      "publicStores": 81
+    },
+    {
+      "state": "LA",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 68,
+      "publicStores": 49
+    },
+    {
+      "state": "ME",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 21,
+      "publicStores": 18
+    },
+    {
+      "state": "MD",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 68,
+      "publicStores": 57
+    },
+    {
+      "state": "MA",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 52,
+      "publicStores": 21
+    },
+    {
+      "state": "MI",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 143,
+      "publicStores": 110
+    },
+    {
+      "state": "MN",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 61,
+      "publicStores": 59
+    },
+    {
+      "state": "MS",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 35,
+      "publicStores": 24
+    },
+    {
+      "state": "MO",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 51,
+      "publicStores": 46
+    },
+    {
+      "state": "MT",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 11,
+      "publicStores": 10
+    },
+    {
+      "state": "NE",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 41,
+      "publicStores": 32
+    },
+    {
+      "state": "NV",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 38,
+      "publicStores": 26
+    },
+    {
+      "state": "NH",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 10,
+      "publicStores": 10
+    },
+    {
+      "state": "NJ",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 54,
+      "publicStores": 34
+    },
+    {
+      "state": "NM",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 25,
+      "publicStores": 22
+    },
+    {
+      "state": "NY",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 79,
+      "publicStores": 48
+    },
+    {
+      "state": "NC",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 181,
+      "publicStores": 144
+    },
+    {
+      "state": "ND",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 7,
+      "publicStores": 6
+    },
+    {
+      "state": "OH",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 262,
+      "publicStores": 207
+    },
+    {
+      "state": "OK",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 83,
+      "publicStores": 47
+    },
+    {
+      "state": "OR",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 83,
+      "publicStores": 62
+    },
+    {
+      "state": "PA",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 165,
+      "publicStores": 133
+    },
+    {
+      "state": "RI",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 6,
+      "publicStores": 4
+    },
+    {
+      "state": "SC",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 87,
+      "publicStores": 78
+    },
+    {
+      "state": "SD",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 11,
+      "publicStores": 11
+    },
+    {
+      "state": "TN",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 142,
+      "publicStores": 83
+    },
+    {
+      "state": "TX",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 371,
+      "publicStores": 270
+    },
+    {
+      "state": "UT",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 11,
+      "publicStores": 10
+    },
+    {
+      "state": "VT",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 6,
+      "publicStores": 5
+    },
+    {
+      "state": "VA",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 169,
+      "publicStores": 113
+    },
+    {
+      "state": "WA",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 93,
+      "publicStores": 76
+    },
+    {
+      "state": "WV",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 46,
+      "publicStores": 44
+    },
+    {
+      "state": "WI",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 84,
+      "publicStores": 75
+    },
+    {
+      "state": "WY",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 6,
+      "publicStores": 5
+    },
+    {
+      "state": "DC",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-10-13-32-41/output/goodwill.geojson",
+      "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
+      "sha256": "7199b89682fa66fa5d22693f7ed3279da0269ffeca91e206c58e9ba2f639cdc3",
+      "candidates": 2,
+      "publicStores": 1
+    }
+  ],
+  "generatedAt": "2026-11-05T01:24:37.535Z"
+}

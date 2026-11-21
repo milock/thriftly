@@ -1,5 +1,9 @@
 "use client";
 
+import { hasNeighborhoodBaseline } from "@/lib/scoring";
+
+import { useTranslations } from "next-intl";
+
 import { SearchX, TriangleAlert, MapPin } from "lucide-react";
 import type { ScoredStore, NearestHint } from "@/lib/types";
 import { StoreCard } from "@/components/store-card";
@@ -15,6 +19,9 @@ interface Props {
   nearest?: NearestHint | null;
   /** Widen the search to include the nearest store (set radius to its distance). */
   onExpand?: () => void;
+  onReset?: () => void;
+  onRetry?: () => void;
+  filteredOut?: boolean;
 }
 
 function CardSkeleton() {
@@ -51,8 +58,9 @@ export function StoreList({
   selectedId,
   onSelect,
   nearest,
-  onExpand,
+  onExpand, onReset, onRetry, filteredOut,
 }: Props) {
+  const t = useTranslations("ui");
   if (loading) {
     return (
       <div className="space-y-2.5">
@@ -64,14 +72,15 @@ export function StoreList({
   }
   if (error) {
     return (
-      <EmptyState
+      <div><EmptyState
         icon={<TriangleAlert className="size-5" />}
-        title="Couldn’t load stores"
-        body="Something went wrong reaching the data sources. Try again in a moment."
-      />
+        title={t("loadError")}
+        body={t("loadRetry")}
+      /><Button onClick={onRetry} className="mt-3 min-h-11 w-full">{t("retry")}</Button></div>
     );
   }
   if (stores.length === 0) {
+    if (filteredOut) return <div><EmptyState icon={<SearchX className="size-5" />} title={t("filteredEmpty")} body={t("filteredHelp")} /><Button onClick={onReset} className="mt-3 min-h-11 w-full">{t("resetFilters")}</Button></div>;
     if (nearest) {
       const miles = Math.round(nearest.distanceMiles);
       const place = [nearest.locality, nearest.region].filter(Boolean).join(", ");
@@ -81,13 +90,13 @@ export function StoreList({
           <div className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <MapPin className="size-5" />
           </div>
-          <p className="text-sm font-medium">No Goodwill stores in range</p>
+          <p className="text-sm font-medium">{t("noStores")}</p>
           <p className="max-w-xs text-[13px] text-muted-foreground">
-            The nearest one is about {miles} mi away{place ? ` in ${place}` : ""}.
+            {t("nearest", { miles, place })}
           </p>
           {reachable && onExpand && (
             <Button variant="outline" size="sm" className="mt-2" onClick={onExpand}>
-              Search within {miles} mi
+              {t("within", { miles })}
             </Button>
           )}
         </div>
@@ -96,8 +105,8 @@ export function StoreList({
     return (
       <EmptyState
         icon={<SearchX className="size-5" />}
-        title="No Goodwill stores in range"
-        body="Widen your radius, lower the minimum score, or search a different location."
+        title={t("noStores")}
+        body={t("widen")}
       />
     );
   }
@@ -107,10 +116,9 @@ export function StoreList({
       {stores.map((s, i) => (
         <li
           key={s.id}
-          className="animate-in fade-in slide-in-from-bottom-1 fill-mode-both"
-          style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
+
         >
-          <StoreCard store={s} rank={i + 1} selected={s.id === selectedId} onSelect={onSelect} />
+          <StoreCard store={s} rank={i + 1} highest={hasNeighborhoodBaseline(s.score) && s.score.total === Math.max(...stores.filter(x => hasNeighborhoodBaseline(x.score)).map(x => x.score.total))} selected={s.id === selectedId} onSelect={onSelect} />
         </li>
       ))}
     </ul>

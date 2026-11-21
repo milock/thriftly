@@ -1,42 +1,58 @@
 import type { LatLng } from "@/lib/types";
 
-export function formatCurrency(value: number | null, opts?: { perMonth?: boolean }): string {
+/** Stable across server and browser CLDR versions, with explicit UTC date order. */
+export function formatSourceDate(value: string | undefined, locale = "en", timeZone = "UTC"): string | null {
+  if (!value || !Number.isFinite(Date.parse(value))) return null;
+  const date = new Date(value);
+  let year = String(date.getUTCFullYear());
+  let month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  let day = String(date.getUTCDate()).padStart(2, "0");
+  // A date-only source is already a calendar date. Timestamped reviews use the
+  // store's zone, so an evening San Diego check does not appear to be tomorrow.
+  if (value.includes("T") && timeZone !== "UTC") {
+    try {
+      const fields = new Intl.DateTimeFormat("en-US", {timeZone, calendar:"gregory", numberingSystem:"latn",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(date);
+      year = fields.find(p=>p.type==="year")!.value;
+      month = fields.find(p=>p.type==="month")!.value;
+      day = fields.find(p=>p.type==="day")!.value;
+    } catch { return null; }
+  }
+  const parts = locale.startsWith("zh") ? [year, month, day]
+    : locale === "en" || locale === "tl" ? [month, day, year] : [day, month, year];
+  const result = parts.join("/");
+  return locale === "ar" ? result.replace(/\d/g, digit => "٠١٢٣٤٥٦٧٨٩"[Number(digit)]) : result;
+}
+
+export function formatCurrency(value: number | null, opts?: { perMonth?: boolean; locale?: string }): string {
   if (value == null) return "—";
-  return `$${Math.round(value).toLocaleString()}${opts?.perMonth ? "/mo" : ""}`;
+  return new Intl.NumberFormat(opts?.locale ?? "en", { numberingSystem: opts?.locale === "ar" ? "arab" : "latn", style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value) + (opts?.perMonth ? "/mo" : "");
 }
-
-export function formatCompactCurrency(value: number | null): string {
-  if (value == null) return "—";
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(value >= 10_000_000 ? 0 : 1)}M`;
-  if (value >= 1_000) return `$${Math.round(value / 1000)}K`;
-  return `$${Math.round(value)}`;
+export function formatCompactCurrency(value: number | null, locale = "en"): string {
+  return value == null ? "—" : new Intl.NumberFormat(locale, { numberingSystem: locale === "ar" ? "arab" : "latn", style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
-
-export function formatPercent(value: number | null): string {
-  return value == null ? "—" : `${Math.round(value)}%`;
+export function formatPercent(value: number | null, locale = "en"): string {
+  return value == null ? "—" : new Intl.NumberFormat(locale, { numberingSystem: locale === "ar" ? "arab" : "latn", style: "percent", maximumFractionDigits: 0 }).format(value / 100);
 }
-
-export function formatDistance(miles: number): string {
-  if (miles < 0.1) return "< 0.1 mi";
-  if (miles < 10) return `${miles.toFixed(1)} mi`;
-  return `${Math.round(miles)} mi`;
+// Fixed unit labels avoid server/browser CLDR spacing differences during hydration.
+const MILE_UNITS: Record<string, string> = {en:"mi", es:"mi", "zh-Hans":"英里", "zh-Hant":"英里", tl:"mi", vi:"dặm", ar:"ميل"};
+export function formatDistance(miles: number, locale = "en"): string {
+  const n = new Intl.NumberFormat(locale, { numberingSystem: locale === "ar" ? "arab" : "latn", minimumFractionDigits: miles < 10 ? 1 : 0, maximumFractionDigits: miles < 10 ? 1 : 0 });
+  return `${miles < 0.1 ? "< " : ""}${n.format(Math.max(0.1, miles))}${locale.startsWith("zh") ? "" : " "}${MILE_UNITS[locale] ?? "mi"}`;
 }
-
-export function formatPopulation(value: number): string {
-  if (value >= 1000) return `${(value / 1000).toFixed(value >= 100000 ? 0 : 1)}k`;
-  return `${value}`;
+export function formatPopulation(value: number, locale = "en"): string {
+  return new Intl.NumberFormat(locale, { numberingSystem: locale === "ar" ? "arab" : "latn", notation: "compact", maximumFractionDigits: 1 }).format(value);
 }
 
 /** Google Maps turn-by-turn directions to the store's exact coordinates. */
-export function directionsUrl(store: { location: LatLng; address?: string }): string {
+export function directionsUrl(store: { location: LatLng; address?: string; googlePlaceId?: string }): string {
   const dest = `${store.location.lat},${store.location.lon}`;
-  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`;
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}${store.googlePlaceId ? `&destination_place_id=${encodeURIComponent(store.googlePlaceId)}` : ''}`;
 }
 
 /** Open the place on Google Maps (name + address when available). */
-export function mapsPlaceUrl(store: { location: LatLng; address?: string }): string {
-  const query = store.address ? `Goodwill ${store.address}` : `${store.location.lat},${store.location.lon}`;
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+export function mapsPlaceUrl(store: { location: LatLng; address?: string; name?: string; googlePlaceId?: string }): string {
+  const query = store.address ? `${store.name ?? ""} ${store.address}`.trim() : `${store.location.lat},${store.location.lon}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}${store.googlePlaceId ? `&query_place_id=${encodeURIComponent(store.googlePlaceId)}` : ''}`;
 }
 
 export function telUrl(phone: string): string {

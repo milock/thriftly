@@ -1,0 +1,26 @@
+{
+  "button": "Informar de un problema",
+  "buttonFor": "Informar de un problema con {store}",
+  "formFor": "Informe sobre {store}",
+  "intro": "Tu informe es privado y se envía a una cola de revisión. Los informes no cambian directamente la ficha pública.",
+  "reason": "¿Qué hay que corregir?",
+  "details": "Detalles (opcionales)",
+  "detailsRequired": "Detalles (al menos 10 caracteres)",
+  "detailsHint": "Explica lo que observaste e incluye una fuente o dirección, si la tienes.",
+  "privacy": "No se necesita correo electrónico. No incluyas información personal. Máximo 1500 caracteres.",
+  "submit": "Enviar para revisión",
+  "sending": "Enviando…",
+  "cancel": "Cerrar",
+  "success": "Tu informe se guardó para revisión. La ficha pública no ha cambiado. Gracias.",
+  "rateLimited": "Has alcanzado el límite de informes. Inténtalo de nuevo en una hora.",
+  "checkDetails": "Revisa los datos e inténtalo de nuevo.",
+  "failed": "No pudimos confirmar que el informe se guardara. Inténtalo de nuevo. Reenviar el mismo informe no creará un duplicado.",
+  "reasons": {
+    "wrong-location": "Ubicación incorrecta",
+    "donation-only": "Solo acepta donaciones",
+    "closed": "Cerrado o fuera de servicio",
+    "duplicate": "Ficha duplicada",
+    "incorrect-hours": "Horario incorrecto",
+    "other": "Otra corrección práctica"
+  }
+}

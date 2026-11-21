@@ -1,0 +1,26 @@
+{
+  "button": "Report a listing problem",
+  "buttonFor": "Report a problem with {store}",
+  "formFor": "Report for {store}",
+  "intro": "Your report is private and goes to a review queue. Reports do not directly change the public listing.",
+  "reason": "What needs correcting?",
+  "details": "Details (optional)",
+  "detailsRequired": "Details (at least 10 characters)",
+  "detailsHint": "Share what you noticed and a source or address, if available.",
+  "privacy": "No email required. Leave out personal information. Up to 1,500 characters.",
+  "submit": "Send for review",
+  "sending": "Sending…",
+  "cancel": "Close",
+  "success": "Your report was saved for review. The public listing has not changed. Thank you.",
+  "rateLimited": "You have reached the report limit. Please try again in an hour.",
+  "checkDetails": "Check the details, then try again.",
+  "failed": "We could not confirm your report was saved. Please try again. Retrying the same report will not create a duplicate.",
+  "reasons": {
+    "wrong-location": "Wrong location",
+    "donation-only": "Donation-only location",
+    "closed": "Closed or no longer operating",
+    "duplicate": "Duplicate listing",
+    "incorrect-hours": "Incorrect hours",
+    "other": "Another practical correction"
+  }
+}

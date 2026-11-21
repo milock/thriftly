@@ -1,3 +1,5 @@
+import type { VisitScore } from "@/lib/visit-score";
+
 export interface LatLng {
   lat: number;
   lon: number;
@@ -6,6 +8,23 @@ export interface LatLng {
 export interface Store {
   id: string; // e.g. "node/123456"
   name: string;
+  /** Persisted, conservatively confirmed identity; never matched during rendering. */
+  googlePlaceId?: string;
+  /** Why a listing is public: a confirmed Google identity, or OSM corroboration. */
+  identityBasis?: 'google' | 'openstreetmap';
+  brandId?: string;
+  brand?: string;
+  operator?: string;
+  /** Local independent operators may have multiple shops within their region. */
+  operatorType?: 'independent' | 'chain';
+  /** Deliberate evidence review, separate from a source import or refresh. */
+  verification?: {
+    method: 'official-website-review';
+    checkedAt: string;
+    sourceUrls: string[];
+  };
+  sourcingModel?: 'donation' | 'buy-sell-trade' | 'mixed' | 'unknown';
+  merchandiseScope?: 'general' | 'fashion' | 'home-improvement' | 'books' | 'unknown';
   location: LatLng;
   address?: string;
   street?: string; // "7631 Girard Avenue"
@@ -13,6 +32,19 @@ export interface Store {
   locality?: string; // city, "San Diego"
   region?: string; // "CA"
   openingHours?: string;
+  /** IANA time zone at the store, independent of the shopper's browser zone. */
+  timezone?: string;
+  facilityType?: 'retail' | 'outlet' | 'donation' | 'warehouse' | 'office' | 'services' | 'unknown';
+  sourceTags?: Record<string, string>;
+  sourceAliases?: string[];
+  provenance?: {
+    source: string;
+    sourceId: string;
+    sourceUrl?: string;
+    sourceUpdatedAt?: string;
+    fetchedAt?: string;
+    classificationBasis?: string;
+  };
   website?: string;
   phone?: string;
 }
@@ -56,6 +88,8 @@ export interface FactorScore {
 }
 
 export interface GoodsScore {
+  visit?: VisitScore;
+  baselineTotal?: number;
   total: number; // 0..100
   factors: Record<FactorKey, FactorScore>;
   catchment: { tractCount: number; population: number };

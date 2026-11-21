@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "scope": "San Diego independent retail pilot; local operators may have multiple local shops. Not a complete city directory.",
+  "stores": [
+    {
+      "id": "independent/humble-heart-ocean-beach",
+      "name": "Humble Heart Thrift + Music, Ocean Beach",
+      "brandId": "humble-heart-ocean-beach",
+      "brand": "Humble Heart",
+      "operator": "THE HEART, LLC",
+      "operatorType": "independent",
+      "sourcingModel": "donation",
+      "merchandiseScope": "general",
+      "facilityType": "retail",
+      "location": {
+        "lat": 32.745441209313,
+        "lon": -117.248879603568
+      },
+      "street": "4873 Newport Ave",
+      "address": "4873 Newport Ave, San Diego, CA 92107",
+      "locality": "San Diego",
+      "region": "CA",
+      "timezone": "America/Los_Angeles",
+      "website": "https://www.theheartob.com/locations",
+      "verification": {
+        "method": "official-website-review",
+        "checkedAt": "2026-11-06T03:14:50Z",
+        "sourceUrls": [
+          "https://www.theheartob.com/locations",
+          "https://www.theheartob.com/about-us"
+        ]
+      },
+      "provenance": {
+        "source": "official-independent-website",
+        "sourceId": "humble-heart-ocean-beach",
+        "sourceUrl": "https://www.theheartob.com/locations",
+        "fetchedAt": "2026-11-06T03:14:50Z",
+        "classificationBasis": "Operator website reviewed for public retail shopping, street address and local operation; no in-person visit."
+      },
+      "sourceTags": {
+        "coordinateMethod": "census-address-range-match",
+        "coordinateSource": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=4873+Newport+Ave%2C+San+Diego%2C+CA+92107&benchmark=Public_AR_Current&format=json",
+        "coordinateMatchedAddress": "4873 NEWPORT AVE, SAN DIEGO, CA, 92107",
+        "coordinateCheckedAt": "2026-11-06T03:14:50Z",
+        "coordinatePrecision": "Census street address-range interpolation; not a rooftop or entrance survey"
+      },
+      "openingHours": "Mo-Sa 10:30-18:30; Su 12:00-18:30",
+      "phone": "858-388-9204"
+    },
+    {
+      "id": "independent/home-start",
+      "name": "Home Start Thrift Boutique",
+      "brandId": "home-start",
+      "brand": "Home Start",
+      "operator": "Home Start, Inc.",
+      "operatorType": "independent",
+      "sourcingModel": "donation",
+      "merchandiseScope": "general",
+      "facilityType": "retail",
+      "location": {
+        "lat": 32.763248346346,
+        "lon": -117.11488898572
+      },
+      "street": "3611 Adams Ave",
+      "address": "3611 Adams Ave, San Diego, CA 92116",
+      "locality": "San Diego",
+      "region": "CA",
+      "timezone": "America/Los_Angeles",
+      "website": "https://home-start.org/home-start-thrift-boutique-store/",
+      "verification": {
+        "method": "official-website-review",
+        "checkedAt": "2026-11-06T03:14:50Z",
+        "sourceUrls": [
+          "https://home-start.org/home-start-thrift-boutique-store/",
+          "https://home-start.org/about-home-start/",
+          "https://home-start.org/our-locations/"
+        ]
+      },
+      "provenance": {
+        "source": "official-independent-website",
+        "sourceId": "home-start",
+        "sourceUrl": "https://home-start.org/home-start-thrift-boutique-store/",
+        "fetchedAt": "2026-11-06T03:14:50Z",
+        "classificationBasis": "Operator website reviewed for public retail shopping, street address and local operation; no in-person visit."
+      },
+      "sourceTags": {
+        "coordinateMethod": "census-address-range-match",
+        "coordinateSource": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=3611+Adams+Ave%2C+San+Diego%2C+CA+92116&benchmark=Public_AR_Current&format=json",
+        "coordinateMatchedAddress": "3611 ADAMS AVE, SAN DIEGO, CA, 92116",
+        "coordinateCheckedAt": "2026-11-06T03:14:50Z",
+        "coordinatePrecision": "Census street address-range interpolation; not a rooftop or entrance survey",
+        "hoursReview": "Operator boutique and locations pages disagree; hours withheld."
+      },
+      "phone": "619-906-5996"
+    },
+    {
+      "id": "independent/safari-seconds",
+      "name": "Safari Seconds Thrift Store",
+      "brandId": "safari-seconds",
+      "brand": "Safari Seconds",
+      "operator": "Alliance for African Assistance",
+      "operatorType": "independent",
+      "sourcingModel": "donation",
+      "merchandiseScope": "general",
+      "facilityType": "retail",
+      "location": {
+        "lat": 32.766727642847,
+        "lon": -117.058047889176
+      },
+      "street": "6533 El Cajon Blvd",
+      "address": "6533 El Cajon Blvd, San Diego, CA 92115",
+      "locality": "San Diego",
+      "region": "CA",
+      "timezone": "America/Los_Angeles",
+      "website": "https://www.alliance-for-africa.org/safari-seconds-thrift-store",
+      "verification": {
+        "method": "official-website-review",
+        "checkedAt": "2026-11-06T03:14:50Z",
+        "sourceUrls": [
+          "https://www.alliance-for-africa.org/safari-seconds-thrift-store",
+          "https://www.alliance-for-africa.org/about"
+        ]
+      },
+      "provenance": {
+        "source": "official-independent-website",
+        "sourceId": "safari-seconds",
+        "sourceUrl": "https://www.alliance-for-africa.org/safari-seconds-thrift-store",
+        "fetchedAt": "2026-11-06T03:14:50Z",
+        "classificationBasis": "Operator website reviewed for public retail shopping, street address and local operation; no in-person visit."
+      },
+      "sourceTags": {
+        "coordinateMethod": "census-address-range-match",
+        "coordinateSource": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=6533+El+Cajon+Blvd%2C+San+Diego%2C+CA+92115&benchmark=Public_AR_Current&format=json",
+        "coordinateMatchedAddress": "6533 EL CAJON BLVD, SAN DIEGO, CA, 92115",
+        "coordinateCheckedAt": "2026-11-06T03:14:50Z",
+        "coordinatePrecision": "Census street address-range interpolation; not a rooftop or entrance survey"
+      },
+      "openingHours": "Mo-Su 10:00-18:00"
+    },
+    {
+      "id": "independent/father-joes-hillcrest",
+      "name": "Father Joe's Villages Hillcrest Thrift Store",
+      "brandId": "father-joes-hillcrest",
+      "brand": "Father Joe's Villages",
+      "operator": "Father Joe's Villages",
+      "operatorType": "independent",
+      "sourcingModel": "donation",
+      "merchandiseScope": "general",
+      "facilityType": "retail",
+      "location": {
+        "lat": 32.748407533328,
+        "lon": -117.149972690703
+      },
+      "street": "1457 University Ave",
+      "address": "1457 University Ave, San Diego, CA 92103",
+      "locality": "San Diego",
+      "region": "CA",
+      "timezone": "America/Los_Angeles",
+      "website": "https://my.neighbor.org/take-action/retail-shop/thrift-store-locations/",
+      "verification": {
+        "method": "official-website-review",
+        "checkedAt": "2026-11-06T03:14:50Z",
+        "sourceUrls": [
+          "https://my.neighbor.org/take-action/retail-shop/thrift-store-locations/"
+        ]
+      },
+      "provenance": {
+        "source": "official-independent-website",
+        "sourceId": "father-joes-hillcrest",
+        "sourceUrl": "https://my.neighbor.org/take-action/retail-shop/thrift-store-locations/",
+        "fetchedAt": "2026-11-06T03:14:50Z",
+        "classificationBasis": "Operator website reviewed for public retail shopping, street address and local operation; no in-person visit."
+      },
+      "sourceTags": {
+        "coordinateMethod": "census-address-range-match",
+        "coordinateSource": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=1457+University+Ave%2C+San+Diego%2C+CA+92103&benchmark=Public_AR_Current&format=json",
+        "coordinateMatchedAddress": "1457 UNIVERSITY AVE, SAN DIEGO, CA, 92103",
+        "coordinateCheckedAt": "2026-11-06T03:14:50Z",
+        "coordinatePrecision": "Census street address-range interpolation; not a rooftop or entrance survey",
+        "hoursReview": "Operator states hours exclude holidays; confirm holiday hours directly."
+      },
+      "openingHours": "Mo-Sa 10:00-19:00; Su 10:00-18:00",
+      "phone": "619-255-1255"
+    }
+  ]
+}

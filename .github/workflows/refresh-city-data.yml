@@ -1,9 +1,11 @@
-name: Refresh Goodwill data
+name: Refresh thrift store data
 
-# Weekly: per-state Overpass queries for every US Goodwill store (retried, mirror
-# fallback), scored offline against bundled Census data, written to
-# data/goodwill-us.json. Commits any change, which auto-deploys via Vercel and
-# re-pre-renders. No request-time upstream calls on the default path.
+# Weekly: classified thrift/resale sources plus Census scoring.
+# Published ATP extracts and official retail locators, plus one OpenStreetMap
+# query used only to corroborate listings. No paid Google API calls.
+# Each source fails on its own: a stale or missing source keeps its last accepted
+# records while the others refresh. The final health step fails the run (after the
+# data commit) when a source is past its hold window, so the gap gets noticed.
 
 on:
   schedule:
@@ -29,40 +31,81 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm test
       - run: npm run lint
+      - name: Record confirmed public coverage
+        run: node --import tsx scripts/check-google-coverage.ts --write-baseline /tmp/thriftly-coverage.json
       - name: Restore recent state checkpoints
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
-          path: .cache/refresh
-          key: refresh-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: refresh-
+          path: |
+            .cache/atp
+            .cache/expanded
+            .cache/store-access
+            .cache/osm
+          key: thrift-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: thrift-
+      - name: Start a fresh source health report
+        run: rm -f .cache/source-health.json && cp data/stores-us.json "$RUNNER_TEMP/previous-stores-us.json"
+      - name: Fetch latest successful published Goodwill source
+        id: source
+        run: node --import tsx scripts/fetch-atp-goodwill.ts
       - name: Build national Goodwill dataset
+        id: goodwill
+        if: steps.source.outputs.changed == 'true'
+        # A failed rebuild leaves the previous Goodwill dataset in place.
+        continue-on-error: true
         run: npm run build:data
         env:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
-          OVERPASS_URL: ${{ secrets.OVERPASS_URL }}
+          STORE_SOURCE: atp
+      - name: Fetch other thrift and resale sources
+        run: node --import tsx scripts/fetch-expanded-stores.ts
+      - name: Build combined store registry
+        run: node --import tsx scripts/build-expanded-stores.ts
+        env:
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+      - name: Join published EPA walkability data
+        run: node --import tsx scripts/fetch-store-access.ts
+      - name: Fetch OpenStreetMap second-hand shops
+        run: node --import tsx scripts/fetch-osm-thrift.ts
+      - name: Keep and corroborate listing identities (no Google calls)
+        run: node --import tsx scripts/verify-store-identities.ts --previous "$RUNNER_TEMP/previous-stores-us.json"
+      - name: Preserve coverage on unexpected matching regressions
+        run: node --import tsx scripts/check-google-coverage.ts --baseline /tmp/thriftly-coverage.json
+      - run: npm test
       - name: Save checkpoints even when upstream is unavailable
         if: always()
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
-          path: .cache/refresh
-          key: refresh-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            .cache/atp
+            .cache/expanded
+            .cache/store-access
+            .cache/osm
+          key: thrift-${{ github.run_id }}-${{ github.run_attempt }}
       - run: npm run build
       - name: Save validated dataset
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: goodwill-dataset
-          path: data/goodwill-us.json
+          path: |
+            data/goodwill-us.json
+            data/stores-us.json
+            data/store-access.json
+            data/google-place-ids.json
+            data/store-corroborations.json
+            data/provenance/*.json
+            .cache/source-health.json
           retention-days: 7
       - name: Commit refreshed data
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/goodwill-us.json
+          git add data/goodwill-us.json data/stores-us.json data/store-access.json data/google-place-ids.json data/store-corroborations.json data/provenance
           if git diff --cached --quiet; then
             echo "No data changes."
           else
-            git commit -m "chore: weekly Goodwill data refresh"
+            git commit -m "chore: weekly thrift store data refresh"
             # main may have moved while the (long) build ran, so rebase our data
             # commit on top of the latest main before pushing. Retry a few times
             # in case more commits land during the rebase.
@@ -74,3 +117,8 @@ jobs:
             echo "could not push after retries" >&2
             exit 1
           fi
+      - name: Report source health
+        if: always()
+        run: node --import tsx scripts/check-source-health.ts
+        env:
+          GOODWILL_BUILD_OUTCOME: ${{ steps.goodwill.outcome }}

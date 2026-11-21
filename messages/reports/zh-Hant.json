@@ -1,0 +1,26 @@
+{
+  "button": "回報商店資訊問題",
+  "buttonFor": "回報 {store} 的資訊問題",
+  "formFor": "關於 {store} 的回報",
+  "intro": "你的回報會保密並進入審核佇列。回報不會直接更改公開資訊。",
+  "reason": "哪些資訊需要更正？",
+  "details": "詳細說明（選填）",
+  "detailsRequired": "詳細說明（至少 10 個字元）",
+  "detailsHint": "請描述你發現的問題，並盡可能提供來源或地址。",
+  "privacy": "無需提供電子郵件。請勿填寫個人資訊。最多 1,500 個字元。",
+  "submit": "提交審核",
+  "sending": "正在提交…",
+  "cancel": "關閉",
+  "success": "回報已儲存，等待審核。公開資訊尚未更改。謝謝。",
+  "rateLimited": "已達到回報數量上限。請一小時後重試。",
+  "checkDetails": "請檢查詳情後再試。",
+  "failed": "無法確認回報是否已儲存。請重試。重複提交同一回報不會產生重複紀錄。",
+  "reasons": {
+    "wrong-location": "位置錯誤",
+    "donation-only": "僅接收捐贈的地點",
+    "closed": "已關閉或停止營業",
+    "duplicate": "重複的商店資訊",
+    "incorrect-hours": "營業時間錯誤",
+    "other": "其他實用資訊更正"
+  }
+}

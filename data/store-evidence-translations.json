@@ -1,0 +1,356 @@
+{
+  "es": {
+    "savers/1191-clothing": {
+      "caveat": "El operador indica esta categoría de mercancía; no se han verificado los artículos concretos ni las existencias actuales."
+    },
+    "savers/1191-books": {
+      "caveat": "El operador indica esta categoría de mercancía; no se han verificado los artículos concretos ni las existencias actuales."
+    },
+    "savers/1191-housewares": {
+      "caveat": "El operador indica esta categoría de mercancía; no se han verificado los artículos concretos ni las existencias actuales."
+    },
+    "savers/1191-electronics": {
+      "caveat": "El operador indica esta categoría de mercancía; no se han verificado los artículos concretos ni las existencias actuales."
+    },
+    "savers/1191-parking": {
+      "value": "La ficha indica que hay estacionamiento disponible.",
+      "caveat": "No se han verificado la disponibilidad de plazas, las tarifas ni las plazas accesibles."
+    },
+    "savers/1191-accessibility": {
+      "value": "El operador indica que se permiten animales de servicio.",
+      "caveat": "Esto no confirma que haya acceso sin escalones, acceso para sillas de ruedas, estacionamiento accesible ni baños accesibles."
+    },
+    "buffalo-exchange/loc_wy8eyxwx-parking": {
+      "value": "Se indican plazas con parquímetro y estacionamientos de pago cerca de 6th Avenue and Robinson Avenue.",
+      "caveat": "No se han verificado las tarifas actuales ni la disponibilidad de plazas."
+    },
+    "buffalo-exchange/loc_8yrxypn6-parking": {
+      "value": "La tienda indica que hay estacionamiento en la calle en Hawthorne Boulevard.",
+      "caveat": "No se han verificado las restricciones actuales, las tarifas ni la disponibilidad de plazas."
+    },
+    "buffalo-exchange/loc_8yrxypn6-transit": {
+      "value": "La tienda señala las rutas de autobús 14 y 75 de TriMet en las cercanías.",
+      "caveat": "No se han verificado los horarios en tiempo real, la ruta a pie ni el acceso a bordo. Consulta TriMet antes de viajar."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-furniture": {
+      "caveat": "Descripción del operador sin fecha; no se han verificado la disponibilidad actual de artículos ni las condiciones en el local."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-clothing": {
+      "caveat": "Descripción del operador sin fecha; no se han verificado la disponibilidad actual de artículos ni las condiciones en el local."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-housewares": {
+      "caveat": "Descripción del operador sin fecha; no se han verificado la disponibilidad actual de artículos ni las condiciones en el local."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-books": {
+      "caveat": "Descripción del operador sin fecha; no se han verificado la disponibilidad actual de artículos ni las condiciones en el local."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-size": {
+      "value": "Más de 15,000 pies cuadrados.",
+      "caveat": "Una página del operador de la época de apertura, sin fecha, describe la superficie comercial, no el complejo multiservicio de 135,000 pies cuadrados. No se ha verificado la superficie actual medida."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-furniture": {
+      "caveat": "El operador indica esta categoría de mercancía; no se han verificado los artículos concretos ni las existencias actuales."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-clothing": {
+      "caveat": "El operador indica esta categoría de mercancía; no se han verificado los artículos concretos ni las existencias actuales."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-housewares": {
+      "caveat": "El operador indica esta categoría de mercancía; no se han verificado los artículos concretos ni las existencias actuales."
+    }
+  },
+  "zh-Hans": {
+    "savers/1191-clothing": {
+      "caveat": "运营方列出了这一商品类别；具体商品和当前库存未经核实。"
+    },
+    "savers/1191-books": {
+      "caveat": "运营方列出了这一商品类别；具体商品和当前库存未经核实。"
+    },
+    "savers/1191-housewares": {
+      "caveat": "运营方列出了这一商品类别；具体商品和当前库存未经核实。"
+    },
+    "savers/1191-electronics": {
+      "caveat": "运营方列出了这一商品类别；具体商品和当前库存未经核实。"
+    },
+    "savers/1191-parking": {
+      "value": "门店资料显示有停车位。",
+      "caveat": "车位是否可用、是否收费以及无障碍车位情况均未经核实。"
+    },
+    "savers/1191-accessibility": {
+      "value": "运营方表示允许服务性动物进入。",
+      "caveat": "这并不代表已核实无台阶入口、轮椅通行、无障碍停车位或无障碍卫生间。"
+    },
+    "buffalo-exchange/loc_wy8eyxwx-parking": {
+      "value": "资料列出 6th Avenue and Robinson Avenue 附近的收费路边车位和收费停车场。",
+      "caveat": "当前费率和车位供应情况未经核实。"
+    },
+    "buffalo-exchange/loc_8yrxypn6-parking": {
+      "value": "门店资料列出 Hawthorne Boulevard 路边停车。",
+      "caveat": "当前限制、费用和车位供应情况未经核实。"
+    },
+    "buffalo-exchange/loc_8yrxypn6-transit": {
+      "value": "门店资料列出附近的 TriMet 14 路和 75 路公交线路。",
+      "caveat": "实时班次、步行路线和无障碍上车情况均未经核实；出行前请查看 TriMet 信息。"
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-furniture": {
+      "caveat": "运营方未注明日期的设施说明；当前商品供应情况和现场情况均未经核实。"
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-clothing": {
+      "caveat": "运营方未注明日期的设施说明；当前商品供应情况和现场情况均未经核实。"
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-housewares": {
+      "caveat": "运营方未注明日期的设施说明；当前商品供应情况和现场情况均未经核实。"
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-books": {
+      "caveat": "运营方未注明日期的设施说明；当前商品供应情况和现场情况均未经核实。"
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-size": {
+      "value": "超过 15,000 平方英尺。",
+      "caveat": "运营方一份未注明日期的开业时期页面描述的是零售面积，并非 135,000 平方英尺的多服务综合体。当前实测面积未经核实。"
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-furniture": {
+      "caveat": "运营方列出了这一商品类别；具体商品和当前库存未经核实。"
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-clothing": {
+      "caveat": "运营方列出了这一商品类别；具体商品和当前库存未经核实。"
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-housewares": {
+      "caveat": "运营方列出了这一商品类别；具体商品和当前库存未经核实。"
+    }
+  },
+  "zh-Hant": {
+    "savers/1191-clothing": {
+      "caveat": "營運方列出此商品類別；具體商品和目前庫存未經查證。"
+    },
+    "savers/1191-books": {
+      "caveat": "營運方列出此商品類別；具體商品和目前庫存未經查證。"
+    },
+    "savers/1191-housewares": {
+      "caveat": "營運方列出此商品類別；具體商品和目前庫存未經查證。"
+    },
+    "savers/1191-electronics": {
+      "caveat": "營運方列出此商品類別；具體商品和目前庫存未經查證。"
+    },
+    "savers/1191-parking": {
+      "value": "門市資料顯示有停車位。",
+      "caveat": "車位是否可用、是否收費以及無障礙車位情況均未經查證。"
+    },
+    "savers/1191-accessibility": {
+      "value": "營運方表示允許服務性動物進入。",
+      "caveat": "這不代表已查證無階梯入口、輪椅通行、無障礙停車位或無障礙洗手間。"
+    },
+    "buffalo-exchange/loc_wy8eyxwx-parking": {
+      "value": "資料列出 6th Avenue and Robinson Avenue 附近的收費路邊車位和收費停車場。",
+      "caveat": "目前費率和車位供應情況未經查證。"
+    },
+    "buffalo-exchange/loc_8yrxypn6-parking": {
+      "value": "門市資料列出 Hawthorne Boulevard 路邊停車。",
+      "caveat": "目前限制、費用和車位供應情況未經查證。"
+    },
+    "buffalo-exchange/loc_8yrxypn6-transit": {
+      "value": "門市資料列出附近的 TriMet 14 路和 75 路公車路線。",
+      "caveat": "即時班次、步行路線和無障礙上車情況均未經查證；出發前請查看 TriMet 資訊。"
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-furniture": {
+      "caveat": "營運方未標日期的設施說明；目前商品供應情況和現場狀況均未經查證。"
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-clothing": {
+      "caveat": "營運方未標日期的設施說明；目前商品供應情況和現場狀況均未經查證。"
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-housewares": {
+      "caveat": "營運方未標日期的設施說明；目前商品供應情況和現場狀況均未經查證。"
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-books": {
+      "caveat": "營運方未標日期的設施說明；目前商品供應情況和現場狀況均未經查證。"
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-size": {
+      "value": "超過 15,000 平方英尺。",
+      "caveat": "營運方一份未標日期的開幕時期頁面描述的是零售面積，並非 135,000 平方英尺的多服務綜合體。目前實測面積未經查證。"
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-furniture": {
+      "caveat": "營運方列出此商品類別；具體商品和目前庫存未經查證。"
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-clothing": {
+      "caveat": "營運方列出此商品類別；具體商品和目前庫存未經查證。"
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-housewares": {
+      "caveat": "營運方列出此商品類別；具體商品和目前庫存未經查證。"
+    }
+  },
+  "tl": {
+    "savers/1191-clothing": {
+      "caveat": "Inilalarawan ng operator ang kategoryang ito ng paninda; hindi pa nabeberipika ang mga partikular na item at kasalukuyang stock."
+    },
+    "savers/1191-books": {
+      "caveat": "Inilalarawan ng operator ang kategoryang ito ng paninda; hindi pa nabeberipika ang mga partikular na item at kasalukuyang stock."
+    },
+    "savers/1191-housewares": {
+      "caveat": "Inilalarawan ng operator ang kategoryang ito ng paninda; hindi pa nabeberipika ang mga partikular na item at kasalukuyang stock."
+    },
+    "savers/1191-electronics": {
+      "caveat": "Inilalarawan ng operator ang kategoryang ito ng paninda; hindi pa nabeberipika ang mga partikular na item at kasalukuyang stock."
+    },
+    "savers/1191-parking": {
+      "value": "Nakalista sa impormasyon ng tindahan na may paradahan.",
+      "caveat": "Hindi pa nabeberipika kung may bakanteng puwesto, may bayad, o may accessible na paradahan."
+    },
+    "savers/1191-accessibility": {
+      "value": "Ayon sa operator, pinapayagan ang mga service animal.",
+      "caveat": "Hindi nito kinukumpirma ang walang-hakbang na pasukan, access para sa wheelchair, accessible na paradahan, o accessible na banyo."
+    },
+    "buffalo-exchange/loc_wy8eyxwx-parking": {
+      "value": "Nakalista ang mga metered na puwesto sa kalsada at may-bayad na paradahan malapit sa 6th Avenue and Robinson Avenue.",
+      "caveat": "Hindi pa nabeberipika ang kasalukuyang singil at availability ng puwesto."
+    },
+    "buffalo-exchange/loc_8yrxypn6-parking": {
+      "value": "Nakalista ng tindahan ang paradahan sa kalsada sa Hawthorne Boulevard.",
+      "caveat": "Hindi pa nabeberipika ang kasalukuyang restriksiyon, singil, at availability ng puwesto."
+    },
+    "buffalo-exchange/loc_8yrxypn6-transit": {
+      "value": "Tinutukoy ng tindahan ang mga kalapit na ruta ng bus 14 at 75 ng TriMet.",
+      "caveat": "Hindi pa nabeberipika ang live na iskedyul, rutang lalakarin, o accessible na pagsakay. Tingnan ang TriMet bago bumiyahe."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-furniture": {
+      "caveat": "Walang petsang paglalarawan ng pasilidad mula sa operator; hindi pa nabeberipika ang kasalukuyang availability ng mga item o ang mismong lokasyon."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-clothing": {
+      "caveat": "Walang petsang paglalarawan ng pasilidad mula sa operator; hindi pa nabeberipika ang kasalukuyang availability ng mga item o ang mismong lokasyon."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-housewares": {
+      "caveat": "Walang petsang paglalarawan ng pasilidad mula sa operator; hindi pa nabeberipika ang kasalukuyang availability ng mga item o ang mismong lokasyon."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-books": {
+      "caveat": "Walang petsang paglalarawan ng pasilidad mula sa operator; hindi pa nabeberipika ang kasalukuyang availability ng mga item o ang mismong lokasyon."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-size": {
+      "value": "Mahigit 15,000 talampakang parisukat.",
+      "caveat": "Inilalarawan ng walang-petsang pahina ng operator noong panahon ng pagbubukas ang lawak ng retail floor, hindi ang multi-service complex na 135,000 talampakang parisukat. Hindi pa nabeberipika ang kasalukuyang nasukat na lawak ng sahig."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-furniture": {
+      "caveat": "Inilalarawan ng operator ang kategoryang ito ng paninda; hindi pa nabeberipika ang mga partikular na item at kasalukuyang stock."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-clothing": {
+      "caveat": "Inilalarawan ng operator ang kategoryang ito ng paninda; hindi pa nabeberipika ang mga partikular na item at kasalukuyang stock."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-housewares": {
+      "caveat": "Inilalarawan ng operator ang kategoryang ito ng paninda; hindi pa nabeberipika ang mga partikular na item at kasalukuyang stock."
+    }
+  },
+  "vi": {
+    "savers/1191-clothing": {
+      "caveat": "Đơn vị vận hành mô tả nhóm hàng này; chưa xác minh từng mặt hàng cụ thể và hàng còn hiện tại."
+    },
+    "savers/1191-books": {
+      "caveat": "Đơn vị vận hành mô tả nhóm hàng này; chưa xác minh từng mặt hàng cụ thể và hàng còn hiện tại."
+    },
+    "savers/1191-housewares": {
+      "caveat": "Đơn vị vận hành mô tả nhóm hàng này; chưa xác minh từng mặt hàng cụ thể và hàng còn hiện tại."
+    },
+    "savers/1191-electronics": {
+      "caveat": "Đơn vị vận hành mô tả nhóm hàng này; chưa xác minh từng mặt hàng cụ thể và hàng còn hiện tại."
+    },
+    "savers/1191-parking": {
+      "value": "Thông tin cửa hàng cho biết có chỗ đỗ xe.",
+      "caveat": "Chưa xác minh tình trạng chỗ trống, phí đỗ xe hoặc chỗ đỗ xe dành cho người khuyết tật."
+    },
+    "savers/1191-accessibility": {
+      "value": "Đơn vị vận hành cho biết cửa hàng cho phép động vật hỗ trợ.",
+      "caveat": "Thông tin này không xác nhận lối vào không bậc, lối đi cho xe lăn, chỗ đỗ xe dành cho người khuyết tật hay nhà vệ sinh phù hợp."
+    },
+    "buffalo-exchange/loc_wy8eyxwx-parking": {
+      "value": "Thông tin liệt kê chỗ đỗ xe tính phí trên đường và bãi đỗ xe trả phí gần 6th Avenue and Robinson Avenue.",
+      "caveat": "Chưa xác minh mức phí hiện tại và tình trạng chỗ trống."
+    },
+    "buffalo-exchange/loc_8yrxypn6-parking": {
+      "value": "Cửa hàng liệt kê chỗ đỗ xe trên đường Hawthorne Boulevard.",
+      "caveat": "Chưa xác minh các hạn chế, phí và tình trạng chỗ trống hiện tại."
+    },
+    "buffalo-exchange/loc_8yrxypn6-transit": {
+      "value": "Cửa hàng nêu các tuyến xe buýt TriMet 14 và 75 ở gần đó.",
+      "caveat": "Chưa xác minh lịch chạy trực tiếp, tuyến đường đi bộ hay khả năng lên xe phù hợp. Hãy kiểm tra TriMet trước khi đi."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-furniture": {
+      "caveat": "Mô tả cơ sở của đơn vị vận hành không ghi ngày; chưa xác minh tình trạng hàng hóa hiện tại hoặc tại địa điểm."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-clothing": {
+      "caveat": "Mô tả cơ sở của đơn vị vận hành không ghi ngày; chưa xác minh tình trạng hàng hóa hiện tại hoặc tại địa điểm."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-housewares": {
+      "caveat": "Mô tả cơ sở của đơn vị vận hành không ghi ngày; chưa xác minh tình trạng hàng hóa hiện tại hoặc tại địa điểm."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-books": {
+      "caveat": "Mô tả cơ sở của đơn vị vận hành không ghi ngày; chưa xác minh tình trạng hàng hóa hiện tại hoặc tại địa điểm."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-size": {
+      "value": "Hơn 15,000 feet vuông.",
+      "caveat": "Trang cũ không ghi ngày của đơn vị vận hành mô tả diện tích sàn bán lẻ, không phải khu phức hợp đa dịch vụ rộng 135,000 feet vuông. Chưa xác minh diện tích sàn đo đạc hiện tại."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-furniture": {
+      "caveat": "Đơn vị vận hành mô tả nhóm hàng này; chưa xác minh từng mặt hàng cụ thể và hàng còn hiện tại."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-clothing": {
+      "caveat": "Đơn vị vận hành mô tả nhóm hàng này; chưa xác minh từng mặt hàng cụ thể và hàng còn hiện tại."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-housewares": {
+      "caveat": "Đơn vị vận hành mô tả nhóm hàng này; chưa xác minh từng mặt hàng cụ thể và hàng còn hiện tại."
+    }
+  },
+  "ar": {
+    "savers/1191-clothing": {
+      "caveat": "يذكر المشغّل فئة البضائع هذه؛ ولم يتم التحقق من المنتجات الفردية أو المخزون الحالي."
+    },
+    "savers/1191-books": {
+      "caveat": "يذكر المشغّل فئة البضائع هذه؛ ولم يتم التحقق من المنتجات الفردية أو المخزون الحالي."
+    },
+    "savers/1191-housewares": {
+      "caveat": "يذكر المشغّل فئة البضائع هذه؛ ولم يتم التحقق من المنتجات الفردية أو المخزون الحالي."
+    },
+    "savers/1191-electronics": {
+      "caveat": "يذكر المشغّل فئة البضائع هذه؛ ولم يتم التحقق من المنتجات الفردية أو المخزون الحالي."
+    },
+    "savers/1191-parking": {
+      "value": "تشير معلومات المتجر إلى توفر مواقف للسيارات.",
+      "caveat": "لم يتم التحقق من توفر المواقف أو رسومها أو وجود مواقف مهيأة لذوي الإعاقة."
+    },
+    "savers/1191-accessibility": {
+      "value": "يذكر المشغّل أن الحيوانات المساعدة مسموح بها.",
+      "caveat": "لا يؤكد ذلك توفر مدخل بلا درجات أو إمكانية وصول للكراسي المتحركة أو مواقف سيارات أو دورات مياه مهيأة."
+    },
+    "buffalo-exchange/loc_wy8eyxwx-parking": {
+      "value": "تُدرج المعلومات مواقف شارع مزودة بعدادات ومواقف مدفوعة قرب 6th Avenue and Robinson Avenue.",
+      "caveat": "لم يتم التحقق من الأسعار الحالية أو توفر المواقف."
+    },
+    "buffalo-exchange/loc_8yrxypn6-parking": {
+      "value": "يُدرج المتجر مواقف في الشارع على Hawthorne Boulevard.",
+      "caveat": "لم يتم التحقق من القيود الحالية أو الرسوم أو توفر المواقف."
+    },
+    "buffalo-exchange/loc_8yrxypn6-transit": {
+      "value": "يحدد المتجر خطي حافلات TriMet 14 و75 القريبين.",
+      "caveat": "لم يتم التحقق من الجداول المباشرة أو مسار المشي أو إمكانية الصعود المهيأ. تحقق من TriMet قبل السفر."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-furniture": {
+      "caveat": "وصف غير مؤرخ للمنشأة من المشغّل؛ لم يتم التحقق من توفر المنتجات حاليًا أو من الموقع ميدانيًا."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-clothing": {
+      "caveat": "وصف غير مؤرخ للمنشأة من المشغّل؛ لم يتم التحقق من توفر المنتجات حاليًا أو من الموقع ميدانيًا."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-housewares": {
+      "caveat": "وصف غير مؤرخ للمنشأة من المشغّل؛ لم يتم التحقق من توفر المنتجات حاليًا أو من الموقع ميدانيًا."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-books": {
+      "caveat": "وصف غير مؤرخ للمنشأة من المشغّل؛ لم يتم التحقق من توفر المنتجات حاليًا أو من الموقع ميدانيًا."
+    },
+    "goodwill/2255cbdf-30cf-e411-b4ab-0050568924e6-size": {
+      "value": "أكثر من 15,000 قدم مربع.",
+      "caveat": "تصف صفحة غير مؤرخة من فترة الافتتاح مساحة البيع بالتجزئة، وليس المجمع متعدد الخدمات الذي تبلغ مساحته 135,000 قدم مربع. ولم يتم التحقق من المساحة المقاسة حاليًا."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-furniture": {
+      "caveat": "يذكر المشغّل فئة البضائع هذه؛ ولم يتم التحقق من المنتجات الفردية أو المخزون الحالي."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-clothing": {
+      "caveat": "يذكر المشغّل فئة البضائع هذه؛ ولم يتم التحقق من المنتجات الفردية أو المخزون الحالي."
+    },
+    "goodwill/b05784fa-93d7-ec11-80fd-00505689ac90-housewares": {
+      "caveat": "يذكر المشغّل فئة البضائع هذه؛ ولم يتم التحقق من المنتجات الفردية أو المخزون الحالي."
+    }
+  }
+}

@@ -21,6 +21,10 @@ const FACTOR_KEYS: FactorKey[] = [
   "medianHomeValue", "medianHouseholdIncome", "pctBachelorsPlus", "medianGrossRent",
 ];
 
+export function hasNeighborhoodBaseline(score: GoodsScore): boolean {
+  return score.visit?.components.neighborhood.value !== null && score.catchment.tractCount > 0 && Object.values(score.factors).some(factor => typeof factor.value === 'number' && Number.isFinite(factor.value));
+}
+
 export function computeGoodsScore(demo: CatchmentDemographics): GoodsScore {
   const factors = {} as Record<FactorKey, FactorScore>;
   let total = 0;

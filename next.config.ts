@@ -1,19 +1,21 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const isDev = process.env.NODE_ENV !== "production";
 
 const ContentSecurityPolicy = [
   "default-src 'self'",
   // 'unsafe-eval' is needed only by the dev HMR runtime; production stays strict.
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' https://maps.googleapis.com https://maps.gstatic.com${isDev ? " 'unsafe-eval'" : ""}`,
   "script-src-attr 'none'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://tile.openstreetmap.org",
-  "font-src 'self' data:",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "img-src 'self' data: blob: https://maps.gstatic.com https://maps.googleapis.com https://maps.google.com https://khms0.googleapis.com https://khms1.googleapis.com https://mt0.googleapis.com https://mt1.googleapis.com https://streetviewpixels-pa.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
   // Geocoding runs in the browser (the user's own IP) against the OSM geocoders —
   // the server's datacenter IP gets rate-limited/blocked, so client-side is the
   // only path that works everywhere. These two origins must be reachable.
-  "connect-src 'self' https://photon.komoot.io https://nominatim.openstreetmap.org",
+  // Ratings are server-fetched; only the Google Maps renderer connects directly.
+  "connect-src 'self' https://photon.komoot.io https://nominatim.openstreetmap.org https://maps.googleapis.com https://maps.gstatic.com https://maps.google.com https://khms0.googleapis.com https://khms1.googleapis.com https://mt0.googleapis.com https://mt1.googleapis.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -37,17 +39,17 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  // Bundle the tract-centroid data into the functions that score stores at
-  // runtime: the client API route and the server-rendered city landing pages.
+  experimental: {globalNotFound: true},
+  // Bundle independent scores plus durable Google identity confirmations.
   outputFileTracingIncludes: {
-    // Both serve from the bundled national dataset; the live fallback (rare)
-    // reads the tract centroids. City pages also read bundled city centroids.
-    "/api/enrich": ["./data/goodwill-us.json"],
-    "/api/stores": ["./data/goodwill-us.json", "./data/tract-centroids/**/*"],
-    "/goodwill/[slug]": [
-      "./data/goodwill-us.json",
+    "/*": ["./data/stores-us.json", "./data/store-access.json", "./data/google-place-ids.json"],
+    // Public results require the same confirmed registry on every route.
+    "/api/enrich": ["./data/stores-us.json", "./data/google-place-ids.json"],
+    "/api/stores": ["./data/stores-us.json", "./data/google-place-ids.json"],
+    "/[locale]/goodwill/[slug]": [
+      "./data/stores-us.json",
       "./data/city-centroids.json",
-      "./data/tract-centroids/**/*",
+      "./data/google-place-ids.json",
     ],
   },
   async headers() {
@@ -55,4 +57,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default createNextIntlPlugin("./i18n/request.ts")(nextConfig);

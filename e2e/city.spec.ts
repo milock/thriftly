@@ -1,4 +1,7 @@
 import { test, expect } from "@playwright/test";
+import {blockStoreDetails} from "./fixtures";
+
+test.beforeEach(async ({page}) => { await blockStoreDetails(page); });
 
 // The /goodwill hub and state pages are static (no upstream API calls), so these are hermetic.
 test.describe("local SEO hierarchy", () => {
@@ -21,9 +24,9 @@ test.describe("local SEO hierarchy", () => {
   test("a precomputed city page renders its ranked stores", async ({ page }) => {
     await page.goto("/goodwill/san-diego-ca");
     await expect(
-      page.getByRole("heading", { name: /best goodwill stores in san diego, ca/i }),
+      page.getByRole("heading", { name: /goodwill stores in san diego, ca/i }),
     ).toBeVisible();
-    await expect(page.getByRole("heading", { name: /every goodwill near san diego/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /mapped goodwill locations near san diego/i })).toBeVisible();
     // Stores come from committed precomputed data, so they're in the SSR HTML.
     await expect(page.getByRole("link", { name: /directions/i }).first()).toBeVisible();
     await expect(page.getByText(/we don.t have scored goodwill data/i)).toHaveCount(0);
@@ -31,10 +34,13 @@ test.describe("local SEO hierarchy", () => {
 
   test("the landing page links into the hierarchy", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("link", { name: /all 50 states/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /browse cities/i })).toHaveAttribute("href", "/thrift-stores");
+    for (const brand of ["goodwill", "salvation-army", "savers", "buffalo-exchange"]) {
+      await expect(page.locator(`a[href="/${brand}"]`)).toBeVisible();
+    }
     await expect(page.getByRole("link", { name: /san diego, ca/i }).first()).toHaveAttribute(
       "href",
-      "/goodwill/san-diego-ca",
+      "/thrift-stores/san-diego-ca",
     );
   });
 });

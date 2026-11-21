@@ -22,7 +22,7 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
-      className={cn("flex flex-1 text-left", className)}
+      className={cn("flex flex-1 text-start", className)}
       {...props}
     />
   )
@@ -58,6 +58,7 @@ function SelectTrigger({
 
 function SelectContent({
   className,
+  listClassName,
   children,
   side = "bottom",
   sideOffset = 4,
@@ -66,6 +67,7 @@ function SelectContent({
   alignItemWithTrigger = true,
   ...props
 }: SelectPrimitive.Popup.Props &
+  { listClassName?: string } &
   Pick<
     SelectPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger"
@@ -87,7 +89,7 @@ function SelectContent({
           {...props}
         >
           <SelectScrollUpButton />
-          <SelectPrimitive.List>{children}</SelectPrimitive.List>
+          <SelectPrimitive.List className={listClassName}>{children}</SelectPrimitive.List>
           <SelectScrollDownButton />
         </SelectPrimitive.Popup>
       </SelectPrimitive.Positioner>
@@ -127,7 +129,7 @@ function SelectItem({
       </SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator
         render={
-          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
+          <span className="pointer-events-none absolute end-2 flex size-4 items-center justify-center" />
         }
       >
         <CheckIcon className="pointer-events-none" />

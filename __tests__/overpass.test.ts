@@ -6,9 +6,9 @@ const sample = {
   elements: [
     {
       type: "node", id: 1, lat: 32.84, lon: -117.27,
-      tags: { name: "Goodwill - La Jolla", "addr:street": "123 Prospect St", website: "https://x.org", phone: "555", opening_hours: "Mo-Su 09:00-21:00" },
+      tags: { name: "Goodwill - La Jolla", shop: "charity", "addr:street": "123 Prospect St", website: "https://x.org", phone: "555", opening_hours: "Mo-Su 09:00-21:00" },
     },
-    { type: "way", id: 2, center: { lat: 32.7, lon: -117.1 }, tags: { name: "Goodwill Midway", brand: "Goodwill" } },
+    { type: "way", id: 2, center: { lat: 32.7, lon: -117.1 }, tags: { name: "Goodwill Midway", brand: "Goodwill", shop: "charity" } },
     { type: "node", id: 3, lat: 32.6, lon: -117.0, tags: { name: "Some Other Shop" } },
   ],
 };
@@ -16,7 +16,7 @@ const sample = {
 describe("parseOverpass", () => {
   it("maps elements to Store objects with id/name/location", () => {
     const stores = parseOverpass(sample);
-    expect(stores).toHaveLength(3);
+    expect(stores).toHaveLength(2);
     const first = stores.find((s) => s.id === "node/1")!;
     expect(first.name).toBe("Goodwill - La Jolla");
     expect(first.location).toEqual({ lat: 32.84, lon: -117.27 });
@@ -36,7 +36,7 @@ describe("fetchGoodwillStores", () => {
   it("uses only the configured server-side provider when supplied", async () => {
     vi.stubEnv('OVERPASS_URL','https://provider.example/interpreter');
     const spy=vi.spyOn(globalThis,'fetch').mockResolvedValue(new Response(JSON.stringify(sample)));
-    expect(await fetchGoodwillStores({lat:32.84,lon:-117.27},10)).toHaveLength(3);
+    expect(await fetchGoodwillStores({lat:32.84,lon:-117.27},10)).toHaveLength(2);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy.mock.calls[0][0]).toBe('https://provider.example/interpreter');
   });
@@ -50,7 +50,7 @@ describe("fetchGoodwillStores", () => {
     // fires once per mirror and the first success wins.
     expect(spy).toHaveBeenCalled();
     expect(spy.mock.calls[0]?.[1]?.method).toBe("POST");
-    expect(stores.length).toBe(3);
+    expect(stores.length).toBe(2);
   });
 });
 

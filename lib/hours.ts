@@ -84,44 +84,41 @@ export function osmDay(date: Date): number {
   return (date.getDay() + 6) % 7;
 }
 
-export function isOpenNow(week: Week | null, now: Date = new Date()): boolean | null {
-  if (!week) return null;
-  const day = osmDay(now);
-  const mins = now.getHours() * 60 + now.getMinutes();
-  return week[day].some(([s, e]) => mins >= s && mins < e);
+/** Store-local calendar fields. Missing/invalid zones never imply a live status. */
+function localClock(now: Date, timezone?: string): { day: number; minutes: number } | null {
+  if (!timezone) return null;
+  try {
+    const parts = new Intl.DateTimeFormat("en-US", { timeZone: timezone, weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(now);
+    const value = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+    return { day: DAY_LABELS.indexOf(value("weekday")), minutes: Number(value("hour")) * 60 + Number(value("minute")) };
+  } catch { return null; }
 }
 
-function fmtTime(mins: number): string {
-  const h24 = Math.floor(mins / 60) % 24;
-  const m = mins % 60;
-  const ampm = h24 < 12 ? "AM" : "PM";
-  const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
-  return m === 0 ? `${h12} ${ampm}` : `${h12}:${String(m).padStart(2, "0")} ${ampm}`;
+export function isOpenNow(week: Week | null, now: Date = new Date(), timezone?: string): boolean | null {
+  const clock = localClock(now, timezone);
+  if (!week || !clock || clock.day < 0) return null;
+  return week[clock.day].some(([start, end]) => clock.minutes >= start && clock.minutes < end);
 }
 
-export function formatDayHours(intervals: Interval[]): string {
-  if (!intervals.length) return "Closed";
-  if (intervals.length === 1 && intervals[0][0] === 0 && intervals[0][1] === 1440) return "Open 24 hours";
-  return intervals.map(([s, e]) => `${fmtTime(s)} – ${fmtTime(e)}`).join(", ");
+type HourLabels = { closed: string; allDay: string };
+const DEFAULT_LABELS: HourLabels = { closed: "Closed", allDay: "Open 24 hours" };
+function fmtTime(mins: number, locale: string): string {
+  return new Intl.DateTimeFormat(locale, { hour: "numeric", minute: mins % 60 ? "2-digit" : undefined, timeZone: "UTC" }).format(new Date(Date.UTC(2026, 0, 5, Math.floor(mins / 60) % 24, mins % 60)));
 }
-
-export function todayHours(week: Week | null, now: Date = new Date()): string | null {
-  if (!week) return null;
-  return formatDayHours(week[osmDay(now)]);
+export function formatDayHours(intervals: Interval[], locale = "en", labels: HourLabels = DEFAULT_LABELS): string {
+  if (!intervals.length) return labels.closed;
+  if (intervals.length === 1 && intervals[0][0] === 0 && intervals[0][1] === 1440) return labels.allDay;
+  return intervals.map(([start, end]) => `${fmtTime(start, locale)} – ${fmtTime(end, locale)}`).join(", ");
 }
-
-export interface WeekRow {
-  day: string;
-  hours: string;
-  isToday: boolean;
+export function todayHours(week: Week | null, now: Date = new Date(), timezone?: string, locale = "en", labels: HourLabels = DEFAULT_LABELS): string | null {
+  const clock = localClock(now, timezone);
+  if (!week || !clock || clock.day < 0) return null;
+  return formatDayHours(week[clock.day], locale, labels);
 }
-
-export function weeklyRows(week: Week | null, now: Date = new Date()): WeekRow[] {
+export interface WeekRow { day: string; hours: string; isToday: boolean; }
+export function weeklyRows(week: Week | null, now: Date = new Date(), timezone?: string, locale = "en", labels: HourLabels = DEFAULT_LABELS): WeekRow[] {
   if (!week) return [];
-  const today = osmDay(now);
-  return week.map((intervals, i) => ({
-    day: DAY_LABELS[i],
-    hours: formatDayHours(intervals),
-    isToday: i === today,
-  }));
+  const clock = localClock(now, timezone);
+  const weekday = new Intl.DateTimeFormat(locale, { weekday: "short", timeZone: "UTC" });
+  return week.map((intervals, i) => ({ day: weekday.format(new Date(Date.UTC(2026, 0, 5 + i))), hours: formatDayHours(intervals, locale, labels), isToday: i === clock?.day }));
 }

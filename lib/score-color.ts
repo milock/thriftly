@@ -71,7 +71,7 @@ export interface ScoreTier {
 
 /** Human label for a score, so meaning is conveyed by words, not color alone. */
 export function scoreTier(score: number): ScoreTier {
-  if (score >= 82) return { label: "Prime", blurb: "Top-tier donations nearby" };
+  if (score >= 82) return { label: "Prime", blurb: "Highest neighborhood score band" };
   if (score >= 68) return { label: "Excellent", blurb: "Affluent catchment area" };
   if (score >= 52) return { label: "Strong", blurb: "Comfortable surrounding area" };
   if (score >= 36) return { label: "Fair", blurb: "Mixed-income catchment" };
@@ -86,8 +86,8 @@ export const FACTOR_LABELS: Record<string, string> = {
 };
 
 export const FACTOR_BLURB: Record<string, string> = {
-  medianHomeValue: "Pricier homes usually mean more spending money, and nicer cast-offs.",
-  medianHouseholdIncome: "Higher-income households tend to donate better stuff.",
-  pctBachelorsPlus: "More college grads tracks with brand-name, well-kept donations.",
-  medianGrossRent: "Catches wealth in renter-heavy areas that home values miss.",
+  medianHomeValue: "The median value of owner-occupied homes in the surrounding Census tracts.",
+  medianHouseholdIncome: "The median household income in the surrounding Census tracts.",
+  pctBachelorsPlus: "The share of adults with a bachelor’s degree or higher in nearby tracts.",
+  medianGrossRent: "The median gross rent in nearby Census tracts, including renter-heavy areas.",
 };

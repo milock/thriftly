@@ -1,3 +1,17 @@
+import type { Page } from "@playwright/test";
+
+/** Exercise the browser search path with mocked API responses. Coordinate
+ * links on an ordinary navigation are rendered with the real server dataset. */
+export async function gotoClientSearch(page: Page, path: string) {
+  const { pathname, search, hash } = new URL(path, "https://fixture.invalid");
+  await page.addInitScript(({ pathname, search, hash }) => {
+    if (location.pathname === pathname && !location.search) {
+      history.replaceState(null, "", pathname + search + hash);
+    }
+  }, { pathname, search, hash });
+  return page.goto(pathname);
+}
+
 // Deterministic API fixtures so e2e tests never depend on live Overpass/Census.
 function factor(value: number, normalized: number, weight: number) {
   return { value, normalized, weight, contribution: Math.round(normalized * weight * 10) / 10 };
@@ -15,6 +29,7 @@ function makeStore(
   return {
     id,
     name: "Goodwill",
+    googlePlaceId: `ChIJ_thriftly_fixture_${id.replace("node/", "")}`,
     locality,
     street,
     region: "CA",
@@ -49,3 +64,13 @@ export const storesResponse = {
 export const photonReverseResponse = {
   features: [{ properties: { city: "San Diego", state: "California", countrycode: "US" } }],
 };
+
+export const firstStore = storesResponse.stores[0];
+
+/** The paid details endpoint was removed. Any request to it is a regression. */
+export async function blockStoreDetails(page: Page, onRequest?: (url: string) => void) {
+  await page.route("**/api/store-details**", route => {
+    onRequest?.(route.request().url());
+    return route.fulfill({ status: 404, json: { error: "not_found" } });
+  });
+}

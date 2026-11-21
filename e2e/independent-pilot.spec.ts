@@ -1,0 +1,72 @@
+import {expect,test} from '@playwright/test';
+import {blockStoreDetails} from './fixtures';
+import {googleMapsBootstrap} from './google-maps-fixture';
+
+const path='/independent-thrift-stores/san-diego-ca';
+const search='/search?lat=32.7157&lon=-117.1611&radius=15&label=San+Diego&brands=independent';
+test.beforeEach(async({page})=>{
+ await page.route(googleMapsBootstrap,route=>route.abort('failed'));
+ await page.route('**/api/enrich**',route=>route.fulfill({json:{enriched:{}}}));
+ await blockStoreDetails(page);
+});
+test('pilot shows source-verified shops with correction and visit links',async({page})=>{
+ await page.setViewportSize({width:320,height:740});
+ await page.goto(path);
+ await expect(page.getByRole('heading',{level:1})).toHaveText('Independent thrift stores in San Diego, CA');
+ const firstTitle=await page.getByRole('heading',{level:3}).first().boundingBox();
+ expect(firstTitle!.y+firstTitle!.height).toBeLessThanOrEqual(740);
+ const sources=page.getByRole('button',{name:'Listing source and verification',exact:true});
+ await expect.poll(() => sources.count()).toBeGreaterThanOrEqual(3);
+ const published = await sources.count();
+ await sources.first().click();
+ await expect(page.getByText('Verified online: 11/05/2026')).toBeVisible();
+ await page.keyboard.press('Escape');
+ await expect(page.getByRole('link',{name:'Website',exact:true})).toHaveCount(published);
+ await expect(page.getByRole('button',{name:/report a problem/i})).toHaveCount(published);
+ await expect(page.getByRole('link',{name:'Directions',exact:true})).toHaveCount(published);
+ await expect(page.getByText(/Oldest source update/)).toHaveCount(0);
+ await page.getByRole('button',{name:'Refresh',exact:true}).click();
+ await expect(sources).toHaveCount(published);
+ await expect(page.getByText(/Oldest source update/)).toHaveCount(0);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
+test('independent and chain choices combine and survive reload',async({page,isMobile})=>{
+ await page.goto(search);
+ const stores = page.locator('[data-store-card]');
+ await expect(stores.filter({hasText:'Humble Heart'})).toBeVisible();
+ const independentCount = await stores.count();
+ expect(independentCount).toBeGreaterThanOrEqual(3);
+ await page.getByRole('button',{name:/^filters/i}).click();
+ await expect(page.getByRole('checkbox',{name:'Independent stores',exact:true})).toBeChecked();
+ await page.getByRole('checkbox',{name:'Goodwill',exact:true}).check();
+ if(isMobile)await page.getByRole('button',{name:/show .* stores/i}).click();
+ await expect.poll(()=>stores.count()).toBeGreaterThan(independentCount);
+ await page.reload();
+ await expect.poll(()=>stores.count()).toBeGreaterThan(independentCount);
+ await page.getByRole('button',{name:/^filters/i}).click();
+ await page.getByRole('button',{name:'Goodwill only',exact:true}).click();
+ if(isMobile)await page.getByRole('button',{name:/show .* stores/i}).click();
+ await expect(page.locator('[data-store-card]').filter({hasText:'Humble Heart'})).toHaveCount(0);
+ await expect(page).toHaveURL(/brands=goodwill/);
+});
+test('independent search retains departments and directions when the map fails',async({page,isMobile})=>{
+ await page.goto(search+'&departments=furniture');
+ const stores = page.locator('[data-store-card]');
+ await expect(stores.filter({hasText:"Father Joe's Villages"})).toBeVisible();
+ await expect(stores.filter({hasText:'Home Start'})).toBeVisible();
+ await expect(stores.filter({hasText:'Humble Heart'})).toHaveCount(0);
+ if(isMobile)await page.getByRole('tab',{name:'Map',exact:true}).click();
+ await expect(page.getByText('The map is temporarily unavailable. Store listings and directions are still available.')).toBeVisible();
+ if(isMobile)await page.getByRole('tab',{name:'List',exact:true}).click();
+ const card=page.locator('[data-store-card]').first();
+ await expect(card.locator('[data-store-address]')).not.toBeEmpty();
+ await card.locator('[data-store-toggle]').click();
+ await expect(card.getByRole('link',{name:'Directions',exact:true})).toHaveAttribute('href',/^https:\/\/www\.google\.com\/maps\/dir\//);
+});
+test('city navigation exposes the pilot and other cities do not create empty directories',async({page})=>{
+ await page.goto('/thrift-stores/san-diego-ca');
+ await page.getByRole('navigation',{name:'Browse store brands in San Diego'}).getByRole('link',{name:/Independent stores/}).click();
+ await expect(page).toHaveURL(new RegExp(path));
+ const response=await page.goto('/independent-thrift-stores/new-york-ny');
+ expect(response?.status()).toBe(404);
+});

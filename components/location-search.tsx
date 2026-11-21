@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
+
+import { useEffect, useRef, useState, useId } from "react";
 import { Search, LocateFixed, LoaderCircle, MapPin } from "lucide-react";
 import type { LatLng } from "@/lib/types";
 import { suggestPlaces, geocodeAddress, type PlaceSuggestion } from "@/lib/geocode-client";
@@ -17,6 +19,9 @@ interface Props {
 }
 
 export function LocationSearch({ onLocate, bias, className }: Props) {
+  const t = useTranslations("ui");
+  const listId = useId();
+  const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
@@ -57,6 +62,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
   }, [query]);
 
   function choose(s: Suggestion) {
+    setError(null);
     skipNext.current = true;
     setQuery(s.label);
     setSuggestions([]);
@@ -68,9 +74,13 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
   async function geocodeRaw() {
     if (!query.trim()) return;
     setBusy(true);
+    setError(null);
     try {
       const location = await geocodeAddress(query, bias);
       if (location) onLocate(location);
+      else setError(t("geocodeError"));
+    } catch {
+      setError(t("geocodeError"));
     } finally {
       setBusy(false);
       setOpen(false);
@@ -84,6 +94,7 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
   }
 
   function onKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Escape") { setOpen(false); return; }
     if (!open || suggestions.length === 0) return;
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -97,25 +108,27 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
   }
 
   function useMyLocation() {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) { setError(t("locationError")); return; }
+    setError(null);
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLocating(false);
         onLocate({ lat: pos.coords.latitude, lon: pos.coords.longitude });
       },
-      () => setLocating(false),
+      () => { setLocating(false); setError(t("locationError")); },
       { enableHighAccuracy: true, timeout: 10000 },
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className={`flex items-center gap-2 ${className ?? ""}`}>
-      <div className="relative flex-1">
+    <form onSubmit={onSubmit} className={`relative flex items-center gap-2 ${className ?? ""}`}>
+      <div className="min-w-0 flex-1">
+        <div className="relative">
         {loading ? (
-          <LoaderCircle className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
+          <LoaderCircle className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
         ) : (
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         )}
         <Input
           value={query}
@@ -130,33 +143,34 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
           onKeyDown={onKeyDown}
           onFocus={() => query.trim().length >= 3 && setOpen(true)}
           onBlur={() => setTimeout(() => setOpen(false), 120)}
-          placeholder="ZIP code or address"
-          aria-label="Search by ZIP code or address"
+          placeholder={t("zip")}
+          aria-label={t("searchAddress")}
           role="combobox"
           aria-expanded={open}
           aria-autocomplete="list"
+          aria-controls={open ? listId : undefined}
+          aria-activedescendant={open && active >= 0 ? `${listId}-${active}` : undefined}
           autoComplete="off"
-          className="h-10 pl-9 pr-3"
+          className="h-11 ps-9 pe-3 text-base"
         />
+        </div>
         {open && query.trim().length >= 3 && (
-          <ul className="animate-in fade-in slide-in-from-top-1 absolute left-0 right-0 top-[calc(100%+6px)] z-50 overflow-hidden rounded-xl border border-border bg-popover py-1 shadow-lg duration-150">
+          <ul id={listId} role="listbox" aria-label={t("searchAddress")} className="animate-in fade-in slide-in-from-top-1 absolute inset-x-0 top-[calc(100%+6px)] z-50 max-h-[min(20rem,50dvh)] overflow-y-auto rounded-xl border border-border bg-popover py-1 shadow-lg duration-150">
             {suggestions.length > 0 ? (
               suggestions.map((s, i) => (
-                <li key={s.id}>
-                  <button
-                    type="button"
+                <li key={s.id} id={`${listId}-${i}`} role="option" aria-selected={i === active}
                     onMouseDown={(e) => {
                       e.preventDefault();
-                      choose(s);
+
                     }}
+                    onClick={() => choose(s)}
                     onMouseEnter={() => setActive(i)}
-                    className={`flex w-full items-center gap-2 px-3 py-2 text-left text-[13px] transition-colors ${
+                    className={`flex min-h-11 w-full cursor-pointer items-center gap-2 px-3 py-2 text-start text-[13px] transition-colors ${
                       i === active ? "bg-accent" : ""
                     }`}
                   >
                     <MapPin className="size-3.5 shrink-0 text-muted-foreground" />
-                    <span className="truncate">{s.label}</span>
-                  </button>
+                    <span className="min-w-0 break-words leading-relaxed">{s.label}</span>
                 </li>
               ))
             ) : (
@@ -164,12 +178,12 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
                 {loading ? (
                   <>
                     <LoaderCircle className="size-3.5 shrink-0 animate-spin" />
-                    Searching…
+                    {t("searching")}
                   </>
                 ) : (
                   <>
                     <MapPin className="size-3.5 shrink-0" />
-                    No matches — try a ZIP or “City, ST”
+                    {t("noMatches")}
                   </>
                 )}
               </li>
@@ -177,8 +191,8 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
           </ul>
         )}
       </div>
-      <Button type="submit" disabled={busy} className="h-10 shrink-0">
-        {busy ? <LoaderCircle className="size-4 animate-spin" /> : "Search"}
+      <Button type="submit" aria-label={t("search")} disabled={busy} className="size-11 shrink-0 p-0 sm:w-auto sm:px-4">
+        {busy ? <LoaderCircle className="size-4 animate-spin" /> : <><Search className="size-4 sm:hidden" /><span className="hidden sm:inline">{t("search")}</span></>}
       </Button>
       <Button
         type="button"
@@ -186,12 +200,13 @@ export function LocationSearch({ onLocate, bias, className }: Props) {
         size="icon"
         onClick={useMyLocation}
         disabled={locating}
-        title="Use my location"
-        aria-label="Use my location"
-        className="size-10 shrink-0"
+        title={t("myLocation")}
+        aria-label={t("myLocation")}
+        className="size-11 shrink-0"
       >
         {locating ? <LoaderCircle className="size-4 animate-spin" /> : <LocateFixed className="size-4" />}
       </Button>
+      {error && <p role="alert" className="absolute inset-x-0 top-full z-50 mt-1 rounded-md border border-border bg-popover p-3 text-sm text-popover-foreground shadow-md">{error}</p>}
     </form>
   );
 }

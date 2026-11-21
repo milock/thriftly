@@ -57,7 +57,8 @@ it('serves ordinary searches from the dataset without upstream calls', async () 
   const data = await r.json();
   expect(r.status).toBe(200);
   expect(data.stores.length).toBeGreaterThan(0);
-  expect(data.generatedAt).toBeTruthy();
+  // Mixed sources include independently reviewed shops with no publisher date.
+  expect(data.generatedAt).toBeNull();
   expect(fetch).not.toHaveBeenCalled();
 });
 it('accepts the target Host behind a reverse proxy', async () => {

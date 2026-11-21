@@ -1,0 +1,74 @@
+{
+  "checkedAt": "2026-11-06T03:14:50Z",
+  "method": "Manual operator-website review for public retail, address, and local operation; address-range geocoding by U.S. Census. No visit, phone call, stock check or rooftop survey.",
+  "stores": [
+    {
+      "id": "independent/humble-heart-ocean-beach",
+      "sourceUrls": [
+        "https://www.theheartob.com/locations",
+        "https://www.theheartob.com/about-us"
+      ],
+      "retailConfirmed": true,
+      "addressConfirmed": true,
+      "localOperatorConfirmed": true,
+      "coordinateSource": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=4873+Newport+Ave%2C+San+Diego%2C+CA+92107&benchmark=Public_AR_Current&format=json",
+      "matchedAddress": "4873 NEWPORT AVE, SAN DIEGO, CA, 92107"
+    },
+    {
+      "id": "independent/home-start",
+      "sourceUrls": [
+        "https://home-start.org/home-start-thrift-boutique-store/",
+        "https://home-start.org/about-home-start/",
+        "https://home-start.org/our-locations/"
+      ],
+      "retailConfirmed": true,
+      "addressConfirmed": true,
+      "localOperatorConfirmed": true,
+      "coordinateSource": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=3611+Adams+Ave%2C+San+Diego%2C+CA+92116&benchmark=Public_AR_Current&format=json",
+      "matchedAddress": "3611 ADAMS AVE, SAN DIEGO, CA, 92116"
+    },
+    {
+      "id": "independent/safari-seconds",
+      "sourceUrls": [
+        "https://www.alliance-for-africa.org/safari-seconds-thrift-store",
+        "https://www.alliance-for-africa.org/about"
+      ],
+      "retailConfirmed": true,
+      "addressConfirmed": true,
+      "localOperatorConfirmed": true,
+      "coordinateSource": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=6533+El+Cajon+Blvd%2C+San+Diego%2C+CA+92115&benchmark=Public_AR_Current&format=json",
+      "matchedAddress": "6533 EL CAJON BLVD, SAN DIEGO, CA, 92115"
+    },
+    {
+      "id": "independent/father-joes-hillcrest",
+      "sourceUrls": [
+        "https://my.neighbor.org/take-action/retail-shop/thrift-store-locations/"
+      ],
+      "retailConfirmed": true,
+      "addressConfirmed": true,
+      "localOperatorConfirmed": true,
+      "coordinateSource": "https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=1457+University+Ave%2C+San+Diego%2C+CA+92103&benchmark=Public_AR_Current&format=json",
+      "matchedAddress": "1457 UNIVERSITY AVE, SAN DIEGO, CA, 92103"
+    }
+  ],
+  "excluded": [
+    {
+      "name": "Rock Thrift Store",
+      "reason": "Explicit operator closure notice, final operating day July 5, 2024",
+      "sourceUrl": "https://www.sdrock.com/thriftstatement"
+    },
+    {
+      "name": "Auntie Helen's",
+      "reason": "Closure report; no new operator confirmation",
+      "sourceUrl": "https://www.kpbs.org/news/racial-justice-social-equity/2023/12/15/auntie-helens-closing-after-36-years-serving-san-diegans-with-hiv-aids"
+    },
+    {
+      "name": "Honest Thrift Studio",
+      "reason": "Accessible first-party retail/address confirmation unavailable"
+    },
+    {
+      "name": "Assistance League of Greater San Diego",
+      "reason": "Held outside strict independent pilot because national chapter affiliation needs separate classification"
+    }
+  ]
+}

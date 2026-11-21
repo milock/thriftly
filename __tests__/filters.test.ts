@@ -5,7 +5,7 @@ import type { ScoredStore } from "@/lib/types";
 function store(id: string, total: number, distanceMiles: number): ScoredStore {
   return {
     id, name: id, location: { lat: 0, lon: 0 }, distanceMiles,
-    score: { total, factors: {} as ScoredStore["score"]["factors"], catchment: { tractCount: 0, population: 0 } },
+    score: { total, factors: {} as ScoredStore["score"]["factors"], catchment: { tractCount: 1, population: 100 } },
   };
 }
 
@@ -21,4 +21,11 @@ describe("applyFilters", () => {
     const out = applyFilters(stores, { ...DEFAULT_FILTERS, radiusMiles: 50, sort: "distance" });
     expect(out.map((s) => s.id)).toEqual(["b", "a", "c"]);
   });
+});
+
+
+it("open-now filter includes only stores with confirmed local hours", () => {
+  const known = { ...store("known", 80, 2), openingHours: "24/7", timezone: "America/Los_Angeles" };
+  const unknown = { ...store("unknown", 80, 2), openingHours: "24/7" };
+  expect(applyFilters([known, unknown], { ...DEFAULT_FILTERS, openNowOnly: true }).map((s) => s.id)).toEqual(["known"]);
 });
