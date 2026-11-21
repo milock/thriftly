@@ -6,6 +6,7 @@ import { computeVisitScore } from "@/lib/visit-score";
 import { hasNeighborhoodBaseline } from "@/lib/scoring";
 import { matchesBrands } from "@/lib/brands";
 import { confirmedPlaceIds, parseGooglePlaceRegistry } from "@/lib/google-place-registry";
+import { corroboratedStoreIds, parseCorroborationRegistry } from "@/lib/osm-corroboration";
 
 // The bundled, pre-scored national store dataset (built by the weekly job from
 // classified source snapshots). Read once and memoized. This is the primary data source:
@@ -43,9 +44,15 @@ function nationalDataset(): ScoredStore[] {
   let registry = parseGooglePlaceRegistry(null);
   try { registry = parseGooglePlaceRegistry(JSON.parse(readFileSync(join(process.cwd(), 'data', 'google-place-ids.json'), 'utf8'))); } catch { /* No confirmed identities means no public stores. */ }
   const ids = confirmedPlaceIds(dataset().stores, registry);
-  publishedCache = dataset().stores.flatMap(store => {
+  // Free second gate: an unchanged listing that an OpenStreetMap shop of the same
+  // brand corroborates (lib/osm-corroboration.ts). Missing file means Google only.
+  let corroborations = parseCorroborationRegistry(null);
+  try { corroborations = parseCorroborationRegistry(JSON.parse(readFileSync(join(process.cwd(), 'data', 'store-corroborations.json'), 'utf8'))); } catch { /* Google-confirmed listings only. */ }
+  const corroborated = corroboratedStoreIds(dataset().stores, corroborations);
+  publishedCache = dataset().stores.flatMap((store): ScoredStore[] => {
     const googlePlaceId = ids.get(store.id);
-    return googlePlaceId ? [{...store, googlePlaceId}] : [];
+    if (googlePlaceId) return [{...store, googlePlaceId, identityBasis: 'google' as const}];
+    return corroborated.has(store.id) ? [{...store, identityBasis: 'openstreetmap' as const}] : [];
   });
   return publishedCache;
 }

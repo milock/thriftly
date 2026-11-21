@@ -10,7 +10,6 @@ import { parseStoreFilterIds } from "@/lib/brands";
 import { MapBoundary } from "@/components/map/map-boundary";
 import { useStores } from "@/lib/use-stores";
 import type {InitialSearchQuery} from "@/lib/search-query";
-import { useLiveStores, LiveStoresContext } from "@/lib/use-live-stores";
 import { formatDistance } from "@/lib/format";
 import {storeOpenNow} from "@/lib/store-status";
 import { applyFilters, parseDepartments, DEFAULT_FILTERS, type Filters } from "@/lib/filters";
@@ -78,9 +77,7 @@ export default function SearchPage({initialStores = [], initialQuery = null, ini
     const t = setTimeout(() => setCaretHint(false), 2600);
     return () => clearTimeout(t);
   }, []);
-  const { stores: registryStores, loading, error, nearest, search } = useStores({stores: initialStores, query: initialQuery, nearest: initialNearest});
-  const live = useLiveStores(registryStores, selectedId, center, filters.radiusMiles);
-  const stores = live.stores;
+  const { stores, loading, error, nearest, search } = useStores({stores: initialStores, query: initialQuery, nearest: initialNearest});
   const isDesktop = useIsDesktop();
   const visible = useMemo(() => applyFilters(stores, filters), [stores, filters]);
   const canonicalSelectedId = resolveSelectedStoreId(visible, selectedId);
@@ -215,7 +212,7 @@ export default function SearchPage({initialStores = [], initialQuery = null, ini
   );
 
   return (
-    <LiveStoresContext.Provider value={live.context}>
+    <>
     <div className="flex h-dvh flex-col">
       <header className="search-header relative z-30 shrink-0 border-b bg-background">
         <div className="search-header-row site-gutter flex items-center justify-between gap-2 py-2">
@@ -339,6 +336,6 @@ export default function SearchPage({initialStores = [], initialQuery = null, ini
       )}
       </main>
     </div>
-    </LiveStoresContext.Provider>
+    </>
   );
 }
