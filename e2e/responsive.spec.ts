@@ -1,4 +1,4 @@
-import {test, expect} from '@playwright/test';
+import {test, expect} from './test';
 import {gotoClientSearch, blockStoreDetails, storesResponse, photonReverseResponse} from './fixtures';
 import {mockGoogleMaps} from './google-maps-fixture';
 import {computeVisitScore} from '../lib/visit-score';

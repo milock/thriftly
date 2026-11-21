@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from './test';
 
 const path = "/search?lat=32.84&lon=-117.27&radius=8&brands=goodwill&label=San%20Diego";
 

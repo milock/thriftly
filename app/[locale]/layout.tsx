@@ -1,4 +1,5 @@
 import type {Metadata, Viewport} from 'next';
+import {HydrationMarker} from "@/components/hydration-marker";
 import {notFound} from 'next/navigation';
 import {NextIntlClientProvider} from 'next-intl';
 import {getMessages, getTranslations, setRequestLocale} from 'next-intl/server';
@@ -48,6 +49,7 @@ export default async function LocaleLayout({children,params}:{children:React.Rea
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>{children}</ThemeProvider>
       </NextIntlClientProvider>
       <Analytics/>
+      <HydrationMarker/>
     </body>
   </html>;
 }
