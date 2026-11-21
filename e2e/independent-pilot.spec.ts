@@ -11,8 +11,10 @@ test.beforeEach(async({page})=>{
 });
 test('pilot shows source-verified shops with correction and visit links',async({page})=>{
  await page.setViewportSize({width:320,height:740});
+ page.on('console',m=>{ if(m.type()==='error'||m.type()==='warning') console.log(`[diag ${test.info().project.name} pilot] console.${m.type()}: ${m.text().slice(0,600)}`); });
  await page.goto(path);
  await expect(page.getByRole('heading',{level:1})).toHaveText('Independent thrift stores in San Diego, CA');
+ console.log(`[diag ${test.info().project.name} pilot] h3 count=${await page.getByRole('heading',{level:3}).count()} all h3=${await page.locator('h3').count()} canonicals=${await page.locator('link[rel="canonical"]').count()}`);
  const firstTitle=await page.getByRole('heading',{level:3}).first().boundingBox();
  expect(firstTitle!.y+firstTitle!.height).toBeLessThanOrEqual(740);
  const sources=page.getByRole('button',{name:'Listing source and verification',exact:true});

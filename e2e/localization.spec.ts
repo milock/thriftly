@@ -36,8 +36,10 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
  await blockStoreDetails(fresh);
  await fresh.route('**/api/enrich**',r=>r.fulfill({json:{enriched:{}}}));
  const freshErrors:string[]=[]; fresh.on('pageerror',e=>freshErrors.push(e.message));
+ fresh.on('console',m=>{ if(m.type()==='error'||m.type()==='warning') console.log(`[diag ${test.info().project.name} ${locale}] console.${m.type()}: ${m.text().slice(0,600)}`); });
  await fresh.goto(prefix+'/thrift-stores/los-angeles-ca');
  await fresh.waitForLoadState('networkidle');
+ console.log(`[diag ${test.info().project.name} ${locale}] canonicals after load: ${await fresh.locator('link[rel="canonical"]').count()}`);
  await expect(fresh.locator('h1')).toBeVisible();
  const numberingSystem = locale === "ar" ? "arab" : "latn";
  const runtimeNumbers = await fresh.evaluate(({locale, numberingSystem}) => ({explicit: new Intl.NumberFormat(locale,{numberingSystem}).format(12.3), default: new Intl.NumberFormat(locale).format(12.3)}), {locale,numberingSystem});
@@ -47,6 +49,7 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
  await fresh.locator(`nav a[href="${prefix}/buffalo-exchange/los-angeles-ca"]`).click();
  await expect(fresh).toHaveURL(prefix+'/buffalo-exchange/los-angeles-ca');
  await expect(fresh.locator('h1')).toContainText('Buffalo Exchange');
+ console.log(`[diag ${test.info().project.name} ${locale}] canonicals after nav: ${JSON.stringify(await fresh.locator('link[rel="canonical"]').evaluateAll(ls=>ls.map(l=>[l.getAttribute('href'),l.parentElement?.tagName,Array.from(l.parentElement?.children??[]).indexOf(l)])))}`);
  await expect(fresh.locator('link[rel="canonical"]')).toHaveAttribute('href',`https://www.thriftly.xyz${prefix}/buffalo-exchange/los-angeles-ca`);
  await fresh.waitForLoadState('networkidle');
  expect(freshErrors).toEqual([]);
