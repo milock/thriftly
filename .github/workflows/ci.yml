@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           cache: npm
@@ -21,5 +21,36 @@ jobs:
       - run: npm test
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:e2e
-      - run: npm run audit:seo -- --strict
+      - name: Audit static and live dynamic SEO
+        shell: bash
+        run: |
+          seo_server_log="$RUNNER_TEMP/thriftly-seo-server.log"
+          GOOGLE_PLACES_API_KEY='' node scripts/test-server.mjs >"$seo_server_log" 2>&1 &
+          seo_server_pid=$!
+          trap 'kill "$seo_server_pid" 2>/dev/null || true; wait "$seo_server_pid" 2>/dev/null || true' EXIT
+          seo_server_ready=0
+          for seo_attempt in {1..60}; do
+            if curl --fail --silent --cacert .cache/test-tls/cert.pem --output /dev/null https://127.0.0.1:3107/search; then
+              seo_server_ready=1
+              break
+            fi
+            if ! kill -0 "$seo_server_pid" 2>/dev/null; then
+              cat "$seo_server_log"
+              exit 1
+            fi
+            sleep 1
+          done
+          if [ "$seo_server_ready" != 1 ]; then
+            cat "$seo_server_log"
+            exit 1
+          fi
+          NODE_EXTRA_CA_CERTS=.cache/test-tls/cert.pem SEO_AUDIT_ORIGIN=https://127.0.0.1:3107 npm run audit:seo -- --strict
+      - name: Retain SEO audit evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: seo-audit-${{ github.run_id }}
+          path: outputs/seo-build-audit.json
+          if-no-files-found: ignore
+          retention-days: 7
       - run: npm run typecheck

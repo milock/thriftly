@@ -4,7 +4,7 @@ import {renderToStaticMarkup} from 'react-dom/server';
 import {JsonLd} from '@/components/json-ld';
 import {loadStateCentroids} from '@/lib/gazetteer';
 import {POST} from '@/app/api/enrich/route';
-import {readFileSync} from 'node:fs';
+import {allBundledStores} from '@/lib/locate';
 
 afterEach(() => vi.restoreAllMocks());
 it('JSON-LD cannot escape its script element', () => {
@@ -17,7 +17,7 @@ it('rejects path traversal from geocoder state metadata', () => {
   expect(loadStateCentroids('../../package')).toEqual([]);
 });
 it('deduplicates known store coordinates and calls only Photon', async () => {
-  const point = JSON.parse(readFileSync('data/goodwill-us.json','utf8')).stores[0].location;
+  const point = allBundledStores()[0].location;
   const fetch = vi.spyOn(globalThis,'fetch').mockResolvedValue(new Response(JSON.stringify({features:[{properties:{city:'Test',countrycode:'US'}}]})));
   const response = await POST(new Request('http://localhost/api/enrich',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({points:[point,point]})}));
   expect(response.status).toBe(200);

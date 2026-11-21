@@ -4,19 +4,16 @@
   "formFor": "Report for {store}",
   "intro": "Your report is private and goes to a review queue. Reports do not directly change the public listing.",
   "reason": "What needs correcting?",
-  "visited": "Date visited (optional)",
-  "visitedRequired": "Date visited (required)",
   "details": "Details (optional)",
   "detailsRequired": "Details (at least 10 characters)",
   "detailsHint": "Share what you noticed and a source or address, if available.",
-  "departmentsHint": "Which departments did you see? Mention anything that was missing or listed incorrectly.",
   "privacy": "No email required. Leave out personal information. Up to 1,500 characters.",
   "submit": "Send for review",
   "sending": "Sending…",
   "cancel": "Close",
   "success": "Your report was saved for review. The public listing has not changed. Thank you.",
   "rateLimited": "You have reached the report limit. Please try again in an hour.",
-  "checkDetails": "Check the details and visit date, then try again.",
+  "checkDetails": "Check the details, then try again.",
   "failed": "We could not confirm your report was saved. Please try again. Retrying the same report will not create a duplicate.",
   "reasons": {
     "wrong-location": "Wrong location",
@@ -24,12 +21,6 @@
     "closed": "Closed or no longer operating",
     "duplicate": "Duplicate listing",
     "incorrect-hours": "Incorrect hours",
-    "departments": "Departments seen during a visit",
-    "other": "Another practical correction",
-    "shopper-review": "Rate your visit"
-  },
-  "rating": "Your store rating",
-  "chooseRating": "Choose a rating",
-  "ratingOption": "{value} out of 5",
-  "confirmVisit": "I visited this store myself, and this rating reflects my own experience."
+    "other": "Another practical correction"
+  }
 }

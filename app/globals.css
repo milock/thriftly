@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./vendor/shadcn.css";
-@import "leaflet/dist/leaflet.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -163,46 +162,6 @@
   border: 2px solid var(--background);
 }
 
-/* Leaflet: make tiles, controls, and popups match the design system. */
-.leaflet-container {
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
-  background: var(--muted);
-  /* Contain Leaflet's high internal z-indexes so popovers/sheets layer above the map. */
-  isolation: isolate;
-}
-.leaflet-control-zoom a {
-  border-radius: 8px !important;
-  color: var(--foreground) !important;
-  background: var(--card) !important;
-  border-color: var(--border) !important;
-}
-.leaflet-bar {
-  border: none !important;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 1px 3px rgb(0 0 0 / 0.1) !important;
-}
-.leaflet-popup-content-wrapper {
-  border-radius: 14px !important;
-  box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.25) !important;
-  padding: 0 !important;
-  border: 1px solid var(--border);
-  background: var(--card);
-}
-.leaflet-popup-content {
-  margin: 0 !important;
-  width: auto !important;
-}
-.leaflet-popup-tip {
-  background: var(--card) !important;
-}
-.leaflet-popup-close-button {
-  display: none !important;
-}
-.leaflet-control-attribution {
-  background: color-mix(in oklch, var(--card) 80%, transparent) !important;
-  border-radius: 8px 0 0 0 !important;
-  font-size: 10px !important;
-}
-
 /* Subtle "meteors": thin streaks that drift diagonally across a hero surface. */
 .meteor {
   position: absolute;
@@ -272,11 +231,6 @@
   }
 }
 
-/* Keep the key-free basemap readable in dark mode without recoloring markers. */
-.dark .thriftly-basemap {
-  filter: invert(1) hue-rotate(180deg) brightness(0.8) saturate(0.7);
-}
-
 /* Shared interaction floor for links and native controls. */
 :where(a, button, select, input):focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
 input { caret-color: var(--brand); }
@@ -298,7 +252,7 @@ p { text-wrap: pretty; }
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC7, U+10EC9-10EEE, U+10EF0-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
 }
 
-html[lang="ar"], html[lang="ar"] .leaflet-container { font-family: "Noto Sans Arabic", var(--font-geist-sans), sans-serif; }
+html[lang="ar"] { font-family: "Noto Sans Arabic", var(--font-geist-sans), sans-serif; }
 html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3 { letter-spacing: 0; }
 /* Common phone gutters protect controls from landscape cutouts. */
 .site-gutter {
@@ -322,5 +276,3 @@ header { padding-top: env(safe-area-inset-top); }
   .search-result-summary p + p { margin: 0; flex-shrink: 0; }
   [data-mobile-toolbar] { padding-top: .25rem; padding-bottom: max(.25rem, env(safe-area-inset-bottom)); }
 }
-@media (max-width: 1023px) { .leaflet-control-zoom a { width: 44px !important; height: 44px !important; line-height: 44px !important; } }
-@media (pointer: coarse) { .leaflet-control-zoom a { width: 44px !important; height: 44px !important; line-height: 44px !important; } }

@@ -1,25 +1,25 @@
 /**
  * A transparent heuristic, not an inventory prediction or calibrated model.
- * Only moderated, first-party Thriftly reviews may enter this score. Google
- * Places ratings are intentionally excluded from the input contract.
+ * Live Google aggregate ratings are an attenuated signal,
+ * never a prediction of inventory or a first-party shopper rating.
  */
-export interface OwnedShopperReviews {
-  source: "thriftly";
-  shopperRating: number | null;
-  shopperReviewCount: number | null;
+export interface GoogleRatings {
+  source: "google";
+  rating: number | null;
+  ratingCount: number | null;
 }
 
 export interface VisitScoreInput {
   /** Pass null when the underlying Census baseline is unavailable. */
   neighborhood: number | null;
-  shopperReviews: OwnedShopperReviews | null;
+  googleRatings: GoogleRatings | null;
   /** EPA National Walkability Index, 1–20, 2021 release. */
   walkability: number | null;
 }
 
 export const VISIT_SCORE_MODEL = {
-  version: "visit-v1-owned-reviews",
-  maxReviewWeight: 0.30,
+  version: "visit-v2-google-live",
+  maxReviewWeight: 0.50,
   maxWalkabilityWeight: 0.05,
   /** Heuristic attenuation constant, not a statistical confidence threshold. */
   reviewHalfWeightCount: 50,
@@ -37,19 +37,19 @@ export type VisitScoreCoverage =
   | "no-neighborhood"
   | "neighborhood-only"
   | "neighborhood-and-access"
-  | "neighborhood-and-reviews"
+  | "neighborhood-and-ratings"
   | "all-signals";
 
 export interface VisitScore {
   model: typeof VISIT_SCORE_MODEL.version;
   total: number | null;
-  components: Record<"neighborhood" | "shopperReviews" | "walkability", VisitScoreComponent>;
+  components: Record<"neighborhood" | "googleRatings" | "walkability", VisitScoreComponent>;
   coverage: {
     kind: VisitScoreCoverage;
     availableSignals: number;
-    shopperReviewCount: number | null;
+    googleRatingCount: number | null;
     /** Evidence attenuation only, not confidence or probability of correctness. */
-    reviewEvidenceWeight: number;
+    ratingEvidenceWeight: number;
   };
 }
 
@@ -60,15 +60,15 @@ function inRange(value: number | null, min: number, max: number): value is numbe
 export function computeVisitScore(input: VisitScoreInput): VisitScore {
   const neighborhood = inRange(input.neighborhood, 0, 100) ? input.neighborhood : null;
   const access = inRange(input.walkability, 1, 20) ? input.walkability : null;
-  const owned = input.shopperReviews;
-  // Runtime validation also rejects non-owned payloads from untyped callers.
-  const validReview = owned?.source === "thriftly"
-    && inRange(owned.shopperRating, 1, 5)
-    && typeof owned.shopperReviewCount === "number"
-    && Number.isSafeInteger(owned.shopperReviewCount)
-    && owned.shopperReviewCount > 0;
-  const rating = validReview ? owned!.shopperRating : null;
-  const count = validReview ? owned!.shopperReviewCount : null;
+  const google = input.googleRatings;
+  // Runtime validation also rejects other-provider payloads from untyped callers.
+  const validReview = google?.source === "google"
+    && inRange(google.rating, 1, 5)
+    && typeof google.ratingCount === "number"
+    && Number.isSafeInteger(google.ratingCount)
+    && google.ratingCount > 0;
+  const rating = validReview ? google!.rating : null;
+  const count = validReview ? google!.ratingCount : null;
   const evidenceWeight = count === null ? 0 : count / (count + VISIT_SCORE_MODEL.reviewHalfWeightCount);
   const reviewWeight = neighborhood === null ? 0 : VISIT_SCORE_MODEL.maxReviewWeight * evidenceWeight;
   const accessWeight = neighborhood !== null && access !== null ? VISIT_SCORE_MODEL.maxWalkabilityWeight : 0;
@@ -83,7 +83,7 @@ export function computeVisitScore(input: VisitScoreInput): VisitScore {
 
   const components = {
     neighborhood: component(neighborhood, neighborhood, neighborhoodWeight),
-    shopperReviews: component(rating, rating === null ? null : 25 * (rating - 1), reviewWeight),
+    googleRatings: component(rating, rating === null ? null : 25 * (rating - 1), reviewWeight),
     walkability: component(access, access === null ? null : (access - 1) / 19 * 100, accessWeight),
   };
   // Keep precision here so the total reconciles with displayed contributions;
@@ -91,7 +91,7 @@ export function computeVisitScore(input: VisitScoreInput): VisitScore {
   const total = neighborhood === null ? null : Object.values(components).reduce((sum, part) => sum + (part.contribution ?? 0), 0);
   const kind: VisitScoreCoverage = neighborhood === null ? "no-neighborhood"
     : rating !== null && access !== null ? "all-signals"
-    : rating !== null ? "neighborhood-and-reviews"
+    : rating !== null ? "neighborhood-and-ratings"
     : access !== null ? "neighborhood-and-access"
     : "neighborhood-only";
 
@@ -102,8 +102,8 @@ export function computeVisitScore(input: VisitScoreInput): VisitScore {
     coverage: {
       kind,
       availableSignals: [neighborhood, rating, access].filter(value => value !== null).length,
-      shopperReviewCount: count,
-      reviewEvidenceWeight: evidenceWeight,
+      googleRatingCount: count,
+      ratingEvidenceWeight: evidenceWeight,
     },
   };
 }

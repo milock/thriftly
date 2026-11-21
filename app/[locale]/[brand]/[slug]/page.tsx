@@ -9,6 +9,7 @@ import {datasetGeneratedAt, locateBundledStores} from '@/lib/locate';
 import {pageMetadata, SITE_URL} from '@/lib/seo';
 import {localizedPath} from '@/i18n/routing';
 import {CityHeader, CityFooter} from '@/components/city/chrome';
+import {InfoDisclosure} from '@/components/info-disclosure';
 import {CityStores} from '@/components/city/city-stores';
 import {BrandNavigation} from '@/components/city/brand-navigation';
 import {JsonLd} from '@/components/json-ld';
@@ -60,11 +61,10 @@ export default async function DirectoryCity({params}: {params: Promise<{locale: 
     <nav aria-label={p('breadcrumb')} className="text-sm text-muted-foreground"><Link href="/">{p('home')}</Link> / <Link href={`/${id}`}>{hubTitle}</Link> / {place}</nav>
     <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
     <p className="mt-3 text-muted-foreground">{!stores.length ? t('cityEmpty', {city: city.city}) : brand ? t('cityBrandIntro', {count: stores.length, brand: brand.name, radius: city.radiusMiles, city: city.city}) : t('cityAllIntro', {count: stores.length, radius: city.radiusMiles, city: city.city})}</p>
-    <p className="mt-2 text-sm text-muted-foreground">{!brand && representedBrands.length === 1 && !stores.some(store => store.operatorType === 'independent') ? t('singleBrandCoverage', {brand: representedBrands[0].name}) : t('coverageNote')}</p>
-    <Link href={mapHref} className="mt-5 inline-flex min-h-11 items-center rounded-md bg-brand px-5 font-medium text-brand-foreground">{t('openMap')}</Link>
+    <div className="mt-3 flex flex-wrap items-center gap-x-4"><Link href={mapHref} className="inline-flex min-h-11 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground">{t('openMap')}</Link><Link href="/how-we-score" className="inline-flex min-h-11 items-center text-sm underline underline-offset-4">{p('methodShort')}</Link><InfoDisclosure label={t('coverageLabel')}><p>{!brand && representedBrands.length === 1 && !stores.some(store => store.operatorType === 'independent') ? t('singleBrandCoverage', {brand: representedBrands[0].name}) : t('coverageNote')}</p></InfoDisclosure></div>
     <BrandNavigation city={city} active={id}/>
-    {stores.length > 0 && <section className="mt-8"><h2 className="text-xl font-semibold">{t('cityResults', {city: city.city})}</h2><p className="mt-2 text-sm text-muted-foreground">{t('neighborhoodNote')}</p><div className="mt-4"><CityStores initial={stores} cityName={city.city} lat={center?.lat} lon={center?.lon} radiusMiles={city.radiusMiles} brandIds={brand ? [brand.id] : []} generatedAt={date} initialDateLabel={date ? new Intl.DateTimeFormat(locale, {dateStyle: 'medium', timeZone: 'UTC'}).format(new Date(date)) : undefined}/></div></section>}
-    <p className="mt-6 text-sm text-muted-foreground">{date && <>{t('sourceDate', {date: new Intl.DateTimeFormat(locale, {dateStyle: 'long', timeZone: 'UTC'}).format(new Date(date))})}. </>}{t('independent')}</p>
+    {stores.length > 0 && <section className="mt-4"><h2 className="sr-only">{t('cityResults', {city: city.city})}</h2><div><CityStores initial={stores} cityName={city.city} lat={center?.lat} lon={center?.lon} radiusMiles={city.radiusMiles} brandIds={brand ? [brand.id] : []} generatedAt={date} initialDateLabel={date ? new Intl.DateTimeFormat(locale, {dateStyle: 'medium', timeZone: 'UTC'}).format(new Date(date)) : undefined}/></div></section>}
+    <InfoDisclosure label={t('coverageLabel')}><p>{date && <>{t('sourceDate', {date: new Intl.DateTimeFormat(locale, {dateStyle: 'long', timeZone: 'UTC'}).format(new Date(date))})}. </>}{t('independent')}</p></InfoDisclosure>
     <Link href={`/${id}`} className="mt-8 inline-block underline">{t('browseCities')}</Link>
   </div></main><CityFooter/></div>;
 }
