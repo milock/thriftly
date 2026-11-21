@@ -1,11 +1,19 @@
 import {it,expect,vi,afterEach} from 'vitest';
 import * as locate from '@/lib/locate';
+import * as outlets from '@/lib/outlets';
+import {generateMetadata as outletMetadata} from '@/app/[locale]/goodwill/los-angeles-ca/outlets/page';
 afterEach(()=>vi.restoreAllMocks());
 import sitemap from '@/app/sitemap';
 import {pageMetadata,SITE_URL} from '@/lib/seo';
 import {generateMetadata} from '@/app/[locale]/goodwill/[slug]/page';
 vi.mock('@/i18n/navigation',()=>({Link:()=>null,useRouter:()=>({}),usePathname:()=>'/'}));
 vi.mock('next-intl/server',()=>({setRequestLocale:()=>{},getTranslations:async()=>((key:string)=>key)}));
+
+it('omits an uncovered outlet guide from every sitemap locale and noindexes it',async()=>{
+  vi.spyOn(outlets,'losAngelesOutlets').mockReturnValue([]);
+  expect(sitemap().some(entry=>entry.url.endsWith('/goodwill/los-angeles-ca/outlets'))).toBe(false);
+  expect((await outletMetadata({params:Promise.resolve({locale:'en'})})).robots).toMatchObject({index:false,follow:true});
+});
 
 it('excludes empty city pages and invented modification dates from the sitemap',()=>{
   const entries=sitemap(); const urls=entries.map(x=>x.url);
@@ -45,3 +53,13 @@ it('noindexes uncovered cities but keeps covered cities indexable',async()=>{
   empty.mockRestore();
   expect((await generateMetadata({params:Promise.resolve({slug:'los-angeles-ca',locale:'en'})})).robots).toMatchObject({index:true,follow:true});
 });
+
+it('serves a plain-text sitemap with the same URLs as sitemap.xml',async()=>{
+  const {GET}=await import('@/app/sitemap.txt/route');
+  const response=GET();const text=await response.text();
+  expect(response.headers.get('content-type')).toBe('text/plain; charset=utf-8');
+  const lines=text.trimEnd().split('\n');
+  expect(lines).toEqual(sitemap().map(entry=>entry.url));
+  expect(lines.every(line=>new URL(line).origin==='https://www.thriftly.xyz')).toBe(true);
+  expect(lines).toContain('https://www.thriftly.xyz/how-we-score');
+},30000);

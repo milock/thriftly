@@ -1,4 +1,12 @@
 import { defineConfig, devices } from "@playwright/test";
+import {existsSync} from 'node:fs';
+
+if (existsSync('.env.local')) process.loadEnvFile('.env.local');
+const realGoogle = process.env.THRIFTLY_REAL_GOOGLE_MAPS === "1";
+const browserKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim();
+if (realGoogle && !browserKey) {
+  throw new Error("Real Google acceptance requires the restricted browser key");
+}
 
 export default defineConfig({
   testDir: "./e2e",
@@ -28,6 +36,9 @@ export default defineConfig({
     { name: "iphone", use: { ...devices["iPhone 13"] } },
   ],
   webServer: {
+    env: {
+      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: realGoogle ? browserKey! : "deterministic-google-test-key",
+    },
     // Use an isolated port and always launch this checkout’s production build.
     command: "npm run build -- --webpack && node scripts/test-server.mjs",
     url: "https://127.0.0.1:3107",

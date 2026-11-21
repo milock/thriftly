@@ -1,6 +1,6 @@
 import type { ScoredStore } from "@/lib/types";
 import { DEPARTMENTS, documentedDepartments, type Department } from "@/lib/store-evidence";
-import { parseHours, isOpenNow } from "@/lib/hours";
+import {storeOpenNow} from "@/lib/store-status";
 import { matchesBrands, type StoreFilterId } from "@/lib/brands";
 
 export type SortKey = "score" | "distance" | "best-nearby";
@@ -42,9 +42,10 @@ export function applyFilters(stores: ScoredStore[], f: Filters): ScoredStore[] {
     if (!matchesBrands(s, f.brandIds)) return false;
     if (f.departments?.length && !documentedDepartments(s).some(department => f.departments.includes(department))) return false;
     if (s.distanceMiles > f.radiusMiles) return false;
-    if (s.score.total < f.minScore) return false;
+    if (f.minScore > 0 && (s.score.catchment.tractCount === 0 || s.score.total < f.minScore)) return false;
     // A live-only filter must exclude unknown store-local hours.
-    if (f.openNowOnly && isOpenNow(parseHours(s.openingHours), new Date(), s.timezone) !== true) return false;
+    const open = storeOpenNow(s);
+    if (f.openNowOnly && open !== true) return false;
     return true;
   });
   const sorted = [...filtered];
