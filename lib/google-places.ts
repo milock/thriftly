@@ -126,6 +126,7 @@ export function selectGooglePlaceId(store: Store, candidates: readonly GooglePla
 
 /** Search is an offline curation operation; public rendering uses saved IDs only. */
 export async function findGooglePlaceMatch(store: Store, apiKey: string, fetcher: typeof fetch = fetch): Promise<GoogleMatchDecision> {
+  if (process.env.GOOGLE_PLACES_ENABLED !== 'true') throw new Error('google_places_disabled');
   const street = store.street || store.address?.split(",")[0];
   if (!street || !/^\d/.test(street.trim()) || !store.region) return {placeId: null, reason: 'insufficient-source-address'};
   const address = store.address || [street, store.locality, store.region].filter(Boolean).join(", ");

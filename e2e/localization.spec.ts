@@ -1,8 +1,8 @@
 import {test,expect} from '@playwright/test';
-import {mockStoreDetails} from './fixtures';
+import {blockStoreDetails} from './fixtures';
 import {mockGoogleMaps} from './google-maps-fixture';
 
-test.beforeEach(async ({page})=>{ await mockStoreDetails(page,{unavailable:true}); });
+test.beforeEach(async ({page})=>{ await blockStoreDetails(page); });
 const locales=['en','es','zh-Hans','zh-Hant','tl','vi','ar'];
 for(const locale of locales) test(`${locale}: complete localized navigation and metadata`,async({page,request,context})=>{
  const prefix=locale==='en'?'':`/${locale}`;
@@ -33,7 +33,7 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
  // document's canceled prefetches to the new document.
  await page.close();
  const fresh = await context.newPage();
- await mockStoreDetails(fresh, {unavailable: true});
+ await blockStoreDetails(fresh);
  await fresh.route('**/api/enrich**',r=>r.fulfill({json:{enriched:{}}}));
  const freshErrors:string[]=[]; fresh.on('pageerror',e=>freshErrors.push(e.message));
  await fresh.goto(prefix+'/thrift-stores/los-angeles-ca');

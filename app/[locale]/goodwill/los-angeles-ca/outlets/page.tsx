@@ -6,7 +6,6 @@ import {JsonLd} from '@/components/json-ld';
 import {InfoDisclosure} from '@/components/info-disclosure';
 import {RankedStores} from '@/components/city/ranked-stores';
 import {losAngelesOutlets} from '@/lib/outlets';
-import {cityCentroid} from '@/lib/city-data';
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
@@ -27,7 +26,7 @@ export default async function LosAngelesOutlets({params}: {params: Promise<{loca
     <nav aria-label={t('breadcrumb')}><Link href="/goodwill/los-angeles-ca" className="underline">{t('laStores')}</Link> / {t('outlets')}</nav>
     <h1 className="text-4xl font-semibold tracking-tight">{t('outletTitle')}</h1>
     <div className="flex items-start gap-2"><p className="text-lg">{t('outletIntro')}</p><InfoDisclosure label={t('sources')}><p>{t('outletSource')}</p></InfoDisclosure></div>
-    {outlets.length > 0 && <section className="space-y-5"><h2 className="text-2xl font-semibold">{t('addresses')}</h2><RankedStores stores={outlets} cityName="Los Angeles" center={cityCentroid('los-angeles-ca') ?? undefined}/></section>}
+    {outlets.length > 0 && <section className="space-y-5"><h2 className="text-2xl font-semibold">{t('addresses')}</h2><RankedStores stores={outlets} cityName="Los Angeles"/></section>}
     <section className="space-y-4"><h2 className="text-2xl font-semibold">{t('checkOperator')}</h2><p>{t('operatorBody')}</p><div className="flex flex-wrap gap-5"><a className="underline" href="https://www.goodwillsocal.org/outlet-store/">{t('operatorPage')}</a><a className="underline" href="https://www.goodwillsocal.org/shop/goodwill-locator/">{t('operatorLocator')}</a></div></section>
     <section className="space-y-4"><h2 className="text-2xl font-semibold">{t('regularTitle')}</h2><p>{t('regularBody')}</p><div className="flex flex-wrap gap-5"><Link className="underline" href="/goodwill/los-angeles-ca">{t('compareLA')}</Link><Link className="underline" href="/how-we-score">{t('understand')}</Link></div></section>
   </main><CityFooter/></div>;

@@ -72,6 +72,11 @@ export function shouldReviewGoogleIdentity(store: Store, confirmation: GooglePla
 
 async function main() {
   if (existsSync('.env.local')) process.loadEnvFile('.env.local');
+  // Skip without touching saved confirmations or audit data while billing is disabled.
+  if (process.env.GOOGLE_PLACES_ENABLED !== 'true') {
+    console.log('Google Places matching is disabled; saved data is unchanged.');
+    return;
+  }
   const apiKey = process.env.GOOGLE_PLACES_API_KEY?.trim();
   if (!apiKey) throw new Error('GOOGLE_PLACES_API_KEY is not configured');
   const args = process.argv.slice(2);

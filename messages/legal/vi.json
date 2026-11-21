@@ -10,7 +10,7 @@
   "privacy3": "Mã băm có khóa luân phiên giúp hạn chế lạm dụng báo cáo. Thriftly không đưa địa chỉ IP thô vào báo cáo. Nhà cung cấp dịch vụ lưu trữ và bên thứ ba có thể xử lý nhật ký yêu cầu theo chính sách riêng của họ. Báo cáo và quyết định xét duyệt được lưu trong hệ thống xét duyệt riêng tư để kiểm duyệt và kiểm toán; hiện chưa có thời hạn xóa tự động được bảo đảm.",
   "privacy4": "Vercel lưu trữ Thriftly và cung cấp phân tích web. Bộ nhớ trình duyệt ghi nhớ tùy chọn giao diện như giao diện sáng/tối và ngôn ngữ. Xem chính sách của các nhà cung cấp được liên kết để biết cách họ xử lý dữ liệu.",
   "terms0": "Thriftly là hướng dẫn độc lập về các cửa hàng đồ cũ và bán lại mở cửa cho công chúng. Danh sách, giờ mở cửa, khu hàng và thông tin ghé thăm có thể chưa đầy đủ hoặc đã lỗi thời. Hãy xác nhận thông tin quan trọng với cửa hàng trước khi đi. Khu hàng được liệt kê không có nghĩa là hôm nay còn hàng.",
-  "terms1": "Điểm kết hợp dữ liệu điều tra dân số, dữ liệu lịch sử về khả năng đi bộ khi có và đánh giá Google. Điểm không dự đoán hàng hóa, giá cả hay kết quả mua sắm.",
+  "terms1": "Điểm kết hợp dữ liệu điều tra dân số với dữ liệu lịch sử về khả năng đi bộ khi có. Điểm không dự đoán hàng hóa, giá cả hay kết quả mua sắm.",
   "terms2": "Chỉ gửi thông tin chính xác mà bạn có quyền chia sẻ. Báo cáo được xem xét riêng tư và không trực tiếp thay đổi danh sách công khai.",
   "terms3": "Thriftly có tính năng và nội dung của Google Maps. Việc sử dụng các tính năng đó tuân theo Điều khoản dịch vụ bổ sung dành cho người dùng cuối của Google Maps và Chính sách quyền riêng tư của Google được liên kết bên dưới. Nội dung từ nguồn khác vẫn giữ phần ghi nhận nguồn gốc và điều khoản áp dụng ban đầu.",
   "googleTerms": "Điều khoản Google Maps",

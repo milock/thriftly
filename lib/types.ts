@@ -5,36 +5,13 @@ export interface LatLng {
   lon: number;
 }
 
-/** Live Google content, held in memory only for the current page view. */
-export interface LiveGoogleHours {
-  openNow: boolean | null;
-  weekdayDescriptions: string[];
-}
-
-export interface LiveGoogleDetails {
-  placeId: string;
-  name: string;
-  address: string;
-  location: LatLng;
-  businessStatus: 'OPERATIONAL' | 'CLOSED_TEMPORARILY' | 'CLOSED_PERMANENTLY' | null;
-  currentOpeningHours: LiveGoogleHours | null;
-  regularOpeningHours: LiveGoogleHours | null;
-  phone: string | null;
-  website: string | null;
-  rating: number | null;
-  ratingCount: number | null;
-  mapsUrl: string | null;
-  attributions: { provider: string; providerUri: string | null }[];
-}
-
 export interface Store {
   id: string; // e.g. "node/123456"
   name: string;
   /** Persisted, conservatively confirmed identity; never matched during rendering. */
   googlePlaceId?: string;
-  google?: LiveGoogleDetails;
-  /** Independent identity retained for source disclosure during live rendering. */
-  registryIdentity?: {name: string; address?: string};
+  /** Why a listing is public: a confirmed Google identity, or OSM corroboration. */
+  identityBasis?: 'google' | 'openstreetmap';
   brandId?: string;
   brand?: string;
   operator?: string;

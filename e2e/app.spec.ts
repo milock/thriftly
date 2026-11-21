@@ -1,10 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { firstStore, googleDetailsFor, gotoClientSearch, mockStoreDetails, storesResponse, photonReverseResponse } from "./fixtures";
+import { firstStore, gotoClientSearch, blockStoreDetails, storesResponse, photonReverseResponse } from "./fixtures";
 import { mockGoogleMaps } from "./google-maps-fixture";
 
 test.beforeEach(async ({ page }) => {
   await mockGoogleMaps(page);
-  await mockStoreDetails(page, { unavailable: true });
+  await blockStoreDetails(page);
   await page.route("**/api/stores**", (route) => route.fulfill({ json: storesResponse }));
   await page.route("**/api/enrich**", (route) => route.fulfill({ json: { enriched: {} } }));
   // Geocoding runs client-side against Photon (the user's own IP). Stub the
@@ -173,51 +173,40 @@ test("map markers open a keyboard-accessible store and score breakdown", async (
   await expect(marker).toBeFocused();
 });
 
-test("switching between mobile list and map reuses a fetched place", async ({ page, isMobile }) => {
-  test.skip(!isMobile, "mobile layout only");
+test("cards and map popups link to Google Maps reviews without a paid lookup", async ({ page, isMobile }) => {
   const requests: string[] = [];
-  await mockStoreDetails(page, { onRequest: id => requests.push(id) });
+  await page.unroute("**/api/store-details**");
+  await blockStoreDetails(page, url => requests.push(url));
   await gotoClientSearch(page, "/search?lat=32.84&lon=-117.27&radius=8");
-  const first = page.locator("[data-store-card]").first();
-  await expect(first.locator("[data-google-rating][data-state=loaded]")).toBeVisible();
-  for (let attempt = 0; attempt < 2; attempt++) {
-    await page.getByRole("tab", { name: "Map", exact: true }).click();
-    const map = page.locator("[data-google-map][data-state=ready]");
-    await expect(map).toHaveCount(1);
-    await map.getByRole("button", { name: /Goodwill.*Girard.*Visit score/i }).press("Enter");
-    await expect(map.getByRole("dialog").locator("[data-google-rating][data-state=loaded]")).toBeVisible();
-    await page.getByRole("tab", { name: "List", exact: true }).click();
-    await expect(page.locator("[data-google-map]")).toHaveCount(0);
-    await expect(first.locator("[data-google-rating][data-state=loaded]")).toBeVisible();
-  }
-  expect(requests.filter(id => id === firstStore.id)).toHaveLength(1);
+  const first = page.locator("[data-store-card]").filter({ hasText: "Girard Avenue" });
+  const reviews = first.getByRole("link", { name: "Read reviews on Google Maps", exact: true });
+  await expect(reviews).toHaveAttribute("href", /^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=.*&query_place_id=ChIJ_thriftly_fixture_1$/);
+  await expect(reviews).toHaveAttribute("target", "_blank");
+  if (isMobile) await page.getByRole("tab", { name: "Map", exact: true }).click();
+  const map = page.locator("[data-google-map][data-state=ready]");
+  await map.getByRole("button", { name: /Goodwill.*Girard.*Visit score/i }).press("Enter");
+  await expect(map.getByRole("dialog").locator("[data-google-reviews]")).toBeVisible();
+  expect(requests).toHaveLength(0);
 });
 
-test("the rated store uses the same score in the card, map and breakdown", async ({ page, isMobile }) => {
-  await mockStoreDetails(page, { details: store => ({
-    ...googleDetailsFor(store),
-    ...(store.id === firstStore.id ? { rating: 5, ratingCount: 450 } : {}),
-  }) });
+test("a store uses the same score in the card, map and breakdown", async ({ page, isMobile }) => {
   await gotoClientSearch(page, "/search?lat=32.84&lon=-117.27&radius=8");
   const card = page.locator("[data-store-card]").filter({ hasText: "Girard Avenue" });
-  const cardScore = card.getByRole("button", { name: /visit score 94 out of 100.*show score details/i });
+  const cardScore = card.getByRole("button", { name: /visit score 89 out of 100.*show score details/i });
   await expect(cardScore).toBeVisible();
   await cardScore.click();
   const breakdown = page.getByRole("dialog", { name: "Visit score", exact: true }).and(page.locator("[data-open]"));
-  await expect(breakdown.locator("[data-score-total]")).toHaveAttribute("data-score-total", "94");
+  await expect(breakdown.locator("[data-score-total]")).toHaveAttribute("data-score-total", "89");
   await page.keyboard.press("Escape");
   await expect(breakdown).toHaveCount(0);
 
   if (isMobile) await page.getByRole("tab", { name: "Map", exact: true }).click();
   const map = page.locator("[data-google-map][data-state=ready]");
-  const pin = map.getByRole("button", { name: /Goodwill.*Girard.*Visit score 94 out of 100/i });
-  await expect(pin).toHaveText("94");
+  const pin = map.getByRole("button", { name: /Goodwill.*Girard.*Visit score 89 out of 100/i });
+  await expect(pin).toHaveText("89");
   await pin.press("Enter");
   const popup = map.getByRole("dialog");
-  await popup.getByRole("button", { name: /visit score 94 out of 100.*show score details/i }).click();
-  await expect(breakdown.locator("[data-score-total]")).toHaveAttribute("data-score-total", "94");
-  const google = breakdown.locator("[data-score-component=googleRatings]");
-  await expect(google.getByRole("rowheader")).toContainText("5/5 · 450");
-  await expect(google.getByRole("cell", { name: "45%", exact: true })).toBeVisible();
-  await expect(google.getByRole("cell", { name: "45", exact: true })).toBeVisible();
+  await popup.getByRole("button", { name: /visit score 89 out of 100.*show score details/i }).click();
+  await expect(breakdown.locator("[data-score-total]")).toHaveAttribute("data-score-total", "89");
+  await expect(breakdown.locator("[data-score-component=googleRatings]")).toHaveCount(0);
 });
