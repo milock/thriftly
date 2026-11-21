@@ -1,4 +1,4 @@
-import {expect,test} from '@playwright/test';
+import {expect,test} from './test';
 import {blockStoreDetails} from './fixtures';
 import {googleMapsBootstrap} from './google-maps-fixture';
 

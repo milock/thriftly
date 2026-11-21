@@ -1,4 +1,4 @@
-import {test, expect} from '@playwright/test';
+import {test, expect} from './test';
 test('production server sends security headers', async ({request}) => {
   const res = await request.get('/');
   expect(res.status()).toBe(200);
