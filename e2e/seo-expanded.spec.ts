@@ -1,9 +1,9 @@
 import {test, expect} from '@playwright/test';
-import {mockStoreDetails} from './fixtures';
+import {blockStoreDetails} from './fixtures';
 
 test('directory schema describes the visible store order and directions', async ({page}) => {
   await page.route('**/api/enrich**', route => route.abort());
-  await mockStoreDetails(page, {unavailable: true});
+  await blockStoreDetails(page);
   for (const path of ['/goodwill/new-york-ny', '/thrift-stores/los-angeles-ca']) {
     await page.goto(path);
     const items = await page.locator('script[type="application/ld+json"]').evaluateAll(nodes => {

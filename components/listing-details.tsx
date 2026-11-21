@@ -7,7 +7,7 @@ import type { Store } from "@/lib/types";
 import { evidenceForStore } from "@/lib/store-evidence";
 import { hasOnlineVerification } from "@/lib/independent-stores";
 import { formatSourceDate, safeWebsiteUrl } from "@/lib/format";
-import { StoreGoogleDetails } from "@/components/store-google-details";
+import { StoreReviewsLink } from "@/components/store-reviews-link";
 import { InfoDisclosure } from "@/components/info-disclosure";
 import { ReportListing } from "@/components/report-listing";
 import evidenceTranslations from "@/data/store-evidence-translations.json";
@@ -32,13 +32,12 @@ export function ListingDetails({store, actions}: {store: Store; actions?: ReactN
   const sourceUrl = safeWebsiteUrl(source?.sourceUrl);
   const date = (value?: string) => formatSourceDate(value, locale, store.timezone) ?? t("unknown");
   return <div className="text-xs leading-relaxed text-muted-foreground">
-    <StoreGoogleDetails store={store} />
+    <StoreReviewsLink store={store} />
     <div className="flex flex-wrap items-center gap-x-1">
       {actions}
       <InfoDisclosure label={t("listingInfo")}>
         {store.facilityType && <p>{u(store.facilityType)}</p>}
         {store.operatorType === "independent" && <p>{t("independent")}</p>}
-        {store.registryIdentity && <p>{t("registryListing")}: <bdi>{store.registryIdentity.name}</bdi>{store.registryIdentity.address && <> · <bdi dir="ltr">{store.registryIdentity.address}</bdi></>}</p>}
         <p>{t("source")}: {sourceUrl ? <a className="underline underline-offset-2" href={sourceUrl} target="_blank" rel="noopener noreferrer">{source?.source === "official-independent-website" ? t("operatorWebsite") : sourceNames[source!.source] ?? source!.source}</a> : source?.source ?? t("unknown")}</p>
         <p>{t("retrieved")}: <time dateTime={source?.fetchedAt}>{date(source?.fetchedAt)}</time></p>
         {source?.sourceUpdatedAt && <p>{t("sourceDate")}: <time dateTime={source.sourceUpdatedAt}>{date(source.sourceUpdatedAt)}</time></p>}

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import type { Store } from "@/lib/types";
 
 const store = {
@@ -32,6 +32,7 @@ const match = {
   businessStatus: "OPERATIONAL",
 } satisfies GooglePlaceCandidate;
 
+beforeEach(() => vi.stubEnv('GOOGLE_PLACES_ENABLED', 'true'));
 afterEach(() => vi.unstubAllEnvs());
 
 describe("Google listing identity", () => {
@@ -128,5 +129,14 @@ describe("place match route", () => {
     } finally {
       fetcher.mockRestore();
     }
+  });
+});
+
+describe('Places search billing safeguard', () => {
+  it.each(['', 'false', 'TRUE'])('never calls upstream when opt-in is %s', async enabled => {
+    vi.stubEnv('GOOGLE_PLACES_ENABLED', enabled);
+    const fetcher = vi.fn();
+    await expect(findGooglePlaceId(store, 'test-key', fetcher)).rejects.toThrow('google_places_disabled');
+    expect(fetcher).not.toHaveBeenCalled();
   });
 });

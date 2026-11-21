@@ -1,12 +1,12 @@
 import { expect, test } from "@playwright/test";
-import { gotoClientSearch, mockStoreDetails, storesResponse } from "./fixtures";
+import { gotoClientSearch, blockStoreDetails, storesResponse } from "./fixtures";
 import { mockGoogleMaps } from "./google-maps-fixture";
 
 const search = "/search?lat=32.84&lon=-117.27&radius=8";
 
 test.beforeEach(async ({ page }) => {
   await mockGoogleMaps(page);
-  await mockStoreDetails(page, { unavailable: true });
+  await blockStoreDetails(page);
   await page.route("**/api/stores**", route => route.fulfill({ json: storesResponse }));
   await page.route("**/api/enrich**", route => route.fulfill({ json: { enriched: {} } }));
 });

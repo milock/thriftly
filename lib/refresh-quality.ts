@@ -12,11 +12,13 @@ export function assertRefreshQuality(input: {
   if (input.scoredCount < Math.max(100, input.previousScoredCount * 0.9)) throw new Error('Scoring coverage dropped more than 10%');
 }
 
-/** Normal refreshes require a source collected within seven days. A bounded,
+/** Normal refreshes require a source collected within seven days (or the
+ * source-specific window passed as maxAgeDays). A bounded,
  * explicit one-off historical import is available for a verified last-good release. */
-export function assertSourceSnapshot(stamp: string | undefined, options: {allowHistorical?: boolean} = {}) {
+export function assertSourceSnapshot(stamp: string | undefined, options: {allowHistorical?: boolean; maxAgeDays?: number} = {}) {
   const time=Date.parse(stamp ?? ''); const age=Date.now()-time;
-  if(!Number.isFinite(time)||age < -300000 || age > (options.allowHistorical ? 45 : 7)*86400000) {
+  const maxAgeDays=Math.max(options.maxAgeDays ?? 7, options.allowHistorical ? 45 : 0);
+  if(!Number.isFinite(time)||age < -300000 || age > maxAgeDays*86400000) {
     throw new Error('Store source is stale, missing a collection date, or dated in the future');
   }
 }

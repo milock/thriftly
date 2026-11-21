@@ -44,3 +44,42 @@ export function confirmedPlaceIds(stores: readonly Store[], registry: GooglePlac
   }
   return new Map(rows.filter(row => storeCounts.get(row.storeId) === 1 && placeCounts.get(row.placeId) === 1).map(row => [row.storeId, row.placeId]));
 }
+
+export interface CarriedConfirmation {storeId: string; placeId: string; previousFingerprint: string; identityFingerprint: string; movedMeters: number; basis: string}
+const CARRY_METERS = 75;
+const normalizeStreet = (value: string | undefined) => (value ?? '').toLowerCase()
+  .replace(/\b(street|avenue|road|drive|boulevard|highway|suite|ste|north|south|east|west)\b/g, word => ({street: 'st', avenue: 'ave', road: 'rd', drive: 'dr', boulevard: 'blvd', highway: 'hwy', suite: '#', ste: '#', north: 'n', south: 's', east: 'e', west: 'w'}[word]!))
+  .replace(/[^a-z0-9#]/g, '');
+const streetNumber = (value: string | undefined) => value?.trim().match(/^(\d+)/)?.[1];
+function metersBetween(a: Store['location'], b: Store['location']) {
+  const rad = Math.PI / 180, dLat = (b.lat - a.lat) * rad, dLon = (b.lon - a.lon) * rad;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLon / 2) ** 2;
+  return 2 * 6371008.8 * Math.asin(Math.sqrt(h));
+}
+
+/**
+ * Keep a confirmed Google identity through small source edits (a re-geocoded pin,
+ * "Street" becoming "St", a banner tweak), so routine refreshes no longer drop
+ * listings now that no paid re-match runs. Only the same directory ID, brand and
+ * facility type within 75 m qualifies, with the same street number or the same
+ * normalized street. Anything bigger stays unpublished until verified again.
+ */
+export function carryForwardConfirmations(registry: GooglePlaceRegistry, previous: readonly Store[], current: readonly Store[]): {registry: GooglePlaceRegistry; carried: CarriedConfirmation[]} {
+  const before = new Map(previous.map(store => [store.id, store]));
+  const after = new Map(current.map(store => [store.id, store]));
+  const carried: CarriedConfirmation[] = [];
+  const records = registry.records.map(row => {
+    const old = before.get(row.storeId), next = after.get(row.storeId);
+    if (!old || !next || row.identityFingerprint !== listingIdentityFingerprint(old)) return row;
+    const identityFingerprint = listingIdentityFingerprint(next);
+    if (identityFingerprint === row.identityFingerprint) return row;
+    const movedMeters = metersBetween(old.location, next.location);
+    if (old.brandId !== next.brandId || old.facilityType !== next.facilityType || movedMeters > CARRY_METERS) return row;
+    const sameStreet = !!old.street && normalizeStreet(old.street) === normalizeStreet(next.street);
+    const sameNumber = !!streetNumber(old.street ?? old.address) && streetNumber(old.street ?? old.address) === streetNumber(next.street ?? next.address);
+    if (!sameStreet && !sameNumber) return row;
+    carried.push({storeId: row.storeId, placeId: row.placeId, previousFingerprint: row.identityFingerprint, identityFingerprint, movedMeters: Math.round(movedMeters), basis: sameStreet ? 'same-street' : 'same-street-number'});
+    return {...row, identityFingerprint};
+  });
+  return {registry: {version: 1, records}, carried};
+}
