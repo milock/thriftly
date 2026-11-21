@@ -15,6 +15,7 @@ test('pilot shows source-verified shops with correction and visit links',async({
  await page.goto(path);
  await expect(page.getByRole('heading',{level:1})).toHaveText('Independent thrift stores in San Diego, CA');
  console.log(`[diag ${test.info().project.name} pilot] h3 count=${await page.getByRole('heading',{level:3}).count()} all h3=${await page.locator('h3').count()} canonicals=${await page.locator('link[rel="canonical"]').count()}`);
+ console.log(`[diag ${test.info().project.name} pilot] first h3: ${await page.locator('h3').first().evaluate(el=>JSON.stringify({text:el.textContent?.slice(0,40),connected:el.isConnected,display:getComputedStyle(el).display,visibility:getComputedStyle(el).visibility,rect:el.getBoundingClientRect().toJSON(),hydrated:Object.keys(el).some(k=>k.startsWith('__reactFiber')),ancestorHidden:!!el.closest('[hidden],[aria-hidden="true"],[inert]')}))}`);
  const firstTitle=await page.getByRole('heading',{level:3}).first().boundingBox();
  expect(firstTitle!.y+firstTitle!.height).toBeLessThanOrEqual(740);
  const sources=page.getByRole('button',{name:'Listing source and verification',exact:true});
@@ -45,7 +46,10 @@ test('independent and chain choices combine and survive reload',async({page,isMo
  await expect.poll(()=>stores.count()).toBeGreaterThan(independentCount);
  await page.reload();
  await expect.poll(()=>stores.count()).toBeGreaterThan(independentCount);
+ page.on('console',m=>{ if(m.type()==='error'||m.type()==='warning') console.log(`[diag ${test.info().project.name} filters] console.${m.type()}: ${m.text().slice(0,600)}`); });
+ console.log(`[diag ${test.info().project.name} filters] before click: button hydrated=${await page.getByRole('button',{name:/^filters/i}).evaluate(el=>Object.keys(el).some(k=>k.startsWith('__reactProps')))} readyState=${await page.evaluate(()=>document.readyState)}`);
  await page.getByRole('button',{name:/^filters/i}).click();
+ console.log(`[diag ${test.info().project.name} filters] after click: expanded=${await page.getByRole('button',{name:/^filters/i}).getAttribute('aria-expanded')} goodwillOnly=${await page.getByRole('button',{name:'Goodwill only',exact:true}).count()}`);
  await page.getByRole('button',{name:'Goodwill only',exact:true}).click();
  if(isMobile)await page.getByRole('button',{name:/show .* stores/i}).click();
  await expect(page.locator('[data-store-card]').filter({hasText:'Humble Heart'})).toHaveCount(0);

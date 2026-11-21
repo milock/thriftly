@@ -46,10 +46,11 @@ for(const locale of locales) test(`${locale}: complete localized navigation and 
  if(locale === "ar") console.log("Arabic runtime defaults", {server:new Intl.NumberFormat(locale).format(12.3),browser:runtimeNumbers.default});
  expect(runtimeNumbers.explicit).toBe(new Intl.NumberFormat(locale,{numberingSystem}).format(12.3));
  // Brand navigation must work on demand after a fresh server hydration.
+ console.log(`[diag ${test.info().project.name} ${locale}] before nav: link hydrated=${await fresh.locator(`nav a[href="${prefix}/buffalo-exchange/los-angeles-ca"]`).evaluate(el=>Object.keys(el).some(k=>k.startsWith('__reactProps')))} canonical claimed=${await fresh.locator('link[rel="canonical"]').first().evaluate(el=>Object.keys(el).some(k=>k.startsWith('__reactFiber')))} readyState=${await fresh.evaluate(()=>document.readyState)}`);
  await fresh.locator(`nav a[href="${prefix}/buffalo-exchange/los-angeles-ca"]`).click();
  await expect(fresh).toHaveURL(prefix+'/buffalo-exchange/los-angeles-ca');
  await expect(fresh.locator('h1')).toContainText('Buffalo Exchange');
- console.log(`[diag ${test.info().project.name} ${locale}] canonicals after nav: ${JSON.stringify(await fresh.locator('link[rel="canonical"]').evaluateAll(ls=>ls.map(l=>[l.getAttribute('href'),l.parentElement?.tagName,Array.from(l.parentElement?.children??[]).indexOf(l)])))}`);
+ console.log(`[diag ${test.info().project.name} ${locale}] canonicals after nav: ${JSON.stringify(await fresh.locator('link[rel="canonical"]').evaluateAll(ls=>ls.map(l=>[l.getAttribute('href'),l.parentElement?.tagName,Array.from(l.parentElement?.children??[]).indexOf(l),Object.keys(l).some(k=>k.startsWith('__reactFiber'))])))}`);
  await expect(fresh.locator('link[rel="canonical"]')).toHaveAttribute('href',`https://www.thriftly.xyz${prefix}/buffalo-exchange/los-angeles-ca`);
  await fresh.waitForLoadState('networkidle');
  expect(freshErrors).toEqual([]);
