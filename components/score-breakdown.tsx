@@ -12,8 +12,8 @@ export function ScoreBreakdown({score}: {score: GoodsScore}) {
   return <div className="space-y-3">
     <p className="text-3xl font-semibold tabular-nums" data-score-total={Math.round(score.total)}>{number.format(Math.round(score.total))}<span className="text-sm font-normal text-muted-foreground"> / 100</span></p>
     {visit && <table className="w-full text-start text-xs"><thead className="text-muted-foreground"><tr><th className="pb-2 text-start font-normal">{l('component')}</th><th className="pb-2 text-end font-normal">{l('weight')}</th><th className="pb-2 text-end font-normal">{l('points')}</th></tr></thead><tbody>
-      {Object.entries(visit.components).map(([key,part])=><tr key={key} className="border-t" data-score-component={key}>
-        <th className="py-2 pe-2 text-start font-medium">{l(key==='neighborhood'?'neighborhoodScore':key==='walkability'?'walkability':'googleScore')}<span className="mt-0.5 block font-normal text-muted-foreground">{part.value===null?'—':key==='googleRatings'?`${number.format(part.value)}/5 · ${number.format(visit.coverage.googleRatingCount ?? 0)}`:`${number.format(part.normalized ?? 0)}/100`}</span></th>
+      {Object.entries(visit.components).filter(([key])=>key!=='googleRatings').map(([key,part])=><tr key={key} className="border-t" data-score-component={key}>
+        <th className="py-2 pe-2 text-start font-medium">{l(key==='neighborhood'?'neighborhoodScore':'walkability')}<span className="mt-0.5 block font-normal text-muted-foreground">{part.value===null?'—':`${number.format(part.normalized ?? 0)}/100`}</span></th>
         <td className="py-2 ps-2 text-end tabular-nums">{number.format(part.effectiveWeight*100)}%</td>
         <td className="py-2 ps-2 text-end font-medium tabular-nums" data-score-points={part.contribution ?? 0}>{part.contribution===null?'—':number.format(part.contribution)}</td>
       </tr>)}

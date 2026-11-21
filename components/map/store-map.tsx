@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 import { Minus, Navigation, Plus, Search, X } from "lucide-react";
 import { ScoreDetails } from "@/components/score-details";
 import { ScoreRing } from "@/components/score-ring";
-import { StoreGoogleDetails } from "@/components/store-google-details";
+import { StoreReviewsLink } from "@/components/store-reviews-link";
 import { haversineMiles } from "@/lib/distance";
 import { directionsUrl, formatDistance } from "@/lib/format";
 import { hasGoogleMapsApiKey, loadGoogleMaps, onGoogleMapsAuthFailure } from "@/lib/google-maps-loader";
@@ -119,7 +119,7 @@ function StorePopup({ store, onClose }: { store: ScoredStore; onClose: () => voi
   const locale = useLocale();
   const labelId = useId();
   const close = useRef<HTMLButtonElement>(null);
-  const address = store.google?.address || store.street || store.address;
+  const address = store.street || store.address;
   const scored = hasNeighborhoodBaseline(store.score);
   const open = storeOpenNow(store);
 
@@ -140,7 +140,7 @@ function StorePopup({ store, onClose }: { store: ScoredStore; onClose: () => voi
     >
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
-          <p id={labelId} className="break-words text-base font-semibold leading-tight">{store.google?.name || store.name}</p>
+          <p id={labelId} className="break-words text-base font-semibold leading-tight">{store.name}</p>
           {address && (
             <p className="break-words text-sm leading-relaxed text-muted-foreground">
               <bdi dir="auto">{address}</bdi>
@@ -167,7 +167,7 @@ function StorePopup({ store, onClose }: { store: ScoredStore; onClose: () => voi
         </button>
       </div>
       <div className="mt-1">
-        <StoreGoogleDetails store={store} />
+        <StoreReviewsLink store={store} />
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-2">
         {scored ? (
@@ -399,8 +399,8 @@ function GoogleStoreMap({ center, radiusMiles, stores, selectedId, onSelect, onS
             const scored = hasNeighborhoodBaseline(store.score);
             const score = Math.round(store.score.total);
             const label = [
-              store.google?.name || store.name,
-              store.google?.address || [store.street, store.neighborhood || store.locality, store.region].filter(Boolean).join(", "),
+              store.name,
+              [store.street, store.neighborhood || store.locality, store.region].filter(Boolean).join(", "),
               scored ? t("scoreAria", { score }) : t("notScored"),
             ].filter(Boolean).join(", ");
             return (

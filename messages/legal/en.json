@@ -10,7 +10,7 @@
   "privacy3": "A rotating keyed hash helps limit report abuse. Thriftly does not put raw IP addresses in reports. Hosting and third-party providers may process request logs under their own policies. Reports and review decisions remain in the private review system for moderation and audit; no automatic deletion period is currently guaranteed.",
   "privacy4": "Vercel hosts Thriftly and supplies web analytics. Browser storage remembers interface preferences such as theme and language. Consult the linked provider policies for their data practices.",
   "terms0": "Thriftly is an independent guide to public thrift and resale shops. Listings, hours, departments, and visit details may be incomplete or outdated. Confirm important details with the store before traveling. A listed department does not mean an item is in stock today.",
-  "terms1": "Scores combine neighborhood Census measures, available historical walkability data, and Google ratings. They do not predict inventory, prices, or shopping outcomes.",
+  "terms1": "Scores combine neighborhood Census measures with available historical walkability data. They do not predict inventory, prices, or shopping outcomes.",
   "terms2": "Submit only accurate information you have the right to share. Reports enter a private review queue and do not directly change public listings.",
   "terms3": "Thriftly includes Google Maps features and content. Use of those features is subject to the Google Maps End User Additional Terms of Service and the Google Privacy Policy linked below. Other source content retains its original attribution and applicable terms.",
   "googleTerms": "Google Maps terms",
