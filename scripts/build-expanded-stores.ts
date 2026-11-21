@@ -8,6 +8,7 @@ import {computeGoodsScore} from '../lib/scoring';
 import {CATCHMENT_RADIUS_MILES} from '../lib/reference-ranges';
 import type {ScoredStore,TractCentroid,TractDemographics} from '../lib/types';
 import {assertSourceSnapshot} from '../lib/refresh-quality';
+import {ATP_MAX_AGE_DAYS,failureReason,recordSourceHealth,retentionStatus} from '../lib/source-health';
 import {parseIndependentStores} from '../lib/independent-stores';
 import {applyStoreCoordinateCorrection,goodwillCoordinateReviewReason,type StoreCoordinateCorrection} from '../lib/store-coordinate-integrity';
 try{for(const line of readFileSync('.env.local','utf8').split('\n')){const m=line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);if(m&&!process.env[m[1]])process.env[m[1]]=m[2].replace(/^["']|["']$/g,'');}}catch{}
@@ -22,26 +23,49 @@ async function main(){
   if(corrected!==store)correctedBaseIds.add(store.id);
   return {...corrected,brandId:'goodwill',brand:'Goodwill',sourcingModel:'donation',merchandiseScope:'general'};
  });
- const sources=[];const added:ExpandedStore[]=[];const exclusions=[];
- for(const [spider,brandId]of [['savers_ca_us','savers'],['buffalo_exchange_us','buffalo-exchange']] as const){
+ const sources:Record<string,unknown>[]=[];const added:ExpandedStore[]=[];const exclusions:{brandId:string;records:{sourceId:string;reason:string}[]}[]=[];
+ const published=existsSync('data/stores-us.json')?read('data/stores-us.json'):{sources:[],stores:[]};
+ let priorExclusions:{brandId:string;records:{sourceId:string;reason:string}[]}[]=[];try{priorExclusions=read('data/provenance/expanded-store-sources.json').exclusions??[];}catch{}
+ /** A source that is missing, stale or incomplete keeps its last accepted records. */
+ const load=(brandId:string,build:()=>{stores:ExpandedStore[];rejected:{sourceId:string;reason:string}[];source:Record<string,unknown>})=>{
+  try{
+   const result=build();added.push(...result.stores);exclusions.push({brandId,records:result.rejected});sources.push(result.source);
+   const accepted=published.sources.find((s:{brandId:string})=>s.brandId===brandId);
+   recordSourceHealth({source:brandId,status:accepted?.sha256&&accepted.sha256===result.source.sha256?'unchanged':'refreshed',sourceUpdatedAt:result.source.sourceUpdatedAt as string});
+  }catch(error){
+   const reason=(error as NodeJS.ErrnoException)?.code==='ENOENT'?'no snapshot fetched this week':failureReason(error);
+   const accepted=published.sources.find((s:{brandId:string})=>s.brandId===brandId);
+   const kept=(published.stores as ExpandedStore[]).filter(s=>s.brandId===brandId);
+   if(!accepted||!kept.length)throw new Error(`${brandId} has no current source and no last good data: ${reason}`);
+   const status=retentionStatus(accepted.sourceUpdatedAt??accepted.fetchedAt);
+   added.push(...kept);exclusions.push({brandId,records:priorExclusions.find(e=>e.brandId===brandId)?.records??[]});
+   sources.push({...accepted,status,retainedReason:reason});
+   recordSourceHealth({source:brandId,status,sourceUpdatedAt:accepted.sourceUpdatedAt??accepted.fetchedAt,reason});
+  }
+ };
+ for(const [spider,brandId]of [['savers_ca_us','savers'],['buffalo_exchange_us','buffalo-exchange']] as const)load(brandId,()=>{
   const snapshot=read(join(cache,spider+'-snapshot.json'));
-  const accepted=existsSync('data/stores-us.json')?read('data/stores-us.json').sources.find((s:{brandId:string})=>s.brandId===brandId):undefined;
-  assertSourceSnapshot(snapshot.sourceUpdatedAt,{allowHistorical:isAcceptedChainSnapshot(snapshot,accepted)||process.env.ALLOW_HISTORICAL_STORE_SOURCE==='1'});
-  const parsed=parseChainAtp(snapshot,brandId);added.push(...parsed.stores);exclusions.push({brandId,records:parsed.rejected});
-  sources.push({brandId,source:'alltheplaces',sourceUrl:snapshot.sourceUrl,sourceUpdatedAt:snapshot.sourceUpdatedAt,fetchedAt:snapshot.fetchedAt,runId:snapshot.runId,sha256:snapshot.sha256,license:'CC0-1.0',rawCount:snapshot.data.features.length,publicCount:parsed.stores.length,rejectedCount:parsed.rejected.length,coverage:'published-chain-extract; nationwide completeness unverified'});
- }
- const sa=read(join(cache,'salvation-army-snapshot.json'));assertSourceSnapshot(sa.queriedAt);
- const parsed=parseSalvation(sa);added.push(...parsed.stores);exclusions.push({brandId:'salvation-army',records:parsed.rejected});
- sources.push({brandId:'salvation-army',source:'official-salvation-army-locator',sourceUrl:'https://satruck.org/ThriftStore/',sourceUpdatedAt:sa.queriedAt,fetchedAt:sa.queriedAt,publicCount:parsed.stores.length,rejectedCount:parsed.rejected.length,queryCount:sa.completedCount,coverage:'partial-geographic-queries; nearest10 perZIP; not national completeness'});
- const closet=read(join(cache,'out-of-the-closet-snapshot.json'));assertSourceSnapshot(closet.sourceUpdatedAt);
- const closetParsed=parseOutOfCloset(closet);added.push(...closetParsed.stores);exclusions.push({brandId:'out-of-the-closet',records:closetParsed.rejected});
- sources.push({brandId:'out-of-the-closet',source:'official-out-of-the-closet-locator',sourceUrl:closet.sourceUrl,sourceUpdatedAt:closet.sourceUpdatedAt,fetchedAt:closet.fetchedAt,publicCount:closetParsed.stores.length,rejectedCount:closetParsed.rejected.length,coverage:'official current locator; national completeness not independently established'});
+  const accepted=published.sources.find((s:{brandId:string})=>s.brandId===brandId);
+  assertSourceSnapshot(snapshot.sourceUpdatedAt,{maxAgeDays:ATP_MAX_AGE_DAYS,allowHistorical:isAcceptedChainSnapshot(snapshot,accepted)||process.env.ALLOW_HISTORICAL_STORE_SOURCE==='1'});
+  const parsed=parseChainAtp(snapshot,brandId);
+  return {...parsed,source:{brandId,source:'alltheplaces',sourceUrl:snapshot.sourceUrl,sourceUpdatedAt:snapshot.sourceUpdatedAt,fetchedAt:snapshot.fetchedAt,runId:snapshot.runId,sha256:snapshot.sha256,license:'CC0-1.0',rawCount:snapshot.data.features.length,publicCount:parsed.stores.length,rejectedCount:parsed.rejected.length,coverage:'published-chain-extract; nationwide completeness unverified'}};
+ });
+ load('salvation-army',()=>{
+  const sa=read(join(cache,'salvation-army-snapshot.json'));assertSourceSnapshot(sa.queriedAt);
+  const parsed=parseSalvation(sa);
+  return {...parsed,source:{brandId:'salvation-army',source:'official-salvation-army-locator',sourceUrl:'https://satruck.org/ThriftStore/',sourceUpdatedAt:sa.queriedAt,fetchedAt:sa.queriedAt,publicCount:parsed.stores.length,rejectedCount:parsed.rejected.length,queryCount:sa.completedCount,coverage:'partial-geographic-queries; nearest10 perZIP; not national completeness'}};
+ });
+ load('out-of-the-closet',()=>{
+  const closet=read(join(cache,'out-of-the-closet-snapshot.json'));assertSourceSnapshot(closet.sourceUpdatedAt);
+  const parsed=parseOutOfCloset(closet);
+  return {...parsed,source:{brandId:'out-of-the-closet',source:'official-out-of-the-closet-locator',sourceUrl:closet.sourceUrl,sourceUpdatedAt:closet.sourceUpdatedAt,fetchedAt:closet.fetchedAt,publicCount:parsed.stores.length,rejectedCount:parsed.rejected.length,coverage:'official current locator; national completeness not independently established'}};
+ });
  const independent=parseIndependentStores(read('data/independent-san-diego.json'));
  added.push(...independent);
  sources.push({brandId:'independent',source:'official-independent-website',sourceUpdatedAt:undefined,fetchedAt:undefined,publicCount:independent.length,rejectedCount:0,coverage:'curated San Diego pilot; independent local operators; individual website-review dates are preserved, not refreshed automatically'});
  for(let i=0;i<added.length;i++)added[i]=applyStoreCoordinateCorrection(added[i],corrections.get(added[i].id));
  if(!added.length||new Set([...base,...added].map(s=>s.id)).size!==base.length+added.length)throw new Error('Empty or duplicate store IDs');
- const previous:ScoredStore[]=existsSync('data/stores-us.json')?read('data/stores-us.json').stores:[];
+ const previous:ScoredStore[]=published.stores;
  const prior=new Map(previous.map(s=>[s.id,s]));
  const reusable=(s:Pick<ScoredStore,'id'|'location'>)=>{const old=prior.get(s.id);return old&&old.location.lat===s.location.lat&&old.location.lon===s.location.lon&&old.score?.catchment.tractCount>0?old:undefined;};
  const centroids:TractCentroid[]=readdirSync('data/tract-centroids').filter(f=>f.endsWith('.json')).flatMap(f=>read(join('data/tract-centroids',f)));
@@ -61,7 +85,7 @@ async function main(){
  const rescoredGoodwill=new Map(scored.slice(0,correctedBaseIds.size).map(store=>[store.id,store]));
  const stores=[...base.map(store=>rescoredGoodwill.get(store.id)??store),...scored.slice(correctedBaseIds.size)];
  for(const brandId of ['savers','buffalo-exchange','salvation-army','out-of-the-closet']){const count=added.filter(s=>s.brandId===brandId).length;const old=previous.filter(s=>(s as ExpandedStore).brandId===brandId).length;if(count<Math.max(1,old*.9))throw new Error(`Coverage regression for ${brandId}`);}
- const generatedAt=new Date().toISOString();const sourceUpdatedAt=[goodwill.sourceUpdatedAt??goodwill.generatedAt,...sources.map(s=>s.sourceUpdatedAt).filter((date):date is string=>!!date)].sort()[0];
+ const generatedAt=new Date().toISOString();const sourceUpdatedAt=[goodwill.sourceUpdatedAt??goodwill.generatedAt,...sources.map(s=>s.sourceUpdatedAt).filter((date):date is string=>typeof date==='string'&&!!date)].sort()[0];
  const payload={generatedAt,sourceUpdatedAt,source:'multi-source-thrift-registry',count:stores.length,sources:[{brandId:'goodwill',source:goodwill.source,sourceUpdatedAt:goodwill.sourceUpdatedAt,publicCount:base.length,coverage:'validated Goodwill dataset with documented location corrections and quarantines'},...sources],stores};
  mkdirSync('data/provenance',{recursive:true});writeFileSync('data/provenance/expanded-store-sources.json',JSON.stringify({generatedAt,sourceUpdatedAt,sources:payload.sources,exclusions},null,2)+'\n');
  writeFileSync('data/stores-us.json.tmp',JSON.stringify(payload));renameSync('data/stores-us.json.tmp','data/stores-us.json');

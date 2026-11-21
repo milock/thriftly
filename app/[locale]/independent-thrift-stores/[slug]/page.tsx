@@ -8,6 +8,7 @@ import {datasetGeneratedAt, locateBundledStores} from '@/lib/locate';
 import {pageMetadata, SITE_URL} from '@/lib/seo';
 import {localizedPath} from '@/i18n/routing';
 import {CityHeader, CityFooter} from '@/components/city/chrome';
+import {InfoDisclosure} from '@/components/info-disclosure';
 import {CityStores} from '@/components/city/city-stores';
 import {BrandNavigation} from '@/components/city/brand-navigation';
 import {JsonLd} from '@/components/json-ld';
@@ -41,13 +42,10 @@ export default async function IndependentCity({params}:{params:Promise<{locale:s
  return <div className="flex min-h-dvh flex-col"><JsonLd data={schema}/><CityHeader/><main id="main-content" tabIndex={-1} className="flex-1"><div className="site-gutter mx-auto max-w-3xl py-6 sm:py-12">
   <nav aria-label={p('breadcrumb')} className="text-sm text-muted-foreground"><Link href="/">{p('home')}</Link> / <Link href="/thrift-stores">{t('allTitle')}</Link> / {place}</nav>
   <h1 id="pilot-title" className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
-  {!stores.length&&<p className="mt-3 text-muted-foreground">{t('cityEmpty',{city:city.city})}</p>}
-  <p className="mt-2 text-sm text-muted-foreground">{t('independentPilotScope')}</p>
+  <p className="mt-2 text-sm text-muted-foreground">{stores.length ? t('countRadius',{count:stores.length,radius:city.radiusMiles,city:city.city}) : t('cityEmpty',{city:city.city})}</p>
+  <div className="mt-3 flex flex-wrap items-center gap-x-4"><Link href={mapHref} className="inline-flex min-h-11 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground">{t('openMap')}</Link><Link href="/how-we-score" className="inline-flex min-h-11 items-center text-sm underline underline-offset-4">{p('methodShort')}</Link><InfoDisclosure label={t('coverageLabel')}><p>{t('independentPilotScope')}</p><p>{date&&<>{t('sourceDate',{date:new Intl.DateTimeFormat(locale,{dateStyle:'long',timeZone:'UTC'}).format(new Date(date))})}. </>}{t('independent')}</p></InfoDisclosure></div>
   <BrandNavigation city={city} active="independent-thrift-stores" compactMobile/>
   {stores.length>0&&<section aria-labelledby="pilot-title" className="mt-4 sm:mt-6"><h2 className="sr-only">{t('cityResults',{city:city.city})}</h2><CityStores initial={stores} cityName={city.city} lat={center?.lat} lon={center?.lon} radiusMiles={city.radiusMiles} brandIds={['independent']} generatedAt={date}/></section>}
-  <Link href={mapHref} className="mt-6 inline-flex min-h-11 items-center rounded-md bg-brand px-5 font-medium text-brand-foreground">{t('openMap')}</Link>
-  <p className="mt-6 text-sm text-muted-foreground">{t('neighborhoodNote')} <Link href="/how-we-score" className="underline">{p('methodShort')}</Link></p>
-  <p className="mt-6 text-sm text-muted-foreground">{date&&<>{t('sourceDate',{date:new Intl.DateTimeFormat(locale,{dateStyle:'long',timeZone:'UTC'}).format(new Date(date))})}. </>}{t('independent')}</p>
   <Link href={`/thrift-stores/${slug}`} className="mt-8 inline-block underline">{t('allStores')}</Link>
  </div></main><CityFooter/></div>;
 }

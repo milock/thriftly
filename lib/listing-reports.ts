@@ -3,7 +3,7 @@ import { isIP } from 'node:net';
 import { get, list, put } from '@vercel/blob';
 
 // Server-only module. Clients must use type-only imports from this file.
-export const REPORT_REASONS = ['wrong-location', 'donation-only', 'closed', 'duplicate', 'incorrect-hours', 'departments', 'shopper-review', 'other'] as const;
+export const REPORT_REASONS = ['wrong-location', 'donation-only', 'closed', 'duplicate', 'incorrect-hours', 'other'] as const;
 export type ReportReason = typeof REPORT_REASONS[number];
 export type ReportStatus = 'pending' | 'approved' | 'rejected';
 export interface ReportInput {
@@ -11,9 +11,6 @@ export interface ReportInput {
   reason: ReportReason;
   details: string;
   requestId: string;
-  visitedOn: string | null;
-  rating: number | null;
-  confirmedVisit: boolean;
 }
 export interface ListingReport {
   version: 1;
@@ -22,9 +19,6 @@ export interface ListingReport {
   reason: ReportReason;
   details: string;
   submittedAt: string;
-  visitedOn: string | null;
-  rating: number | null;
-  confirmedVisit: boolean;
   status: ReportStatus;
   review?: { at: string; actor: string; note: string };
 }
@@ -41,22 +35,16 @@ function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new ReportError(400, 'invalid_report');
   return value as Record<string, unknown>;
 }
-export function validateReport(value: unknown, knownStoreIds: ReadonlySet<string>, now = new Date()): ReportInput {
+export function validateReport(value: unknown, knownStoreIds: ReadonlySet<string>): ReportInput {
   const raw = object(value);
-  if (Object.keys(raw).some(key => !['storeId', 'reason', 'details', 'requestId', 'visitedOn', 'rating', 'confirmedVisit'].includes(key))) throw new ReportError(400, 'invalid_report');
+  if (Object.keys(raw).some(key => !['storeId', 'reason', 'details', 'requestId'].includes(key))) throw new ReportError(400, 'invalid_report');
   if (typeof raw.storeId !== 'string' || raw.storeId.length > 200 || !knownStoreIds.has(raw.storeId)) throw new ReportError(400, 'unknown_store');
   if (typeof raw.reason !== 'string' || !REPORT_REASONS.includes(raw.reason as ReportReason)) throw new ReportError(400, 'invalid_report');
   if (typeof raw.requestId !== 'string' || !UUID.test(raw.requestId)) throw new ReportError(400, 'invalid_report');
   if (typeof raw.details !== 'string' || raw.details.length > MAX_DETAILS || controlCharacters.test(raw.details)) throw new ReportError(400, 'invalid_report');
   const details = raw.details.trim();
-  if (['departments', 'other'].includes(raw.reason) && details.length < 10) throw new ReportError(400, 'details_required');
-  const visitedOn = raw.visitedOn ?? null;
-  if (visitedOn !== null && (typeof visitedOn !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(visitedOn) || !Number.isFinite(Date.parse(visitedOn)) || new Date(visitedOn).toISOString().slice(0, 10) !== visitedOn || visitedOn < '2000-01-01' || visitedOn > now.toISOString().slice(0, 10))) throw new ReportError(400, 'invalid_visit_date');
-  if (['departments', 'shopper-review'].includes(raw.reason) && !visitedOn) throw new ReportError(400, 'visit_date_required');
-  const rating = raw.rating ?? null;
-  const confirmedVisit = raw.confirmedVisit ?? false;
-  if (typeof confirmedVisit !== 'boolean' || (raw.reason === 'shopper-review' ? !Number.isInteger(rating) || (rating as number) < 1 || (rating as number) > 5 || confirmedVisit !== true : rating !== null || confirmedVisit !== false)) throw new ReportError(400, 'invalid_rating');
-  return { storeId: raw.storeId, reason: raw.reason as ReportReason, details, requestId: raw.requestId.toLowerCase(), visitedOn: visitedOn as string | null, rating: rating as number | null, confirmedVisit };
+  if (raw.reason === 'other' && details.length < 10) throw new ReportError(400, 'details_required');
+  return { storeId: raw.storeId, reason: raw.reason as ReportReason, details, requestId: raw.requestId.toLowerCase() };
 }
 
 /** Bounds the actual stream, including requests with no Content-Length. */
@@ -167,13 +155,13 @@ export interface ReportQueue {
 }
 
 function sameReport(report: ListingReport, input: ReportInput): boolean {
-  return report.storeId === input.storeId && report.reason === input.reason && report.details === input.details && report.visitedOn === input.visitedOn && report.rating === input.rating && report.confirmedVisit === input.confirmedVisit;
+  return report.storeId === input.storeId && report.reason === input.reason && report.details === input.details;
 }
 
 /** Fixed slot paths and conditional creates enforce a shared 5-per-hour limit. */
 async function claimRateSlot(storage: ReportStorage, reporter: string, input: ReportInput, now: Date): Promise<void> {
   const hour = now.toISOString().slice(0, 13).replace('T', '-');
-  const fingerprint = createHash('sha256').update(JSON.stringify([input.storeId, input.reason, input.details, input.visitedOn, input.rating, input.confirmedVisit])).digest('hex');
+  const fingerprint = createHash('sha256').update(JSON.stringify([input.storeId, input.reason, input.details])).digest('hex');
   const claim: RateClaim = { requestId: input.requestId, fingerprint, expiresAt: new Date(now.getTime() + 48 * 3600_000).toISOString() };
   // The same request keeps its slot after a network failure. A failed report
   // write consumes a slot conservatively; it never produces false success.
@@ -196,7 +184,7 @@ export function createReportQueue(storage: ReportStorage = blobReportStorage()):
         return existing.id;
       }
       await claimRateSlot(storage, reporter, input, now);
-      const report: ListingReport = { version: 1, id: input.requestId, storeId: input.storeId, reason: input.reason, details: input.details, visitedOn: input.visitedOn, rating: input.rating, confirmedVisit: input.confirmedVisit, submittedAt: now.toISOString(), status: 'pending' };
+      const report: ListingReport = { version: 1, id: input.requestId, storeId: input.storeId, reason: input.reason, details: input.details, submittedAt: now.toISOString(), status: 'pending' };
       if (await storage.create(path, report)) return report.id;
       const saved = await storage.read<ListingReport>(path);
       if (!saved) throw new ReportError(503, 'reports_unavailable');

@@ -29,6 +29,7 @@ import { tractsWithinRadius, aggregateCatchment } from "../lib/catchment";
 import { computeGoodsScore } from "../lib/scoring";
 import { CATCHMENT_RADIUS_MILES } from "../lib/reference-ranges";
 import { assertRefreshQuality, assertSourceSnapshot } from "../lib/refresh-quality";
+import { ATP_MAX_AGE_DAYS } from "../lib/source-health";
 import {parseAtpStores, type AtpSnapshot} from "../lib/atp-stores";
 import { STATES } from "../lib/cities";
 import { deduplicateStores } from "../lib/store-classification";
@@ -127,7 +128,7 @@ let sourceMetadata: {source: string; sourceUpdatedAt: string; runId?:string; lic
 let classificationReview: Store[]=[];
 function readAtpStores(): Store[] {
   const snapshot=JSON.parse(readFileSync(join(process.cwd(),'.cache','atp','goodwill.json'),'utf8')) as AtpSnapshot;
-  assertSourceSnapshot(snapshot.sourceUpdatedAt,{allowHistorical:process.env.ALLOW_HISTORICAL_STORE_SOURCE==='1'});
+  assertSourceSnapshot(snapshot.sourceUpdatedAt,{maxAgeDays:ATP_MAX_AGE_DAYS,allowHistorical:process.env.ALLOW_HISTORICAL_STORE_SOURCE==='1'});
   const previous=JSON.parse(readFileSync(join(process.cwd(),'data','goodwill-us.json'),'utf8')) as {sourceUpdatedAt?:string;generatedAt?:string;stores:Store[]};
   if(Date.parse(snapshot.sourceUpdatedAt)<Date.parse(previous.sourceUpdatedAt??previous.generatedAt??'')) throw new Error('Refusing to replace a newer store source with an older one');
   const parsed=parseAtpStores(snapshot,previous.stores);

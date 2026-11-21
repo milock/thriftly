@@ -10,6 +10,7 @@ import { cityCentroid } from "@/lib/city-data";
 import { locateBundledStores, datasetGeneratedAt } from "@/lib/locate";
 import type { ScoredStore } from "@/lib/types";
 import { BrandNavigation } from "@/components/city/brand-navigation";
+import { InfoDisclosure } from "@/components/info-disclosure";
 import { CityStores } from "@/components/city/city-stores";
 import { AddToOsm } from "@/components/add-to-osm";
 import { CityHeader, CityFooter } from "@/components/city/chrome";
@@ -186,11 +187,11 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
           </h1>
 
           {count > 0 ? (
-            <p className="mt-3 text-base leading-relaxed sm:text-lg text-muted-foreground">
+            <p className="mt-2 text-sm text-muted-foreground">
               {t("cityIntro", {count, radius: c.radiusMiles, city: c.city})}
             </p>
           ) : (
-            <p className="mt-3 text-base leading-relaxed sm:text-lg text-muted-foreground">
+            <p className="mt-2 text-sm text-muted-foreground">
               {t("cityEmpty", {city: c.city})}
             </p>
           )}
@@ -198,7 +199,7 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-1">
             <Link
               href={searchHref(c, lat, lon)}
-              className={cn(buttonVariants({ size: "lg" }), "min-h-12 h-auto w-full sm:w-auto whitespace-normal py-3 gap-2 px-5 text-[15px]")}
+              className={cn(buttonVariants({ size: "lg" }), "min-h-11 h-auto whitespace-normal py-2 gap-2 px-4 text-sm")}
             >
               {t("openCity", {city: c.city})}
               <ArrowRight className="size-4 shrink-0 rtl:rotate-180" />
@@ -214,14 +215,9 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
           <BrandNavigation city={c} active="goodwill" />
 
           {count > 0 && (
-            <section className="mt-6">
-              <h2 className="text-xl font-semibold tracking-tight">
-                {t("mapped", {city: c.city})}
-              </h2>
-              <p className="mt-1.5 text-[14px] text-muted-foreground">
-                {t("sorted")}
-              </p>
-              <div className="mt-3">
+            <section className="mt-4">
+              <h2 className="sr-only">{t("mapped", {city: c.city})}</h2>
+              <div>
                 <CityStores
                   brandIds={["goodwill"]}
                   initial={stores}
@@ -241,11 +237,11 @@ export default async function CityPage({ params }: { params: Promise<{ slug: str
             </section>
           )}
 
-          <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
-            {t("dataset")}: <time dateTime={datasetGeneratedAt(["goodwill"]) ?? undefined}>
+          <InfoDisclosure label={t("dataset")}>
+            <p>{t("dataset")}: <time dateTime={datasetGeneratedAt(["goodwill"]) ?? undefined}>
               {datasetGeneratedAt(["goodwill"]) ? new Intl.DateTimeFormat(locale, {dateStyle: "long", timeZone: "UTC"}).format(new Date(datasetGeneratedAt(["goodwill"])!)) : t("dateUnavailable")}
-            </time>. {t("independent")}
-          </p>
+            </time>. {t("independent")}</p>
+          </InfoDisclosure>
           {c.slug === "los-angeles-ca" && <aside className="mt-10 rounded-xl border border-border p-5">
             <h2 className="text-lg font-semibold">{t("outletQuestion")}</h2>
             <Link className="mt-2 inline-block underline" href="/goodwill/los-angeles-ca/outlets">{t("outletLink")}</Link>

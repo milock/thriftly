@@ -1,6 +1,8 @@
 import {test, expect} from '@playwright/test';
+import {blockStoreDetails} from './fixtures';
 
 test.beforeEach(async ({page}) => {
+  await blockStoreDetails(page);
   await page.route('**/api/enrich**', route => route.fulfill({json: {enriched: {}}}));
 });
 

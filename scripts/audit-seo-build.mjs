@@ -1,4 +1,4 @@
-/** Audit the local Next prerender output without requesting production. */
+/** Audit local prerender output and explicitly configured live dynamic pages. */
 import {readFile, writeFile, mkdir} from 'node:fs/promises';
 import {resolve, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -49,30 +49,54 @@ export function evaluatePage(page,path,status=200){
  }}
  return issues;
 }
-export async function audit(root=process.cwd()){
+export function liveAuditOrigin(value){
+ if(!value)return null;
+ const url=new URL(value);
+ if(!['http:','https:'].includes(url.protocol)||url.username||url.password||url.pathname!=='/'||url.search||url.hash)throw new Error('SEO_AUDIT_ORIGIN must be an HTTP(S) origin without credentials, path, query or fragment.');
+ return url.origin;
+}
+export function recognizedDynamicRoute(buildPath,routes){
+ return (routes.dynamicRoutes??[]).find(route=>typeof route.regex==='string'&&new RegExp(route.regex).test(buildPath))??null;
+}
+export async function audit(root=process.cwd(),options={}){
  const app=join(root,'.next/server/app');const sitemap=await readFile(join(app,'sitemap.xml.body'),'utf8');const manifest=JSON.parse(await readFile(join(root,'.next/prerender-manifest.json'),'utf8'));
- const urls=[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>decode(m[1]));const findings=[];const pages=new Map();const refs=[];let parsed=0;
+ const routes=JSON.parse(await readFile(join(root,'.next/routes-manifest.json'),'utf8'));
+ const liveOrigin=liveAuditOrigin(options.origin??process.env.SEO_AUDIT_ORIGIN);const fetcher=options.fetcher??fetch;
+ const urls=[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>decode(m[1]));const findings=[];const pages=new Map();const refs=[];let parsed=0,staticParsed=0,liveParsed=0;
  if(!urls.length)throw new Error('Sitemap contains no URLs.');
  const add=(path,code,detail)=>findings.push({path,code,detail});
  const seenUrls=new Set();
  for(const raw of urls){if(seenUrls.has(raw)){add(raw,'duplicate_sitemap_url','');continue;}seenUrls.add(raw);let url;try{url=new URL(raw);}catch{add(raw,'invalid_sitemap_url','');continue;}
   if(url.origin!==ORIGIN||url.search||url.hash){add(raw,'sitemap_origin_or_suffix','');continue;}
   const path=url.pathname;const {locale}=localePath(path);const buildPath=locale==='en'?`/en${path==='/'?'':path}`:path;
-  const route=manifest.routes[buildPath];if(!route){add(path,'missing_prerender_manifest',buildPath);continue;}
-  let html;try{html=await readFile(join(app,`${buildPath.slice(1)}.html`),'utf8');}catch{add(path,'missing_prerender_html',buildPath);continue;}
-  const page=inspectHtml(html);parsed++;for(const issue of evaluatePage(page,path,route.initialStatus??200))add(path,issue.code,issue.detail);
+  const route=manifest.routes[buildPath];let html,status=200,source;
+  if(route){
+   try{html=await readFile(join(app,`${buildPath.slice(1)}.html`),'utf8');}catch{add(path,'missing_prerender_html',buildPath);continue;}
+   status=route.initialStatus??200;source='static';
+  }else{
+   if(!recognizedDynamicRoute(buildPath,routes)){add(path,'missing_prerender_manifest',buildPath);continue;}
+   if(!liveOrigin){add(path,'dynamic_origin_required',buildPath);continue;}
+   try{
+    const response=await fetcher(new URL(path,liveOrigin),{redirect:'manual',cache:'no-store',signal:AbortSignal.timeout(10000)});
+    status=response.status;html=await response.text();source='live';
+    if(!response.headers.get('content-type')?.toLowerCase().includes('text/html'))add(path,'live_content_type',response.headers.get('content-type')??'');
+   }catch{add(path,'live_fetch_failed',buildPath);continue;}
+  }
+  const page=inspectHtml(html);parsed++;if(source==='static')staticParsed++;else liveParsed++;
+  for(const issue of evaluatePage(page,path,status))add(path,issue.code,issue.detail);
   pages.set(path,{ids:page.ids});
   for(const href of new Set(page.hrefs)){let target;try{target=new URL(href,raw);}catch{add(path,'invalid_href',href);continue;}if(target.origin===ORIGIN&&!target.pathname.startsWith('/_next/')&&!target.pathname.startsWith('/api/'))refs.push({from:path,target:target.pathname,hash:target.hash});}
  }
  for(const ref of refs){const target=pages.get(ref.target);if(!target){const {locale}=localePath(ref.target);const key=locale==='en'?`/en${ref.target==='/'?'':ref.target}`:ref.target;if(!manifest.routes[key])add(ref.from,'internal_target_unverified',ref.target);continue;}
   if(ref.hash){let id;try{id=decodeURIComponent(ref.hash.slice(1));}catch{add(ref.from,'invalid_fragment',ref.hash);continue;}if(id&&!target.ids.has(id))add(ref.from,'missing_fragment',`${ref.target}${ref.hash}`);}
  }
+ /** @type {Record<string,number>} */
  const counts={};for(const finding of findings)counts[finding.code]=(counts[finding.code]??0)+1;
- return {buildId:(await readFile(join(root,'.next/BUILD_ID'),'utf8')).trim(),scope:'Sitemap URLs mapped to Next prerender manifest and HTML. Status is manifest initialStatus, not a live HTTP check. Internal targets absent from the sitemap are checked against the manifest; dynamic targets remain unverified.', sitemapUrls:urls.length, uniqueUrls:new Set(urls).size, htmlPagesChecked:parsed, internalLinksChecked:refs.length, counts,findings};
+ return {buildId:(await readFile(join(root,'.next/BUILD_ID'),'utf8')).trim(),scope:'Static sitemap URLs use local prerender HTML and manifest initialStatus. Recognized dynamic sitemap routes use live HTTP status and HTML from the explicitly configured SEO_AUDIT_ORIGIN. Both receive identical metadata, locale, indexability, structured-data and link checks. Internal targets absent from the sitemap are verified only against the prerender manifest.', sitemapUrls:urls.length, uniqueUrls:new Set(urls).size, htmlPagesChecked:parsed, staticHtmlPagesChecked:staticParsed, liveHtmlPagesChecked:liveParsed, liveOrigin, internalLinksChecked:refs.length, counts,findings};
 }
 export function auditExitCode(strict, findings){return strict&&findings.length>0?1:0;}
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  const args=process.argv.slice(2);if(args.some(arg=>arg!=='--strict'))throw new Error('Usage: npm run audit:seo -- [--strict]');
- const result=await audit();const output=resolve('outputs/seo-build-audit.json');await mkdir(resolve('outputs'),{recursive:true});await writeFile(output,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({output,sitemapUrls:result.sitemapUrls,htmlPagesChecked:result.htmlPagesChecked,counts:result.counts},null,2));
+ const result=await audit();const output=resolve('outputs/seo-build-audit.json');await mkdir(resolve('outputs'),{recursive:true});await writeFile(output,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({output,sitemapUrls:result.sitemapUrls,htmlPagesChecked:result.htmlPagesChecked,staticHtmlPagesChecked:result.staticHtmlPagesChecked,liveHtmlPagesChecked:result.liveHtmlPagesChecked,liveOrigin:result.liveOrigin,counts:result.counts},null,2));
  process.exitCode=auditExitCode(args.includes('--strict'),result.findings);
 }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T03:17:52.374Z",
+  "generatedAt": "2026-11-18T01:19:34.915Z",
   "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
   "sources": [
     {
@@ -12,25 +12,25 @@
     {
       "brandId": "savers",
       "source": "alltheplaces",
-      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-24-13-32-37/output/savers_ca_us.geojson",
-      "sourceUpdatedAt": "2026-10-29T05:46:36.679966Z",
-      "fetchedAt": "2026-11-06T00:40:22.748Z",
-      "runId": "2026-10-24-13-32-37",
-      "sha256": "a0ab06d3a4567bfc952a91717d59442ddcb0bd71eb82f18b278ea172ab98dbf4",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-11-07-13-32-32/output/savers_ca_us.geojson",
+      "sourceUpdatedAt": "2026-11-12T13:04:52.799435Z",
+      "fetchedAt": "2026-11-18T01:12:37.018Z",
+      "runId": "2026-11-07-13-32-32",
+      "sha256": "b23fce6a6f54030d886631e420414c1b09a93637314bc64b38a7f105c67a9113",
       "license": "CC0-1.0",
-      "rawCount": 693,
+      "rawCount": 694,
       "publicCount": 204,
-      "rejectedCount": 489,
+      "rejectedCount": 490,
       "coverage": "published-chain-extract; nationwide completeness unverified"
     },
     {
       "brandId": "buffalo-exchange",
       "source": "alltheplaces",
-      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-10-24-13-32-37/output/buffalo_exchange_us.geojson",
-      "sourceUpdatedAt": "2026-10-25T04:38:05.557273Z",
-      "fetchedAt": "2026-11-06T00:40:22.880Z",
-      "runId": "2026-10-24-13-32-37",
-      "sha256": "1ed0a19b8d1dac89b966f4ccc85a30e876a64b8b3541d0fa359bc68c805f8ad2",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-11-07-13-32-32/output/buffalo_exchange_us.geojson",
+      "sourceUpdatedAt": "2026-11-08T03:59:47.068646Z",
+      "fetchedAt": "2026-11-18T01:12:37.245Z",
+      "runId": "2026-11-07-13-32-32",
+      "sha256": "70e520b42c734ce84760ebf2487e37e7ffb2f9d68647459ee01d27d55d6a70d7",
       "license": "CC0-1.0",
       "rawCount": 42,
       "publicCount": 41,
@@ -41,10 +41,10 @@
       "brandId": "salvation-army",
       "source": "official-salvation-army-locator",
       "sourceUrl": "https://satruck.org/ThriftStore/",
-      "sourceUpdatedAt": "2026-11-06T00:36:09.058Z",
-      "fetchedAt": "2026-11-06T00:36:09.058Z",
-      "publicCount": 363,
-      "rejectedCount": 980,
+      "sourceUpdatedAt": "2026-11-18T01:19:22.585Z",
+      "fetchedAt": "2026-11-18T01:19:22.585Z",
+      "publicCount": 362,
+      "rejectedCount": 975,
       "queryCount": 296,
       "coverage": "partial-geographic-queries; nearest10 perZIP; not national completeness"
     },
@@ -52,8 +52,8 @@
       "brandId": "out-of-the-closet",
       "source": "official-out-of-the-closet-locator",
       "sourceUrl": "https://outofthecloset.org/locations/",
-      "sourceUpdatedAt": "2026-11-06T00:40:33.212Z",
-      "fetchedAt": "2026-11-06T00:40:33.212Z",
+      "sourceUpdatedAt": "2026-11-18T01:19:34.590Z",
+      "fetchedAt": "2026-11-18T01:19:34.590Z",
       "publicCount": 26,
       "rejectedCount": 0,
       "coverage": "official current locator; national completeness not independently established"
@@ -1071,11 +1071,11 @@
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2076",
+          "sourceId": "2076",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2076",
+          "sourceId": "CDC2076",
           "reason": "outside-us-coverage"
         },
         {
@@ -1191,11 +1191,11 @@
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2126",
+          "sourceId": "CDC2126",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2126",
+          "sourceId": "2126",
           "reason": "outside-us-coverage"
         },
         {
@@ -1355,11 +1355,11 @@
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2173",
+          "sourceId": "2173",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2173",
+          "sourceId": "CDC2173",
           "reason": "outside-us-coverage"
         },
         {
@@ -1423,11 +1423,11 @@
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2137",
+          "sourceId": "CDC2137",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2137",
+          "sourceId": "2137",
           "reason": "outside-us-coverage"
         },
         {
@@ -1463,11 +1463,11 @@
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2034",
+          "sourceId": "2034",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2034",
+          "sourceId": "CDC2034",
           "reason": "outside-us-coverage"
         },
         {
@@ -1495,11 +1495,11 @@
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2121",
+          "sourceId": "CDC2121",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2121",
+          "sourceId": "2121",
           "reason": "outside-us-coverage"
         },
         {
@@ -1527,11 +1527,11 @@
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2077",
+          "sourceId": "2077",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2077",
+          "sourceId": "CDC2077",
           "reason": "outside-us-coverage"
         },
         {
@@ -1555,11 +1555,11 @@
           "reason": "not-public-retail"
         },
         {
-          "sourceId": "2093",
+          "sourceId": "CDC2093",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2093",
+          "sourceId": "2093",
           "reason": "outside-us-coverage"
         },
         {
@@ -1599,19 +1599,19 @@
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2048",
-          "reason": "outside-us-coverage"
-        },
-        {
           "sourceId": "2048",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2039",
+          "sourceId": "CDC2048",
           "reason": "outside-us-coverage"
         },
         {
           "sourceId": "2039",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "CDC2039",
           "reason": "outside-us-coverage"
         },
         {
@@ -1627,11 +1627,11 @@
           "reason": "not-public-retail"
         },
         {
-          "sourceId": "CDC2197",
+          "sourceId": "2197",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2197",
+          "sourceId": "CDC2197",
           "reason": "outside-us-coverage"
         },
         {
@@ -1688,6 +1688,10 @@
         },
         {
           "sourceId": "CDC1272",
+          "reason": "not-public-retail"
+        },
+        {
+          "sourceId": "CDC1603",
           "reason": "not-public-retail"
         },
         {
@@ -1923,15 +1927,11 @@
           "reason": "not-public-retail"
         },
         {
-          "sourceId": "2104",
-          "reason": "outside-us-coverage"
-        },
-        {
           "sourceId": "CDC2104",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2060",
+          "sourceId": "2104",
           "reason": "outside-us-coverage"
         },
         {
@@ -1939,11 +1939,15 @@
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2084",
+          "sourceId": "2060",
           "reason": "outside-us-coverage"
         },
         {
           "sourceId": "CDC2084",
+          "reason": "outside-us-coverage"
+        },
+        {
+          "sourceId": "2084",
           "reason": "outside-us-coverage"
         },
         {
@@ -1999,11 +2003,11 @@
           "reason": "not-public-retail"
         },
         {
-          "sourceId": "2150",
+          "sourceId": "CDC2150",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2150",
+          "sourceId": "2150",
           "reason": "outside-us-coverage"
         },
         {
@@ -2019,11 +2023,11 @@
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "2055",
+          "sourceId": "CDC2055",
           "reason": "outside-us-coverage"
         },
         {
-          "sourceId": "CDC2055",
+          "sourceId": "2055",
           "reason": "outside-us-coverage"
         }
       ]
@@ -3669,10 +3673,6 @@
           "reason": "not-public-retail"
         },
         {
-          "sourceId": "4eb9bfd0-0ee4-477b-ab81-3eb6e88db61f",
-          "reason": "not-public-retail"
-        },
-        {
           "sourceId": "6e239cb7-4c61-4689-a732-ceb49cccce35",
           "reason": "not-public-retail"
         },
@@ -3698,10 +3698,6 @@
         },
         {
           "sourceId": "164adaf3-ff6d-45ea-b3b8-e3486ce2b01c",
-          "reason": "not-public-retail"
-        },
-        {
-          "sourceId": "20d13f6c-e640-4720-88c4-ba9ec5ff3a87",
           "reason": "not-public-retail"
         },
         {
@@ -4669,10 +4665,6 @@
           "reason": "not-public-retail"
         },
         {
-          "sourceId": "182fe7bf-e8f0-4631-8fd3-6118a6d1e2e9",
-          "reason": "not-public-retail"
-        },
-        {
           "sourceId": "fbcb8954-9421-4101-834c-ed2904d76466",
           "reason": "not-public-retail"
         },
@@ -5337,19 +5329,11 @@
           "reason": "not-public-retail"
         },
         {
-          "sourceId": "e8eee622-9f8e-4f73-b37c-541d698bea59",
-          "reason": "not-public-retail"
-        },
-        {
           "sourceId": "6f7f2676-f4d7-48d0-8e85-9705e1eab717",
           "reason": "not-public-retail"
         },
         {
           "sourceId": "2fdcb68d-6af8-4f67-b58f-11c4b1fc6ba9",
-          "reason": "not-public-retail"
-        },
-        {
-          "sourceId": "21225cfe-e1dc-44b5-9df3-b0b74006b6c0",
           "reason": "not-public-retail"
         },
         {

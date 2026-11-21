@@ -25,7 +25,7 @@ export function Methodology() {
         <Info className="size-4" />
         <span className="hidden lg:inline">{t("howScoring")}</span>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[22rem] max-w-[calc(100vw-2rem)] max-h-[80dvh] overflow-y-auto p-0">
+      <PopoverContent align="end" className="w-[22rem] max-w-[calc(100vw-2rem)] max-h-[min(var(--available-height),80dvh)] overflow-y-auto p-0">
         <div className="border-b p-4">
           <h3 className="text-sm font-semibold">{t("score")}</h3>
           <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
