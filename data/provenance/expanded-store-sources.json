@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T01:19:34.915Z",
+  "generatedAt": "2026-11-23T21:32:58.231Z",
   "sourceUpdatedAt": "2026-10-11T16:21:48.982849Z",
   "sources": [
     {
@@ -12,11 +12,11 @@
     {
       "brandId": "savers",
       "source": "alltheplaces",
-      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-11-07-13-32-32/output/savers_ca_us.geojson",
-      "sourceUpdatedAt": "2026-11-12T13:04:52.799435Z",
-      "fetchedAt": "2026-11-18T01:12:37.018Z",
-      "runId": "2026-11-07-13-32-32",
-      "sha256": "b23fce6a6f54030d886631e420414c1b09a93637314bc64b38a7f105c67a9113",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-11-14-13-32-33/output/savers_ca_us.geojson",
+      "sourceUpdatedAt": "2026-11-16T19:17:17.369900Z",
+      "fetchedAt": "2026-11-23T21:25:26.203Z",
+      "runId": "2026-11-14-13-32-33",
+      "sha256": "7b34f6ce28e07dd5573f29f75417f1009957e20b199e54e9621a69d1707aa2b8",
       "license": "CC0-1.0",
       "rawCount": 694,
       "publicCount": 204,
@@ -26,11 +26,11 @@
     {
       "brandId": "buffalo-exchange",
       "source": "alltheplaces",
-      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-11-07-13-32-32/output/buffalo_exchange_us.geojson",
-      "sourceUpdatedAt": "2026-11-08T03:59:47.068646Z",
-      "fetchedAt": "2026-11-18T01:12:37.245Z",
-      "runId": "2026-11-07-13-32-32",
-      "sha256": "70e520b42c734ce84760ebf2487e37e7ffb2f9d68647459ee01d27d55d6a70d7",
+      "sourceUrl": "https://alltheplaces-data.openaddresses.io/runs/2026-11-14-13-32-33/output/buffalo_exchange_us.geojson",
+      "sourceUpdatedAt": "2026-11-14T21:08:06.415160Z",
+      "fetchedAt": "2026-11-23T21:25:26.408Z",
+      "runId": "2026-11-14-13-32-33",
+      "sha256": "4b545718b8a2173dc22a8b44caece44d427549885e434ce27ed3ab2d58311ddc",
       "license": "CC0-1.0",
       "rawCount": 42,
       "publicCount": 41,
@@ -41,10 +41,10 @@
       "brandId": "salvation-army",
       "source": "official-salvation-army-locator",
       "sourceUrl": "https://satruck.org/ThriftStore/",
-      "sourceUpdatedAt": "2026-11-18T01:19:22.585Z",
-      "fetchedAt": "2026-11-18T01:19:22.585Z",
+      "sourceUpdatedAt": "2026-11-23T21:32:46.099Z",
+      "fetchedAt": "2026-11-23T21:32:46.099Z",
       "publicCount": 362,
-      "rejectedCount": 975,
+      "rejectedCount": 973,
       "queryCount": 296,
       "coverage": "partial-geographic-queries; nearest10 perZIP; not national completeness"
     },
@@ -52,8 +52,8 @@
       "brandId": "out-of-the-closet",
       "source": "official-out-of-the-closet-locator",
       "sourceUrl": "https://outofthecloset.org/locations/",
-      "sourceUpdatedAt": "2026-11-18T01:19:34.590Z",
-      "fetchedAt": "2026-11-18T01:19:34.590Z",
+      "sourceUpdatedAt": "2026-11-23T21:32:57.822Z",
+      "fetchedAt": "2026-11-23T21:32:57.822Z",
       "publicCount": 26,
       "rejectedCount": 0,
       "coverage": "official current locator; national completeness not independently established"
@@ -4829,10 +4829,6 @@
           "reason": "not-public-retail"
         },
         {
-          "sourceId": "0c9bdecb-fc58-4c47-aae7-18c1c600ce09",
-          "reason": "not-public-retail"
-        },
-        {
           "sourceId": "92851bd5-a183-4beb-afa5-d026731e29c4",
           "reason": "not-public-retail"
         },
@@ -5750,10 +5746,6 @@
         },
         {
           "sourceId": "05672769-66ce-49b0-a368-2ee3595aa15c",
-          "reason": "not-public-retail"
-        },
-        {
-          "sourceId": "8b9ce872-e382-42ad-a3f3-3dc3a4649be2",
           "reason": "not-public-retail"
         },
         {
